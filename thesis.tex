@@ -8,6 +8,7 @@
 %
 \documentclass[a4paper,10pt,twoside]{report}
 
+
 %all the other includes etc. are done in the thesis.sty file.
 \usepackage{thesis}
 \graphicspath{{figures/}}
@@ -57,25 +58,25 @@
 
 %It could be handy to have a list of todos and brainstorms in your thesis
 %\chapter*{*General todos*}\todo{remove this chapter}
-%\input{chapters/general_todos}
+%\include{chapters/general_todos}
 
 %\chapter*{*Brainstorm results*}\todo{remove this chapter}
-%\input{chapters/brainstorm_results}
+%\include{chapters/brainstorm_results}
 
-\chapter*{Abstract}\label{chapter:abstract}
-\input{chapters/abstract}
+%\chapter*{Abstract}\label{chapter:abstract}
+\include{chapters/abstract}
 
 \clearemptydoublepage
 
 %An executive summary if you want:
 %\chapter*{Executive summary}\label{chapter:executive_summary}
-%\input{chapters/executive_summary}
+%\include{chapters/executive_summary}
 
 %\clearemptydoublepage
 
 
-\chapter*{Preface}\label{chapter:preface}
-\input{chapters/preface}
+%\chapter*{Preface}\label{chapter:preface}
+\include{chapters/preface}
 
 \clearemptydoublepage
 
@@ -95,31 +96,31 @@
 
 \clearemptydoublepage
 
-\chapter{Introduction}\label{chapter:introduction}
+%\chapter{Introduction}\label{chapter:introduction}
 \setcounter{page}{0}
 \pagenumbering{arabic}
 %from here on, start the 'real' page numbering, from 1, with normal digits
-\input{chapters/introduction}
+\include{chapters/introduction}
 
 \clearemptydoublepage
 
-\chapter{Preliminaries}\label{chapter:preliminaries}
-\input{chapters/preliminaries}
+%\chapter{Preliminaries}\label{chapter:preliminaries}
+\include{chapters/preliminaries}
 
 \clearemptydoublepage
 
-\chapter{Forecasting of the Disturbance Storm Time Index: Gaussian Process Models}\label{chapter:first_real_chapter}
-\input{chapters/first_real_chapter}
+%\chapter{Forecasting of the Disturbance Storm Time Index: Gaussian Process Models}\label{chapter:first_real_chapter}
+\include{chapters/first_real_chapter}
 
 \clearemptydoublepage
 
-\chapter{Second Real Chapter}\label{chapter:second_real_chapter}
-\input{chapters/second_real_chapter}
+%\chapter{Second Real Chapter}\label{chapter:second_real_chapter}
+\include{chapters/second_real_chapter}
 
 \clearemptydoublepage
 
-\chapter{Conclusions}\label{chapter:conclusions}
-\input{chapters/conclusions}
+%\chapter{Conclusions}\label{chapter:conclusions}
+\include{chapters/conclusions}
 
 \clearemptydoublepage
 
@@ -133,7 +134,7 @@
 \appendix
 \addcontentsline{toc}{chapter}{Appendix}
 
-\input{appendices/main}
+\include{appendices/main}
 
 \end{document}
 

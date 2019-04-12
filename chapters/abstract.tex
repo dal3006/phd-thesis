@@ -1,1 +1,42 @@
-THIS IS MY ABSTRACT
+\chapter*{Abstract}\label{chapter:abstract}
+
+The study of variations in the space environment between the Sun and the Earth constitutes 
+the core of \textit{space weather} research. Ionized plasma ejected by the Sun couples with 
+the Earth’s magnetic field in complex processes that determine the state of the Earth's 
+magnetosphere. Adverse effects from space weather can impact communication networks, 
+power grids and logistics infrastructure, all crucial pillars of a civilization that 
+is reliant on technology.
+
+It is thus important to leverage data sources, scientific knowledge and statistical learning 
+methodology to create space weather forecasting and monitoring systems of the future. This 
+thesis aims to be a step towards that goal. The work is organised into the following 
+sections/chapters.
+
+\begin{enumerate}
+\item \textit{Forecasting}: We develop probabilistic forecasting models for predicting 
+\textit{geo-magnetic} time series. Combining ground based and satellite measurements, 
+we propose a \textit{gaussian process} model for one hour ahead prediction of the \textit{Dst} 
+time series \cite{ChandorkarDst}, \cite{CHANDORKAR2018237}. We augment this model with a 
+\textit{long short-term memory} network and produce probabilistic predictions six hours 
+ahead for \textit{Dst} \cite{doi:10.1029/2018SW001898}.
+
+\item \textit{Parameter Inference \& Uncertainty Quantification}: Quantifying uncertainties in the 
+Earth's \textit{radiation belt} parameters is an important step for producing ensembles of high 
+fidelity simulations of the \textit{magnetosphere}. We combine simplified dynamical models with 
+Markov chain Monte Carlo techniques to infer uncertainties in magnetospheric parameters, 
+using data from probes orbiting in the radiation belts.
+
+\item \textit{Causal Time Lag Prediction}: In temporal phenomena, it is often the case 
+that causal effects of events are not immediately observed, but after a certain time interval 
+which can be dynamic. One prominent example of such behavior is the \textit{Sun-Earth} system. 
+Particles ejected from the Sun, also called the \textit{solar wind}, reach the Earth's magnetosphere 
+after a time delay which is uncertain. We propose a novel neural network based method, for 
+predicting causal time delay between time series and apply it to the problem of 
+\textit{solar wind} propagation.
+
+\end{enumerate}
+
+\bibliographystyle{plain}
+
+\bibliography{references}
+
