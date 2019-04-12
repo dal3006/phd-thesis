@@ -16,3 +16,6 @@
 *.lol
 *.lot
 *.toc
+*.xml
+*.bcf
+thesys.syntex*
