@@ -10,7 +10,7 @@
 
 %all the other includes etc. are done in the thesis.sty file.
 \usepackage{thesis}
-
+\graphicspath{{figures/}}
 
 %
 % These commands need to be defined in order to produce a correct and personalized document
@@ -21,13 +21,13 @@
 
 \newcommand{\me}{Mandar Hemant Chandorkar}
 \newcommand{\keywords}{keyword1, keyword2, keyword3}
-\newcommand{\version}{EMPTY version}
+\newcommand{\version}{Alpha 0.1}
 \newcommand{\monthYear}{June 2019}
 
 %Be sure to use all the titles for your committee members!!! (their names show up on the very first page!)
 \newcommand{\firstCommitteeMember}{Prof. Dr. P.D. Gr\"{u}nwald}
 \newcommand{\secondCommitteeMember}{Prof. Dr. U. Ebert}
-\newcommand{\thirdCommitteeMember}{Your Third Committee Member, usually the external member}
+\newcommand{\thirdCommitteeMember}{Dr. Enrico Camporeale}
 
 \author{\me}
 
@@ -108,7 +108,7 @@
 
 \clearemptydoublepage
 
-\chapter{First Real Chapter}\label{chapter:first_real_chapter}
+\chapter{Forecasting of the Disturbance Storm Time Index: Gaussian Process Models}\label{chapter:first_real_chapter}
 \input{chapters/first_real_chapter}
 
 \clearemptydoublepage
@@ -125,8 +125,8 @@
 
 %Choose a good bibliography style, plain would do often, but these might be nice too
 %\bibliographystyle{these}
-\bibliographystyle{plain}
-\bibliography{references}
+%\bibliographystyle{plain}
+%\bibliography{references}
 
 \clearemptydoublepage
 
@@ -136,3 +136,4 @@
 \input{appendices/main}
 
 \end{document}
+
