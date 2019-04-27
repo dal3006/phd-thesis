@@ -6,61 +6,65 @@ It is widely accepted that solar wind/magnetosphere coupling plays a key role in
 geomagnetic state. Under appropriate conditions, this coupling can lead to injection of energetic particles 
 into the Earth’s auroral and equatorial plasma currents, leading to geomagnetic storms.The solar wind conditions 
 that are effective for creating geomagnetic storms are sustained periods of high-speed solar wind and a southward 
-directed solar wind magnetic field (Burton et al. 1975). When Akasofu (1981) studied the coupling function 
+directed solar wind magnetic field \cite{JGR:JGR10260}. When Akasofu \cite{1981AkasofuE} studied the coupling function 
 between the solar wind and geomagnetic disturbance, they observed that during these extreme events, the key process 
 is the magnetic reconnection. It produces an enhancement of fluxes of particle which creates a depression of the 
 horizontal component (H) of the Earth’s magnetic field and an intensification of the westward ring current 
-circulating the Earth (Gonzalez, 1994). When there is a geomagnetic storm, the energy content of the ring current 
+circulating the Earth \cite{JGRA:JGRA11775}. When there is a geomagnetic storm, the energy content of the ring current 
 increases. This increase is inversely proportional to the strength of the surface magnetic field at low latitudes. 
 To assess the severity of geomagnetic storms, the Dst index or Disturbance Storm Time index is often used. 
 
-The Dst index (Sugiura, 1964) is based on four low latitude stations and represents the axis-symmetric 
+The Dst index \cite{Sugiura1964} is based on four low latitude stations and represents the axis-symmetric 
 magnetic signature of magnetosphere currents (such as the ring current, the tail currents and the 
 Chapman-Ferraro current). It is computed using 1-hour average values of the horizontal component of the 
 Earth’s magnetic field and is expressed in nano Tesla (nT). In the case of a typical magnetic storm, 
 three phases are observed according to Dst variations. First, there is a sudden drop corresponding to 
-the storm commencement. Second, the value of Dst stays in its excited state as the ring current intensifies (main phase). Finally, once the z-component of the Interplanetary Magnetic Field (IMF) turns northward, the ring current begins to recover and rises back to its quiet level (recovery phase). 
+the storm commencement. Second, the value of Dst stays in its excited state as the ring current intensifies 
+(main phase). Finally, once the z-component of the Interplanetary Magnetic Field (IMF) turns northward, 
+the ring current begins to recover and rises back to its quiet level (recovery phase). 
 
 Geomagnetic\ indices\ like\ Dst are used in Space Weather to describe and predict effects of the solar wind on 
 geomagnetic environment and human infrastructures. It has been long observed that important geomagnetic storms 
 disrupt human-made systems on Earth, they can impact satellites and the path of radio signals for GPS, 
 disrupt navigation systems and create harmful geomagnetic induced currents in the power grids and pipelines. 
 One of the important research problems in Space Weather is to predict geomagnetic disturbances, in order  
-to protect technological infrastructure  (Singh et al. 2010). The aim of this study is to propose an  accurate 
+to protect technological infrastructure \cite{Singh2010}. The aim of this study is to propose an  accurate 
 and reliable probabilistic model to predict Dst from 1h to 6h ahead. 
 
-The Dst prediction problem has been extensively researched. Burton et al. (1975) developed a model that expressed 
-the time evolution of Dst as an Ordinary Differential Equation (ODE). This method takes into account the particle 
-injection from the plasma sheet into the magnetosphere and expresses it based on the velocity, the density of the 
-solar wind and on the north-south magnetic component of the IMF.\ Iyemori et al. (1979) used a linear filtering 
-prediction method to connect Dst and the southward component of the interplanetary magnetic field. The linear 
-assumption, however, has limitations since  the solar wind and magnetosphere form a coupled non-linear system. 
+The Dst prediction problem has been extensively researched. Burton et al. \cite{JGR:JGR10260} developed a model 
+that expressed the time evolution of Dst as an Ordinary Differential Equation (ODE). This method takes into account 
+the particle injection from the plasma sheet into the magnetosphere and expresses it based on the velocity, 
+the density of the solar wind and on the north-south magnetic component of the IMF.\ Iyemori et al. \cite{Iyemori1979} 
+used a linear filtering prediction method to connect Dst and the southward component of the interplanetary 
+magnetic field. The linear assumption, however, has limitations since  the solar wind and magnetosphere form a 
+coupled non-linear system. 
 
 To\ model this nonlinear behavior, various models have been proposed. A popular  approach used to model 
-nonlinear systems is based on artificial neural networks (ANN) (Haykin, 1998). One of the earliest models of 
-Dst prediction based on ANNs is due to Lundstedt and Wintoft (1994). They developed a feedforward neural 
-network to predict Dst one hour ahead, using the Bz component, the density and the velocity of the solar wind. 
-This model was able to model the initial and the main phase well, but the recovery phase was not modeled accurately. 
-Gleisner et al. (1996) developed a Time Delay neural network (Waibel et al. 1989) to predict Dst one hour ahead 
-using the proton density, solar wind velocity and the  \( Bz  \) component of the IMF. This approach 
-managed to improve the prediction of storm recovery phases, showing the benefits of using the time history of 
-solar wind inputs. Wu and Lundstedt (1997) used an Elman recurrent network (Elman, 1990) to provide forecast of 
-the Dst index from 1h ahead to 6h ahead. Later, Lundstedt et al. (2002) used the same network architecture to 
-provide an operational forecast of the Dst index one hour ahead and improve again the performance of prediction. 
-Wing et al. (2005) used a recurrent network, to provide an operational forecast of the Kp index. The success of 
-these operational models demonstrate that recurrent networks are quite useful in the empirical modelling of 
-magnetospheric response to solar wind drivers. 
+nonlinear systems is based on artificial neural networks (ANN) \cite{haykin1994neural}. One of the earliest models of 
+Dst prediction based on ANNs is due to Lundstedt and Wintoft \cite{lundstedt1994prediction}. They developed a 
+feedforward neural network to predict Dst one hour ahead, using the Bz component, the density and the velocity of 
+the solar wind. This model was able to model the initial and the main phase well, but the recovery phase was not 
+modeled accurately. Gleisner et al. \cite{gleisner1996predicting} developed a Time Delay neural network 
+(Waibel et al. \cite{Waibel1989}) to predict Dst one hour ahead using the proton density, solar wind velocity and the  
+\( Bz  \) component of the IMF. This approach managed to improve the prediction of storm recovery phases, 
+showing the benefits of using the time history of solar wind inputs. Wu and Lundstedt \cite{wu1997geomagnetic} 
+used an Elman recurrent network \cite{elman} to provide forecast of the Dst index from 1h ahead to 6h ahead. 
+Later, Lundstedt et al. \cite{Lund} used the same network architecture to provide an operational forecast of 
+the Dst index one hour ahead and improve again the performance of prediction. Wing et al. \cite{JGRA:JGRA17461} 
+used a recurrent network, to provide an operational forecast of the Kp index. The success of these operational 
+models demonstrate that recurrent networks are quite useful in the empirical modelling of magnetospheric 
+response to solar wind drivers. 
 
 Another\ approach\ which is at the intersection between physical models and neural networks is provided by 
-Bala and Reiff (2012). Their approach is based on ANNs and uses the so called   Boyle index which represents 
+Bala and Reiff \cite{Bala2012}. Their approach is based on ANNs and uses the so called Boyle index which represents 
 the steady state polar cap potential and is a combination of the velocity of the solar wind, the magnitude of 
 the IMF and the IMF clock angle, as an input. It is used to predict Kp, Dst and AE, and provides good performance 
-to predict them from 1h ahead to 6h ahead. Lazzús et al. (2017) use Particle Swarm Optimization (PSO) 
-(Kennedy and Eberhart, 1995), instead of the Backpropagation algorithm (Rumelhart and McClelland, 1986), 
-to learn the ANN connection weights. Results obtained in this study show that PSO can provide benefits for 
-generating forecasts of Dst from one to six hours ahead.
+to predict them from 1h ahead to 6h ahead. Lazz\'us et al. \cite{Lazzus} use 
+Particle Swarm Optimization (PSO) \cite{eberhart1995new}, instead of the Backpropagation algorithm 
+\cite{rummelhart1986parallel}, to learn the ANN connection weights. Results obtained in this study show 
+that PSO can provide benefits for generating forecasts of Dst from one to six hours ahead.
 
-Chandorkar\ et al. (2017) pointed out that various techniques have been used to predict Dst, but do not 
+Chandorkar\ et al. \cite{ChandorkarDst} pointed out that various techniques have been used to predict Dst, but do not 
 focus on  providing probabilistic predictions. Their model is based on Gaussian process (GP) to construct 
 autoregressive models to predict Dst one hour ahead, based on past values of Dst, and also on the velocity of 
 the solar wind and the z component of the IMF. In this study, they show that it is possible to generate an 
@@ -70,21 +74,22 @@ does not yield a performance as accurate as the one provided by ANN.
 
 All these models are based either on solar wind parameters and past values of Dst. One of the most striking features 
 of the Dst index is the link between Dst variation, and the impact on GPS satellites. It is widely known that when 
-there is a geomagnetic storm, the quality of the GPS signal is disturbed (Astafyeva et al. 2009). The magnetic field 
-measured onboard GPS satellites might be a key information when an important storm occurs. Recently, GPS data have 
-been publicly released under the terms of the Executive Order for Coordinating Efforts to prepare the Nation for 
-Space Weather Events (Morley et al. 2017). 
+there is a geomagnetic storm, the quality of the GPS signal is disturbed 
+(Astafyeva et al. \cite{astafyeva2014geomagnetic}). The magnetic field measured onboard GPS satellites might be a 
+key information when an important storm occurs. Recently, GPS data have been publicly released under the terms 
+of the Executive Order for Coordinating Efforts to prepare the Nation for 
+Space Weather Events \cite{morley2017energetic}. 
 
 In this work, we propose a technique to combine the great performance of an ANN with the advantage of the 
 probabilistic forecast provided by GP. We use a specific ANN called Long Short-Term Memory neural network (LSTM) 
-(Hochreiter and Schmidhuber, 1997) to provide a single point prediction of the geomagnetic index from 1h to 6h ahead. 
+\cite{hochreiter1997long} to provide a single point prediction of the geomagnetic index from 1h to 6h ahead. 
 It is a specific recurrent network which has never been used in Space Weather applications before. Then we use this 
 prediction as the mean function of a GP, to obtain a probabilistic forecast based on this single prediction from 
 1h to 6h ahead. This process is called GPNN. Input parameters of this GPNN are solar wind parameters 
 (density, velocity,  \( IMF  \vert B \vert  \)  and \(  Bz \) ), past values of Dst from 1h to 6h, and the 
 magnetic field measured onboard GPS satellites. 
 
-The remainder of this paper is organised as follows: section 2 presents the data used in this study. 
+The remainder of this chapter is organised as follows: section 2 presents the data used in this study. 
 Section 3 describes the computational method, how the LSTM and the combination of this ANN and the GP called 
 GPNN are developed and optimised. Section 4 presents the results of the optimisation of the LSTM forecast 
 from 1h to 6h ahead, and the evaluation of the probabilistic forecast provided by the GPNN method. 
@@ -99,13 +104,14 @@ We also consider GPS data which are provided by the National Oceanic and Atmosph
 These data are provided by the team working on the Combined X-ray dosimeter or CXD at the 
 Los Alamos National Laboratory (https://www .ngdc.noaa.gov/stp/space-weather/satellite-data/satellite-system/gps/). 
 In this study, we decided to use data recorded by the GPS satellite ns41, which has the widest temporal coverage 
-(Morley et al. 2017). 
+\cite{morley2017energetic}. 
 
 Figure 1 shows the temporal coverage of the database used in this study, compared to previous studies. 
 The temporal coverage of our study is represented by the green line. As GPS ns41 data starts at 
 00 :00 14 January 2001, we consider a set of 134,398 hourly data of solar wind parameters, geomagnetic Dst index, 
-and GPS data between this starting date and 23 :00 31 December 2016. This includes 49 storm times, listed in Table 1. 
-Part of those storm times were included in the list used in Ji et al (2012) and Chandorkar et al. (2017). 
+and GPS data between this starting date and 23 :00 31 December 2016. This includes 49 storm events, listed in Table 1. 
+Part of those storm times were included in the list used in Ji et al \cite{Ji2012} and 
+Chandorkar et al. \cite{ChandorkarDst}. 
 
 Studies done in the past to predict the geomagnetic index Dst have shown that various solar wind parameters 
 are of interest to optimise the performance of predicting models. In the present study, we focused on the use 
@@ -123,10 +129,10 @@ to be passed from one cell of the network to the next. When this loop is unrolle
 as multiple copies of the same network. This specific architecture is thought to be very efficient in 
 forecasting time series. 
 
-Hochreiter (1991) and Bengio et al. (1994) underlined a weakness of RNN. They are supposed to connect past 
-information to the present, but if the information needed is too far in the past, RNN are unable to learn 
-how to connect the information. This failure is due to the vanishing gradient problem occuring during the 
-training phase of RNN. 
+Hochreiter \cite{hochreiter1991untersuchungen} and Bengio et al. \cite{bengio1994learning} underlined a weakness of RNN. 
+They are supposed to connect past information to the present, but if the information needed is too far in the past, 
+RNN are unable to learn how to connect the information. This failure is due to the vanishing gradient problem 
+occuring during the training phase of RNN. 
 
 LSTM are designed to avoid this problem. They are made to remember information for long periods of time. 
 They have a chain-like structure like RNN, but the repeating module has a specific structure. 
@@ -197,7 +203,7 @@ obtain the required information.
 
 The LSTM NN is trained with a backpropagation algorithm and thanks to its architecture, 
 the gradient does not tend to vanish. To train a NN, most of the time, the gradient descent 
-optimisation algorithm used is the Levenberg-Marquardt (Marquardt, 1963), but here we 
+optimisation algorithm used is the Levenberg-Marquardt \cite{marquardt1963algorithm}, but here we 
 considered the RMSprop. RMSprop is an unpublished adaptative learning rate method proposed by 
 Geoff Hinton (http://www.cs.toronto.edu/~tijmen/csc321/slides/lecture\_slides\_lec6.pdf). 
 Parameters like weights and bias of the network are described using the notation  \(  \theta _{i} \) . 
@@ -251,7 +257,8 @@ of the model. This function plays a significant role in the process described in
  density applied to functions, the practical implementation is rather straightforward, boiling down to simple 
  analytical expression that requires no more than linear algebra. Moreover, GP regression outputs a Gaussian 
  distribution, which has a natural probabilistic intepretation, rather than a single-point estimate.For a complete 
- description of this method the reader is refered to reference textbooks like Rasmussen and Williams (2006). 
+ description of this method the reader is refered to reference textbooks like Rasmussen and Williams 
+ \cite{Rasmussen:2005:GPM:1162254}. 
 
 A Gaussian process can be described by Equation \ref{eq:gp}. 
 
@@ -273,7 +280,7 @@ Equation 11 and by its covariance function  \( k \left( x,x^{'} \right)  \)  des
 The covariance function specifies how exactly each point influences the values that the other points are 
 likely to take on. The main idea is that if  \( x_{i} \) and  \( x_{j} \)  are close by, 
 we expect the output from the functions at these points to be similar . Different types of covariance 
-functions exist, also called kernels, which determine the form of the model. Chandorkar et al. (2017) 
+functions exist, also called kernels, which determine the form of the model. Chandorkar et al. \cite{ChandorkarDst} 
 listed common kernels used in machine learning and described how the choice of it is fundamental. 
 In this study, we focused on the neural network kernel described by Equation \ref{eq:gpcov} (Williams, 1998). 
 
@@ -283,10 +290,11 @@ In this study, we focused on the neural network kernel described by Equation \re
 \end{equation}
 
 
-As Rasmussen and Williams (2006) described, if there is no prior knowledge about the function to be approximated, 
-the mean function is defined to be zero. The aim of our study here is to combine the neural network and the 
-gaussian process to obtain accurate forecast with an uncertainty distribution. Hence, the mean function  
-\( m \left( x \right)  \)  is provided by the  \( NN \left( x \right)  \)  function described in section 3.2.
+As Rasmussen and Williams \cite{Rasmussen:2005:GPM:1162254} described, if there is no prior knowledge about 
+the function to be approximated, the mean function is defined to be zero. The aim of our study here is to 
+combine the neural network and the gaussian process to obtain accurate forecast with an uncertainty distribution. 
+Hence, the mean function  \( m \left( x \right)  \)  is provided by the  \( NN \left( x \right)  \)  function 
+described in section 3.2.
 
 
 The joint distribution of the training output  \( f \)  and the test outputs  \( f_{\ast} \)  according to the 
@@ -313,8 +321,9 @@ represents the  \( n \times n_{\ast} \)  matrix of the covariance of all pairs o
 
 
 To make predictions, the posterior distribution over function is needed. To get the posterior distribution, 
-we need to restrict the prior distribution from Equation 14 only to those functions that fit the observed data points. 
-It needs to be conditioned on the observations as described by the system of Equation \ref{eq:preddist}.
+we need to restrict the prior distribution from Equation \ref{eq:jointdist} only to those functions that 
+fit the observed data points. It needs to be conditioned on the observations as described by 
+the system of Equation \ref{eq:preddist}.
 
 
 
@@ -329,7 +338,8 @@ posterior distribution by evaluating the mean and covariance matrix.
 
 
 
-To predict the geomagnetic index Dst based on input features \( x \) , the Equation \ref{eq:dstgp} sumarises the inherent process. 
+To predict the geomagnetic index Dst based on input features \( x \) , the Equation \ref{eq:dstgp} sumarises 
+the inherent process. 
 
 
 
@@ -342,7 +352,7 @@ f \left( x_{t+p} \right)  &\sim GP \left( NN \left( x_{t+p} \right) , K_{NN}(x_{
 With  \( p \)  being the expected time forecast. Here we 
 consider $p  = {1,2,3,4,5,6}$ to provide multi-step ahead prediction 
 of the Dst index from 1h to 6h ahead. The GP part is developed using the Matlab Software GPML, available 
-at http://www.gaussianprocess.org/gpml/code (Rasmussen and Nickisch, 2010).
+at http://www.gaussianprocess.org/gpml/code \cite{rasmussen2010gaussian}.
 
 
 
@@ -363,40 +373,50 @@ This is summarised with the Equation \ref{eq:dstmodel}.
 
 
 \begin{equation}\label{eq:dstmodel}
- Dst \left( t+p \right)_{NN} = NN \left( n \left( t \right) , V \left( t \right) , IMF \vert B \vert  \left( t \right) ,Bz \left( t \right) , Bsat_{GPS} \left( t \right) , Dst \left( t-1 \right) ,Dst \left( t-2 \right) , \ldots ,Dst \left( t-6 \right)  \right)
+	\begin{aligned}
+		Dst \left( t+p \right)_{NN} = NN ( 
+			& n \left( t \right) , V \left( t \right) , IMF \vert B \vert  \left( t \right) ,Bz \left( t \right) , Bsat_{GPS} \left( t \right) , \\ 
+			&	Dst \left( t-1 \right) ,Dst \left( t-2 \right) , \ldots ,Dst \left( t-6 \right) )
+	\end{aligned}
 \end{equation}
 
 To find the LSTM structure which is the most suitable for predicting geomagnetic storms, we train it 
 using various number of cells. The optimal number is 20 and after training, testing and validating each 
 LSTM, we compare their performance to neural network models proposed in the past to predict Dst. 
-Figure 3\ presents a  comparison of correlation coefficient and root mean square error between our model, 
-with and without using GPS data, and previous models predicting Dst based on NN. The temporal coverage of 
-these previous studies are shown in Figure 1 so the reader can have an estimation of the storm times used in them. 
+Figure \ref{fig:lstmpredswoGPS} presents a  comparison of correlation coefficient and root mean square error 
+between our model, with and without using GPS data, and previous models predicting Dst based on NN. 
+The temporal coverage of these previous studies are shown in Figure \ref{fig:datacoverage} so the reader 
+can have an estimation of the storm times used in them. 
 
 
 
 Our model, with or without GPS data provides performance which are close to the one obtained by 
-Lazzús et al. (2017) from 1h ahead to 3h ahead but when the expected forecast goes from 4h ahead to 6h ahead, 
+Lazzús et al. \cite{Lazzus} from 1h ahead to 3h ahead but when the expected forecast goes from 4h ahead to 6h ahead, 
 our models, with or without GPS data provide better global performance. As an example, when considering a 6h 
-ahead forecast, our model with GPS data provides a CC of 0.873 and a RMSE of 9.86, while Lazzús et al. (2017) 
-obtained a CC of 0.826 and a RMSE of 13.09. As the Lazzús et al. (2017) model is based only on previous Dst values, 
-it shows the benefit of using exogenous data when predicting a geomagnetic index. Bala and Reiff (2012) used 
-the Boyle index as an input function, and obtained quite similar performance as ours. If we consider 
-again a forecast of 6h ahead, their model presents a\ CC of 0.77 and a RMSE of 11.09. It is slightly  
-worse than our model with or without GPS data. We also decided to compare our model with the one provided 
-by Wu and Lundstedt (1997) as it is the first model using recurrent network. We wanted to compare the performance 
-of a classic recurrent network to the LSTM, and see how the complexity of the LSTM cell could provide more 
-accurate predictions. Wu and Lundstedt (1997) provided for a 6h ahead forecast a CC of 0.82 and a RMSE of 20.8, 
-showing in comparison to our model with or without GPS data, that the LSTM cell brings more accuracy. We observed 
-that using GPS data generally results in an improvement when considering important geomagnetic storms. 
-Figure 4 presents predictions obtained with the LSTM NN, with GPS data in blue and without GPS data in red, 
-for Dst forecast from 1h ahead to 6h ahead, for the 2003 Halloween storm event (peak at -422 nT). 
-Predictions for 1h to 2h ahead are very similar, but when we consider the forecast of 3h ahead, the model 
-without GPS data predicts a peak of -348 nT while the model with the GPS data provides a prediction of -405 nT. 
-For a forecast done 4h ahead, the model without GPS data provides a prediction of -335 nT and the one with GPS data, 
-a forecast of -380 nT. For predictions done 5 h ahead, predicted peak values are quite the same. 
-However, the 6h ahead forecast shows that a single point prediction provided by the NN is not good enough and 
-offers a strong rationale to combine the NN performance with the GP model to obtain a probabilistic forecast. 
+ahead forecast, our model with GPS data provides a CC of 0.873 and a RMSE of 9.86, while Lazzús et al. \cite{Lazzus} 
+obtained a CC of 0.826 and a RMSE of 13.09. As the Lazzús et al. \cite{Lazzus} model is based only on 
+previous Dst values, it shows the benefit of using exogenous data when predicting a geomagnetic index. 
+Bala and Reiff \cite{Bala2012} used the Boyle index as an input function, and obtained quite similar 
+performance as ours. If we consider again a forecast of 6h ahead, their model presents a\ CC of 0.77 
+and a RMSE of 11.09. It is slightly worse than our model with or without GPS data. We also decided to compare 
+our model with the one provided by Wu and Lundstedt \cite{wu1997geomagnetic} as it is the first model using 
+recurrent network. 
+
+We wanted to compare the performance of a classic recurrent network to the LSTM, and see 
+how the complexity of the LSTM cell could provide more accurate predictions. Wu and Lundstedt \cite{wu1997geomagnetic} 
+provided for a 6h ahead forecast a CC of 0.82 and a RMSE of 20.8, showing in comparison to our model with or 
+without GPS data, that the LSTM cell brings more accuracy. We observed that using GPS data generally results 
+in an improvement when considering important geomagnetic storms. Figure 4 presents predictions obtained with 
+the LSTM NN, with GPS data in blue and without GPS data in red, for Dst forecast from 1h ahead to 6h ahead, 
+for the 2003 Halloween storm event (peak at -422 nT). Predictions for 1h to 2h ahead are very similar, but when 
+we consider the forecast of 3h ahead, the model without GPS data predicts a peak of -348 nT while the model 
+with the GPS data provides a prediction of -405 nT. 
+
+For a forecast done 4h ahead, the model without GPS data 
+provides a prediction of -335 nT and the one with GPS data, a forecast of -380 nT. For predictions done 5 h ahead, 
+predicted peak values are quite the same. However, the 6h ahead forecast shows that a single point prediction 
+provided by the NN is not good enough and offers a strong rationale to combine the NN performance with the 
+GP model to obtain a probabilistic forecast. 
 
 
 \subsection{Evaluation of the GPNN model}
@@ -408,8 +428,8 @@ and  are not adequate  to evaluate  probabilistic forecast.
 
 Storm activity is often classified using given thresholds of Dst values. According to the most common 
 classification, we distinguished 3 levels of storms summarised in Table 2\ 
-(Dst<-250, -250<=Dst<-50, Dst>=-50). The aim here is to use metrics which will be able to evaluate 
-how the GPNN manages to forecast geomagnetic storms into the right « family » of storm. To do so, 
+(Dst $<= 250$, $-250 <=$ Dst $<= 50$, Dst $>= -50$). The aim here is to use metrics which will be able to evaluate 
+how the GPNN manages to forecast geomagnetic storms into the right family of storm. To do so, 
 we focused on the Receiver Operating Characteristic Curve and Reliability diagram.
 
 
@@ -461,29 +481,32 @@ than the perfect diagonal slope, the resulting forecasts  are under/over confide
 smaller/higher probabilities for a specific outcome than observed. 
 
 
-Figure 5 presents reliability diagrams obtained from 1h to 6h ahead forecasts. It shows that the 1h ahead 
-forecast slightly underestimates the storm, when there is more than 35$\%$  of probabilities for a 
-given value of Dst. For example, when there is 80$\%$  of risk for a predicted storm, the real observed 
-frequency of it is 90$\%$ . The GPNN provides reliable forecast for 2h ahead prediction, as the observed 
-frequency of storm regarding the predicted probability defines almost perfectly a diagonal. For predictions 
-further than 3h ahead, the more it goes in time, the more it overestimates the probability of storms. If we 
-focus on the 6h ahead prediciton, when the GPNN model provides a predicted probability of 90$\%$ , the 
+Figure \ref{fig:gpnnreliability} presents reliability diagrams obtained from 1h to 6h ahead forecasts. 
+It shows that the 1h ahead forecast slightly underestimates the storm, when there is more than 35$\%$  of 
+probabilities for a given value of Dst. For example, when there is 80$\%$  of risk for a predicted storm, 
+the real observed frequency of it is 90$\%$. The GPNN provides reliable forecast for 2h ahead prediction, 
+as the observed frequency of storm regarding the predicted probability defines almost perfectly a diagonal. 
+For predictions further than 3h ahead, the more it goes in time, the more it overestimates the probability of storms. 
+
+If we focus on the 6h ahead prediciton, when the GPNN model provides a predicted probability of 90$\%$, the 
 real observed frequency is of 65$\%$ . This model is over-confident. Once the reliability diagram is obtained, 
 it is of interest to seek simple corrections to the forecast probabilities (re-calibration). This issue will be 
-investigated elsewhere in greater detail. Here, we just show Figure 6that by multiplying the standard deviation 
-by a\ factor of 2 or 3, it it possible to improve the reliability for predicted probability higher than 50$\%$  
-(Figure 6). For example, if the predicted probability is 90$\%$ , by multiplying sigma by 2, the corresponding 
-real frequency is 72$\%$  and if we multiply by 3 we get 80$\%$ . This way, we managed to get closer to the diagonal, 
-when the probability of events increase. Conversely, a simple rescaling of the obtained standard deviation yields 
-worse reliability for probabilities smaller than 50$\%$ .  
+investigated elsewhere in greater detail. Here, we just show Figure \ref{fig:gpnnreliabilitysigma} that by multiplying 
+the standard deviation by a\ factor of 2 or 3, it it possible to improve the reliability for predicted probability 
+higher than 50$\%$ (Figure \ref{fig:gpnnreliability}). For example, if the predicted probability is 90$\%$, 
+by multiplying sigma by 2, the corresponding real frequency is 72$\%$ and if we multiply by 3 we get 80$\%$. 
+This way, we managed to get closer to the diagonal, when the probability of events increase. Conversely, 
+a simple rescaling of the obtained standard deviation yields worse reliability for probabilities smaller than 50$\%$ .  
 
 
-Figure 7 presents predictions provided by the GPNN model for the 2003 Halloween storm. For predictions from 
-1h ahead to 5h ahead, thanks to this process, the predicted value of Dst is close to the real value. For example, 
-for 5h ahead, the real peak of activity of -422 nT has a predicted value of -391 nT. The main contribution of the 
-GP process here is shown for the 6h ahead forecast. While the LSTM alone failed to reach the highest peak of activity, 
-the GPNN manages to have a predicted value closer to the real value than the LSTM one, and the covariance over the 
-mean value encompasses the peak of activity (compare with Figure 4)
+Figure \ref{fig:gpnnhalloween} presents predictions provided by the GPNN model for the 2003 Halloween storm. 
+For predictions from 1h ahead to 5h ahead, thanks to this process, the predicted value of Dst is close to the 
+real value. For example, for 5h ahead, the real peak of activity of -422 nT has a predicted value of -391 nT. 
+
+The main contribution of the GP process here is shown for the 6h ahead forecast. While the LSTM alone failed to 
+reach the highest peak of activity, the GPNN manages to have a predicted value closer to the real value than 
+the LSTM one, and the covariance over the mean value encompasses the peak of activity 
+(compare with Figure \ref{fig:lstmperf})
 
 
 
