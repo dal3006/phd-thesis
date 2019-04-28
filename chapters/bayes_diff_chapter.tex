@@ -83,9 +83,9 @@ The key quantities in the system above are.
 
 To solve the radial diffusion system \ref{eq:raddiffusion}, the
 quantities $\kappa(l, t)$, $\lambda(l, t)$ and $Q(l, t)$ need to be
-specified. It is a common practice (see \citet{GRL:GRL10762},
-\citet{JGRA:JGRA15067}, \citet{JGRA:JGRA18021} and
-\citet{GRL:GRL22815}) to parameterise the diffusion field
+specified. It is a common practice (see \cite{GRL:GRL10762},
+\cite{JGRA:JGRA15067}, \cite{JGRA:JGRA18021} and
+\cite{GRL:GRL22815}) to parameterise the diffusion field
 $\kappa$ and loss rate $\lambda$ in the following manner.
 
 \begin{align}
@@ -127,7 +127,7 @@ In the radial diffusion system (\ref{eq:raddiffusion}), $\mathcal{L}_{\theta} =
 \cite{MEHRKANOON2015105}, \cite{MEHRKANOON20122502} as well as
 parameter estimation of delay differential equations
 \cite{MEHRKANOON2014830}, the approach taken in the aforementioned
-research (\citet{MEHRKANOON2014830}) was expressing the parameter
+research (\cite{MEHRKANOON2014830}) was expressing the parameter
 estimation of time delay as an algebraic optimization problem
 resulting in closed-form approximation for the time varying parameters
 while avoiding iterative simulation of the dynamical system (governed
@@ -141,19 +141,29 @@ of boundary value problems.
 
 Radial basis functions have been applied for the mesh-free solutions of Poisson PDE systems 
 (\cite{AMINATAEI20082887}, \cite{DUAN200866}, \cite{DUAN2006394} \& \cite{CNM:CNM419}),
-as well as the Poisson control problem \citet{Pearson2013}. Further applications of RBFs include 
+as well as the Poisson control problem \cite{Pearson2013}. Further applications of RBFs include 
 atmospheric flow \cite{Tillenius2015406}, convection-diffusion \cite{Safdari-Vaighani2015}, and 
-Schrödinger's equation (\cite{doi:10.1137/120893975}). See ref. \cite{fornberg2015} for a recent textbook with geoscience applications.
+Schrödinger's equation \cite{doi:10.1137/120893975}. See ref. \cite{fornberg2015} for a recent 
+textbook with geoscience applications.
 
 \paragraph{Gaussian Processes}
 
-Gaussian Process (GP) models \cite{Rasmussen:2005:GPM:1162254} have a rich theory which has much overlapping with linear systems and deterministic and stochastic differential equations. 
+Gaussian Process (GP) models \cite{Rasmussen:2005:GPM:1162254} have a rich theory which has much overlapping 
+with linear systems and deterministic and stochastic differential equations. 
 
-\citet{Skilling1992} presented one of the earliest works which focused on calculating solutions of ordinary differential equations (ODE) systems with Gaussian Process methodology, \citet{Graepel} applied it for solving linear partial differential equations with Dirichlet and Von Neumann boundary conditions.
+\cite{Skilling1992} presented one of the earliest works which focused on calculating solutions of ordinary 
+differential equations (ODE) systems with Gaussian Process methodology, \cite{Graepel} applied it for solving 
+linear partial differential equations with Dirichlet and Von Neumann boundary conditions.
 
-Interplay between linear operators and GP models applied to Bayesian filtering was investigated by \citet{Sarkka2011}. \citet{pmlr-v31-dondelinger13a} proposed an adaptive gradient matching technique to used Gaussian Process models for infering parameters of coupled ODE systems.
+Interplay between linear operators and GP models applied to Bayesian filtering was investigated by \cite{Sarkka2011}. 
+\cite{pmlr-v31-dondelinger13a} proposed an adaptive gradient matching technique to used Gaussian Process models for 
+infering parameters of coupled ODE systems.
 
-\paragraph{Neural Networks} were also employed for solutions of boundary value problems in the works such as \citet{Lagaris}, \citet{Aarts2001} \&  \citet{TSOULOS20092385}. \citet{Baymani2011} used Feedforward networks for calculating solutions to the Stokes problem. These approaches generally revolved around decomposing the solution into two components, i.e. the first one satisfying the boundary conditions and the second one represented by the feedforward network.
+\paragraph{Neural Networks} were also employed for solutions of boundary value problems in the works such as 
+\cite{Lagaris}, \cite{Aarts2001} \&  \cite{TSOULOS20092385}. \cite{Baymani2011} used Feedforward networks for 
+calculating solutions to the Stokes problem. These approaches generally revolved around decomposing the solution 
+into two components, i.e. the first one satisfying the boundary conditions and the second one represented by the 
+feedforward network.
 
 
 \section{Methodology}
@@ -369,7 +379,7 @@ we treat the covariance function parameters as fixed.
 
 \subsection{Inference}
 
-We employ the adaptive Metropolis algorithm as proposed by \citet{haario2001}, for sampling
+We employ the adaptive Metropolis algorithm as proposed by \cite{haario2001}, for sampling
 system parameters. The adaptive Metropolis algorithm adapts the exploration variance according
 to the running sample statistics of the Markov Chain procedure.
 

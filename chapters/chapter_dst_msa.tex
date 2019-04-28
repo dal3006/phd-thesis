@@ -109,8 +109,10 @@ In this study, we decided to use data recorded by the GPS satellite ns41, which 
 Figure 1 shows the temporal coverage of the database used in this study, compared to previous studies. 
 The temporal coverage of our study is represented by the green line. As GPS ns41 data starts at 
 00 :00 14 January 2001, we consider a set of 134,398 hourly data of solar wind parameters, geomagnetic Dst index, 
-and GPS data between this starting date and 23 :00 31 December 2016. This includes 49 storm events, listed in Table 1. 
-Part of those storm times were included in the list used in Ji et al \cite{Ji2012} and 
+and GPS data between this starting date and 23 :00 31 December 2016. This includes 49 storm events, listed in 
+Table \ref{table:teststormsgpnn}. 
+
+Some of these events were included in the list used in Ji et al \cite{Ji2012} and 
 Chandorkar et al. \cite{ChandorkarDst}. 
 
 Studies done in the past to predict the geomagnetic index Dst have shown that various solar wind parameters 
@@ -427,7 +429,7 @@ and  are not adequate  to evaluate  probabilistic forecast.
 
 
 Storm activity is often classified using given thresholds of Dst values. According to the most common 
-classification, we distinguished 3 levels of storms summarised in Table 2\ 
+classification, we distinguished 3 levels of storms summarised in Table \ref{table:stormclass} 
 (Dst $<= 250$, $-250 <=$ Dst $<= 50$, Dst $>= -50$). The aim here is to use metrics which will be able to evaluate 
 how the GPNN manages to forecast geomagnetic storms into the right family of storm. To do so, 
 we focused on the Receiver Operating Characteristic Curve and Reliability diagram.
@@ -636,6 +638,80 @@ re-calibrate the prediction
 
 %%%%%%%%%%%%%%%%%%%% Figure/Image No: 8 Ends here %%%%%%%%%%%%%%%%%%%%
 
+
+\begin{table}[h]
+	\fontsize{8}{9.6}\selectfont
+	\centering
+	\caption{Storm events used to evaluate GPNN model}
+	\label{table:teststormsgpnn}
+	\begin{tabular}{ccccc}
+	\hline
+	Start Date & Start Time & End Date & End Time & min. Dst \\ \hline
+	2001/03/19 & 15:00 & 2001/03/21 & 23:00 & -149 \\
+	2001/03/31 & 04:00 & 2001/04/01 & 21:00 & -387 \\
+	2001/04/18 & 01:00 & 2001/04/18 & 13:00 & -114 \\
+	2001/04/22 & 02:00 & 2001/04/23 & 15:00 & -102 \\
+	2001/08/17 & 16:00 & 2001/08/18 & 16:00 & -105 \\
+	2001/09/30 & 23:00 & 2001/10/02 & 00:00 & -148 \\
+	2001/10/21 & 17:00 & 2001/10/24 & 11:00 & -187 \\
+	2001/10/28 & 03:00 & 2001/10/29 & 22:00 & -157 \\
+	2002/03/23 & 14:00 & 2002/03/25 & 05:00 & -100 \\
+	2002/04/17 & 11:00 & 2002/04/19 & 02:00 & -127 \\
+	2002/04/19 & 09:00 & 2002/04/21 & 06:00 & -149 \\
+	2002/05/11 & 10:00 & 2002/05/12 & 16:00 & -110 \\
+	2002/05/23 & 12:00 & 2002/05/24 & 23:00 & -109 \\
+	2002/08/01 & 23:00 & 2002/08/02 & 09:00 & -102 \\
+	2002/09/04 & 01:00 & 2002/09/05 & 00:00 & -109 \\
+	2002/09/07 & 14:00 & 2002/09/08 & 20:00 & -181 \\
+	2002/10/01 & 06:00 & 2002/10/03 & 08:00 & -176 \\
+	2002/11/20 & 16:00 & 2002/11/22 & 06:00 & -128 \\
+	2003/05/29 & 20:00 & 2003/05/30 & 10:00 & -144 \\
+	2003/06/17 & 19:00 & 2003/06/19 & 03:00 & -141 \\
+	2003/07/11 & 15:00 & 2003/07/12 & 16:00 & -105 \\
+	2003/08/17 & 18:00 & 2003/08/19 & 11:00 & -148 \\
+	2003/11/20 & 12:00 & 2003/11/22 & 00:00 & -422 \\
+	2004/01/22 & 03:00 & 2004/01/24 & 00:00 & -149 \\
+	2004/02/11 & 10:00 & 2004/02/12 & 00:00 & -105 \\
+	2004/04/03 & 14:00 & 2004/04/04 & 08:00 & -112 \\
+	2004/07/22 & 20:00 & 2004/07/23 & 20:00 & -101 \\
+	2004/07/24 & 21:00 & 2004/07/26 & 17:00 & -148 \\
+	2004/07/26 & 22:00 & 2004/07/30 & 05:00 & -197 \\
+	2004/08/30 & 05:00 & 2004/08/31 & 21:00 & -126 \\
+	2004/11/11 & 22:00 & 2004/11/13 & 13:00 & -109 \\
+	2005/01/21 & 18:00 & 2005/01/23 & 05:00 & -105 \\
+	2005/05/07 & 20:00 & 2005/05/09 & 10:00 & -127 \\
+	2005/05/29 & 22:00 & 2005/05/31 & 08:00 & -138 \\
+	2005/06/12 & 17:00 & 2005/06/13 & 19:00 & -106 \\
+	2005/08/31 & 12:00 & 2005/09/01 & 12:00 & -131 \\
+	2006/04/13 & 20:00 & 2006/04/14 & 23:00 & -111 \\
+	2006/12/14 & 21:00 & 2006/12/16 & 03:00 & -147 \\ 
+	2011/09/26 & 14:00 & 2011/09/27 & 12:00 & −101 \\
+	2011/10/24 & 20:00 & 2011/10/25 & 14:00 & −132 \\
+	2012/03/08 & 12:00 & 2012/03/10 & 16:00 & −131 \\
+	2012/04/23 & 11:00 & 2012/04/24 & 13:00 & −108 \\
+	2012/07/15 & 01:00 & 2012/07/16 & 23:00 & −127 \\
+	2012/09/30 & 13:00 & 2012/10/01 & 18:00 & −119 \\
+	2012/10/08 & 02:00 & 2012/10/09 & 17:00 & −105 \\
+	2012/11/13 & 18:00 & 2012/11/14 & 18:00 & −108 \\
+	2013/03/17 & 07:00 & 2013/03/18 & 10:00 & −132 \\
+	2013/05/31 & 18:00 & 2013/06/01 & 20:00 & −119 \\
+	2014/02/18 & 15:00 & 2014/02/19 & 16:00 & −112 \\ \hline
+	\end{tabular}%
+	\end{table}
+
+	\begin{table}[h]
+		%\fontsize{8}{9.6}\selectfont
+		\centering
+		\caption{Storm Classification}
+		\label{table:stormclass}
+		\begin{tabular}{ccccc}
+		\hline
+		Level of Activity & Storm Classification \\ \hline
+		Dst $> -50 nT$ & Moderate\\
+		$-250 nT \leq $ Dst $\leq -50 nT$ & Intense\\
+		Dst $\leq -250 nT$ & Super Storm\\ \hline
+		\end{tabular}
+	\end{table}
 
 
 \bibliographystyle{plain}
