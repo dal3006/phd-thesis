@@ -4,9 +4,9 @@
 
 The Earth's radiation belts are the regions of space near 
 the Earth that extend between 2 and 8 Earth's radii, where the terrestrial magnetic field traps 
-electrons and ions in complex electromagnetic orbits  \cite{vanAllen}. Since their discovery,
+electrons and ions in complex electromagnetic orbits  \citet{vanAllen}. Since their discovery,
 the belts have been the subject of intensive research due to their complex behavior
-and damaging effects on spacecraft \cite{GUBBY20021723, WellingSatellite, baker2002}.
+and damaging effects on spacecraft \citet{GUBBY20021723, WellingSatellite, baker2002}.
 
 Radiation belt particles generally execute three types of periodic motion, 
 each with its own corresponding adiabatic invariant: 
@@ -17,16 +17,16 @@ adiabaticity can be broken and particle motion can not be
 simply decomposed into the aforementioned components. Particle motion 
 can then be represented diffusively along each component via the 
 \emph{Fokker-Planck} equation yielding a powerful picture of 
-radiation belt dynamics \cite{schulz2012particle}.
+radiation belt dynamics \citet{schulz2012particle}.
 
 The third invariant represents the total magnetic flux enclosed within 
 a full particle orbit. It is common to use a normalized form of this, the 
-so called Roederer $L^{*}$ \cite{Roederer1970}. It is analogous to radial 
+so called Roederer $L^{*}$ \citet{Roederer1970}. It is analogous to radial 
 distance from the center of the Earth (in Earth radii) to the equatorial 
 crossing point of the bouncing particle. Diffusion in $L^{*}$ alone 
 (the other invariants shall be considered conserved) accounts for the
 capture and inward radial transport of radiation belt particles 
-(\cite{Roederer1970}, \cite{JGR:JGR4463}).
+(\citet{Roederer1970}, \citet{JGR:JGR4463}).
 
 One of the main difficulties of using a physics-based model for studying and 
 forecasting energetic electrons in the radiation belt is that the parameters 
@@ -55,7 +55,7 @@ The radial diffusion system is a simplified one-dimensional version of
 the \emph{Fokker-Planck} equation. It tracks the time evolution of the
 \emph{phase space density} of particles, $f$ which is governed by the
 differential equation (\ref{eq:raddiffusion}) known as \emph{radial
-  diffusion} in the radiation belt community\cite{JGRA:JGRA9345}.
+  diffusion} in the radiation belt community\citet{JGRA:JGRA9345}.
 
 \begin{equation}\label{eq:raddiffusion}
   \frac{\partial{f}}{\partial{t}} = l^2 \frac{\partial}{\partial{l}}\left( \frac{\kappa(l,
@@ -83,9 +83,9 @@ The key quantities in the system above are.
 
 To solve the radial diffusion system \ref{eq:raddiffusion}, the
 quantities $\kappa(l, t)$, $\lambda(l, t)$ and $Q(l, t)$ need to be
-specified. It is a common practice (see \cite{GRL:GRL10762},
-\cite{JGRA:JGRA15067}, \cite{JGRA:JGRA18021} and
-\cite{GRL:GRL22815}) to parameterise the diffusion field
+specified. It is a common practice (see \citet{GRL:GRL10762},
+\citet{JGRA:JGRA15067}, \citet{JGRA:JGRA18021} and
+\citet{GRL:GRL22815}) to parameterise the diffusion field
 $\kappa$ and loss rate $\lambda$ in the following manner.
 
 \begin{align}
@@ -95,7 +95,7 @@ $\kappa$ and loss rate $\lambda$ in the following manner.
 The quantities $\alpha$, $\beta$ and $b$ are parameters which define
 the diffusion field and loss rate while the quantity $Kp(t)$ is known
 as the Kp index, a measured quantity which stands as a proxy for the
-global geomagnetic activity \cite{BartelsKp}.
+global geomagnetic activity \citet{BartelsKp}.
 
 
 \section{Inverse Problems}\label{sec:inv}
@@ -124,10 +124,10 @@ In the radial diffusion system (\ref{eq:raddiffusion}), $\mathcal{L}_{\theta} =
 \paragraph{Least Squares Support Vector Machines}
 
 (LSSVM) have been applied to calculating approximate solutions to PDEs
-\cite{MEHRKANOON2015105}, \cite{MEHRKANOON20122502} as well as
+\citet{MEHRKANOON2015105}, \citet{MEHRKANOON20122502} as well as
 parameter estimation of delay differential equations
-\cite{MEHRKANOON2014830}, the approach taken in the aforementioned
-research (\cite{MEHRKANOON2014830}) was expressing the parameter
+\citet{MEHRKANOON2014830}, the approach taken in the aforementioned
+research (\citet{MEHRKANOON2014830}) was expressing the parameter
 estimation of time delay as an algebraic optimization problem
 resulting in closed-form approximation for the time varying parameters
 while avoiding iterative simulation of the dynamical system (governed
@@ -135,32 +135,32 @@ by the delay differential equations) in the parameter estimation process.
 
 \paragraph{Radial Basis Functions}
 
-(RBF) were first applied for solution of PDE problems in \cite{KANSA1990147}, 
+(RBF) were first applied for solution of PDE problems in \citet{KANSA1990147}, 
 the authors used colocation with \emph{multiquadric} basis functions for approximating solutions
 of boundary value problems.
 
 Radial basis functions have been applied for the mesh-free solutions of Poisson PDE systems 
-(\cite{AMINATAEI20082887}, \cite{DUAN200866}, \cite{DUAN2006394} \& \cite{CNM:CNM419}),
-as well as the Poisson control problem \cite{Pearson2013}. Further applications of RBFs include 
-atmospheric flow \cite{Tillenius2015406}, convection-diffusion \cite{Safdari-Vaighani2015}, and 
-Schrödinger's equation \cite{doi:10.1137/120893975}. See ref. \cite{fornberg2015} for a recent 
+(\citet{AMINATAEI20082887}, \citet{DUAN200866}, \citet{DUAN2006394} \& \citet{CNM:CNM419}),
+as well as the Poisson control problem \citet{Pearson2013}. Further applications of RBFs include 
+atmospheric flow \citet{Tillenius2015406}, convection-diffusion \citet{Safdari-Vaighani2015}, and 
+Schrödinger's equation \citet{doi:10.1137/120893975}. See ref. \citet{fornberg2015} for a recent 
 textbook with geoscience applications.
 
 \paragraph{Gaussian Processes}
 
-Gaussian Process (GP) models \cite{Rasmussen:2005:GPM:1162254} have a rich theory which has much overlapping 
+Gaussian Process (GP) models \citet{Rasmussen:2005:GPM:1162254} have a rich theory which has much overlapping 
 with linear systems and deterministic and stochastic differential equations. 
 
-\cite{Skilling1992} presented one of the earliest works which focused on calculating solutions of ordinary 
-differential equations (ODE) systems with Gaussian Process methodology, \cite{Graepel} applied it for solving 
+\citet{Skilling1992} presented one of the earliest works which focused on calculating solutions of ordinary 
+differential equations (ODE) systems with Gaussian Process methodology, \citet{Graepel} applied it for solving 
 linear partial differential equations with Dirichlet and Von Neumann boundary conditions.
 
-Interplay between linear operators and GP models applied to Bayesian filtering was investigated by \cite{Sarkka2011}. 
-\cite{pmlr-v31-dondelinger13a} proposed an adaptive gradient matching technique to used Gaussian Process models for 
+Interplay between linear operators and GP models applied to Bayesian filtering was investigated by \citet{Sarkka2011}. 
+\citet{pmlr-v31-dondelinger13a} proposed an adaptive gradient matching technique to used Gaussian Process models for 
 infering parameters of coupled ODE systems.
 
 \paragraph{Neural Networks} were also employed for solutions of boundary value problems in the works such as 
-\cite{Lagaris}, \cite{Aarts2001} \&  \cite{TSOULOS20092385}. \cite{Baymani2011} used Feedforward networks for 
+\citet{Lagaris}, \citet{Aarts2001} \&  \citet{TSOULOS20092385}. \citet{Baymani2011} used Feedforward networks for 
 calculating solutions to the Stokes problem. These approaches generally revolved around decomposing the solution 
 into two components, i.e. the first one satisfying the boundary conditions and the second one represented by the 
 feedforward network.
@@ -330,7 +330,7 @@ to the integrated error of the surrogate model with respect to the governing dyn
 $u_i = \frac{1}{n_c}$, this corresponds to the \emph{Monte Carlo} quadrature of 
 the integrated error, but it is possible to improve the quadrature accuracy by using \emph{Gauss-Legendre} quadrature.
 
-In section \ref{sec:exp}, we use eight point \emph{Gauss Legendre} quadrature in space and time dimension each, thereby setting $n_c = 64$ and weights $u_i$ to appropriate values as dictated by the quadrature rule (\cite{_abramowitzm}).
+In section \ref{sec:exp}, we use eight point \emph{Gauss Legendre} quadrature in space and time dimension each, thereby setting $n_c = 64$ and weights $u_i$ to appropriate values as dictated by the quadrature rule (\citet{_abramowitzm}).
 
 \subsection{Quantifying Observation Likelihood}
 
@@ -379,7 +379,7 @@ we treat the covariance function parameters as fixed.
 
 \subsection{Inference}
 
-We employ the adaptive Metropolis algorithm as proposed by \cite{haario2001}, for sampling
+We employ the adaptive Metropolis algorithm as proposed by \citet{haario2001}, for sampling
 system parameters. The adaptive Metropolis algorithm adapts the exploration variance according
 to the running sample statistics of the Markov Chain procedure.
 
@@ -436,7 +436,7 @@ Kp(t) &= \left\{\begin{matrix}
 \end{align}
 
 Where $C_n(.)$ is the is the Chebyshev polynomial of degree n. 
-The evolution of the Kp index \cite{BartelsKp} is assumed such that it mimics a geomagnetic storm event. 
+The evolution of the Kp index \citet{BartelsKp} is assumed such that it mimics a geomagnetic storm event. 
 
 The radial diffusion solver is run for domain limits $l \in [1, 7], t \in [0, 5]$ with
 200 bins in the spatial and 50 bins in the temporal domains respectively.
@@ -540,5 +540,5 @@ The strength of the proposed method is the ability to quantify the uncertainty i
 \label{fig:bprior}
 \end{figure}
 
-\bibliographystyle{plain}
+\bibliographystyle{plainnat}
 \bibliography{references}
