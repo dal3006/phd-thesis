@@ -1,0 +1,589 @@
+\chapter{Probabilistic Dynamic Time Lag}\label{chapter:pdt}
+
+\section{Introduction}
+
+\section{Deterministic Formulation}\label{sec:formulation}
+
+Time lag inference is essentially a regression problem with two tasks. 
+Given two time series, the causes $x(t)$ and the observed effects $y(t)$, the regression model 
+must learn a mapping $f(.)$ which maps each input pattern $x(t_1)$ to an output $y(t_2)$, and a 
+mapping $g(.)$ which maps the time delay between the input and output patterns $t_2 = t_1 + g(x(t_1))$. 
+This is formally specified in equations below.
+
+\begin{align}
+y(t + \tau(t)) & = f[x(t)]\label{eq:pb1}\\
+\tau(t) & = g[x(t)]\label{eq:pb2} 
+\end{align}
+with
+\[
+f: \mathcal{X}  \rightarrow \mathbb{R},\qquad\text{and}\qquad
+g: \mathcal{X}  \rightarrow \mathbb{R}^{+},
+\]
+$t \in \mathbb{R}^{+}$ represents the continuous temporal domain. The input signal 
+$x(t)\in \mathcal{X}$ is possibly high dimensional and contains the hidden cause to 
+the effect $y(t)\in\mathbb{R}$ which is considered as a scalar in this paper. 
+$\tau(t)\in \mathbb{R}^+$ represents the time delay between inputs and outputs.
+
+It is important to note some caveats about this time lag which make this inference problem 
+different from classical time series regression problems.
+
+Firstly, the time lag $\tau(t)$ can be \emph{non-stationary} i.e. dependent on the input $x(t)$. 
+Secondly, in practical applications such as the motivating space weather example, $\tau(t)$ 
+is not recorded explicitly in the training data. This makes model training and evaluation 
+challenging.
+
+One may make certain assumptions on the time warping function $\phi(t) = t + \tau(t)$, in the general 
+formulation of the problem presented here: 
+
+\begin{enumerate}
+    \item $\phi(.)$ is assumed to be continuous and \emph{bijective}.
+    \item Zhou \& Sornette \citet{ZHOU2006195} enforce further assumptions 
+          such as $\phi(t_1) \leq \phi(t_2), \forall t_1 \leq t_2$, which 
+          are incorporated via constraints. This approach respects the 
+          properties associated with the warping function $\phi(.)$ but 
+          increase the computational complexity of the resulting 
+          optimization problem.
+\end{enumerate}
+
+The second assumption can be restrictive for applications in space physics, where fast moving 
+solar wind can reach the Earth before slow moving solar wind which departed before it. 
+
+In practical time-series applications, one works with sub-sampled or discretized versions of the time 
+series $x(t)$ and $y(t)$. In this case the map $g(.)$ is replaced by its discrete analogue 
+$g(.):\mathcal{X}  \rightarrow \mathbb{N}$. 
+
+Henceforth we will work with the discretized time series $x^m$ and $y^m$.
+
+\section{Probabilistic Formulation}\label{sec:probform}
+
+Unlike the classical supervised learning problem, we cannot associate a time lagged output
+$y^{m + i}$ and input $x^m$ with absolute certainty. It is therefore beneficial to relax 
+the assumption of a deterministic time lag to a stochastic one. Our strategy consists of
+learning a set of independent predictors $\{\hat y_i(x),i=1,\ldots n\}$ associated to a fixed time lag indexed by $i$, along with a set
+of probabilistic weights $\{\hat p_i(x),i=1,\ldots n\}$ summing to one, indicating for a given input $x$ the probability for each time lag $i$
+to be the correct one. These weights naturally arise from a latent variable model that we describe now.
+
+\subsection{Latent model and associated likelihood}\label{sec:latent}
+
+Suppose we discretize time in units of $\delta t$, such that for a given event $x^{(m)}$ at time  
+$t = m\ \delta t$, the possible time lag $\tau^{(m)}$ is within a window $[\tau_{min},\tau_{max}]$. 
+This interval is as well discretized into $n = (\tau_{max}-\tau_{min})/\delta t $ intervals so that 
+the effect if any of this event has to be found in the vector of size $n$ of possible effects $(y^{(m+1)},\ldots,y^{(m+n)}\}$.
+Assume now that for a given cause $x$ we are given a set of independent predictors $\{\hat y_i(x),i=1,\ldots n\}$ for these effects.
+Our probabilistic formulation is based on the following conditional probability distribution:
+\begin{equation}\label{eq:py}
+  P\bigl[{\bf y}^{m} = {\bf y}\vert x^{(m)}=x\bigr] = \sum_{\{\tau_i\in\{0,1\}\}}  \hat p\bigl(\tau_1,\ldots,\tau_n\vert x)
+\prod_{i=1}^n {\cal N}\bigl(\hat y_i(x),\sigma_i(\tau)\bigr)
+\end{equation}
+with 
+\[
+\sigma_i({\bf \tau})^{-2} = \Bigl(1+\sum_j\alpha_{ij} \tau_j\Bigr)\sigma^{-2},
+\]
+with $\sigma^2$ a default variance and $\alpha_{ij}\ge 0$ a matrix of non-negative real parameters. 
+This is a local mixture model function of the input variable $x$. Its precise meaning is the following: for a given cause $x$ the effect
+$y_i$ at horizon $i$ has a normal distribution centered on $\hat y_i(x)$ with  variance $\sigma_i^2({\bf \tau})$ (independent of $x$ as a simplifying assumption). $\{\tau_1,\ldots,\tau_n\}$ is a set of binary
+latent variables encoding the stochastic causal time lag, telling whether $x$ causes $y_i$ ($\tau_i=1$) or not ($\tau_i=0$). Since we expect a one to one correspondence between causes
+$x^{(m)}$ and effects $y^{m+i}$ we impose the constraint
+\begin{equation}\label{eq:cs1}
+\sum_{i=1}^n \tau_i = 1.
+\end{equation}
+The fact that $x$ can influence $y_i$ through the bias $\hat y_i(x)$ even when $\tau_i=0$ reflects an indirect
+influence due to a finite auto-correlation time of $y_t$. But this should come with a higher variance, insured when $\alpha_{ij}$ is a decreasing function of $\vert i-j\vert$.
+A large value of $\alpha_{ii}$ compared to $\alpha_{ij}$ for  $i\ne j$ 
+should correspond to a small auto-correlation time. From the constraint~(\ref{eq:cs1}), $\hat p(\tau\vert x)$ is specified by  a vector
+$\{\hat p_i(x),i=1,\dots n\}$ corresponding to
+\[
+\hat p_i(x) = \hat p(\tau_1=0,\ldots,\tau_i=1,\ldots,\tau_n=0\vert x),
+\]
+with 
+\[
+\sum_{i=1}^n \hat p_i(x) = 1.
+\]
+The log likelihood associated to this joint measure is: %(see appendix~\ref{app:LL}):
+\begin{equation}\label{eq:LL}
+{\cal L}\bigl[\hat {\bf y},\sigma,{\bf \alpha}] = -\frac{n}{2}\log(\sigma)-{\mathbb E}_{data}\Bigl[\frac{1}{2\sigma^2}\sum_{i=1}^n\bigl(y_i-\hat y_i(x)\bigr)^2
+-\log\bigl(Z(\sigma,{\bf \alpha})\bigr)\Bigr],
+\end{equation}
+with
+\[
+Z(\sigma,{\bf \alpha}) = \sum_{i=1}^n\hat p_i(x)\exp\Bigl(-\frac{1}{2\sigma^2}\sum_j\alpha_{ji}\bigl(y_j-\hat y_j(x)\bigr)^2+\frac{1}{2}\sum_j\log(1+\alpha_{ji})\Bigr).
+\]
+Optimizing ${\cal L}$ yields the following expression of the optimal parameters:
+\begin{equation}\label{eq:var}
+\frac{\sigma^2}{1+\alpha_{ij}} = \frac{{\mathbb E}_{data}\bigl[\bigl(y_i-\hat y_i(x)\bigr)^2p_j(x,{\bf y})\bigr]}{{\mathbb E}_{data}\bigl[p_j(x,{\bf y})\bigr]},
+\end{equation}
+by means of the conditional probability $P(\tau_i=1\vert x,{\bf y})$ which reads
+\begin{equation}\label{eq:hatpi}
+p_i(x,{\bf y}) = \frac{1}{Z(\sigma,{\bf \alpha})}\hat p_i(x)\exp\Bigl(-\frac{1}{2\sigma^2}\sum_j\alpha_{ji}\bigl(y_j-\hat y_j(x)\bigr)^2+\frac{1}{2}\sum_j\log(1+\alpha_{ji})\Bigr).
+\end{equation}
+These are implicit equations, since ${\bf p}(x,{\bf y})$ depends on the parameters $\sigma^2$ and $\alpha_{ij}$.
+In addition the optimal $\hat {\bf p}$ reads:%(see appendix~\ref{app:LL})
+\begin{equation}\label{eq:tildep}
+\hat p_i(x) = {\mathbb E}_{data,y}\Bigl[p_i(x,{\bf y})\Bigr].
+\end{equation}
+
+Practically the saddle point equations (\ref{eq:var},\ref{eq:hatpi},\ref{eq:tildep}) can be solved by alternatively updating $\hat {\bf p}$
+and the parameters through equations~(\ref{eq:hatpi}) and~(\ref{eq:var}). The type of solution to be expected is analyzed in the next section,
+in a simpler case where $\alpha_{ij} = \alpha\delta_{ij}$.
+
+
+\subsection{Linear stability analysis}\label{sec:stability}
+Let $\Delta y_i^2(x)= \bigl(y_i-\hat y_i(x)\bigr)^2$ and call
+\[
+\sigma_0^2 = \frac{1}{n}{\mathbb E}_{data}\Bigl(\sum_{i=1}^n \Delta y_i^2(x)\Bigr)
+\]
+the default mean square error of the predictor ${\hat {\bf y}}(x)$.
+There is a degenerate solution to the saddle point equations (\ref{eq:var},\ref{eq:hatpi},\ref{eq:tildep}) corresponding to $\hat p_i(x) = 1/n$, $\alpha_{ij}=0$ for all
+pairs $(i,j)$ with $\sigma^2=\sigma_0^2$. Intuitively the model could converge to this solution when the set of predictors are not specific enough.
+It would be therefore interesting to identify the conditions under which this degenerate solution may appear. For this we can compute the Hessian and check its eigenvalues.
+To simplify the analysis
+we restrict the analysis to the set of parameters
+\[
+\alpha_{ij} = \alpha \delta_{ij},
+\]
+which leaves us with only two parameters $\alpha$ and $r = \sigma^2/\sigma_0^2$. Leaving aside the details of the computation, %for the Appendix~\ref{app:Hessian},
+the situation can be summarized as follows. There are two key statistical quantities:
+\begin{align}
+C_1[{\bf p}] &= \frac{1}{\sigma_0^2}{\mathbb E}_{data}\Bigl(\sum_{i=1}^n p_i(x,{\bf y})\Delta y_i^2(x)\Bigr),\label{def:C1}\\[0.2cm]
+C_2[{\bf p}] &= \frac{1}{\sigma_0^4}{\mathbb E}_{data}\Bigl[\sum_{i=1}^n p_i(x,{\bf y})\Bigl(\Delta y_i^2(x)-\sum_{j=1}^np_j(x,{\bf y})\Delta y_j^2(x)\Bigr)^2\Bigr].\label{def:C2}
+\end{align}
+$C_1$ represents the covariance between the latent variables $\{\tau_i\}$ and the normalized predictor errors. $C_1$ smaller than one 
+indicates a positive correlation between the latent variables and small errors. At the degenerate point, i.e. ${\bf p}={\bf p}_{0}$ uniform, $C_1[{\bf p}_{0}]=1$ and $C_2[{\bf p}_{0}]$
+represents the default variability among the predictor errors.
+At a saddle point the parameters are given by:
+\begin{align*}
+\frac{\sigma^2}{\sigma_0^2} &= \frac{n-C_1[{\bf p}]}{n-1} \\[0.2cm]
+\alpha &= \frac{n}{n-1}\frac{1-C_1[{\bf p}]}{C_1[{\bf p}]}.
+\end{align*}
+Such a saddle point is stable whenever
+\[
+C_2[{\bf p}] < 2C_1^2[{\bf p}]+{\cal O}\bigl(\frac{1}{n}\bigr).
+\]
+In particular the condition for the degenerate point to be unstable is
+\[
+C_2[{\bf p}_0] > 2\bigl(1-\frac{1}{n}\bigr).
+\]
+Note that for $\Delta y_i(x)$ iid centered with variance $\sigma_0^2$ and relative kurtosis $\kappa$ 
+(conditionally to $x$) we have $C_2 = (2+\kappa)(1-1/n)$. As a result, as soon as there are fluctuations 
+among the $\Delta y_i^2(x)$ with non-negative relative kurtosis ($\kappa=0$ for a normal variable) the 
+degenerate solution will be unstable.
+
+\subsection{Loss function and related optimal predictor}
+
+Once the set $\hat {\bf y}(x)$ of predictors is learned and assuming that the correct parameters for~(\ref{eq:py}) 
+have been found we would like to know for a given input $x$, what is the optimal predictor for $y_i(x)$. 
+Any predictor has  to come in a composite form $(\hat y(x),\hat I(x))$ where $\hat I(x)$ is the predicted index 
+and $\hat y(x)$ the predicted value. This is necessarily associated to a loss function which we specify with 
+an $L_2$ norm:
+
+\begin{equation}\label{eq:orloss}
+{\cal L}(\hat y,\hat I) = {\mathbb E}_{data}\Bigl[\bigl(y_{\hat I(x)}-\hat y(x)\bigr)^2\Bigr]. 
+\end{equation}
+
+Then we have the following statement:
+
+\begin{prop}\label{prop:opred}
+Based on~(\ref{eq:py}), with $\alpha_{ij} = \alpha\delta_{ij},\ \alpha>0$, the optimal composite predictor $(y^\star,I^\star)$ is given by
+\[
+y^\star(x) = \hat y_{I^\star(x)}(x)\qquad\text{with}\qquad I^\star(x) = \argmax_{i} \bigl(\hat p_i(x)\bigr), 
+\]
+\end{prop}
+\begin{proof}
+See Appendix~\ref{app:opred}
+\end{proof}
+
+Since $\hat {\bf p}$ is self-consistently determined by~(\ref{eq:tildep}) along with equation~(\ref{eq:var}), what is 
+needed from the practical point of view is to be able to solve two  regression problems, namely $\hat {\bf y}(x)$ 
+and $\hat {\bf p}(x)$ from a set of observations $\{(x^{m},{\bf y}^{m})\}$ with a given set of parameters 
+${\bf \alpha}$ and $\sigma^2$ in order then to be able to iterate the saddle point equations. The practical 
+implementation of this framework will be described in the next section.
+
+
+\section{Practical Solution}\label{sec:model}
+
+\subsection{Alternating Learning Updates}
+
+In order to train it we retro-propagate the following loss function:
+
+\begin{equation}
+\mathcal{L}(y^{(1:M)}, \hat{y}^{(1:M)}, \hat{p}^{(1:M)}) =
+ \frac{1}{M}\sum_{i,m} \frac{1 + \alpha p^{(m)}_i}{2\sigma^2}(y^{(m)}_{i} - \hat{y}^{(m)}_{i})^2   
++  p^{(m)}_{i}\log \left (\frac{p^{(m)}_i}{\hat{p}^{(m)}_i} \right).\label{eq:loss}
+\end{equation}
+
+This function is computed over a mini-batch of size $M$ with $m=1\ldots M$ referring  to data sample indices within the
+mini-batch in question. Its can be derived from . 
+
+Parameters $\alpha$ and $\sigma^2$ have been already defined. From the variational point of view it can be checked 
+that this form leads each predictor $\hat y_i(x)$ to minimize a squared error independently of each other and of 
+the other set of predictors $\hat {\bf p}$, while these are led to converge to the form given in~(\ref{eq:tildep}).
+
+\subsection{Hyper-parameters tuning}
+
+Hyper-parameter selection is an important part of the model training process in the PDT problem. 
+The hyper-parameter selection problem in deep learning has received much attention and a number 
+of methodologies have been proposed for tacking it. 
+
+Snoek et. al \citet{snoek2012practical} cast the problem in the formalism of Bayesian optimization, their method 
+builds a Gaussian Process based surrogate model of the hyper-parameter fitness surface and computes 
+updates based on expected improvement. 
+
+
+Bergstra et. al \citet{hypBengio} demonstrate that sequential hyper-parameter search techniques yield state of the art 
+results when applied on \emph{Deep Belief Nets} (DBN). 
+
+Bergstra \& Bengio \citet{randomsearchBengio} showed that random search can be an effective way for tuning model 
+hyper-parameters in several problem domains, and serve as a good baseline which can enable 
+further improvement in model performance.
+
+In the current work, we employ random search for hyper-parameter selection. 
+
+\subsection{Neural network architecture}
+
+From the practical point of view, the two aforementioned regression problems $\hat {\bf y}(x)$ and $\hat {\bf p}(x)$ 
+can be solved efficiently with help of neural networks, with possibly deep architectures depending on the 
+dimension of the input signal $x$. Since the output $y$ and time lag $\tau$ have common causes we expect a 
+single architecture with feature sharing for $\hat {\bf y}(x)$ and $\hat {\bf p}(x)$ to be more efficient.
+
+\begin{figure}[ht]
+\centerline{\resizebox*{0.7\textwidth}{!}{\input{figures/archi.pdf_t}}}
+\caption{\label{fig:archi} Architecture of the neural network specified by the number of units $(n^v,n_1^h,n_2^h,2n)$ in each layer.}
+\end{figure}
+
+Beside the output layer which is constrained to be of size $2 \times n$ where $n$ is the chosen size of the time window,
+the composition and size of the layers preceding the output layer are dependent on the application. 
+One may choose \emph{convolutional layers} for input data which consists of images and fully connected 
+layers for vector data.
+
+In section \ref{sec:exppdt}, we use fully connected neural architectures sketched on Figure~\ref{fig:archi}, 
+having a maximum depth of two hidden layers, for prediction of outputs and time lags. 
+
+
+
+\section{Experiments}\label{sec:exppdt}
+
+
+Just as the MNIST, CIFAR Santa Fe Laser and other data sets serve as a way to evaluate machine learning 
+algorithms, it is necessary to propose benchmark problems for \emph{Probabilistic Dynamic Time Lag}.
+
+This is particularly challenging given the nature of the PDT problem, although time lag 
+relationships do exist in real world data sets (\citet{doi:10.1002/jgra.50429}, \citet{ZHOU2006195}), 
+it is difficult to find data sets with time lag relationships explicitly annotated.
+
+This barrier can be surpassed in turn by careful construction of synthetic data sets which incorporate 
+dynamic time lag relationships between causes and effects with various complexity.
+
+Synthetic data sets allow us to evaluate the accuracy of both, the output and time lag predictions of 
+PDT models. To this end, we propose four benchmark tests, which are motivated by their connection 
+to the solar wind prediction problem, but which we hope can become canonical examples in the area 
+of PDT modelling.
+
+\subsection{Data Generation}
+
+We start by generating the time series $x(t) \in \mathbb{R}^10$, 
+which represent the driving forces in our system. This can be achieved with 
+good flexibility using \emph{Stochastic Langevin Dynamics} as shown in 
+equation \ref{eq:data}.
+
+\begin{align}
+ x(t + 1) &= (1 - \eta) x(t) + \mathcal{N}(0, s^2) \label{eq:data}\\
+ y(t + \tau(t)) &= k ||x(t)||^2 + c \label{eq:outputs}
+\end{align}
+
+Equation \ref{eq:outputs} defines the output $y(.)$ as the square norm of the appropriately 
+time lagged input, where $\tau(t)$ determines the time lag relationship.
+
+In each benchmark we set $\eta = 0.02, s^2 = 0.7$, for the data generation process.
+
+
+\subsection{Benchmark Problems}\label{sec:benchmark}
+
+Based on the above framework we construct four benchmark problems.
+
+\begin{enumerate}
+\item \textbf{Problem I} Constant Lag: \newline 
+$\tau(t) = k$
+
+\item \textbf{Problem II} Constant Velocity $v = k ||x(t)||^2 + c$; Fixed Distance $d$: 
+\newline $\tau(t) = d/v,\ k = 10,\ d = 1000,\ c = 40$
+
+\item \textbf{Problem III} Initial Velocity $v = k ||x(t)||^2 + c$, Constant Acceleration $a$; Fixed Distance $d$: 
+\newline $\tau(t) = (\sqrt{v^2 + 2ad} - v)/a,\ k = 5,\ a = 5,\ d = 1000, c = 0$
+
+\item \textbf{Problem IV} Velocity $v = k ||x(t)||^2 + c$, Softplus time lag: 
+\newline $\tau(t) = \exp\left(v\right)/\left(1 + \exp(v)\right), \ k = 10, c = 40$
+
+\end{enumerate}
+
+
+\subsection{Solar Wind Speed Prediction}:\label{sec:solarwind}
+
+We apply our model on the task of solar wind speed prediction using 
+solar magnetic \emph{flux tube expansion}(FTE) data produced by the 
+\emph{current sheet source surface} (CSSS) \citet{csss} model.
+
+The task of predicting solar wind speed from heliospheric data is challenging due 
+to the large distance between the Sun and the Earth as well as the non-stationary 
+propagation time of the solar plasma through the interplanetary medium.
+
+In recent works \citet{Poduval_2014} \& \citet{neuralnetsw} FTE data has been used to
+train models for solar wind speed prediction, but these models assume a constant propagation 
+time when combining FTE data with solar wind speed measurements close to the Earth. 
+
+The CSSS model is run on magnetogram data taken from the \emph{Solar Dynamics Observatory} 
+corresponding to the time period 2011 to 2017. Out of this, one year of data (2014) was 
+kept aside for model testing and the rest for training and hyper-parameter search.
+
+\subsection{Results}
+
+The results of the experiments of \ref{sec:benchmark} and \ref{sec:solarwind} are summarized 
+in table \ref{tab:results_syn} and evaluated using the following charts.
+
+\begin{enumerate}
+    \item Goodness of fit: These charts visualise the scatter between the ground truth values of the output
+          and time lag versus the values predicted by the model. 
+    \item Output-Time Lag charts: Since the output time lag relationship can be expressed in closed 
+          form, we can visualize this relationship in the generated data sets and evaluate how well 
+          the model is able to infer it.
+    \item Error heat-maps: Heat maps of prediction error in velocity vs prediction error 
+          in time lag. They help in visualizing the shape of the error distribution.
+\end{enumerate}
+
+Apart from the standard performance metrics, we attach the values of $\sigma_0$ 
+and $C_1$ introduced in section \ref{sec:stability}.
+
+The value of $\sigma_0$ gives a base line to compare the R.M.S.E scores of the model, 
+in fact an R.M.S.E score less than $\sigma_0$ and $C_1 < 1$ indicates that the model 
+performs better than a naive predictor which assigns a probability of $\frac{1}{n}$ 
+to each candidate model $\hat{y}_i(x)$, regardless of the input $x$.
+
+\begin{table}
+  \caption{Performance: Output (Time Lag) Prediction}\label{tab:results_syn}
+  \centering
+  \begin{tabular}{ l l l l l l}
+  \hline
+  Problem &  M.A.E & R.M.S.E & Pearson Corr. & $\sigma_0$ & $C_1$\\
+  \hline
+  \textbf{I} & $10.74$ ($0.024$)  & $15.37$ ($0.48$) & $0.96$ (--) & $39.0$ & $0.87$\\
+  \textbf{II} & $14.24$ ($1.55$) & $19.31$ ($2.04$) & $0.92$ ($0.83$) & $34.43$ & $0.87$\\
+  \textbf{III} & $4.12$ ($1.66$) & $6.4$ ($2.1$) & $0.92$ ($0.81$) & $10.16$ & $0.76$\\
+  \textbf{IV} & $13.81$ ($1.0$) & $20.13$ ($1.37$) & $0.91$ ( $0.90$) & $31.7$ & $0.833$\\
+  \textbf{Solar Wind} & $63.75$ & $79.61$ & $0.25$ & $80.09$ & $0.998$\\
+  \hline
+  \end{tabular}
+\end{table}
+
+\subsubsection{Problem I}
+
+This is the simplest of the benchmark problems, the task is simply to learn a constant time lag from 
+the training data. On the test data set for this problem, the model predicts the correct time lag for 
+$99.92\%$ of the samples.
+
+
+\begin{figure*}
+  \centering
+
+  \begin{subfigure}[b]{0.4\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/exp2_scatter_v_test}
+    \caption{ \textbf{Problem II}, Goodness of fit, Output $y(x)$}
+    \label{fig:problem2_fitv}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.4\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/exp2_scatter_t_test}
+    \caption{ \textbf{Problem II}, Goodness of fit, Time lag $\tau(t)$ }
+    \label{fig:problem2_fitt}
+  \end{subfigure}
+  
+  \vskip\baselineskip
+  
+  \begin{subfigure}[b]{0.4\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/exp2_errors}
+    \caption{ \textbf{Problem II}, Error in prediction of output vs error in time lag prediction} 
+    \label{fig:problem2_error}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.4\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/exp2_predictive_curves}
+    \caption{ \textbf{Problem II}, Output vs Time Lag Relationship} 
+    \label{fig:problem2_curves}
+  \end{subfigure}
+
+  %\vskip\baselineskip
+  
+  %\begin{subfigure}[b]{0.4\textwidth}
+  %  \centering
+  %  \includegraphics[width=\textwidth]{figures/exp2_timeseries_pred}
+  %  \caption{ \textbf{Problem II}, A portion of the test time series reconstructed using the model} 
+  %  \label{fig:problem2_timeseries}
+  %\end{subfigure}
+  %\hfill
+  %\begin{subfigure}[b]{0.4\textwidth}
+  %  \centering
+  %  \includegraphics[width=\textwidth]{figures/exp2_lag_error_jus}
+  %  \caption{ \textbf{Problem II}, Predicted vs Actual Outputs for the cases with time lag error $\leq -2.5$.} 
+  %  \label{fig:problem2_lag_error_jus}
+  %\end{subfigure}
+  
+  \caption{\textbf{Problem II}, Results}
+\end{figure*}
+
+
+
+
+\subsubsection{Problem II}
+
+Figures \ref{fig:problem2_fitv} and \ref{fig:problem2_fitt} show that the model is able to 
+make accurate predictions for the output as well as time lag.
+
+Figure \ref{fig:problem2_curves} presents smoothed trends extracted from the data presented in 
+\ref{fig:problem2_fitv}, the red curve represents the output time lag function learned by the model 
+while the black curve is the \emph{ground truth} dependence between the two. The model is able to 
+approximate the inverse relationship between the output and time lag from the training data.
+
+
+\begin{figure*}
+  \centering
+
+  \begin{subfigure}[b]{0.4\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/exp3_scatter_v_test}
+    \caption{ \textbf{Problem III}, Goodness of fit, Output $y(x)$}
+    \label{fig:problem3_fitv}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.4\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/exp3_scatter_t_test}
+    \caption{ \textbf{Problem III}, Goodness of fit, Time lag $\tau(t)$ }
+    \label{fig:problem3_fitt}
+  \end{subfigure}
+
+  \vskip\baselineskip
+  
+  \begin{subfigure}[b]{0.4\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/exp3_errors}
+    \caption{ \textbf{Problem III}, Error in prediction of output vs error in time lag prediction} 
+    \label{fig:problem3_error}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.4\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/exp3_predictive_curves}
+    \caption{ \textbf{Problem III}, Output vs Time Lag Relationship} 
+    \label{fig:problem3_curves}
+  \end{subfigure}
+  
+  %\vskip\baselineskip
+  
+  %\begin{subfigure}[b]{0.4\textwidth}
+  %  \centering
+  %  \includegraphics[width=\textwidth]{figures/exp3_timeseries_pred}
+  %  \caption{ \textbf{Problem III}, A portion of the test time series reconstructed using the model} 
+  %  \label{fig:problem3_timeseries}
+  %\end{subfigure}
+  %\hfill
+  %\begin{subfigure}[b]{0.4\textwidth}
+  %  \centering
+  %  \includegraphics[width=\textwidth]{figures/exp3_lag_error_jus}
+  %  \caption{ \textbf{Problem III}, Predicted vs Actual Outputs for the cases with time lag error $\leq -2.5$.} 
+  %  \label{fig:problem3_lag_error_jus}
+  %\end{subfigure}
+  
+  \caption{\textbf{Problem III}, Results}
+\end{figure*}
+
+
+\subsubsection{Problem III}
+
+Problem III involves a more complicated output time lag relationship than problem II due to the 
+effect of acceleration. From figures \ref{fig:problem3_fitv} and \ref{fig:problem3_fitv}, 
+it can be observed that the model can still learn the time lag and output mappings but the 
+time lag error distribution (\ref{fig:problem3_error}) has a slightly longer tail as compared to 
+figure \ref{fig:problem2_error}.
+
+
+\subsubsection{Problem IV}
+
+Figures \ref{fig:problem4_fitv}, \ref{fig:problem4_fitt}, \ref{fig:problem4_curves} summarize 
+the results of the experiment. This case is different as compared to the previous problems as there 
+is now a monotonic relationship between the output and time lag.
+
+
+
+\begin{figure*}
+  \centering
+
+  \begin{subfigure}[b]{0.4\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/exp4_scatter_v_test}
+    \caption{ \textbf{Problem IV}, Goodness of fit, Output $y(x)$}
+    \label{fig:problem4_fitv}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.4\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/exp4_scatter_t_test}
+    \caption{ \textbf{Problem IV}, Goodness of fit, Time lag $\tau(t)$ }
+    \label{fig:problem4_fitt}
+  \end{subfigure}
+  
+  \vskip\baselineskip
+  
+  \begin{subfigure}[b]{0.4\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/exp4_errors}
+    \caption{ \textbf{Problem IV}, Error in prediction of output vs error in time lag prediction} 
+    \label{fig:problem4_error}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.4\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/exp4_predictive_curves}
+    \caption{ \textbf{Problem IV}, Output vs Time Lag Relationship} 
+    \label{fig:problem4_curves}
+  \end{subfigure}
+  
+  \caption{\textbf{Problem IV}, Results}
+\end{figure*}
+
+
+\subsubsection{Solar Wind Prediction}
+
+Figure \ref{fig:sw_preds} shows observed solar wind speed versus the model's predictions for the test data. 
+Although the observed correlation ($0.25$) seems low, this in fact shows a slight improvement above the 
+results in \citet{Poduval_2014} where a correlation score of $0.23$ was observed.
+
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.5\textwidth]{figures/test_scatter_v}
+  \caption{Predicted vs Actual Solar Wind Speed} 
+  \label{fig:sw_preds}
+\end{figure}
+
+
+\section{Conclusions}
+
+We present in this work a formulation and a novel solution methodology for the problem of performing 
+inference and forecasting in the context of lagged causal relationships between time series. 
+We call this problem \emph{Probabilistic Dynamic Time Lag} (PDT) to note the non-stationary nature of the 
+causal link between time series $x(t)$ and $y(t)$. 
+
+We outlined a neural network based solution to this problem and benchmark its performance 
+on a set of synthetic examples.
+
+Going ahead we plan to augment the FTE data set with other solar data sources to improve
+the model's predictive performance on the solar wind forecasting problem.
+
+
+\subsubsection*{Acknowledgements}
+
+
+\clearpage
+\bibliography{references}

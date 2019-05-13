@@ -1,0 +1,35 @@
+\chapter{Log likelihood of the latent model~(\ref{eq:py})}\label{app:LL}
+Assume that the number of learning samples tends to infinity, and so that in a small volume $dv = dxd{\bf y}$ around a given  joint configuration $(x,{\bf y})$,
+the number of data $N_{x,{\bf y}}$ becomes large. Restricting the likelihood to this subset of the data yields the following:
+\[
+{\cal L}_{x,{\bf y}} = \prod_{m=1}^{N_{x,{\bf y}}} \sum_{\{\tau^{(m)}\}} 
+\frac{\hat p(\tau^{(m)}\vert x)}{\prod_{i=1}^n\sqrt{2\pi}\ \sigma_i(\tau^{(m)})}
+\exp\Bigl(-\frac{1}{2}\sum_{i=1}^n\frac{\bigl(y_i-\hat y_i(x)\bigr)^2}{\sigma_i(\tau^{(m)})^2}\Bigr).
+\]
+Upon introducing the relative frequencies:
+\[
+p_i(x,{\bf y}) = \frac{1}{N_{x,{\bf y}}}\sum_{m=1}^{N_{x,{\bf y}}} \tau_i^{(m)} 
+\qquad\text{satisfying}\qquad 
+\sum_{i=1}^n p_i(x,{\bf y}) = 1,
+\]
+the sum over the $\tau_i^{(m)}$ is replaced by a sum over these new variables, 
+with the summand obeying a large deviation principle (see e.g.~\citet{Touchette})
+\[
+{\cal L}_{x,{\bf y}} \asymp \sum_{{\bf p}} 
+\exp\Bigl(-N_{x,{\bf y}} {\cal F}_{x,{\bf y}}\bigl[{\bf p}\bigr]\Bigr)
+\]
+where the rate function simply reads from Sanov's theorem
+\[
+{\cal F}_{x,{\bf y}}\bigl[\{p\}\bigr] = n\log(\sigma)+
+\sum_{i=1}^n\Bigl[\bigl(y_i-\hat y_i(x)\bigr)^2\frac{1+\sum_j\alpha_{ij}p_j}{2\sigma^2}
+-\frac{1}{2}p_i\sum_j\log(1+\alpha_{ji})+p_i\log\frac{p_i}{\hat p_i}\Bigr].
+\]
+Taking the saddle point for $p_i$ yield as a function of $(x,{\bf y})$ expression~(\ref{eq:hatpi}). Inserting this into ${\cal F}$ and taking
+the average over the data set yield the log likelihood~(\ref{eq:LL}) with opposite sign. 
+$\hat p$ is also subject of being optimized. We have
+\[
+\frac{\partial{\cal L}}{\partial \hat p_i(x)} = {\mathbb E}_{data,y}\Bigl[\frac{p_i(x,{\bf y})}{\hat p(x)}-\lambda(x)\Bigr],
+\]
+with $\lambda(x)$ a Lagrange multiplier to insure that $\sum_i\hat p_i(x)=1$ for any $x$ yielding expression~(\ref{eq:tildep}).
+
+\bibliography{references}

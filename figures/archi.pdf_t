@@ -1,0 +1,25 @@
+\begin{picture}(0,0)%
+\includegraphics{archi.pdf}%
+\end{picture}%
+\setlength{\unitlength}{4144sp}%
+%
+\begingroup\makeatletter\ifx\SetFigFont\undefined%
+\gdef\SetFigFont#1#2#3#4#5{%
+  \reset@font\fontsize{#1}{#2pt}%
+  \fontfamily{#3}\fontseries{#4}\fontshape{#5}%
+  \selectfont}%
+\fi\endgroup%
+\begin{picture}(14512,7383)(3361,-7948)
+\put(6121,-2131){\makebox(0,0)[lb]{\smash{{\SetFigFont{29}{34.8}{\rmdefault}{\mddefault}{\updefault}$n_1^h$}}}}
+\put(3376,-916){\makebox(0,0)[lb]{\smash{{\SetFigFont{29}{34.8}{\rmdefault}{\mddefault}{\updefault}$n^v$}}}}
+\put(7066,-6676){\makebox(0,0)[lb]{\smash{{\SetFigFont{20}{24.0}{\rmdefault}{\mddefault}{\updefault}hidden layers}}}}
+\put(10441,-5236){\makebox(0,0)[lb]{\smash{{\SetFigFont{20}{24.0}{\rmdefault}{\mddefault}{\updefault}soft max}}}}
+\put(10036,-3076){\makebox(0,0)[lb]{\smash{{\SetFigFont{20}{24.0}{\rmdefault}{\mddefault}{\updefault}fully connected}}}}
+\put(7021,-4246){\makebox(0,0)[lb]{\smash{{\SetFigFont{20}{24.0}{\rmdefault}{\mddefault}{\updefault}fully connected}}}}
+\put(11926,-1321){\makebox(0,0)[lb]{\smash{{\SetFigFont{29}{34.8}{\rmdefault}{\mddefault}{\updefault}$2n$}}}}
+\put(9406,-2131){\makebox(0,0)[lb]{\smash{{\SetFigFont{29}{34.8}{\rmdefault}{\mddefault}{\updefault}$n_2^h$}}}}
+\put(3421,-4471){\makebox(0,0)[lb]{\smash{{\SetFigFont{50}{60.0}{\rmdefault}{\mddefault}{\updefault}$X$}}}}
+\put(15166,-4246){\makebox(0,0)[lb]{\smash{{\SetFigFont{29}{34.8}{\rmdefault}{\mddefault}{\updefault}$(\hat y(x),\hat I(x))$}}}}
+\put(12061,-2941){\makebox(0,0)[lb]{\smash{{\SetFigFont{50}{60.0}{\rmdefault}{\mddefault}{\updefault}$\hat {\bf y}$}}}}
+\put(12061,-5506){\makebox(0,0)[lb]{\smash{{\SetFigFont{50}{60.0}{\rmdefault}{\mddefault}{\updefault}$\hat {\bf p}$}}}}
+\end{picture}%

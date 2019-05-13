@@ -16,9 +16,32 @@
 \usepackage{a4wide}                     % Tell latex to use the room there is on the page
 \usepackage{amsmath}                    % For equation environment
 \usepackage{amssymb}                    % special Math symbols
+\usepackage{subcaption}
+%\captionsetup{compatibility=false}
+\let\proof\relax
+\let\endproof\relax
+\usepackage{amsthm}
+\newtheoremstyle{etoile}{\parskip}{\parskip}{\itshape}
+                        {0pt}{\bfseries\sffamily}{.}{ }{}
+\theoremstyle{etoile}
+\def\proofname{\normalfont\bfseries\sffamily Proof}
+\newcommand\bbox{\hfill\rule{2mm}{2mm}}
+\let\qed=\bbox
+% Les théoremes
+\newtheorem{prop}{Proposition}[section]
+\newtheorem{coro}[prop]{Corollaire}
+\newtheorem{theo}[prop]{Theorem}
+\newtheorem{defin}[prop]{Definition}
+\newtheorem{lem}[prop]{Lemma}
+
+\def\DD{\displaystyle}
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\argmax}{argmax}
+
 %\usepackage[greek, british]{babel}      % Use british hyphenation stuff and the Greek Euro symbol
 \usepackage{fancyhdr}                   % Nice and shiny headers
 \usepackage{graphicx}                   % For images
+\DeclareGraphicsExtensions{.pdf,.png}
 \usepackage{grffile}                    % So that we can use spaces in image names...
 \usepackage{pifont}                     % For ticks and crosses
 \usepackage{paralist}                   % Compact enumerate and itemize
@@ -57,7 +80,7 @@
 \usepackage{url}                      % Make it possible to define clickable urls
 \usepackage{makeidx}                  % Needed for the index
 %\usepackage{hyperref}                 % For inserting PDF options (author etc.)
-\usepackage{subfig}                   % sub-figures!!! hooray...
+%\usepackage{subfig}                   % sub-figures!!! hooray...
 \captionsetup[subfloat]{position=bottom}   %captions below
 \usepackage{booktabs}                 % nicer tables, nice!
 \usepackage{rotating}                 % rotated tables and such
