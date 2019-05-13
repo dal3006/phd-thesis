@@ -37,7 +37,7 @@ formulation of the problem presented here:
 
 \begin{enumerate}
     \item $\phi(.)$ is assumed to be continuous and \emph{bijective}.
-    \item Zhou \& Sornette \citet{ZHOU2006195} enforce further assumptions 
+    \item \citet{ZHOU2006195} enforce further assumptions 
           such as $\phi(t_1) \leq \phi(t_2), \forall t_1 \leq t_2$, which 
           are incorporated via constraints. This approach respects the 
           properties associated with the warping function $\phi(.)$ but 
@@ -224,15 +224,15 @@ Hyper-parameter selection is an important part of the model training process in 
 The hyper-parameter selection problem in deep learning has received much attention and a number 
 of methodologies have been proposed for tacking it. 
 
-Snoek et. al \citet{snoek2012practical} cast the problem in the formalism of Bayesian optimization, their method 
+\citet{snoek2012practical} cast the problem in the formalism of Bayesian optimization, their method 
 builds a Gaussian Process based surrogate model of the hyper-parameter fitness surface and computes 
 updates based on expected improvement. 
 
 
-Bergstra et. al \citet{hypBengio} demonstrate that sequential hyper-parameter search techniques yield state of the art 
+\citet{hypBengio} demonstrate that sequential hyper-parameter search techniques yield state of the art 
 results when applied on \emph{Deep Belief Nets} (DBN). 
 
-Bergstra \& Bengio \citet{randomsearchBengio} showed that random search can be an effective way for tuning model 
+\citet{randomsearchBengio} showed that random search can be an effective way for tuning model 
 hyper-parameters in several problem domains, and serve as a good baseline which can enable 
 further improvement in model performance.
 
@@ -267,7 +267,7 @@ Just as the MNIST, CIFAR Santa Fe Laser and other data sets serve as a way to ev
 algorithms, it is necessary to propose benchmark problems for \emph{Probabilistic Dynamic Time Lag}.
 
 This is particularly challenging given the nature of the PDT problem, although time lag 
-relationships do exist in real world data sets (\citet{doi:10.1002/jgra.50429}, \citet{ZHOU2006195}), 
+relationships do exist in real world data sets (\citet{doi:10.1002/jgra.50429,ZHOU2006195}), 
 it is difficult to find data sets with time lag relationships explicitly annotated.
 
 This barrier can be surpassed in turn by careful construction of synthetic data sets which incorporate 
@@ -326,7 +326,7 @@ The task of predicting solar wind speed from heliospheric data is challenging du
 to the large distance between the Sun and the Earth as well as the non-stationary 
 propagation time of the solar plasma through the interplanetary medium.
 
-In recent works \citet{Poduval_2014} \& \citet{neuralnetsw} FTE data has been used to
+In recent works \citep{Poduval_2014,neuralnetsw} FTE data has been used to
 train models for solar wind speed prediction, but these models assume a constant propagation 
 time when combining FTE data with solar wind speed measurements close to the Earth. 
 
@@ -585,5 +585,5 @@ the model's predictive performance on the solar wind forecasting problem.
 \subsubsection*{Acknowledgements}
 
 
-\clearpage
+\bibliographystyle{plainnat}
 \bibliography{references}
