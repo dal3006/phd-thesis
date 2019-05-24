@@ -5,23 +5,24 @@ p_i(x) = \delta_{i,I(x)}.
 \]
 Written in terms of $p$ the loss function reads
 \[
-{\cal L}(\hat y,p) = {\mathbb E}_{x,{\bf y}}\Bigl[\sum_{i=1}^n p_i(x)\bigl(y_i-\hat y(x)\bigr)^2\Bigr].
+{\cal L}_2(\hat y,p) = {\mathbb E}_{x,{\bf y}}\Bigl[\sum_{i\in T} p_i(x)\bigl(y_i-\hat y(x)\bigr)^2\Bigr].
 \]
-Under~(\ref{eq:py}) (with $\alpha_{ij}=\alpha\delta_{ij}$) the loss is equal to
+%Under~(\ref{eq:py}) (with $\alpha_{ij}=\alpha\delta_{ij}$) the loss is equal to
+Under~(3) (with $\alpha_{ij}=\alpha\delta_{ij}$) the loss is equal to
 \[
-{\cal L}(\hat y,p) = {\mathbb E}_x\Bigl[\sum_{i=1}^n p_i(x)\Bigl( \bigl(\hat y_i(x)-\hat y(x)\bigr)^2-\hat p_i(x)\frac{\alpha\sigma^2}{1+\alpha}\Bigr)\Bigr]+\sigma^2
+{\cal L}_2(\hat y,p) = {\mathbb E}_x\Bigl[\sum_{i\in T} p_i(x)\Bigl( \bigl(\hat y_i(x)-\hat y(x)\bigr)^2-\hat p_i(x)\frac{\alpha\sigma^2}{1+\alpha}\Bigr)\Bigr]+\sigma^2
 \]
 The minimization w.r.t. $\hat y$ yields
 \begin{equation}\label{eq:hy}
-\hat y(x) = \sum_{i=1}^n p_i(x)\hat y_i(x).
+\hat y(x) = \sum_{i\in T} p_i(x)\hat y_i(x).
 \end{equation}
 In turn, as a function of $p_i$ the loss being a  convex combination, its minimization yields
 \begin{align}
   p_i(x) &= \delta_{i,I(x)},\label{eq:hp}\\[0.2cm]
-  I(x) &= \argmin_i\Bigl(\bigl(\hat y_i(x)-\hat y(x)\bigr)^2-\hat p_i(x)\frac{\alpha\sigma^2}{1+\alpha}\Bigr).\label{eq:hI}
+  I(x) &= \argmin_{i\in T}\Bigl(\bigl(\hat y_i(x)-\hat y(x)\bigr)^2-\hat p_i(x)\frac{\alpha\sigma^2}{1+\alpha}\Bigr).\label{eq:hI}
 \end{align}
 Combining these equations~(\ref{eq:hy},\ref{eq:hp},\ref{eq:hI}) we get
 \[
-I(x) = \argmax_i\bigl(\hat p_i(x)\bigr),
+I(x) = \argmax_{i\in T}\bigl(\hat p_i(x)\bigr),
 \]
 which concludes the proof.  
