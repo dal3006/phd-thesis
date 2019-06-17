@@ -45,7 +45,8 @@ $T_e$ for the ion temperature $T_i$ ($n_i \approx n_e$).
 
 \subsection*{Plasma Parameter}
 
-Consider a Debye sphere of radius $\lambda_d$, this sphere contains $N_e = \frac{4}{3}\pi \lambda^3_d n_e$ electrons. The plasma parameter $g$ is defined as $N_{e}^{-1}$. Rewriting this, we can say:
+Consider a Debye sphere of radius $\lambda_d$, this sphere contains $N_e = \frac{4}{3}\pi \lambda^3_d n_e$ electrons. 
+The plasma parameter $g$ is defined as $N_{e}^{-1}$. Rewriting this, we can say:
 
 \begin{equation}
     g \sim \sqrt{\frac{n_e}{T_e}}
@@ -54,12 +55,10 @@ Consider a Debye sphere of radius $\lambda_d$, this sphere contains $N_e = \frac
 The description of plasma used in many applications in Space is applicable when $g \|| 1$, in this situation 
 the Debye sheilding is significant and the quasi-neutral plasma obeys collective statistical behaviour. 
 The plasma parameter $g$ also correlates with the collision frequency. As the collisions in plasma increase 
-with increasing density and decreasing temperature, if $g \longrightarrow 0$ the plasma becomes nearly collisionless. The collisionless property helps in making simplfying assumtions about plasma dynamics and is the starting point 
+with increasing density and decreasing temperature, if $g \longrightarrow 0$ the plasma becomes nearly collisionless. 
+The collisionless property helps in making simplfying assumtions about plasma dynamics and is the starting point 
 for the \emph{adiabatic} theory of plasma motions in the Earth's magnetosphere which will be discussed in section 
 \ref{sec:plasmadiff}.
-
-
-\section{Sun \& the Solar Wind}\label{sec:solar}
 
 \begin{figure}
     \noindent\includegraphics[width=\textwidth]{Sun_poster.png}
@@ -69,75 +68,107 @@ for the \emph{adiabatic} theory of plasma motions in the Earth's magnetosphere w
     \label{fig:SunLayers}
 \end{figure}
 
+
+\section{Sun \& the Solar Wind}\label{sec:solar}
+
 The Sun is an almost perfectly spherical ball of plasma which is the dominant star in our solar system and 
 the pricipal source of light and energy for all living and meteorological processes on Earth. Apart from 
 terrestrial weather, the Sun is also the primary driver of space weather which results from the interaction 
 between the solar wind and planetary magnetospheres.
 
-\subsection*{Structure}
+\subsection{Structure}
 
 Figure \ref{fig:SunLayers} shows a cross section of the Sun with various layers. We give a brief description 
 of them below.
 
-
-\subsubsection*{Core}
-
-The core of the Sun is the site for the thermonuclear fusion reactions which produce its energy. It extends 
+\textbf{Core}: The core of the Sun is the site for the thermonuclear fusion reactions which produce its energy. It extends 
 from the center to about $20-25\%$ of the solar radius \citep{SolarAct}. It has a temperature close to 
 $1.57 \times 10^7$ Kelvin and a density of $150 \text{g}/\text{cm}^3$ \citep{SolarCore}. Nuclear fusion in the core 
 takes place via the so called \emph{proton-proton chain} (pp).
 
-\subsubsection*{Radiative Zone}
+\begin{wrapfigure}{r}{0.4\textwidth}
+    \centering\includegraphics[width=0.38\textwidth]{chromosphere.jpg}
+    \caption{
+        \small Chromosphere when viewed using an $H\alpha$ filter. Source: CWitte [Public domain]}
+    \label{fig:chromosphere}
+\end{wrapfigure}
 
-The radiative zone extends from $25\%$ to $70\%$ of the solar radius. The nuclear reactions in the core are 
+\textbf{Radiative Zone}: The radiative zone extends from $25\%$ to $70\%$ of the solar radius. The nuclear reactions in the core are 
 highly sensitive to temperature and pressure, in fact they are almost shut off at the edge of the core. 
 In the radiative zone, energy transfer takes place via photons (radiation) which bounce around nuclei until 
 they reach the Convective zone.
 
-\subsubsection*{Convective Zone}
-
-Between $70\%$ of the solar radius to a point close to the solar surface. Density decreases dramatically going 
+\textbf{Convective Zone}: Between $70\%$ of the solar radius to a point close to the solar surface. Density decreases dramatically going 
 from the core to the radiative and subsequently the convective zone. Here the solar material behaves more 
 like a fluid. Due to the temperature gradient which exists across it, the primary source of transport is 
 via convection.
 
-\subsubsection*{Photosphere}
-
-The photosphere is the visible 'surface' of the Sun, since the layers below it are all opaque to visible light.
+\textbf{Photosphere}: The photosphere is the visible 'surface' of the Sun, since the layers below it are all opaque to visible light.
 A layer of about $100$ kilometre thickness, the photosphere is also the region from where sunlight can freely 
 escape into space. The photospheric surface has a number of features i.e. sunspots, granules and faculae. 
-Sunspots are magnetic regions where the solar material has lower temperature as compared to its surroundings. 
+Sunspots (see section\ref{sec:sunspots}) are magnetic regions where the solar material has lower temperature as compared to its surroundings. 
 Magnetic field lines are concentrated in sunspot regions and the field strength in sunspots can often be thousands 
 of times stronger than the on the Earth.
 
-\subsubsection*{Chromosphere}
+\textbf{Chromosphere}: Extending for a distance of almost $5000$ kilometers after the photosphere. The chromosphere is known for the 
+existense of features called \emph{spicules} and prominences. The chromosphere has a red colour which 
+is generally not visible due to the intense light given off by the photosphere, but can be observed through 
+a filter centered on the Hydrogen $H\alpha$ spectral line (see figure \ref{fig:chromosphere}). 
 
-Extending for a distance of almost $5000$ kilometers after the photosphere, the chromosphere has a red colour which 
-is generally not visible due to the intense light given off by the photosphere. The chromosphere is known for the 
-existense of features called \emph{spicules} and prominences. 
+\textbf{Solar Transition Region}: A thin ($100 \text{km}$) region between the chromosphere and the solar corona 
+where the temperature rises from about $8000 \text{K}$ to $500000 \text{K}$. The transition region might not be well 
+defined at all altitudes, but its existence is evidenced by a bifurcation of the dynamics of the solar plasma. 
+Below the transition region, the dynamics is dictated by gas pressure, fluid dynamics and gravitation while 
+above the region the dynamics is dictated more by magnetic forces.
+
+\textbf{Corona}: An aura of plasma around the Sun that extends millions of kilometers into space, the corona can be observed 
+during a total solar eclipse or with a coronograph. The temperature of the corona is dramatically higher 
+than the photosphere and chromosphere. The average temperature can range between 
+$1 \times 10^6 \ \text{to} \ 2 \times 10^6 \text{K}$ while in the hottest regions it can be as high as 
+$2 \times 10^7 \text{K}$ \citep{SolarCorona}. Although the reason for this dramatic increase is still 
+not well understood, there various explanations using concepts of magnetic reconnection 
+\citep{russell2001solar,SolarCorona} and Alfv\'en waves \citep{AlfvenCorona}.
+
+\begin{figure}
+    \noindent\includegraphics[width=0.8\textwidth]{parker-spiral.jpg}
+    \caption{\small An illustration of the Heliospheric Magnetic Field. Image reproduced from \citet{Owens2013}}
+    \label{fig:parkerspiral}
+\end{figure}
+
+\subsection{Heliospheric Magnetic Field \& Solar Wind}
+
+The existence of the solar wind was first postulated via observations of Halley's coment in 
+\citet{Bierman1,Bierman2,Bierman3} and subsequently models of the \emph{Heliospheric Magnetic Field} (HMF) 
+were introduced in \citet{parker1958dynamics}. These models were further evidenced by their ability 
+to explain the effect of the HMF on the modulation of galactic cosmic rays and their measured intensities 
+close to the Earth \citep{ParkerSolarWind}. 
+
+The HMF in steady state points radially outward and rotates with the Sun, producing an \emph{Archimedian spiral} 
+structure as postulated in \cite{parker1958dynamics} and shown schematically in figure \ref{fig:parkerspiral}. 
+Photospheric observations of the magnetic field (see Global Oscillation Network Group \url{https://gong.nso.edu}) 
+are often extrapolated to compute approximations to the HMF. There exist a number of models used to perform such 
+extrapolations, such as the \emph{Potential-Field Source Surface} model (PFSS) 
+\citep{schatten1969model,altschuler1969magnetic}, the \emph{Current-Sheet Source Surface} model (CSSS) 
+\citep{csss} and the \emph{Magnetohydrodynamics Around a Sphere} model (MAS) 
+\citep{linker1999magnetohydrodynamic}. Interested readers can read \citep{Owens2013} for an in-depth review on 
+the phenomena that drive the HMF.
+
+The expansion of the coronal magnetic field leads to the ejection of the solar wind. This hot plasma consists 
+mostly of protons, electrons and a small number of helium and heavy ions. The solar wind spirals outwards in all 
+directions, carrying with it the magnetic field. Upon reaching a distance of $1 \text{AU}$ 
+(close to the Earth's magnetosphere), this wind has a nominal speed of about $400 \text{km}/\text{s}$ while its 
+high speed component has an average velocity of $\tilde 700 \text{km}/\text{s}$.
+
+\todo{Add histogram of solar wind speed.}
 
 
-\subsubsection*{Solar Transition Region}
-
-\subsubsection*{Corona}
-
-\subsection*{Solar Wind}
-
-\begin{wrapfigure}{l}{0.4\textwidth}
-    \centering\includegraphics[width=0.38\textwidth]{parker-spiral.jpg}
-    \caption{
-        \small Solar Wind. Image reproduced from \citet{Owens2013}}
-    \label{fig:spacex}
-\end{wrapfigure}
+\subsection{Sunspots \& Solar Cycle}\label{sec:sunspots}
 
 
-The existence of the solar wind was first postulated by \citet{ParkerSolarWind}.
-
-\subsection*{Sunspots \& Solar Cycle}
 
 \section{Magnetosphere}\label{sec:mag}
 
-\subsection*{Particle Motions \& Adiabatic Theory} \label{sec:plasmadiff}
+\subsection{Particle Motions \& Adiabatic Theory} \label{sec:plasmadiff}
 
 \clearpage
 
