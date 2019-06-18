@@ -4,9 +4,9 @@
 
 The Earth's radiation belts are the regions of space near 
 the Earth that extend between 2 and 8 Earth's radii, where the terrestrial magnetic field traps 
-electrons and ions in complex electromagnetic orbits  \citet{vanAllen}. Since their discovery,
+electrons and ions in complex electromagnetic orbits  \citep{vanAllen}. Since their discovery,
 the belts have been the subject of intensive research due to their complex behavior
-and damaging effects on spacecraft \citet{GUBBY20021723, WellingSatellite, baker2002}.
+and damaging effects on spacecraft \citep{GUBBY20021723, WellingSatellite, baker2002}.
 
 Radiation belt particles generally execute three types of periodic motion, 
 each with its own corresponding adiabatic invariant: 
@@ -17,16 +17,16 @@ adiabaticity can be broken and particle motion can not be
 simply decomposed into the aforementioned components. Particle motion 
 can then be represented diffusively along each component via the 
 \emph{Fokker-Planck} equation yielding a powerful picture of 
-radiation belt dynamics \citet{schulz2012particle}.
+radiation belt dynamics \citep{schulz2012particle}.
 
 The third invariant represents the total magnetic flux enclosed within 
 a full particle orbit. It is common to use a normalized form of this, the 
-so called Roederer $L^{*}$ \citet{Roederer1970}. It is analogous to radial 
+so called Roederer $L^{*}$ \citep{Roederer1970}. It is analogous to radial 
 distance from the center of the Earth (in Earth radii) to the equatorial 
 crossing point of the bouncing particle. Diffusion in $L^{*}$ alone 
 (the other invariants shall be considered conserved) accounts for the
 capture and inward radial transport of radiation belt particles 
-(\citet{Roederer1970}, \citet{JGR:JGR4463}).
+\citep{Roederer1970,JGR:JGR4463}.
 
 One of the main difficulties of using a physics-based model for studying and 
 forecasting energetic electrons in the radiation belt is that the parameters 
@@ -55,7 +55,7 @@ The radial diffusion system is a simplified one-dimensional version of
 the \emph{Fokker-Planck} equation. It tracks the time evolution of the
 \emph{phase space density} of particles, $f$ which is governed by the
 differential equation (\ref{eq:raddiffusion}) known as \emph{radial
-  diffusion} in the radiation belt community\citet{JGRA:JGRA9345}.
+  diffusion} in the radiation belt community \citep{JGRA:JGRA9345}.
 
 \begin{equation}\label{eq:raddiffusion}
   \frac{\partial{f}}{\partial{t}} = l^2 \frac{\partial}{\partial{l}}\left( \frac{\kappa(l,
@@ -83,9 +83,9 @@ The key quantities in the system above are.
 
 To solve the radial diffusion system \ref{eq:raddiffusion}, the
 quantities $\kappa(l, t)$, $\lambda(l, t)$ and $Q(l, t)$ need to be
-specified. It is a common practice (see \citet{GRL:GRL10762},
-\citet{JGRA:JGRA15067}, \citet{JGRA:JGRA18021} and
-\citet{GRL:GRL22815}) to parameterise the diffusion field
+specified. It is a common practice \citetext{see \citealp{GRL:GRL10762},
+\citealp{JGRA:JGRA15067}, \citealp{JGRA:JGRA18021} and
+\citealp{GRL:GRL22815}} to parameterise the diffusion field
 $\kappa$ and loss rate $\lambda$ in the following manner.
 
 \begin{align}
@@ -95,7 +95,7 @@ $\kappa$ and loss rate $\lambda$ in the following manner.
 The quantities $\alpha$, $\beta$ and $b$ are parameters which define
 the diffusion field and loss rate while the quantity $Kp(t)$ is known
 as the Kp index, a measured quantity which stands as a proxy for the
-global geomagnetic activity \citet{BartelsKp}.
+global geomagnetic activity \citep{BartelsKp}.
 
 
 \section{Inverse Problems}\label{sec:inv}
@@ -124,10 +124,10 @@ In the radial diffusion system (\ref{eq:raddiffusion}), $\mathcal{L}_{\theta} =
 \paragraph{Least Squares Support Vector Machines}
 
 (LSSVM) have been applied to calculating approximate solutions to PDEs
-\citet{MEHRKANOON2015105}, \citet{MEHRKANOON20122502} as well as
+\citep{MEHRKANOON2015105,MEHRKANOON20122502} as well as
 parameter estimation of delay differential equations
-\citet{MEHRKANOON2014830}, the approach taken in the aforementioned
-research (\citet{MEHRKANOON2014830}) was expressing the parameter
+\citep{MEHRKANOON2014830}, the approach taken in the aforementioned
+research \citep{MEHRKANOON2014830} was expressing the parameter
 estimation of time delay as an algebraic optimization problem
 resulting in closed-form approximation for the time varying parameters
 while avoiding iterative simulation of the dynamical system (governed
@@ -140,15 +140,14 @@ the authors used colocation with \emph{multiquadric} basis functions for approxi
 of boundary value problems.
 
 Radial basis functions have been applied for the mesh-free solutions of Poisson PDE systems 
-(\citet{AMINATAEI20082887}, \citet{DUAN200866}, \citet{DUAN2006394} \& \citet{CNM:CNM419}),
-as well as the Poisson control problem \citet{Pearson2013}. Further applications of RBFs include 
-atmospheric flow \citet{Tillenius2015406}, convection-diffusion \citet{Safdari-Vaighani2015}, and 
-Schrödinger's equation \citet{doi:10.1137/120893975}. See ref. \citet{fornberg2015} for a recent 
-textbook with geoscience applications.
+\citep{AMINATAEI20082887,DUAN200866,DUAN2006394,CNM:CNM419}, as well as the Poisson control problem 
+\citep{Pearson2013}. Further applications of RBFs include atmospheric flow \citep{Tillenius2015406}, 
+convection-diffusion \citep{Safdari-Vaighani2015}, and Schrödinger's equation \citep{doi:10.1137/120893975}. 
+Refer to \citet{fornberg2015} for a recent textbook with geoscience applications.
 
 \paragraph{Gaussian Processes}
 
-Gaussian Process (GP) models \citet{Rasmussen:2005:GPM:1162254} have a rich theory which has much overlapping 
+Gaussian Process (GP) models \citep{Rasmussen:2005:GPM:1162254} have a rich theory which has much overlapping 
 with linear systems and deterministic and stochastic differential equations. 
 
 \citet{Skilling1992} presented one of the earliest works which focused on calculating solutions of ordinary 
@@ -160,7 +159,7 @@ Interplay between linear operators and GP models applied to Bayesian filtering w
 infering parameters of coupled ODE systems.
 
 \paragraph{Neural Networks} were also employed for solutions of boundary value problems in the works such as 
-\citet{Lagaris}, \citet{Aarts2001} \&  \citet{TSOULOS20092385}. \citet{Baymani2011} used Feedforward networks for 
+\citet{Lagaris,Aarts2001,TSOULOS20092385,Baymani2011} which used Feedforward networks for 
 calculating solutions to the Stokes problem. These approaches generally revolved around decomposing the solution 
 into two components, i.e. the first one satisfying the boundary conditions and the second one represented by the 
 feedforward network.
