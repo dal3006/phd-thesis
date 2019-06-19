@@ -60,16 +60,182 @@ The collisionless property helps in making simplfying assumtions about plasma dy
 for the \emph{adiabatic} theory of plasma motions in the Earth's magnetosphere which will be discussed in section 
 \ref{sec:plasmadiff}.
 
+\section{Magnetosphere}\label{sec:mag}
+
 \begin{figure}
-    \noindent\includegraphics[width=\textwidth]{Sun_poster.png}
+    \noindent\includegraphics[width=0.7\textwidth]{mag.png}
+    \caption{\small An artist's rendering of the structure of a magnetosphere: \\
+        1) Bow shock. 2) Magnetosheath. 3) Magnetopause. 4) Magnetosphere. \\
+        5) Northern tail lobe. 6) Southern tail lobe. 7) Plasmasphere.\\ 
+        Source: Dennis Gallagher, derivative work: Fr\'ed\'eric Michel (Public domain)
+    }
+    \label{fig:magnetosphere}
+\end{figure}
+
+The Earth's magnetosphere (figure \ref{fig:magnetosphere}) is a region surrounding the planet where its magnetic field 
+dominates the \emph{interplanetary magnetic field}. The Earth's magnetic field creates a cavity in space which is sheilded 
+from the impact of the solar wind. 
+
+As the solar wind approaches the Earth, it is slowed down and deflected by the Earth's magnetic field. Since the 
+solar wind is supersonic when it arrives and slows down to subsonic levels, a shock wave is generated in the 
+process (\emph{bow shock}). Much of the solar wind kinetic energy is converted to thermal energy when it crosses 
+the \emph{bow shock} into the \emph{magnetosheath}. The \emph{magnetosheath} spans from the \emph{bow shock} to 
+the \emph{magnetopause}. The \emph{magnetopause} is the outer boundary of the Earth's magnetic sheild, its location 
+is $\sim 10R_E$ ($R_E = 6372 \text{km}$, the radius of the Earth). 
+
+Earth's magnetic sheilding is not perfect and some particles manage to get trapped inside the cavity of the 
+\emph{magnetosphere}, this region of trapped plasma is known as the \emph{plasmasphere} or the \emph{van Allen 
+radiation belts}. Particles trapped in the radiation belts execute complex motions which can be approximately 
+modelled using ideas from adiabatic theory and diffusion described in section \ref{sec:plasmadiff} below. 
+
+
+The portion of the magnetosphere facing away from the Sun (called the \emph{nightside}) is streched out in  
+a tail like shape by the deflected solar wind, hence it is referred to as the \emph{magnetotail}. The 
+\emph{magnetotail} has an approximate extent of upto $1000R_E$.
+
+
+\subsection{Particle Motions \& Adiabatic Theory} \label{sec:plasmadiff}
+
+This section gives a quick introduction to the theory of charged particle motions in the magnetosphere, the reader 
+may refer to \citet{roederer2012dynamics} for an indepth treatment of this subject.
+
+To understand the motions of charged particles in the \emph{magnetosphere}, the role of electric and magnetic 
+forces must be understood.
+
+It is well known from classical electromagnetism that the force exerted on a particle with charge $q$ by a 
+magnetic field $\textbf{B}$ and an electric field $\textbf{E}$ is given by the so called \emph{Lorentz force} 
+(eq \ref{eq:lorentzforce}).
+
+\begin{equation}\label{eq:lorentzforce}
+    \textbf{F} = q\textbf{E} + q\textbf{V} \times \textbf{B}
+\end{equation}
+
+\begin{wrapfigure}{r}{0.4\textwidth}
+    \centering\includegraphics[width=0.35\textwidth]{adiabatic_motions.jpeg}
+    \caption{
+        \small Periodic components of particle motion, Larmor gyration, bounce motion, drift motion. \\ 
+        Reproduced from \citet{roederer2012dynamics}}
+    \label{fig:particlemotions}
+\end{wrapfigure}
+
+\todo{\textbf{TODO}: Check that the adiabatic motion image from Roederer can be reproduced here.}
+
+The first component of equation \ref{eq:lorentzforce} ($q\textbf{E}$) is either aligned or against the local electric 
+field depending on the charge of the particle. The second component $q\textbf{V} \times \textbf{B}$ involves a vector 
+cross product so it is always perpendicular to the plane spanned by vectors $\textbf{v}$ and $\textbf{B}$. In order to 
+understand its effects, we can decompose the particle velocity in two components; $v_{\parallel}$ parallel to $\textbf{B}$ and 
+$v_{\perp}$ perpendicular to $\textbf{B}$. If $\textbf{E} = \mathbf{0}$, then the particle executes a circular motion 
+whose properties are shown in equation \ref{eq:larmor}, $\rho$ is the gyroradius and $\omega$ is the gyrofrequency or 
+cyclotron frequency. In case $v_{\parallel} \neq 0$ then the trajectory is helical.
+
+\begin{equation}\label{eq:larmor}
+    \frac{v^{2}_{\perp}}{\rho} = \frac{qBv_{\perp}}{m} = \omega v_{\perp}
+\end{equation}
+
+Apart from the gyro motion, there are some important drift forces which significantly influence particle motions.
+
+\begin{itemize}
+    \item Electric field drift: If $\mathbf{E}$ has a component $E_{\perp}$ perpendicular to $\mathbf{B}$, the electric 
+    field accelerates and decelerates the particle in the two hemispheres of the orbit. The orbit becomes 
+    a distorted circle and the particle drifts in a direction perpendicular to the electric field with a velocity 
+    $\mathbf{v_d} = \mathbf{E} \times \mathbf{B} / B^2$.
+
+    \item Magnetic gradient drift: When the magnetic field varies in space (as is the case of the Earth), a gradient in the 
+    field strength in the direction perpendicular to $\mathbf{B}$ gives rise to gradient drift velocity given by 
+    $\mathbf{v_g} = \frac{1}{2} m v^2_{\perp}\mathbf{B} \times \frac{\nabla \mathbf{B}}{aB^3}$.
+
+    \item Magnetic curvature drift: If the magnetic field has a curvature then this creates an additional drift motion with 
+    velocity $\mathbf{v_c} = \frac{ m v_{\parallel} \mathbf{B} \times (\hat{\mathbf{b}} \cdot \nabla) \hat{\mathbf{b}} }{qB^2}$
+\end{itemize}
+
+The equations of motion for charged particles in the general case of spatially varying electric and magnetic fields do not 
+admit closed form solutions. The motions are generally complex and require lengthy numerical integrations to be resolved.
+
+
+The \emph{guiding center} approximation helps us to decompose particle motions into three periodic components, each with 
+its own time scale (figure \ref{fig:particlemotions}).
+\begin{enumerate*}
+    \item Gyromotion around magnetic field lines.
+    \item Bounce motions between magnetic north and south poles.
+    \item Equatorial drift of electrons and protons.
+\end{enumerate*}
+
+\subsubsection*{Adiabatic Invariants}
+
+When a physical system is varied slowly, this transformation is can be characterized as \emph{adiabatic}. Formally speaking, 
+for systems which are described by Hamiltonian dynamics, we can write the equations of motion in terms of 
+the \emph{cannonical position} $q$, the \emph{cannonical momentum} $p$, external parameters $\theta$ and the system's 
+\emph{Hamiltonian} $\mathcal{H}(q,p|\theta)$. 
+
+\begin{align}\label{eq:hamilton}
+    \dot q &= \frac{\partial \mathcal{H}}{\partial p}\\
+    \dot p &= - \frac{\partial \mathcal{H}}{\partial q}
+\end{align}
+
+If the hamiltonian system shown in equation \ref{eq:hamilton} executes a periodic motion in the $q,p$ phase space, 
+then it admits an \emph{adiabatic invariant} $A$ given in equation \ref{eq:adiabatic_invariant}.
+
+\begin{equation}\label{eq:adiabatic_invariant}
+    A = \oint p dq
+\end{equation}
+
+The quantity $A$ would remain approximately constant if the external parameters $\theta$ were varied adiabatically, 
+that is changes in $\theta$ happen over a time period much greater than the period of oscillation of the system.
+
+Applying this idea to charged particle motion in the \emph{magnetosphere}, it is possible to associate one 
+adiabatic invariant with each periodic motion i.e. gyromotion $\mathcal{M}$, bounce $J$ and drift 
+$\Phi$ (equation \ref{eq:plasmainv}). 
+
+\begin{align}\label{eq:plasmainv}
+    \mathcal{M} &= \frac{1}{2}\frac{mv^{2}_{\perp}}{B} \\
+    J &= \oint{m_0 v_{\parallel}ds} \\
+    \Phi &= \oint{v_{\text{drift}} \cdot r d\phi} = \int{\mathbf{B} d\mathbf{S}}
+\end{align}
+
+
+The first invariant $\mathcal{M}$ is associated with the Larmor gyration, it is the magnetic moment of the 
+current generated by the circular motion of the particle around the field line. 
+
+The second invariant $J$ is associated with the bounce motion between the two magnetic mirrors near the north and 
+south poles (the quantity $s$ is an appropriately chosen arc length coordinate along the bounce trajectory). 
+
+The third invariant $\Phi$ associated with the drift motion, is actually the magnetic flux through the barrel 
+shape envelope of the particle drift. A particle's guiding magnetic field line can be identified by its radial 
+position $r$ and its longitude $\phi$, the magnetic flux of the drift can then be computed by integrating over 
+$\phi$.
+
+\subsubsection*{Plasma Diffusion}
+
+\citep{schulz2012particle}
+
+\begin{align}
+    \frac{\partial{f}}{\partial{t}} &= \sum^{3}_{p,q = 1}
+    \frac{\partial}{\partial{J_{p}}} \left( \kappa_{pq}
+    \frac{\partial{f}}{\partial{J_{q}}} \right) \\
+    J_1 &= \mathcal{M} \\
+    J_2 &= J \\
+    J_{3} &= \Phi
+\end{align}
+
+\citep{Walt1970}
+
+\begin{equation}
+    \frac{\partial{f}}{\partial{t}} = \ell^2 \frac{\partial}{\partial{\ell}} \left( \frac{\kappa(\ell,
+        t)}{\ell^{2}} \frac{\partial{f}}{\partial{\ell}}
+    \right)_{\mathcal{M}, J} - \lambda(\ell,
+    t) f
+\end{equation}
+
+
+\section{Sun \& the Solar Wind}\label{sec:solar}
+
+\begin{figure}
+    \noindent\centering\includegraphics[width=\textwidth]{Sun_poster.png}
     \caption{\small Cross section of the Sun \\ 
     Author: Kelvinsong [CC BY-SA 3.0 (\url{https://creativecommons.org/licenses/by-sa/3.0})] \\ 
     Source: Wikipedia}
     \label{fig:SunLayers}
 \end{figure}
-
-
-\section{Sun \& the Solar Wind}\label{sec:solar}
 
 The Sun is an almost perfectly spherical ball of plasma which is the dominant star in our solar system and 
 the pricipal source of light and energy for all living and meteorological processes on Earth. Apart from 
@@ -81,8 +247,8 @@ between the solar wind and planetary magnetospheres.
 Figure \ref{fig:SunLayers} shows a cross section of the Sun with various layers. We give a brief description 
 of them below.
 
-\textbf{Core}: The core of the Sun is the site for the thermonuclear fusion reactions which produce its energy. It extends 
-from the center to about $20-25\%$ of the solar radius \citep{SolarAct}. It has a temperature close to 
+\textbf{Core}: The core of the Sun is the site for the thermonuclear fusion reactions which produce its energy. 
+It extends from the center to about $20-25\%$ of the solar radius \citep{SolarAct}. It has a temperature close to 
 $1.57 \times 10^7$ Kelvin and a density of $150 \text{g}/\text{cm}^3$ \citep{SolarCore}. Nuclear fusion in the core 
 takes place via the so called \emph{proton-proton chain} (pp).
 
@@ -129,6 +295,8 @@ $2 \times 10^7 \text{K}$ \citep{SolarCorona}. Although the reason for this drama
 not well understood, there various explanations using concepts of magnetic reconnection 
 \citep{russell2001solar,SolarCorona} and Alfv\'en waves \citep{AlfvenCorona}.
 
+\todo{\textbf{TODO}: Check that the HMF image can be reproduced here.}
+
 \begin{figure}
     \noindent\includegraphics[width=0.8\textwidth]{parker-spiral.jpg}
     \caption{\small An illustration of the Heliospheric Magnetic Field in the \emph{ecliptic plane}. 
@@ -162,12 +330,12 @@ The two fields often exchange energy between themselves over the course of sever
 known as the \emph{solar cycle} (section \ref{sec:sunspots}). Interested readers can read \citep{Owens2013} for an 
 in-depth review on the phenomena that drive the HMF.
 
-\begin{wrapfigure}{r}{0.4\textwidth}
-    \centering\includegraphics[width=0.38\textwidth]{solarwinddist.pdf}
+\begin{figure}
+    \noindent\centering\includegraphics[width=0.75\textwidth]{solarwinddist.pdf}
     \caption{
         \small Distribution of solar wind speed recorded at 1 AU for the time period $2008 - 2018$}
     \label{fig:solarwinddist}
-\end{wrapfigure}
+\end{figure}
 
 The expansion of the coronal magnetic field leads to an eventual opening of field lines at the source surface 
 (see figure \ref{fig:parkerspiral}) and the ejection of the solar wind. This hot plasma consists mostly of protons, 
@@ -213,30 +381,6 @@ $1715$, a period known as the \emph{Maunder minimum} very few sunspots were obse
 than average temperatures in Europe, which was called the \emph{little ice age}. Sunspot numbers going back $11000$ 
 years have been reconstructed using Carbon-$14$ based analysis of tree rings. Apart from the \emph{Maunder minimum},
 other periods of very low sunspot activity have been matched with corresponding \emph{little ice ages}.
-
-\section{Magnetosphere}\label{sec:mag}
-
-\begin{figure}
-    \noindent\includegraphics[width=0.8\textwidth]{mag.png}
-    \caption{\small An artist's rendering of the structure of a magnetosphere: \\
-        1) Bow shock. 2) Magnetosheath. 3) Magnetopause. 4) Magnetosphere. \\
-        5) Northern tail lobe. 6) Southern tail lobe. 7) Plasmasphere.\\ 
-        Source: Dennis Gallagher, derivative work: Fr\'ed\'eric Michel (Public domain)
-    }
-    \label{fig:magnetosphere}
-\end{figure}
-
-
-\subsection{Particle Motions \& Adiabatic Theory} \label{sec:plasmadiff}
-
-\begin{equation}
-    \textbf{F} = q\textbf{E} + q\textbf{V} \times \textbf{B}
-\end{equation}
-
-
-\begin{equation}
-    \frac{v^{2}_{\perp}}{\rho} = \frac{qBv_{\perp}}{m} = \omega v_{\perp}
-\end{equation}
 
 \clearpage
 
