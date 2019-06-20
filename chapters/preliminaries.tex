@@ -1,5 +1,14 @@
 \chapter{Preliminaries}\label{chapter:preliminaries}
 
+This chapter gives a qualitative and somewhat quantitative treatment of various scientific ideas 
+relevant to space weather research. Section \ref{sec:plasma} discusses space plasmas and their properties, 
+\ref{sec:mag} introduces the \emph{magnetosphere}, giving context for chapters \ref{chapter:dst_osa},\ref{chapter:dst_msa}. 
+Section \ref{sec:plasmadiff} introduces the plasma diffusion model \ref{eq:fokker} and its simplified 
+radial diffusion system \ref{eq:radialDiff} which is used as the underlying physical model for chapter 
+\ref{chapter:bayes_diff_chapter}. Section \ref{sec:solar} provides some background about the Sun and 
+the solar wind which is the driver for all space weather phenomena, this is used in the solar wind prediction 
+task considered in chapter \ref{chapter:pdt}.    
+
 \section{Space Plasma}\label{sec:plasma}
 
 Plasma is ubiquitous throughout the visible Universe, also known as the fourth state of matter 
@@ -73,7 +82,7 @@ for the \emph{adiabatic} theory of plasma motions in the Earth's magnetosphere w
 \end{figure}
 
 The Earth's magnetosphere (figure \ref{fig:magnetosphere}) is a region surrounding the planet where its magnetic field 
-dominates the \emph{interplanetary magnetic field}. The Earth's magnetic field creates a cavity in space which is sheilded 
+dominates the \emph{interplanetary magnetic field}. The Earth's magnetic field sheilds the atmosphere and terrestrial life 
 from the impact of the solar wind. 
 
 As the solar wind approaches the Earth, it is slowed down and deflected by the Earth's magnetic field. Since the 
@@ -87,7 +96,6 @@ Earth's magnetic sheilding is not perfect and some particles manage to get trapp
 \emph{magnetosphere}, this region of trapped plasma is known as the \emph{plasmasphere} or the \emph{van Allen 
 radiation belts}. Particles trapped in the radiation belts execute complex motions which can be approximately 
 modelled using ideas from adiabatic theory and diffusion described in section \ref{sec:plasmadiff} below. 
-
 
 The portion of the magnetosphere facing away from the Sun (called the \emph{nightside}) is streched out in  
 a tail like shape by the deflected solar wind, hence it is referred to as the \emph{magnetotail}. The 
@@ -206,9 +214,27 @@ $\phi$.
 
 \subsubsection*{Plasma Diffusion}
 
-\citep{schulz2012particle}
+Because we consider populations of charged particles, it is natural to employ some kind of distribution based 
+picture for magnetospheric plasma. The adiabatic invariants give us a phase space or coordinate system by which 
+we can express quantities of interest. 
 
-\begin{align}
+The main quantity of interest in this case is the \emph{phase space density} $f(t, \mathcal{M}, J, \Phi)$ which 
+is a function of time and three invariants. The \emph{phase space density} tells us the number of particles in 
+a particular region of the phase space, at a particular point of time.
+
+Diffusion behaviour arises when one or more of the invariants are violated, which can happen due to a number of 
+reasons such as: 
+\begin{enumerate*}
+    \item non-adiabatic variations of the magnetic field 
+    \item external forces
+    \item interaction with electromagnetic waves
+    \item collisions with atmosphere/ionosphere. 
+\end{enumerate*}
+
+The plasma diffusion system \citep{schulz2012particle} can be written as a generalized Fokker-Planck system as shown 
+in equation \ref{eq:fokker}.
+
+\begin{align}\label{eq:fokker}
     \frac{\partial{f}}{\partial{t}} &= \sum^{3}_{p,q = 1}
     \frac{\partial}{\partial{J_{p}}} \left( \kappa_{pq}
     \frac{\partial{f}}{\partial{J_{q}}} \right) \\
@@ -217,14 +243,29 @@ $\phi$.
     J_{3} &= \Phi
 \end{align}
 
-\citep{Walt1970}
+It is possible to simplify this system by considering the two main categories of diffusion, radial diffusion and 
+pitch angle diffusion. Radial diffusion allowing particles to move farther or closer to the Earth and pitch angle 
+\footnote{pitch angle being the angle between particle velocity $\mathbf{v}$ and the magnetic field $\mathbf{B}$} 
+diffusion moving the magnetic mirror points along the field lines.
 
-\begin{equation}
+Rewriting $\Phi \propto \frac{1}{\ell}$, the third invariant can be expressed in terms of the 
+\emph{drift shell} $l$ (larger value of $l$ implies greater distance from the Earth). The radial diffusion system 
+can be obtained from \ref{eq:fokker} by keeping $\mathcal{M}, J$ fixed, considering diffusion in $\ell$ 
+(violation of $\Phi$ invariance) and by approximating pitch angle diffusion as a loss process 
+\citep{roederer2012dynamics,Walt1970}.  
+
+\begin{equation}\label{eq:radialDiff}
     \frac{\partial{f}}{\partial{t}} = \ell^2 \frac{\partial}{\partial{\ell}} \left( \frac{\kappa(\ell,
         t)}{\ell^{2}} \frac{\partial{f}}{\partial{\ell}}
-    \right)_{\mathcal{M}, J} - \lambda(\ell,
-    t) f
+    \right)_{\mathcal{M}, J} - \lambda(\ell,t) f
 \end{equation}
+
+The resulting system is shown in \ref{eq:radialDiff}, the term 
+$\ell^2 \frac{\partial}{\partial{\ell}} \left( \frac{\kappa(\ell,t)}{\ell^{2}} \frac{\partial{f}}{\partial{\ell}}
+\right)_{\mathcal{M}, J}$ models diffusive phenomena in $\Phi$ but it expressed in the drift shell coordinate $\ell$. 
+Pitch angle diffusion is approximated using a loss process $\lambda(\ell,t) f$, where $\lambda(\ell,t)$ is the 
+\emph{loss rate}, as an alternative it is also possible to express the loss rate as a \emph{loss time scale} 
+$\tau(\ell,t) = \frac{1}{\lambda(\ell,t)}$, but in this thesis we will use the former convention.
 
 
 \section{Sun \& the Solar Wind}\label{sec:solar}
