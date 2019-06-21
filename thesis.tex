@@ -6,12 +6,13 @@
 %
 % THIS IS THE MAIN FILE (i.e. compile this file, compiling the others directly won't work)
 %
-\documentclass[a4paper,11pt,twoside]{report}
+\documentclass[a4paper,12pt,twoside]{report}
 
 %all the other includes etc. are done in the thesis.sty file.
 \usepackage{thesis}
 \graphicspath{{figures/}}
 %\setlength{\headheight}{13.59pt}
+
 
 %
 % These commands need to be defined in order to produce a correct and personalized document
@@ -27,16 +28,28 @@
 
 %Be sure to use all the titles for your committee members!!! (their names show up on the very first page!)
 \newcommand{\firstPromoter}{Prof. Dr. P.D. Gr\"{u}nwald}
+\newcommand{\firstPromoterAff}{Universiteit Leiden}
+
 \newcommand{\secondPromoter}{Prof. Dr. U. Ebert}
+\newcommand{\secondPromoterAff}{Technische Universiteit Eindhoven}
+
 \newcommand{\coSupervisor}{Dr. Enrico Camporeale}
+\newcommand{\coSupervisorAff}{Centrum Wiskunde en Informatica}
 
 \newcommand{\firstAdvisor}{Prof. Dr. M. Sebag}
+\newcommand{\firstAdvisorAff}{Laboratoire de Recherche en Informatique}
+
 \newcommand{\secondAdvisor}{Dr. C. Furthlener}
+\newcommand{\secondAdvisorAff}{INRIA Saclay - \^{I}le-de-France}
 
 \newcommand{\extMemberOne}{Prof. Dr. M. Owens}
-\newcommand{\extMemberTwo}{Prof Dr. N.L. Cardozo}
-\newcommand{\extMemberThree}{Prof. Dr. M. Girolami}
+\newcommand{\extMemberOneAff}{University of Reading}
 
+\newcommand{\extMemberTwo}{Prof Dr. N.L. Cardozo}
+\newcommand{\extMemberTwoAff}{Technische Universiteit Eindhoven}
+
+\newcommand{\extMemberThree}{Prof. Dr. M. Girolami}
+\newcommand{\extMemberThreeAff}{The University of Warwick}
 
 \author{\me}
 
@@ -60,6 +73,7 @@
 \clearpage
 \include{committee}
 \normalsize
+
 
 \clearemptydoublepage
 
@@ -134,11 +148,6 @@
 
 \clearemptydoublepage
 
-%Choose a good bibliography style, plain would do often, but these might be nice too
-%\bibliographystyle{these}
-%\bibliographystyle{plain}
-%\bibliography{references}
-
 %\clearemptydoublepage
 
 \appendix
@@ -147,5 +156,11 @@
 \include{appendices/AppendixA}
 \include{appendices/AppendixB}
 \include{appendices/AppendixC}
+
+%Choose a good bibliography style, plain would do often, but these might be nice too
+\bibliographystyle{plainnat}
+%\bibliographystyle{plain}
+\bibliography{references}
+
 
 \end{document}

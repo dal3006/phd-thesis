@@ -6,11 +6,16 @@
 %
 % Packages
 %
+
+\usepackage{libertine}
+%\usepackage{libertinust1math}
+\usepackage[T1]{fontenc}
+
 \usepackage{algorithm2e} 
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
-\usepackage{chapterbib}
-\usepackage[sectionbib]{natbib} 
+\usepackage{natbib}
+%\usepackage{chapterbib}  
 \usepackage{bibentry}
 \nobibliography*
 %\usepackage[utf8]{inputenc}
@@ -60,7 +65,6 @@
 \usepackage{epigraph}                   % For quotations, proverbs
 \usepackage{wrapfig}                    % For wrapping text around figures
 \usepackage[inline]{enumitem}           % For in-line lists
-%\usepackage[colorlinks]{hyperref}
 \usepackage{color}
 \definecolor{darkred}{rgb}{0.5,0,0}
 \definecolor{darkgreen}{rgb}{0,0.5,0}
@@ -85,7 +89,6 @@
 \usepackage[section]{placeins}        % Prevent floats from passing beyond \FloatBarrier; keep floats within their sections
 \usepackage{url}                      % Make it possible to define clickable urls
 \usepackage{makeidx}                  % Needed for the index
-%\usepackage{hyperref}                 % For inserting PDF options (author etc.)
 %\usepackage{subfig}                   % sub-figures!!! hooray...
 \captionsetup[subfloat]{position=bottom}   %captions below
 \usepackage{booktabs}                 % nicer tables, nice!
@@ -95,6 +98,8 @@
 % Use the package 'textpos' with the option 'absolute' to place
 % a textbox a given distance from the edge of the page
 \usepackage[absolute]{textpos}
+
+\usepackage{multirow}
 
 \usepackage{listings}                   % For code formatting
 \lstset{
