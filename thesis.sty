@@ -2,14 +2,75 @@
 % September 2009
 % Further updates by Joos Buijs
 \ProvidesPackage{thesis}
+\usepackage[pdftex]{geometry}
 
+\newgeometry{
+  papersize = {173mm,246mm},
+  layoutsize = {167mm,240mm},
+  layoutoffset = {3mm,3mm},
+  bindingoffset = -3mm
+}
+\savegeometry{phdthesisprint}
+
+\newgeometry{papersize={170mm,240mm}}
+\savegeometry{phdthesisview}
 %
 % Packages
 %
 
-\usepackage{libertine}
+%\usepackage[bitstream-charter,expert]{mathdesign}
 %\usepackage{libertinust1math}
 \usepackage[T1]{fontenc}
+\usepackage{charter}
+\usepackage[expert]{mathdesign}
+
+% \SetSymbolFont{operators}   {normal}{OT1}{cmr} {m}{n}
+% \SetSymbolFont{letters}     {normal}{OML}{cmm} {m}{it}
+% \SetSymbolFont{symbols}     {normal}{OMS}{cmsy}{m}{n}
+% \SetSymbolFont{largesymbols}{normal}{OMX}{cmex}{m}{n}
+% \SetSymbolFont{operators}   {bold}  {OT1}{cmr} {bx}{n}
+% \SetSymbolFont{letters}     {bold}  {OML}{cmm} {b}{it}
+% \SetSymbolFont{symbols}     {bold}  {OMS}{cmsy}{b}{n}
+% \SetSymbolFont{largesymbols}{bold}  {OMX}{cmex}{m}{n}
+
+% \SetMathAlphabet{\mathbf}{normal}{OT1}{cmr}{bx}{n}
+% \SetMathAlphabet{\mathsf}{normal}{OT1}{cmss}{m}{n}
+% \SetMathAlphabet{\mathit}{normal}{OT1}{cmr}{m}{it}
+% \SetMathAlphabet{\mathcal}{normal}{OT1}{cmr}{m}{it}
+% \SetMathAlphabet{\mathfrak}{normal}{OT1}{cmr}{m}{it}
+% \SetMathAlphabet{\mathtt}{normal}{OT1}{cmtt}{m}{n}
+% \SetMathAlphabet{\mathbf}{bold}  {OT1}{cmr}{bx}{n}
+% \SetMathAlphabet{\mathsf}{bold}  {OT1}{cmss}{bx}{n}
+% \SetMathAlphabet{\mathit}{bold}  {OT1}{cmr}{bx}{it}
+% \SetMathAlphabet{\mathtt}{bold}  {OT1}{cmtt}{m}{n}
+
+
+\usepackage{titlesec} 
+\titleformat{\section}[hang]{
+    \usefont{T1}{qhv}{b}{n}\selectfont} % "qhv" - TeX Gyre Heros, "b" - bold
+    {} 
+    {0em}
+    {\hspace{-0.4pt}\Large \thesection\hspace{0.6em}}
+
+\usepackage{sectsty}
+\chapterfont{\usefont{T1}{qhv}{b}{n}\selectfont\huge}
+
+\usepackage{tocloft} % subfigure option only if using subfigure package
+\renewcommand{\cfttoctitlefont} % ToC title
+             {\usefont{T1}{qhv}{b}{n}\selectfont\huge}
+\renewcommand{\cftchapfont} % chapter titles
+             {\usefont{T1}{qhv}{b}{n}\selectfont}
+\renewcommand{\cftsecfont} % section titles
+             {\usefont{T1}{bch}{m}{n}\selectfont}
+\renewcommand{\cftsubsecfont} % subsection titles
+             {\usefont{T1}{bch}{m}{n}\selectfont} 
+\renewcommand{\cftchappagefont} % chapter page numbers
+             {\usefont{T1}{bch}{b}{n}\selectfont}
+\renewcommand{\cftsecpagefont} % section page numbers
+             {\cftsecfont} 
+\renewcommand{\cftsubsecpagefont} % subsection page numbers
+             {\cftsubsecfont}
+
 
 \usepackage{algorithm2e} 
 \usepackage[utf8]{inputenc}
@@ -22,6 +83,7 @@
 \usepackage{a4wide}                     % Tell latex to use the room there is on the page
 \usepackage{amsmath}                    % For equation environment
 \usepackage{amssymb}                    % special Math symbols
+
 \usepackage{subcaption}
 %\captionsetup{compatibility=false}
 \let\proof\relax
@@ -57,7 +119,7 @@
 \usepackage[usenames,dvipsnames]{color} % Colored text
 \usepackage{moreverb}                   % To include keywords
 \usepackage{lscape}                     % Landscape page
-\usepackage{tocbibind}
+\usepackage[nottoc]{tocbibind}
 %\usepackage{svnkw}                      % SVN revision number (and more) in LaTeX doc.
 \usepackage{verbatim}                   % Multiline comments (using \begin{comment}
 \usepackage{datetime}                   % For formatting dates
@@ -75,15 +137,16 @@
 %filecolor=darkgreen,
 %urlcolor=darkred,
 %citecolor=darkblue }
-
+\definecolor{toclinkcolor}{rgb}{0.149019,0,0.439215}
 \usepackage[pagebackref=true,
             colorlinks=true,
-            linkcolor=gray,
+            linkcolor=toclinkcolor,
             bookmarks=true,
             filecolor=gray,
-            urlcolor=gray,
-            citecolor=gray
+            urlcolor=Aquamarine,
+            citecolor=toclinkcolor
            ]{hyperref} % Make links clickable and generate bookmarks (so you can easily click through in acroread)
+
 \usepackage{lineno}                   % Include line numbers
 \usepackage{longtable}                % Make tables that can cover multiple pages
 \usepackage[section]{placeins}        % Prevent floats from passing beyond \FloatBarrier; keep floats within their sections
