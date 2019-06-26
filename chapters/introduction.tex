@@ -12,11 +12,11 @@
 \emph{Earth}, \emph{Wind}, \emph{Fire} \& \emph{Water}, the \emph{classical elements} were the basis 
 for understanding our environment during antiquity. Modern science, based on experiments has taken a very 
 different view of the world, one based on atoms, fundamental particles and states of matter. But we could 
-argue that the classical elements were a more a philosophical idea that distilled our everyday experiences 
-with nature, infact many ancient cultures such as Hellenistic Greece, Babylonia, Japan, Tibet, China and 
+argue that the classical elements were a more philosophical idea that distilled our everyday experiences 
+with nature, in fact many ancient cultures such as Hellenistic Greece, Babylonia, Japan, Tibet, China and 
 India had similar lists of four or five elements. These civilizations had very different views on the 
 properties of these elements and how they related to natural phenomena, quite often these links 
-were mythological. Indeed the obvious way in which people experienced the classical elements was through
+were mythological. The obvious way in which people experienced the classical elements was through
 weather systems. 
 
 From the seasons to daily variations, nature's elements drive and shape our lives. Sometimes weather 
@@ -82,8 +82,8 @@ world, even in low latitude places such as Colombia \citep{MORENOCARDENAS2016257
 in the U.S were so bright that they woke up gold miners who began preparing breakfast thinking it was morning 
 \citep{miners}. In the northeastern U.S, people could read the newspaper by the aurora's light \citep{auroraReading}.
 
-\begin{wrapfigure}{l}{0.4\textwidth}
-    \centering\includegraphics[width=0.38\textwidth]{Carrington_Richard_sunspots_1859.jpg}
+\begin{wrapfigure}{l}{0.5\textwidth}
+    \centering\includegraphics[width=0.48\textwidth]{Carrington_Richard_sunspots_1859.jpg}
     \caption{\small Sunspots of September 1, 1859, as sketched by Richard Carrington. 
     A and B mark the initial positions of an intensely bright event, 
     which moved over the course of five minutes to C and D before 
@@ -112,8 +112,8 @@ the fledgling science of Electromagnetism had picked up in the $19^{\text{th}}$ 
 understanding of these phenomena. Faraday's induction experiment from 1831 (figure \ref{fig:induction}) had shown 
 that varying magnetic fields could induce electrical currents in copper wires.
 
-\begin{wrapfigure}{r}{0.4\textwidth}
-    \centering\includegraphics[width=0.38\textwidth]{Induction_experiment.png}
+\begin{figure}
+    \noindent\centering\includegraphics[width=0.7\textwidth]{Induction_experiment.png}
     \caption{
         \small{One of Faraday's 1831 experiments demonstrating induction. 
         The liquid battery (right) sends an electric current through the small coil (A). 
@@ -121,7 +121,7 @@ that varying magnetic fields could induce electrical currents in copper wires.
         voltage in the coil, which is detected by the galvanometer (G). 
         \textit{Source}: J. Lambert (Public domain)}}
     \label{fig:induction}
-\end{wrapfigure}
+\end{figure}
 
 It took approximately a century from the \emph{Carrington event} for a theoretical understanding of Space 
 Weather phenomena to develop. Maxwells equations of Electromagnetism \citep{maxwell1865viii} published in 
@@ -134,6 +134,8 @@ positive and negatively charged particles in roughly equal numbers. Space weathe
 with the rise of space missions and satellites, though there was still much progress to be made. This was 
 especially important with increasing reliance on electronic appliances and communication networks.
 
+\subsubsection*{Impacts}
+
 The Quebec power grid failure of 1989 \citep{kappenman1997geomagnetic} during a geomagnetic storm event showed 
 that intense space weather events like the one observed in 1859 could cause significant damage to communications, 
 energy and technological infrastructure that so crucial to the functioning of modern civilization.
@@ -142,7 +144,9 @@ It is now widely accepted that space weather events can adversely impact satelli
 airline industry, navigation systems and the electric power grid 
 \citep{board2009severe,cannon2013extreme,bothmer2007space,baker2004effects}.
 
-But the solar storms observed in the $20^{\text{th}}$ and $19^{\text{th}}$ centuries are only one part of the 
+\subsubsection*{The Future}
+
+The solar storms observed in the $20^{\text{th}}$ and $19^{\text{th}}$ centuries are only one part of the 
 picture. It is now increasingly likely that private companies will be making significant inroads into space 
 travel for business goals. Companies such as SpaceX and BlueOrigin aim to make space travel cheaper and more 
 accessible so that human beings can live and work in space or other planets in the solar system, potentially 
@@ -161,31 +165,11 @@ This drastic move to become a multi-planetary species will bring with it the ris
 These risks come in the form of severe magnetic storms, solar flares and ejections of charged particles, which must 
 be anticipated if we want to become a succesful space faring race. 
 
-\subsection*{Space Science Informatics}
-
 In order to design resilient technological systems for the new space age, we need to make progress in understanding 
 and anticipating space weather phenomena. Physical theories about space plasmas needed to be combined with the data 
 collected from space missions. The rapid rise of hardware, software, data storage, the deluge of space mission data 
 and the advent of machine learning techniques means that we are in a unique position to take strides towards our 
 space goals.
-
-This thesis aims to be an exploration into the possibilities of space science informatics. It is structured as follows.
-
-\begin{itemize}
-    \item Chapter \ref{chapter:preliminaries} provides a short introduction to space weather concepts needed to 
-    understand the problems considered in this thesis.
-    \item Chapter \ref{chapter:dst_osa} tackles the task of creating probabilistic forecasting systems for Earth 
-    based geomagnetic quantities.
-    \item Chapter \ref{chapter:dst_msa} extends the time horizon of the forecasting models proposed in chapter 
-    \ref{chapter:dst_osa}.
-    \item Chapter \ref{chapter:bayes_diff_chapter} combines a physical models of plasma diffusion with 
-    statistical predictive models for the purpose of Bayesian inference of key plasma diffusion parameters.
-    \item Chapter \ref{chapter:pdt} deals with situation where one quantity influences another through a 
-    time lag that is dynamic. The aim of the modeling being to forecast quantities near the Earth which 
-    are driven by events on the Sun's surface. 
-    \item Chapter \ref{chapter:conclusions} discusses the progress made in the thesis and offers perspectives 
-    for future research.
-\end{itemize}
 
 \clearpage
 %\bibliographystyle{plainnat}

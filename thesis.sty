@@ -45,15 +45,25 @@
 % \SetMathAlphabet{\mathtt}{bold}  {OT1}{cmtt}{m}{n}
 
 
-\usepackage{titlesec} 
-\titleformat{\section}[hang]{
-    \usefont{T1}{qhv}{b}{n}\selectfont} % "qhv" - TeX Gyre Heros, "b" - bold
-    {} 
-    {0em}
-    {\hspace{-0.4pt}\Large \thesection\hspace{0.6em}}
+% \usepackage{titlesec} 
+% \titleformat{\section}[hang]{
+%     \usefont{T1}{qhv}{b}{n}\selectfont} % "qhv" - TeX Gyre Heros, "b" - bold
+%     {} 
+%     {0em}
+%     {\hspace{-0.4pt}\Large \thesection\hspace{0.6em}}
+
+% \titleformat{\subsection}[hang]{
+%   \usefont{T1}{qhv}{b}{n}\selectfont} % "qhv" - TeX Gyre Heros, "b" - bold
+%   {} 
+%   {0em}
+%   {\hspace{-0.4pt}\Large \thesection\hspace{0.6em}}
 
 \usepackage{sectsty}
 \chapterfont{\usefont{T1}{qhv}{b}{n}\selectfont\huge}
+\allsectionsfont{\usefont{T1}{qhv}{b}{n}\selectfont}
+%\sectionfont{\usefont{T1}{qhv}{b}{n}\selectfont\large}
+%\subsectionfont{\usefont{T1}{qhv}{b}{n}\selectfont\medium}
+%\subsubsectionfont{\usefont{T1}{qhv}{b}{n}\selectfont\medium}
 
 \usepackage{tocloft} % subfigure option only if using subfigure package
 \renewcommand{\cfttoctitlefont} % ToC title
