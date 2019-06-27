@@ -189,6 +189,14 @@ $\sim 700 \text{km}/\text{s}$.
     \label{fig:solarwinddist}
 \end{figure}
 
+\subsubsection*{Near Earth Measurements}
+
+The solar wind has the heliospheric magnetic field \emph{frozen in} and as it propagates in the interplanetary medium 
+it carries the solar magnetic field with it. Important solar wind quantities such as 
+\begin{enumerate*} \item solar wind speed \item proton density \item magnetic field strength \end{enumerate*} are recorded 
+at the so called $L1$ \emph{Langrangian point} where the gravitational fields of the Earth and the Sun 
+approximately balance out.
+
 
 
 \subsection{Sunspots \& Solar Cycle}\label{sec:sunspots}
@@ -229,15 +237,32 @@ than average temperatures in Europe, which was called the \emph{little ice age}.
 years have been reconstructed using Carbon-$14$ based analysis of tree rings. Apart from the \emph{Maunder minimum},
 other periods of very low sunspot activity have been matched with corresponding \emph{little ice ages}.
 
+In chapter \ref{chapter:pdt}, the \emph{sunspot number} data as well as the \emph{flux tube expansion} factor 
+computed by the CSSS model will be used to create a input data set for building the \emph{dynamic time lag regression} 
+model proposed therein. Using the input parameters, the DTLR model provides an estimate for the near Earth solar wind speed as 
+well as the propagation time. Measurements of the solar wind speed will be used in chapters \ref{chapter:dst_osa}, 
+\ref{chapter:dst_msa} as inputs to the forecasting models applied therein.
+
+
 \section{Magnetosphere}\label{sec:mag}
 
+% \begin{figure}
+%     \noindent\includegraphics[width=0.7\textwidth]{mag.png}
+%     \caption{\small{Schematic diagram of the Earth's magnetosphere: \\
+%     The Sun (not shown) is to the left of the figure, the solar wind propagates from left to right.\\
+%     1) Bow shock. 2) Magnetosheath. 3) Magnetopause. 4) Magnetosphere. \\
+%     5) Northern tail lobe. 6) Southern tail lobe. 7) Plasmasphere.\\ 
+%     Source: Dennis Gallagher, derivative work: Fr\'ed\'eric Michel (Public domain)}
+%     }
+%     \label{fig:magnetosphere}
+% \end{figure}
+
 \begin{figure}
-    \noindent\includegraphics[width=0.7\textwidth]{mag.png}
-    \caption{\small{Schematic diagram of the Earth's magnetosphere: \\
-    The Sun (not shown) is to the left of the figure, the solar wind propagates from left to right.\\
-    1) Bow shock. 2) Magnetosheath. 3) Magnetopause. 4) Magnetosphere. \\
-    5) Northern tail lobe. 6) Southern tail lobe. 7) Plasmasphere.\\ 
-    Source: Dennis Gallagher, derivative work: Fr\'ed\'eric Michel (Public domain)}
+    \noindent\includegraphics[width=0.8\textwidth]{mag3.png}
+    \caption{\small{Three-dimensional cutaway view of the magnetosphere. The light blue outer surface is the magnetopause, 
+    its boundary layers are shown in darker blue. Magnetic field lines are shown in blue, electric currents in yellow. 
+    The polar region where the magnetic field lines converge is the polar cusp. The bow shock has been omitted for clarity. 
+    Reproduced from \citet{DeKeyser2005}}
     }
     \label{fig:magnetosphere}
 \end{figure}
@@ -428,6 +453,26 @@ $\ell^2 \frac{\partial}{\partial{\ell}} \left( \frac{\kappa(\ell,t)}{\ell^{2}} \
 Pitch angle diffusion is approximated using a loss process $\lambda(\ell,t) f$, where $\lambda(\ell,t)$ is the 
 \emph{loss rate}, as an alternative it is also possible to express the loss rate as a \emph{loss time scale} 
 $\tau(\ell,t) = \frac{1}{\lambda(\ell,t)}$, but in this thesis we will use the former convention.
+
+The radial diffusion system in equation \ref{eq:raddiffusion} is the starting point for chapter 
+\ref{chapter:bayes_diff_chapter} where a surrogate model of the phase space density $\hat{f}$ is built to 
+perform bayesian inference over the parameters of the diffusion coefficient $\kappa$ and loss rate 
+$\lambda$.
+
+\subsection{Current Systems \& Geomagnetic Indices}
+
+As was noted earlier, the solar wind is largely deflected by the Earth's magnetic field but some particles still 
+leak into the magnetosphere. This particle injection is governed by the interaction between the magnetic field carried 
+by the solar wind and the Earth's magnetic field, also known as \emph{solar wind - magnetosphere coupling} it plays a important 
+role in determining space weather conditions in Earth's vicinity. 
+
+Solar wind plasma gets trapped in the Earth's magnetic field at a rate that is modulated by the \emph{solar wind - magnetosphere coupling}. 
+The drift motions of charged particles in the magnetosphere as discussed in section \ref{sec:mag} lead to many
+current systems. The prominent current systems (pictured in figure \ref{fig:magnetosphere}) are 
+\begin{enumerate*} \item ring current \item field aligned current \item tail current \item magnetopause current \end{enumerate*}.  
+These current systems induce magnetic fields which interact with the Earth's magnetic field and mutate it. When the 
+Earth's magnetic field strength is weakened due to strong ring currents, this leads to geomagnetic storm conditions which 
+can have adverse impacts on orbiting satellites and ground based infrastructure.
 
 
 
