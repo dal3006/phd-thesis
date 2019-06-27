@@ -334,21 +334,22 @@ Apart from the gyro motion, there are some important drift forces which signific
     a distorted circle and the particle drifts in a direction perpendicular to the electric field with a velocity 
     $\mathbf{v_d} = \mathbf{E} \times \mathbf{B} / B^2$.
 
-    \item Magnetic gradient drift: When the magnetic field varies in space (as is the case of the Earth), a gradient in the 
-    field strength in the direction perpendicular to $\mathbf{B}$ gives rise to gradient drift velocity given by 
-    $\mathbf{v_g} = \frac{1}{2} m v^2_{\perp}\mathbf{B} \times \frac{\nabla \mathbf{B}}{aB^3}$.
+    \item Magnetic gradient drift: When the magnetic field varies in space (as is the case of the Earth), a 
+    gradient in the field strength in the direction perpendicular to $\mathbf{B}$ gives rise to gradient 
+    drift velocity given by $\mathbf{v_g} = \frac{1}{2} m v^2_{\perp}\mathbf{B} \times \frac{\nabla \mathbf{B}}{aB^3}$.
 
-    \item Magnetic curvature drift: If the magnetic field has a curvature then this creates an additional drift motion with 
-    velocity $\mathbf{v_c} = \frac{ m v_{\parallel} \mathbf{B} \times (\hat{\mathbf{b}} \cdot \nabla) \hat{\mathbf{b}} }{qB^2}, 
+    \item Magnetic curvature drift: If the magnetic field has a curvature then this creates an additional 
+    drift motion with velocity $\mathbf{v_c} = \frac{ m v_{\parallel} 
+    \mathbf{B} \times (\hat{\mathbf{b}} \cdot \nabla) \hat{\mathbf{b}} }{qB^2}, 
     \ \ \mathbf{b} = \frac{\mathbf{B}}{B}$
 \end{itemize}
 
-The equations of motion for charged particles in the general case of spatially varying electric and magnetic fields do not 
-admit closed form solutions. The motions are generally complex and require lengthy numerical integrations to be resolved.
+The equations of motion for charged particles in the general case of spatially varying electric and magnetic fields 
+do not admit closed form solutions. The motions are generally complex and require lengthy numerical integrations 
+to be resolved.
 
-
-The \emph{guiding center} approximation helps us to decompose particle motions into three periodic components, each with 
-its own time scale (figure \ref{fig:particlemotions}).
+The \emph{guiding center} approximation helps us to decompose particle motions into three periodic components, 
+each with its own time scale (figure \ref{fig:particlemotions}).
 \begin{enumerate*}
     \item Gyromotion around magnetic field lines.
     \item Bounce motions between magnetic north and south poles.
@@ -357,10 +358,10 @@ its own time scale (figure \ref{fig:particlemotions}).
 
 \subsubsection*{Adiabatic Invariants}
 
-When a physical system with periodic motion is varied slowly as compared to the its time period, this transformation is can be 
-characterized as \emph{adiabatic}. Formally speaking, for systems which are described by Hamiltonian dynamics, we can write the 
-equations of motion in terms of the \emph{cannonical position} $q$, the \emph{cannonical momentum} $p$, external parameters $\theta$ 
-and the system's \emph{Hamiltonian} $\mathcal{H}(q,p|\theta)$. 
+When a physical system with periodic motion is varied slowly as compared to the its time period, this 
+transformation is can be characterized as \emph{adiabatic}. Formally speaking, for systems which are described by Hamiltonian dynamics, we can write the equations of motion in terms of the \emph{cannonical position} $q$, 
+the \emph{cannonical momentum} $p$, external parameters $\theta$ and the system's \emph{Hamiltonian} 
+$\mathcal{H}(q,p|\theta)$. 
 
 \begin{align}\label{eq:hamilton}
     \dot q &= \frac{\partial \mathcal{H}}{\partial p}\\
@@ -463,16 +464,30 @@ $\lambda$.
 
 As was noted earlier, the solar wind is largely deflected by the Earth's magnetic field but some particles still 
 leak into the magnetosphere. This particle injection is governed by the interaction between the magnetic field carried 
-by the solar wind and the Earth's magnetic field, also known as \emph{solar wind - magnetosphere coupling} it plays a important 
-role in determining space weather conditions in Earth's vicinity. 
+by the solar wind and the Earth's magnetic field, also known as \emph{solar wind - magnetosphere coupling} it 
+plays a important role in determining space weather conditions in Earth's vicinity. 
 
-Solar wind plasma gets trapped in the Earth's magnetic field at a rate that is modulated by the \emph{solar wind - magnetosphere coupling}. 
-The drift motions of charged particles in the magnetosphere as discussed in section \ref{sec:mag} lead to many
-current systems. The prominent current systems (pictured in figure \ref{fig:magnetosphere}) are 
-\begin{enumerate*} \item ring current \item field aligned current \item tail current \item magnetopause current \end{enumerate*}.  
-These current systems induce magnetic fields which interact with the Earth's magnetic field and mutate it. When the 
-Earth's magnetic field strength is weakened due to strong ring currents, this leads to geomagnetic storm conditions which 
-can have adverse impacts on orbiting satellites and ground based infrastructure.
+Solar wind plasma gets trapped in the Earth's magnetic field at a rate that is modulated by the 
+\emph{solar wind - magnetosphere coupling}. The drift motions of charged particles in the magnetosphere 
+as discussed in section \ref{sec:mag} lead to many current systems. The prominent current systems 
+(pictured in figure \ref{fig:magnetosphere}) are \begin{enumerate*} \item ring current 
+\item field aligned current \item tail current \item magnetopause current \end{enumerate*}.  
+These current systems induce magnetic fields which interact with the Earth's magnetic field and mutate it. 
+When the Earth's magnetic field strength is weakened due to strong ring currents, this leads to 
+geomagnetic storm conditions which can have adverse impacts on orbiting satellites and ground based 
+infrastructure.
+
+For the purposes of space weather monitoring and forecasting, the state of the magnetosphere and geomagnetic 
+phenomena are often represented using proxies known as geomagnetic indices. Geomagnetic indices give us the 
+ability to summarize the state of the magnetosphere in terse framework. They are often calculated by averaging 
+several ground based measurements of magnetic fluctuations, generally at a cadence of a few hours.
+
+Chapter \ref{chapter:dst_osa} gives a brief introduction to the popular geomagnetic indices and formulates 
+\emph{gaussian process} models for producing probabilistic one hour ahead forecasts of the $Dst$ 
+index. 
+
+In chapter \ref{chapter:dst_msa}, we augment the $Dst$ model from chapter \ref{chapter:dst_osa} with 
+\emph{long short-term memory} (LSTM) networks and obtain five hour ahead forecasts of the $Dst$.
 
 
 
