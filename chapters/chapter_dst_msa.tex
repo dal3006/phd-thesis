@@ -96,6 +96,13 @@ by the GPNN model.
 
 \section{Data}\label{sec:data}
 
+\begin{figure}
+	\includegraphics[width=\textwidth]{image2.png}
+	\caption{Temporal coverage of database used in this study and in previous studies. Wu and Lundstedt [1997] is in orange and their database starts in 1963, Bala and Reiff [2012] is in yellow, Lazzús et al. [2017] is in blue, and our study is in green. The f10.7 in grey represents the variation of solar activity.}
+	\label{fig:datacoverage}
+\end{figure}
+
+
 Solar wind parameters and the geomagnetic Dst index are taken from the OMNI database 
 (\url{https://omniweb.gsfc.nasa.gov/ow.html}) maintained by the National Space Science Data Center (NSSDC) 
 of National Aeronautics and Space Administration (NASA).
@@ -124,6 +131,15 @@ Concerning parameters provided by the GPS ns41, we use the magnetic field measur
 
 
 \subsection{Long Short-Term Memory Network}
+
+
+\begin{figure}
+	\noindent\includegraphics[width=\textwidth]{lstm.png}
+	\caption{Schematic diagram of the LSTM cell. Reproduced from \url{https://github.com/llSourcell/LSTM_Networks/blob/master/LSTM\%20Demo.ipynb}}
+	\label{fig:lstmcell}
+\end{figure}
+
+
 
 The \emph{long short-term memory} network (LSTM) belongs to the family of \emph{recurrent neural networks} (RNN). 
 In an RNN, hidden layers are built to allow information persistence. They behave as a loop to allow information 
@@ -213,26 +229,29 @@ a brief explaination of its functioning.
 
 \subsubsection*{The RMSProp Algorithm}
 
-Parameters like weights and bias of the network are described using the notation  \(  \theta _{i} \) . 
-We then define \( g_{t,i} \) in equation \ref{eq:gradient} as the gradient of the 
-objective function with respect to the parameters \(   \theta_{i} \) at time step t. 
-
+For the purposes of notational simplicity, the weights and biases of the LSTM cell are concatenated into a 
+single vector $\mathbf{\theta}$, where $\theta_i$ denotes an individual scalar element of $\mathbf{\theta}$. 
+We then define \( g_{t,i} \) in equation \ref{eq:gradient} as the gradient of the objective function with respect 
+to the parameters \(   \theta_{i} \) at time step t. 
 
 \begin{equation}\label{eq:gradient}
- g_{t,i} = \triangledown_{ \theta } J \left(  \theta_{t,i} \right)
+ g_{t,i} = \triangledown_{ \mathbf{\theta} } J \left(  \theta_{t,i} \right)
 \end{equation}
 
-The update of parameters using RMSprop is described by equation \ref{eq:learningrmsprop}. First the running average  
-\( E \left( g^{2} \right)  \)  at time step  \( t \)  is computed, then applied to the compute 
-of parameters  \(  \theta _{i} \).
+The update of parameters using RMSprop is described by equation \ref{eq:learningrmsprop}. First the running average 
+of the second order moment of the gradients \( E \left( g^{2} \right)  \) is computed at each iteration $t$, then 
+the updated parameters $\theta_{t+1,i}$ are calculated using the gradient $g_{t,i}$ and a damped learning rate of 
+$\frac{\eta}{\sqrt{E \left[ g^{2} \right]_{t,i}} + \epsilon }$ ($\epsilon$ is a small number added to 
+$\sqrt{E \left[ g^{2} \right]_{t,i}}$ preventing numerical overflow).
 
 
 \begin{align}\label{eq:learningrmsprop}
- E \left( g^{2} \right)_{t,i} &= 0.9E \left( g^{2} \right)_{t,i} + 0.1 g_{t,i}^{2}  \\ 
- \theta _{t+1,i} &= \theta _{t,i} - \frac{ \eta }{E \left[ g^{2} \right]_{t,i}+ \epsilon } g_{t,i}
+ E \left( g^{2} \right)_{t+1,i} &= 0.9 E \left( g^{2} \right)_{t,i} + 0.1 g_{t,i}^{2}  \\ 
+ \theta_{t+1,i} &= \theta_{t,i} - \frac{ \eta }{\sqrt{E \left[ g^{2} \right]_{t,i}} + \epsilon } g_{t,i}
 \end{align}
 
-With  \(  \eta   \) the learning rate and  \(  \varepsilon  \)  a smoothing term to avoid division by zero.
+
+\subsubsection*{Model Validation \& Performance Metrics}
 
 To develop the network, the database is divided into 3 sets : 70$\%$  for the training set, 20$\%$  
 for the test set and 10$\%$  for the validation set. To evaluate the NN ability to provide accurate 
@@ -263,7 +282,7 @@ of the model. This function plays a significant role in the process described in
  though the theoretical formulation might seem rather abstract, dealing with function spaces and probability 
  density applied to functions, the practical implementation is rather straightforward, boiling down to simple 
  analytical expression that requires no more than linear algebra. Moreover, GP regression outputs a Gaussian 
- distribution, which has a natural probabilistic intepretation, rather than a single-point estimate.For a complete 
+ distribution, which has a natural probabilistic intepretation, rather than a single-point estimate. For a complete 
  description of this method the reader is refered to reference textbooks like Rasmussen and Williams 
  \citet{Rasmussen:2005:GPM:1162254}. 
 
@@ -283,13 +302,14 @@ A Gaussian process can be described by equation \ref{eq:gp}.
 
 
 A GP is completely specified by its mean function  \( m \left( x \right)  \) described by 
-equation 11 and by its covariance function  \( k \left( x,x^{'} \right)  \)  described by equation 12. 
+equation \ref{eq:meanfunc} and by its covariance function  \( k \left( x,x^{'} \right)  \)  in equation \ref{eq:kernelfunc}. 
 The covariance function specifies how exactly each point influences the values that the other points are 
 likely to take on. The main idea is that if  \( x_{i} \) and  \( x_{j} \)  are close by, 
 we expect the output from the functions at these points to be similar . Different types of covariance 
-functions exist, also called kernels, which determine the form of the model. Chandorkar et al. \citet{ChandorkarDst} 
+functions exist, also called kernels, which determine the form of the model. \citet{ChandorkarDst} 
 listed common kernels used in machine learning and described how the choice of it is fundamental. 
-In this study, we focused on the neural network kernel described by equation \ref{eq:gpcov} (Williams, 1998). 
+In this study, we focused on the neural network kernel \citep{williams1998computation} described in 
+equation \ref{eq:gpcov}. 
 
 
 \begin{equation}\label{eq:gpcov}
@@ -297,7 +317,7 @@ In this study, we focused on the neural network kernel described by equation \re
 \end{equation}
 
 
-As Rasmussen and Williams \citet{Rasmussen:2005:GPM:1162254} described, if there is no prior knowledge about 
+As \citet{Rasmussen:2005:GPM:1162254} described, if there is no prior knowledge about 
 the function to be approximated, the mean function is defined to be zero. The aim of our study here is to 
 combine the neural network and the gaussian process to obtain accurate forecast with an uncertainty distribution. 
 Hence, the mean function  \( m \left( x \right)  \)  is provided by the  \( NN \left( x \right)  \)  function 
@@ -367,7 +387,7 @@ at \url{http://www.gaussianprocess.org/gpml/code} \citet{rasmussen2010gaussian}.
 \section{Results} \label{sec:resultsgpnn}
 
 
-\subsection{Optimisation of the LSTM NN}
+\subsection{Optimisation of the LSTM}
 
 
 The first step in the development of the GPNN model is to optimise the performance of each 
@@ -557,29 +577,6 @@ re-calibrate the prediction
 
 %%%%%%%%%%%%%%%%%%%% Figure/Image No: 1 Ends here %%%%%%%%%%%%%%%%%%%%
 
-
-%%%%%%%%%%%%%%%%%%%% Figure/Image No: 2 starts here %%%%%%%%%%%%%%%%%%%%
-
-\begin{figure}
-	\includegraphics[width=\textwidth]{image2.png}
-	\caption{Temporal coverage of database used in this study and in previous studies. Wu and Lundstedt [1997] is in orange and their database starts in 1963, Bala and Reiff [2012] is in yellow, Lazzús et al. [2017] is in blue, and our study is in green. The f10.7 in grey represents the variation of solar activity.}
-	\label{fig:datacoverage}
-\end{figure}
-
-
-%%%%%%%%%%%%%%%%%%%% Figure/Image No: 2 Ends here %%%%%%%%%%%%%%%%%%%%
-
-
-%%%%%%%%%%%%%%%%%%%% Figure/Image No: 3 starts here %%%%%%%%%%%%%%%%%%%%
-
-\begin{figure}
-	\noindent\includegraphics[width=\textwidth]{lstm.png}
-	\caption{Schematic diagram of the LSTM cell. Reproduced from \url{https://github.com/llSourcell/LSTM_Networks/blob/master/LSTM\%20Demo.ipynb}}
-	\label{fig:lstmcell}
-\end{figure}
-
-
-%%%%%%%%%%%%%%%%%%%% Figure/Image No: 3 Ends here %%%%%%%%%%%%%%%%%%%%
 
 
 
