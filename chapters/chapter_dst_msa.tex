@@ -39,7 +39,7 @@ prediction method to connect Dst and the southward component of the interplaneta
 assumption, however, has limitations since  the solar wind and magnetosphere form a coupled non-linear system. 
 
 To model nonlinear behavior of magnetospheric response, various models have been proposed. A popular approach 
-used to model nonlinear systems is based on artificial neural networks (ANN) \citet{haykin1994neural}. One of the 
+used to model nonlinear systems is based on artificial neural networks (ANN) \citep{haykin1994neural}. One of the 
 earliest models of Dst prediction based on ANNs is due to \citet{lundstedt1994prediction}. They developed 
 a feedforward neural network to predict Dst one hour ahead, using $B_z$, the density and the velocity of 
 the solar wind. This model was able to model the initial and main phases of geomagnetic storms well, but 
@@ -148,12 +148,13 @@ as multiple copies of the same network. The RNN architecture is particulary suit
 applications. 
 
 \citet{hochreiter1991untersuchungen,bengio1994learning} underlined a weakness of RNNs. They are supposed to connect 
-past information to the present, but if the information needed is too far in the past, RNN are unable to make this 
-connection. This failure is due to the so called \emph{vanishing gradient problem} occuring during the training of RNNs. 
+past information to the present, but if the information needed is too far in the past, RNNs are unable to to retain it. This failure is due to the so called \emph{vanishing gradient problem} occuring during the training of RNNs. 
 
-LSTM networks are designed to avoid this problem. They are made to remember information for long periods of time. 
-They have a chain-like structure like RNN, but the repeating module has a specific structure. 
-Figure \ref{fig:lstmcell} represents a LSTM cell. The two elements fundamental to this architecture are 
+LSTM networks are designed to overcome the vanishing gradient problem by retaining information pertaining to long range 
+temporal dependencies in time series data. LSTMs have a chain-like structure like RNNs, but the repeating module 
+known as the LSTM cell has specific characteristics.
+
+Figure \ref{fig:lstmcell} represents a LSTM cell. The two elements fundamental to this cell are 
 the cell state and gates. The cell state $\mathbf{c}_{t}$ in figure \ref{fig:lstmcell} is like a conveyor belt which 
 is connected to various gates. Gates can add or remove information from the cell state depending on the information 
 required by the LSTM unit. The three gates in this architecture are: the input gate $\mathbf{i}_t$, 
@@ -247,31 +248,30 @@ $\sqrt{E \left[ g^{2} \right]_{t,i}}$ preventing numerical overflow).
 
 \begin{align}\label{eq:learningrmsprop}
  E \left( g^{2} \right)_{t+1,i} &= 0.9 E \left( g^{2} \right)_{t,i} + 0.1 g_{t,i}^{2}  \\ 
- \theta_{t+1,i} &= \theta_{t,i} - \frac{ \eta }{\sqrt{E \left[ g^{2} \right]_{t,i}} + \epsilon } g_{t,i}
+ \theta_{t+1,i} &= \theta_{t,i} - \frac{ \eta }{\sqrt[]{E \left[ g^{2} \right]_{t,i}} + \epsilon } g_{t,i}
 \end{align}
 
 
-\subsubsection*{Model Validation \& Performance Metrics}
+\subsubsection*{LSTM Model Evaluation}
 
-To develop the network, the database is divided into 3 sets : 70$\%$  for the training set, 20$\%$  
-for the test set and 10$\%$  for the validation set. To evaluate the NN ability to provide accurate 
-forecast from 1h ahead to 6h ahead, we use the Root Mean Square Error (RMSE) and the Correlation Coefficient (CC) 
-respectively defined by equation \ref{eq:rmse} and \ref{eq:cc}. 
+For the purposes of training and evaluation, the data set is divided as follows : 70$\%$ for training, 20$\%$  
+for testing and 10$\%$ for validation. The LSTM model is evaluated using the Root Mean Square Error (RMSE) 
+and the Correlation Coefficient (CC) defined by equations \ref{eq:rmse} and \ref{eq:cc} respectively. 
 
 
 \begin{equation}\label{eq:rmse}
- RMSE= \sqrt[]{ \sum _{t=1}^{n} \left( Dst \left( t \right) -Dst \left( t \right)  \right) ^{2}/n}
+ RMSE = \sqrt[]{ \sum_{t=1}^{n} \left( Dst \left( t \right) - \hat{D}st \left( t \right)  \right) ^{2}/n}
 \end{equation}
 
 \begin{equation}\label{eq:cc}
- CC=Cov \left( Dst,Dst \right) \sqrt[]{Var \left( Dst \right) Var \left( Dst \right) }
+ CC = Cov \left( Dst, \hat{D}st \right) / \sqrt[]{Var \left( Dst \right) Var \left( \hat{D}st \right) }
 \end{equation}
 
 
-We trained and optimised 6 LSTM NN corresponding to forecasts from 1h ahead to 6h ahead, using the 
-Lasagne library in Python (\url{http://lasagne.readthedocs.io/en/latest/index.html}). This way, we obtained a 
-vector of LSTM functions that we note as  \( NN \left( x \right)  \) , with  \( x \)  being input parameters 
-of the model. This function plays a significant role in the process described in the following section. 
+We trained 6 LSTM models corresponding to forecasts from one to six hours ahead. This was implemented using the 
+Lasagne library in Python (\url{http://lasagne.readthedocs.io/en/latest/index.html}). We thus obtained a 
+vector of outputs \( NN \left( x \right)  \), for every input \( x \), which serves as the mean function 
+for the Gaussian process component outlined below. 
 
 
 \subsection{Gaussian Processes for Time Series Prediction}
@@ -303,6 +303,7 @@ A Gaussian process can be described by equation \ref{eq:gp}.
 
 A GP is completely specified by its mean function  \( m \left( x \right)  \) described by 
 equation \ref{eq:meanfunc} and by its covariance function  \( k \left( x,x^{'} \right)  \)  in equation \ref{eq:kernelfunc}. 
+
 The covariance function specifies how exactly each point influences the values that the other points are 
 likely to take on. The main idea is that if  \( x_{i} \) and  \( x_{j} \)  are close by, 
 we expect the output from the functions at these points to be similar . Different types of covariance 
@@ -313,7 +314,7 @@ equation \ref{eq:gpcov}.
 
 
 \begin{equation}\label{eq:gpcov}
- k_{NN} \left( x, x' \right) = \frac{2}{ \pi } \left( \frac{2x^{T}x'}{\sqrt{ \left( 1+2x^{T} x \right) }\sqrt{ \left( 1+2x'^{T}x' \right)}} \right)
+ k_{NN} \left( x, x' \right) = \frac{2}{ \pi } \text{sin}^{-1} \left( \frac{2x^{T}x'}{\sqrt{ \left( 1+2x^{T} x \right) }\sqrt{ \left( 1+2x'^{T}x' \right)}} \right)
 \end{equation}
 
 
@@ -345,14 +346,10 @@ K \left( X_{\ast},X \right)   &  K \left( X_{\ast},X_{\ast} \right) \\
 If there are  \( n \)  training and  \( n_{\ast} \)  test points, then  \( K \left( X,X_{\ast} \right)  \)  
 represents the  \( n \times n_{\ast} \)  matrix of the covariance of all pairs of training and test points. 
 
-
-
 To make predictions, the posterior distribution over function is needed. To get the posterior distribution, 
 we need to restrict the prior distribution from equation \ref{eq:jointdist} only to those functions that 
 fit the observed data points. It needs to be conditioned on the observations as described by 
 the system of equation \ref{eq:preddist}.
-
-
 
 \begin{align}\label{eq:preddist}
  f_{\ast} \vert X_{\ast},X,f &\sim N \left( f_{\ast},cov \left( f_{\ast} \right)  \right)  \\ 
@@ -362,8 +359,6 @@ the system of equation \ref{eq:preddist}.
 
 With this system of equation, test set function values  \( f_{\ast} \)  can now be sampled from the joint 
 posterior distribution by evaluating the mean and covariance matrix. 
-
-
 
 To predict the geomagnetic index Dst based on input features \( x \) , the equation \ref{eq:dstgp} sumarises 
 the inherent process. 
@@ -418,10 +413,10 @@ can have an estimation of the storm times used in them.
 
 
 Our model, with or without GPS data provides performance which are close to the one obtained by 
-Lazzús et al. \citet{Lazzus} from 1h ahead to 3h ahead but when the expected forecast goes from 4h ahead to 6h ahead, 
+\citet{Lazzus} from 1h ahead to 3h ahead but when the expected forecast goes from 4h ahead to 6h ahead, 
 our models, with or without GPS data provide better global performance. As an example, when considering a 6h 
 ahead forecast, our model with GPS data provides a CC of 0.873 and a RMSE of 9.86, while Lazzús et al. \citet{Lazzus} 
-obtained a CC of 0.826 and a RMSE of 13.09. As the Lazzús et al. \citet{Lazzus} model is based only on 
+obtained a CC of 0.826 and a RMSE of 13.09. The model presented in \citet{Lazzus} is based only on 
 previous Dst values, it shows the benefit of using exogenous data when predicting a geomagnetic index. 
 Bala and Reiff \citet{Bala2012} used the Boyle index as an input function, and obtained quite similar 
 performance as ours. If we consider again a forecast of 6h ahead, their model presents a\ CC of 0.77 
@@ -455,9 +450,10 @@ and  are not adequate  to evaluate  probabilistic forecast.
 
 Storm activity is often classified using given thresholds of Dst values. According to the most common 
 classification, we distinguished 3 levels of storms summarised in Table \ref{table:stormclass} 
-(Dst $<= 250$, $-250 <=$ Dst $<= 50$, Dst $>= -50$). The aim here is to use metrics which will be able to evaluate 
-how the GPNN manages to forecast geomagnetic storms into the right family of storm. To do so, 
-we focused on the Receiver Operating Characteristic Curve and Reliability diagram.
+($\text{Dst} <= 250$, $-250 <= \text{Dst} <= 50$, $\text{Dst} >= -50$). The aim here is to use metrics 
+which will be able to evaluate how the GPNN manages to forecast geomagnetic storms into the 
+right family of storm. To do so, we focused on the Receiver Operating Characteristic Curve and 
+Reliability diagram.
 
 
 
