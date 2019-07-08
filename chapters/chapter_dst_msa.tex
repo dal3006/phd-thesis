@@ -98,7 +98,9 @@ by the GPNN model.
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{image2.png}
-	\caption{Temporal coverage of database used in this study and in previous studies. Wu and Lundstedt [1997] is in orange and their database starts in 1963, Bala and Reiff [2012] is in yellow, Lazzús et al. [2017] is in blue, and our study is in green. The f10.7 in grey represents the variation of solar activity.}
+	\caption{Temporal coverage of database used in this study and in previous studies. \citet{wu1997geomagnetic} 
+	is in orange and their database starts in 1963, \citet{Bala2012} is in yellow, \citet{Lazzus} is in blue, and our study is in green. 
+	The f10.7 in grey represents the variation of solar activity.}
 	\label{fig:datacoverage}
 \end{figure}
 
@@ -137,7 +139,8 @@ as multiple copies of the same network. The RNN architecture is particulary suit
 applications. 
 
 \citet{hochreiter1991untersuchungen,bengio1994learning} underlined a weakness of RNNs. They are supposed to connect 
-past information to the present, but if the information needed is too far in the past, RNNs are unable to to retain it. This failure is due to the so called \emph{vanishing gradient problem} occuring during the training of RNNs. 
+past information to the present, but if the information needed is too far in the past, RNNs are unable to to retain it. 
+This failure is due to the so called \emph{vanishing gradient problem} occuring during the training of RNNs. 
 
 LSTM networks are designed to overcome the vanishing gradient problem by retaining information pertaining to long range 
 temporal dependencies in time series data. LSTMs have a chain-like structure like RNNs, but the repeating module 
@@ -166,7 +169,7 @@ state depending on the information required by the LSTM unit. The important piec
 The forget gate is shown in equation \ref{eq:forgetgate}. 
 
 \begin{equation}\label{eq:forgetgate}
- \mathbf{f}_{t} = \sigma  \left( \mathbf{W}_f \cdot  \left[ \mathbf{h}_{t-1}, \mathbf{x}_t \right] + 
+ \mathbf{f}_{t} = \sigma  \left( \mathbf{W}_f \boldsymbol{\cdot}  \left[ \mathbf{h}_{t-1}, \mathbf{x}_t \right] + 
  \mathbf{b}_f \right)
 \end{equation}
 
@@ -183,7 +186,7 @@ on past hidden cell state $\mathbf{h}_{t-1}$ and exogenous inputs $\mathbf{x}_t$
 \( \mathbf{b}_{i} \) \ are the weight matrix and bias vector of the input gate respectively.
 
 \begin{equation}\label{eq:inputgate}
- \mathbf{i}_{t} = \sigma  \left(\mathbf{W}_{i} \cdot \left[ \mathbf{h}_{t-1}, \mathbf{x}_{t} \right] + 
+ \mathbf{i}_{t} = \sigma  \left(\mathbf{W}_{i} \boldsymbol{\cdot} \left[ \mathbf{h}_{t-1}, \mathbf{x}_{t} \right] + 
  \mathbf{b}_{i} \right)
 \end{equation}
 
@@ -196,7 +199,7 @@ This candidate state $\tilde{\mathbf{c}}_{t}$ is used to determine the updated c
  
 
 \begin{equation}\label{eq:candidate}
- \tilde{\mathbf{c}}_{t} = \text{tanh} \left( \mathbf{W}_{c} \cdot  \left[ \mathbf{h}_{t-1},\mathbf{x}_t \right] + 
+ \tilde{\mathbf{c}}_{t} = \text{tanh} \left( \mathbf{W}_{c} \boldsymbol{\cdot}  \left[ \mathbf{h}_{t-1},\mathbf{x}_t \right] + 
  \mathbf{b}_{c} \right)
 \end{equation}
 
@@ -220,7 +223,7 @@ for the next cell.
 
 \begin{align} \label{eq:outputgate}
 	\mathbf{o}_{t} &= \sigma \left( 
-		\mathbf{W}_o \cdot \left[\mathbf{h}_{t-1}, \mathbf{x}_{t} \right] + \mathbf{b}_o \right) \\
+		\mathbf{W}_o \boldsymbol{\cdot} \left[\mathbf{h}_{t-1}, \mathbf{x}_{t} \right] + \mathbf{b}_o \right) \\
 	\mathbf{h}_{t} &= \mathbf{o}_{t} \circ \text{tanh}(\mathbf{c}_t)
 \end{align}
 
