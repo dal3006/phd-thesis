@@ -1,11 +1,11 @@
 \chapter{Preliminaries}\label{chapter:preliminaries}
 
 This chapter gives a qualitative and somewhat quantitative treatment of various scientific ideas 
-relevant to space weather research. Section \ref{sec:plasma} discusses space plasmas and their properties, 
-\ref{sec:mag} introduces the \emph{magnetosphere}, giving context for chapters \ref{chapter:dst_osa},\ref{chapter:dst_msa}. 
-Section \ref{sec:plasmadiff} introduces the plasma diffusion model \ref{eq:fokker} and its simplified 
+relevant to space weather research. Section \S~\ref{sec:plasma} discusses space plasmas and their properties, 
+\S~\ref{sec:mag} introduces the \emph{magnetosphere}, giving context for chapters \ref{chapter:dst_osa},\ref{chapter:dst_msa}. 
+Section \S~\ref{sec:plasmadiff} introduces the plasma diffusion model \ref{eq:fokker} and its simplified 
 radial diffusion system \ref{eq:radialDiff} which is used as the underlying physical model for chapter 
-\ref{chapter:bayes_diff_chapter}. Section \ref{sec:solar} provides some background about the Sun and 
+\ref{chapter:bayes_diff_chapter}. Section \S~\ref{sec:solar} provides some background about the Sun and 
 the solar wind which is the driver for all space weather phenomena, this is used in the solar wind prediction 
 task considered in chapter \ref{chapter:pdt}.    
 
@@ -62,13 +62,13 @@ The plasma parameter $g$ is defined as $N_{e}^{-1}$. Rewriting this, we can say:
     g \sim \sqrt{\frac{n_e}{T_e}}
 \end{equation}
 
-The description of plasma used in many applications in Space is applicable when $g \ll 1$, in this situation 
+~The description of plasma used in many applications in Space is applicable when $g \ll 1$, in this situation 
 the Debye shielding is significant and the quasi-neutral plasma obeys collective statistical behaviour. 
 The plasma parameter $g$ also correlates with the collision frequency. As the collisions in plasma increase 
 with increasing density and decreasing temperature, if $g \longrightarrow 0$ the plasma becomes nearly collisionless. 
 The collisionless property helps in making simplfying assumptions about plasma dynamics and is the starting point 
 for the \emph{adiabatic} theory of plasma motions in the Earth's magnetosphere which will be discussed in section 
-\ref{sec:plasmadiff}.
+\S~\ref{sec:plasmadiff}.
 
 \section{Sun \& the Solar Wind}\label{sec:solar}
 
@@ -107,7 +107,7 @@ via convection.
 \textbf{Photosphere}: The photosphere is the visible 'surface' of the Sun, since the layers below it are all opaque to 
 visible light.A layer of about $100$ kilometre thickness, the photosphere is also the region from where sunlight can freely 
 escape into space. The photospheric surface has a number of features i.e. sunspots, granules and faculae. 
-Sunspots (see section\ref{sec:sunspots}) are magnetic regions where the solar material has lower temperature as compared 
+Sunspots (see section\S~\ref{sec:sunspots}) are magnetic regions where the solar material has lower temperature as compared 
 to its surroundings. Magnetic field lines are concentrated in sunspot regions and the field strength in sunspots can often 
 be thousands of times stronger than the on the Earth.
 
@@ -159,7 +159,7 @@ extrapolations, such as the \emph{Potential-Field Source Surface} model (PFSS)
 
 The HMF can be seen as a combination of two components: the poloidal magnetic field and the toroidal magnetic field.
 The two fields often exchange energy between themselves over the course of several years in a cyclical phenomenon
-known as the \emph{solar cycle} (section \ref{sec:sunspots}). Interested readers can read \citep{Owens2013} for an 
+known as the \emph{solar cycle} (section \S~\ref{sec:sunspots}). Interested readers can read \citep{Owens2013} for an 
 in-depth review on the phenomena that drive the HMF.
 \todo{\textbf{TODO}: Check that the HMF image can be reproduced here.}
 
@@ -180,7 +180,7 @@ The expansion of the coronal magnetic field leads to an eventual opening of fiel
 electrons and a small number of helium and heavy ions. The solar wind spirals outwards in all directions, carrying 
 with it the magnetic field. Upon reaching a distance of $1 \text{AU}$ (close to the Earth's magnetosphere), this wind 
 has a nominal speed of about $400 \text{km}/\text{s}$ while its high speed component has an average velocity of 
-$\sim 700 \text{km}/\text{s}$.
+$\sim 700 \text{km}/\text{s}$ (figure \ref{fig:solarwinddist}).
 
 \begin{figure}
     \noindent\centering\includegraphics[width=0.75\textwidth]{solarwinddist.pdf}
@@ -290,7 +290,7 @@ is $\sim 10R_E$ ($R_E = 6372 \text{km}$, the radius of the Earth).
 Earth's magnetic shielding is not perfect and some particles manage to get trapped inside the cavity of the 
 \emph{magnetosphere}, this region of trapped plasma is known as the \emph{plasmasphere} or the \emph{van Allen 
 radiation belts}. Particles trapped in the radiation belts execute complex motions which can be approximately 
-modelled using ideas from adiabatic theory and diffusion described in section \ref{sec:plasmadiff} below. 
+modelled using ideas from adiabatic theory and diffusion described in section \S~\ref{sec:plasmadiff} below. 
 
 The portion of the magnetosphere facing away from the Sun (called the \emph{nightside}) is streched out in  
 a tail like shape by the deflected solar wind, hence it is referred to as the \emph{magnetotail}. The 
@@ -359,7 +359,8 @@ each with its own time scale (figure \ref{fig:particlemotions}).
 \subsubsection*{Adiabatic Invariants}
 
 When a physical system with periodic motion is varied slowly as compared to the its time period, this 
-transformation is can be characterized as \emph{adiabatic}. Formally speaking, for systems which are described by Hamiltonian dynamics, we can write the equations of motion in terms of the \emph{cannonical position} $q$, 
+transformation is can be characterized as \emph{adiabatic}. Formally speaking, for systems which are described by 
+Hamiltonian dynamics, we can write the equations of motion in terms of the \emph{cannonical position} $q$, 
 the \emph{cannonical momentum} $p$, external parameters $\theta$ and the system's \emph{Hamiltonian} 
 $\mathcal{H}(q,p|\theta)$. 
 
@@ -469,7 +470,7 @@ plays a important role in determining space weather conditions in Earth's vicini
 
 Solar wind plasma gets trapped in the Earth's magnetic field at a rate that is modulated by the 
 \emph{solar wind - magnetosphere coupling}. The drift motions of charged particles in the magnetosphere 
-as discussed in section \ref{sec:mag} lead to many current systems. The prominent current systems 
+as discussed in section \S~\ref{sec:mag} lead to many current systems. The prominent current systems 
 (pictured in figure \ref{fig:magnetosphere}) are \begin{enumerate*} \item ring current 
 \item field aligned current \item tail current \item magnetopause current \end{enumerate*}.  
 These current systems induce magnetic fields which interact with the Earth's magnetic field and mutate it. 

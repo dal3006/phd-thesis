@@ -63,7 +63,7 @@ Particle Swarm Optimization (PSO) \citep{eberhart1995new}, instead of the backpr
 that PSO can provide benefits for training Dst prediction models.
 
 \citet{ChandorkarDst} pointed out that various techniques have been used to predict Dst, but do not 
-focus on providing probabilistic predictions. Their model is based on Gaussian process (GP) to construct 
+focus on providing probabilistic predictions. Their model is based on \emph{Gaussian processes} (GP) to construct 
 autoregressive models to predict Dst one hour ahead, based on a time history of Dst, solar wind velocity and 
 the IMF $B_z$. \citet{ChandorkarDst} show that it is possible to generate an accurate predictive distribution 
 of the forecast instead of a single point prediction. This is important in the space weather domain where 
@@ -82,7 +82,7 @@ In this work, we propose a technique which combines the predictive capabilities 
 probabilistic forecast provided by a GP. We use the so called \emph{long short-term memory network} (LSTM) 
 \citep{hochreiter1997long} to provide a single point prediction of the Dst geomagnetic index from one to six 
 hours ahead. The prediction produced by the LSTM is used as the mean function of a GP, to obtain a 
-probabilistic forecast. We call this hybrid model the \emph{gaussian process neural network} (GPNN). 
+probabilistic forecast. We call this hybrid model the \emph{Gaussian Process Neural Network} (GPNN). 
 Input parameters of the GPNN are solar wind parameters (density, velocity,  
 \( IMF  \vert B \vert  \)  and \(  Bz \) ), six hour time history of Dst, and the magnetic field 
 measured onboard GPS satellites. To the best of our knowledge, the LSTM architecture has never 
@@ -117,29 +117,18 @@ Figure \ref{fig:datacoverage} shows the temporal coverage of the database used i
 previous studies. The temporal coverage of our study is represented by the green line. As GPS ns41 data 
 starts at 00:00 14 January 2001, we consider a set of 134,398 hourly data points consisting of 
 solar wind parameters, geomagnetic Dst index and GPS data between this starting date and 23:00 31 December 2016. 
-This includes 49 storm events, listed in Table \ref{table:teststormsgpnn}. 
-
-Some of these events in table \ref{table:teststormsgpnn} also overlap with events included in 
-\citet{Ji2012} and \citet{ChandorkarDst}. 
+This includes 49 storm events, listed in Table \ref{table:teststormsgpnn}. Some of these events in table 
+\ref{table:teststormsgpnn} also overlap with events included in \citet{Ji2012} and \citet{ChandorkarDst}. 
 
 Studies done in the past to predict the geomagnetic index Dst have shown that various solar wind parameters 
 are of interest when improving performance of Dst models. In the present study, we focused on the use 
 of the solar wind density  \( n \) , velocity  \( V \) , the IMF \( \vert B \vert  \) and its  \( B_{z} \) component. 
-Concerning parameters provided by the GPS ns41, we use the magnetic field measured by the GPS, \( Bsat_{GPS} \) .
+Concerning parameters provided by the GPS ns41, we use the magnetic field measured by the GPS, \( Bsat_{\text{gps}} \) .
 
-\section{Computational method}\label{sec:methodgpnn}
-
-
-\subsection{Long Short-Term Memory Network}
+\section{Methodology}\label{sec:methodgpnn}
 
 
-\begin{figure}
-	\noindent\includegraphics[width=\textwidth]{lstm.png}
-	\caption{Schematic diagram of the LSTM cell. Reproduced from \url{https://github.com/llSourcell/LSTM_Networks/blob/master/LSTM\%20Demo.ipynb}}
-	\label{fig:lstmcell}
-\end{figure}
-
-
+\subsection{Long Short-Term Memory Network}\label{sec:lstmcomponent}
 
 The \emph{long short-term memory} network (LSTM) belongs to the family of \emph{recurrent neural networks} (RNN). 
 In an RNN, hidden layers are built to allow information persistence. They behave as a loop to allow information 
@@ -154,15 +143,30 @@ LSTM networks are designed to overcome the vanishing gradient problem by retaini
 temporal dependencies in time series data. LSTMs have a chain-like structure like RNNs, but the repeating module 
 known as the LSTM cell has specific characteristics.
 
-Figure \ref{fig:lstmcell} represents a LSTM cell. The two elements fundamental to this cell are 
-the cell state and gates. The cell state $\mathbf{c}_{t}$ in figure \ref{fig:lstmcell} is like a conveyor belt which 
-is connected to various gates. Gates can add or remove information from the cell state depending on the information 
-required by the LSTM unit. The three gates in this architecture are: the input gate $\mathbf{i}_t$, 
-the forget gate $\mathbf{f}_t$ and an output gate $\mathbf{o}_t$. The forget gate is represented by 
-equation \ref{eq:forgetgate}. 
+Figure \ref{fig:lstmcell} shows the computational graph of the LSTM cell. The two elements 
+fundamental to this cell are the cell state and gates. The cell state $\mathbf{c}_{t}$ in figure \ref{fig:lstmcell} 
+is like a conveyor belt which is connected to various gates. Gates can add or remove information from the cell 
+state depending on the information required by the LSTM unit. The important pieces of this architecture are: 
+\begin{itemize*} 
+	\item the forget gate $\mathbf{f}_t$ 
+	\item the input gate $\mathbf{i}_t$ 
+	\item the cell state $\mathbf{c}_t$ 
+	\item the output gate $\mathbf{o}_t$  
+\end{itemize*}  
+
+\begin{figure}
+	\noindent\includegraphics[width=\textwidth]{lstm.png}
+	\caption{Schematic diagram of the LSTM cell. Reproduced 
+	from \url{https://github.com/llSourcell/LSTM_Networks/blob/master/LSTM\%20Demo.ipynb}}
+	\label{fig:lstmcell}
+\end{figure}
+
+\subsubsection*{Forget Gate \& Input Gate}
+
+The forget gate is shown in equation \ref{eq:forgetgate}. 
 
 \begin{equation}\label{eq:forgetgate}
- \mathbf{f}_{t} = \sigma  \left( \mathbf{W}_f \cdot  \left( \mathbf{h}_{t-1}, \mathbf{x}_t \right) + 
+ \mathbf{f}_{t} = \sigma  \left( \mathbf{W}_f \cdot  \left[ \mathbf{h}_{t-1}, \mathbf{x}_t \right] + 
  \mathbf{b}_f \right)
 \end{equation}
 
@@ -174,46 +178,57 @@ kept for subsequent equations. The forget gate compares the information coming f
 cell  \( \mathbf{h}_{t-1} \) and the incoming information  \( \mathbf{x}_{t} \)  and outputs a number 
 between zero and one, zero if the information is entirely discarded, one if it is altogether retained.
 
-Then, the input gate (equation \ref{eq:inputgate}) decides what information is retained, depending on past 
-hidden cell state $\mathbf{h}_{t-1}$ and exogenous inputs $\mathbf{x}_t$. \( \mathbf{W}_{i} \)  and  
+Correspondingly the input gate (equation \ref{eq:inputgate}) decides what information is retained, depending 
+on past hidden cell state $\mathbf{h}_{t-1}$ and exogenous inputs $\mathbf{x}_t$. \( \mathbf{W}_{i} \)  and  
 \( \mathbf{b}_{i} \) \ are the weight matrix and bias vector of the input gate respectively.
 
 \begin{equation}\label{eq:inputgate}
- \mathbf{i}_{t} = \sigma  \left(\mathbf{W}_{i} \cdot \left( \mathbf{h}_{t-1}, \mathbf{x}_{t} \right) + 
+ \mathbf{i}_{t} = \sigma  \left(\mathbf{W}_{i} \cdot \left[ \mathbf{h}_{t-1}, \mathbf{x}_{t} \right] + 
  \mathbf{b}_{i} \right)
 \end{equation}
+
+\subsubsection*{Cell State}
 
 The inputs $\mathbf{x}_t$ and cell hidden state $\mathbf{h}_{t-1}$ is then passed through a hyperbolic tangent 
 transformation create a vector of candidate values \(  \tilde{\mathbf{c}}_{t} \) as per equation \ref{eq:candidate}. 
 This candidate state $\tilde{\mathbf{c}}_{t}$ is used to determine the updated cell state $\mathbf{c}_{t}$. 
-With  \( \mathbf{W}_{c} \)  and  \( \mathbf{b}_{c} \)  being the weight and bias of this layer respectively. 
+\( \mathbf{W}_{c} \)  and  \( \mathbf{b}_{c} \)  being the weight and bias of this layer respectively. 
  
 
 \begin{equation}\label{eq:candidate}
- \tilde{\mathbf{c}}_{t} = \text{tanh} \left( \mathbf{W}_{c} \cdot  \left( \mathbf{h}_{t-1},\mathbf{x}_t \right) + 
+ \tilde{\mathbf{c}}_{t} = \text{tanh} \left( \mathbf{W}_{c} \cdot  \left[ \mathbf{h}_{t-1},\mathbf{x}_t \right] + 
  \mathbf{b}_{c} \right)
 \end{equation}
 
-
-We described earlier that the cell state and gates are connected to add or remove information, 
-so the next step consists in the update of  \( \mathbf{c}_{t-1} \) to obtain  \( \mathbf{c}_t \), 
-the new cell state. This is represented in by equation \ref{eq:newstate}. 
+The cell state  \( \mathbf{c}_{t-1} \) is then updated to obtain the new cell state \( \mathbf{c}_t \). This 
+is shown in equation \ref{eq:newstate}, where $\circ$ denotes the element wise (Hadamard) product. 
 
 \begin{equation}\label{eq:newstate}
  \mathbf{c}_t = \mathbf{f}_{t} \circ \mathbf{c}_{t-1} + \mathbf{i}_{t} \circ \tilde{\mathbf{c}}_{t}
 \end{equation}
 
-Then the last step is done through the output gate detailed by equation \ref{eq:outputgate}. First, the 
+\subsubsection*{Output Gate \& Prediction}
+
+The output of the LSTM cell is calculated using equation \ref{eq:outputgate}. First, the 
 sigmoid transformation helps to define the output $\mathbf{o}_t$. Second, the hidden state $\mathbf{h}_t$ 
 is computed by multiplying $\mathbf{o}_{t}$ with a hyperbolic tangent transformation of the cell state 
-$\mathbf{c}_{t}$. $\mathbf{h}_{t}$ as seen in figure \ref{fig:lstmcell} becomes the final output of the 
-LSTM cell and the input for the proceeding cell.
+$\mathbf{c}_{t}$. 
+
+$\mathbf{h}_{t}$ (seen in figure \ref{fig:lstmcell}) becomes the prediction computed LSTM cell and the input 
+for the next cell.
 
 
 \begin{align} \label{eq:outputgate}
-	\mathbf{o}_{t} &= \sigma \left( \mathbf{W}_o \cdot (\mathbf{h}_{t-1}, \mathbf{x}_{t}) + \mathbf{b}_o \right) \\
+	\mathbf{o}_{t} &= \sigma \left( 
+		\mathbf{W}_o \cdot \left[\mathbf{h}_{t-1}, \mathbf{x}_{t} \right] + \mathbf{b}_o \right) \\
 	\mathbf{h}_{t} &= \mathbf{o}_{t} \circ \text{tanh}(\mathbf{c}_t)
 \end{align}
+
+We trained 6 LSTM models corresponding to Dst forecasts from one to six hours ahead. This was implemented using the 
+Lasagne library in Python (\url{http://lasagne.readthedocs.io/en/latest/index.html}). We thus obtained a 
+vector of outputs \( \textbf{m}_{\text{NN}} \left( \mathbf{x} \right)  = [m^{i}_{\textbf{NN}}(\mathbf{x}); \ i = {1, \cdots, 6}] \), 
+for every input \( \mathbf{x} \), which serves as the mean function for the Gaussian process component outlined 
+in section \S~\ref{sec:gpcomponent}. 
 
 \subsection{Training of the LSTM}
 
@@ -264,101 +279,84 @@ and the Correlation Coefficient (CC) defined by equations \ref{eq:rmse} and \ref
 \end{equation}
 
 \begin{equation}\label{eq:cc}
- CC = Cov \left( Dst, \hat{D}st \right) / \sqrt[]{Var \left( Dst \right) Var \left( \hat{D}st \right) }
+ CC = \frac{Cov \left( Dst, \hat{D}st \right)}{\sqrt[]{Var \left( Dst \right) Var \left( \hat{D}st \right)}} 
 \end{equation}
 
 
-We trained 6 LSTM models corresponding to forecasts from one to six hours ahead. This was implemented using the 
-Lasagne library in Python (\url{http://lasagne.readthedocs.io/en/latest/index.html}). We thus obtained a 
-vector of outputs \( NN \left( x \right)  \), for every input \( x \), which serves as the mean function 
-for the Gaussian process component outlined below. 
+\subsection{Gaussian Processes}\label{sec:gpcomponent}
 
+% \begin{equation}\label{eq:gp}
+%  f \left( x \right)  \sim  \mathcal{GP} \left( m \left( x \right) , k \left( x,x' \right)  \right) 
+% \end{equation}
 
-\subsection{Gaussian Processes for Time Series Prediction}
+% \begin{equation}\label{eq:meanfunc}
+%  m \left( x \right) = \mathbb{E} \left[ f \left( x \right)  \right]
+% \end{equation}
 
- A Gaussian process (GP) can be thought as a generalization of a Gaussian distribution applied to functions. 
- Regression based on GP is a Bayesian method where a prior distribution in function space is conditioned on a 
- given number of observations, giving rise to a posterior distribution. The appeal of using GP is that, even 
- though the theoretical formulation might seem rather abstract, dealing with function spaces and probability 
- density applied to functions, the practical implementation is rather straightforward, boiling down to simple 
- analytical expression that requires no more than linear algebra. Moreover, GP regression outputs a Gaussian 
- distribution, which has a natural probabilistic intepretation, rather than a single-point estimate. For a complete 
- description of this method the reader is refered to reference textbooks like Rasmussen and Williams 
- \citet{Rasmussen:2005:GPM:1162254}. 
+% \begin{equation}\label{eq:kernelfunc}
+%  k ( x,x') = \mathbb{E} \left[  \left( f \left( x \right) -m \left( x \right)  \right)  ( f ( x' ) -m ( x') )  \right]
+% \end{equation}
 
-A Gaussian process can be described by equation \ref{eq:gp}. 
+Gaussian processes are a family of models which provide a principled probabilistic framework for forecasting.
+GP models output a predictive distribution instead of a point forecast. Starting from a \emph{prior distribution},
+GP models construct a \emph{posterior predictive distribution} . The appeal of using GP models is that, even though 
+their theoretical formulation might seem rather abstract, the practical implementation is rather straightforward, 
+boiling down to simple analytical expression that requires no more than linear algebra. 
 
-\begin{equation}\label{eq:gp}
- f \left( x \right)  \sim  \mathcal{GP} \left( m \left( x \right) , k \left( x,x^{'} \right)  \right) 
-\end{equation}
+We will not give a complete review of the GP methodology here , the interested reader can refer to 
+section \S~\ref{sec:osaGPmethod} for a detailed review of Gaussian process models and their mathematical formulation.
 
-\begin{equation}\label{eq:meanfunc}
- m \left( x \right) = \mathbb{E} \left[ f \left( x \right)  \right]
-\end{equation}
-
-\begin{equation}\label{eq:kernelfunc}
- k ( x,x^{'}) = \mathbb{E} \left[  \left( f \left( x \right) -m \left( x \right)  \right)  ( f ( x^{'} ) -m ( x^{'}) )  \right]
-\end{equation}
-
-
-A GP is completely specified by its mean function  \( m \left( x \right)  \) described by 
-equation \ref{eq:meanfunc} and by its covariance function  \( k \left( x,x^{'} \right)  \)  in equation \ref{eq:kernelfunc}. 
+A GP is completely specified by its mean function  \( m \left( \mathbf{x} \right)  \) and its covariance function  
+\( K (\mathbf{x}, \mathbf{x}') \)  in equation \ref{eq:gpformulation}. 
 
 The covariance function specifies how exactly each point influences the values that the other points are 
 likely to take on. The main idea is that if  \( x_{i} \) and  \( x_{j} \)  are close by, 
 we expect the output from the functions at these points to be similar . Different types of covariance 
-functions exist, also called kernels, which determine the form of the model. \citet{ChandorkarDst} 
-listed common kernels used in machine learning and described how the choice of it is fundamental. 
-In this study, we focused on the neural network kernel \citep{williams1998computation} described in 
-equation \ref{eq:gpcov}. 
+functions exist, also called kernels, which determine the form of the model. 
+
+\citet{ChandorkarDst} listed common kernels used in machine learning and described how the choice of 
+it is fundamental. In this study, we focused on the neural network kernel \citep{williams1998computation} 
+described in equation \ref{eq:gpcov}. 
 
 
 \begin{equation}\label{eq:gpcov}
- k_{NN} \left( x, x' \right) = \frac{2}{ \pi } \text{sin}^{-1} \left( \frac{2x^{T}x'}{\sqrt{ \left( 1+2x^{T} x \right) }\sqrt{ \left( 1+2x'^{T}x' \right)}} \right)
+ K_{\text{NN}} \left( \mathbf{x}, \mathbf{x}' \right) = 
+ \frac{2}{ \pi } \text{sin}^{-1} \left( \frac{2\mathbf{x}\boldsymbol{\cdot}\mathbf{x}'}{
+	 \sqrt{ \left( 1+2\mathbf{x}\boldsymbol{\cdot} \mathbf{x} \right) }\sqrt{ \left( 1+2\mathbf{x}'\boldsymbol{\cdot}\mathbf{x}' \right)}
+	 } \right)
 \end{equation}
 
 
 As \citet{Rasmussen:2005:GPM:1162254} described, if there is no prior knowledge about 
 the function to be approximated, the mean function is defined to be zero. The aim of our study here is to 
 combine the neural network and the gaussian process to obtain accurate forecast with an uncertainty distribution. 
-Hence, the mean function  \( m \left( x \right)  \)  is provided by the  \( NN \left( x \right)  \)  function 
-described in section 3.2.
+Hence, the mean function  \( m \left( \mathbf{x} \right)  \)  is provided by the  \( \textbf{m}_{\text{NN}} \left( \mathbf{x} \right)  \)  
+function described in section \S~\ref{sec:lstmcomponent}.
 
 
-The joint distribution of the training output  \( f \)  and the test outputs  \( f_{\ast} \)  according to the 
-prior is given by equation \ref{eq:jointdist}. 
 
-\begin{equation}\label{eq:jointdist}
-  \left[ \begin{array}{ll}
-	f\\
-	f_{\ast}\\
-	\end{array} \right] = \mathcal{N}   \left(  \left[ \begin{array}{ll}
-	m \left( x \right) \\
-	m \left( x_{\ast} \right) \\
-	\end{array} \right] ,  \left[ \begin{matrix}
-K \left( X,X \right)   &  K \left( X,X_{\ast} \right) \\
-K \left( X_{\ast},X \right)   &  K \left( X_{\ast},X_{\ast} \right) \\
-\end{matrix}
- \right]  \right) 
-\end{equation}
+% \begin{equation}\label{eq:jointdist}
+%   \left[ \begin{array}{ll}
+% 	f\\
+% 	f_{\ast}\\
+% 	\end{array} \right] = \mathcal{N}   \left(  \left[ \begin{array}{ll}
+% 	m \left( x \right) \\
+% 	m \left( x_{\ast} \right) \\
+% 	\end{array} \right] ,  \left[ \begin{matrix}
+% K \left( X,X \right)   &  K \left( X,X_{\ast} \right) \\
+% K \left( X_{\ast},X \right)   &  K \left( X_{\ast},X_{\ast} \right) \\
+% \end{matrix}
+%  \right]  \right) 
+% \end{equation}
 
 
-If there are  \( n \)  training and  \( n_{\ast} \)  test points, then  \( K \left( X,X_{\ast} \right)  \)  
-represents the  \( n \times n_{\ast} \)  matrix of the covariance of all pairs of training and test points. 
 
-To make predictions, the posterior distribution over function is needed. To get the posterior distribution, 
-we need to restrict the prior distribution from equation \ref{eq:jointdist} only to those functions that 
-fit the observed data points. It needs to be conditioned on the observations as described by 
-the system of equation \ref{eq:preddist}.
+% \begin{align}\label{eq:preddist}
+%  f_{\ast} \vert X_{\ast},X,f &\sim N \left( f_{\ast},cov \left( f_{\ast} \right)  \right)  \\ 
+%  f_{\ast} &= m \left( x_{\ast} \right) +K \left( X_{\ast},X \right)  \left[ K \left( X,X_{\ast}  \right)  \right] ^{-1} \left( y-m \left( x \right)  \right) \\ 
+%  cov \left( f_{\ast} \right) &= K \left( X_{\ast},X_{\ast} \right) -K \left( X_{\ast},X \right)  \left[ K \left( X,X \right)  \right] ^{-1} K \left( X,X_{\ast} \right) 
+% \end{align}
 
-\begin{align}\label{eq:preddist}
- f_{\ast} \vert X_{\ast},X,f &\sim N \left( f_{\ast},cov \left( f_{\ast} \right)  \right)  \\ 
- f_{\ast} &= m \left( x_{\ast} \right) +K \left( X_{\ast},X \right)  \left[ K \left( X,X_{\ast}  \right)  \right] ^{-1} \left( y-m \left( x \right)  \right) \\ 
- cov \left( f_{\ast} \right) &= K \left( X_{\ast},X_{\ast} \right) -K \left( X_{\ast},X \right)  \left[ K \left( X,X \right)  \right] ^{-1} K \left( X,X_{\ast} \right) 
-\end{align}
-
-With this system of equation, test set function values  \( f_{\ast} \)  can now be sampled from the joint 
-posterior distribution by evaluating the mean and covariance matrix. 
 
 To predict the geomagnetic index Dst based on input features \( x \) , the equation \ref{eq:dstgp} sumarises 
 the inherent process. 
@@ -366,17 +364,14 @@ the inherent process.
 
 
 \begin{align}\label{eq:dstgp}
-Dst \left( t+p \right) &= f \left( x_{t-1} \right) + \epsilon \\ 
+Dst \left( t+p \right) &= f_{p} \left( \mathbf{x}_{t} \right) + \epsilon \\ 
 \epsilon &\sim N \left( 0, \sigma ^{2} \right)  \\
-f \left( x_{t+p} \right)  &\sim GP \left( NN \left( x_{t+p} \right) , K_{NN}(x_{t+p}, x_{s+p} ) \right)
+f_{p} \left( \mathbf{x}_{t} \right)  &\sim GP \left( m^{p}_{\text{NN}}(\mathbf{x}) , K_{NN}(\mathbf{x}_{t}, x_{s} ) \right)
 \end{align}
 
-With  \( p \)  being the expected time forecast. Here we 
-consider $p  = {1,2,3,4,5,6}$ to provide multi-step ahead prediction 
-of the Dst index from 1h to 6h ahead. The GP part is developed using the Matlab Software GPML, available 
-at \url{http://www.gaussianprocess.org/gpml/code} \citet{rasmussen2010gaussian}.
-
-
+With  \( p \)  being the expected time forecast. Here we consider $p  = {1,2,3,4,5,6}$ to provide 
+multi-step ahead prediction of the Dst index from 1h to 6h ahead. The GP component is implemented using the 
+Matlab Software GPML \citep{rasmussen2010gaussian}.
 
 
 \section{Results} \label{sec:resultsgpnn}
@@ -389,7 +384,7 @@ The first step in the development of the GPNN model is to optimise the performan
 LSTM to provide predictions of Dst from 1h to 6h ahead. To train LSTM, we use solar wind data and 
 GPS data described in section 2 (the density \(  n \) , the velocity  \( V \) , the  
 \( IMF  \vert B \vert  \) , its  \( B_{z} \)  component and the magnetic field measured 
-by the GPS ns41,  \( Bsat_{GPS} \) ).\ We also use the past history of Dst, from 1h  to 6h back. 
+by the GPS ns41,  \( Bsat_{\text{gps}} \) ).\ We also use the past history of Dst, from 1h  to 6h back. 
 This is summarised with the equation \ref{eq:dstmodel}.
 
 
@@ -397,7 +392,7 @@ This is summarised with the equation \ref{eq:dstmodel}.
 \begin{equation}\label{eq:dstmodel}
 	\begin{aligned}
 		Dst \left( t+p \right)_{NN} = NN ( 
-			& n \left( t \right) , V \left( t \right) , IMF \vert B \vert  \left( t \right) ,Bz \left( t \right) , Bsat_{GPS} \left( t \right) , \\ 
+			& n \left( t \right) , V \left( t \right) , IMF \vert B \vert  \left( t \right) ,Bz \left( t \right) , Bsat_{\text{gps}} \left( t \right) , \\ 
 			&	Dst \left( t-1 \right) ,Dst \left( t-2 \right) , \ldots ,Dst \left( t-6 \right) )
 	\end{aligned}
 \end{equation}
@@ -405,24 +400,39 @@ This is summarised with the equation \ref{eq:dstmodel}.
 To find the LSTM structure which is the most suitable for predicting geomagnetic storms, we train it 
 using various number of cells. The optimal number is 20 and after training, testing and validating each 
 LSTM, we compare their performance to neural network models proposed in the past to predict Dst. 
-Figure \ref{fig:lstmpredswoGPS} presents a  comparison of correlation coefficient and root mean square error 
+Figures \ref{fig:lstmCC} \ref{fig:lstmCC} presents a  comparison of correlation coefficient and root mean square error 
 between our model, with and without using GPS data, and previous models predicting Dst based on NN. 
 The temporal coverage of these previous studies are shown in Figure \ref{fig:datacoverage} so the reader 
 can have an estimation of the storm times used in them. 
+
+\begin{figure}
+	\includegraphics[width=\textwidth]{lstmCompRMSE.pdf}
+	\caption{Comparison of RMSE of $Dst$ forecast models.}
+	\label{fig:lstmRMSE}
+\end{figure}
+
+
 
 
 
 Our model, with or without GPS data provides performance which are close to the one obtained by 
 \citet{Lazzus} from 1h ahead to 3h ahead but when the expected forecast goes from 4h ahead to 6h ahead, 
 our models, with or without GPS data provide better global performance. As an example, when considering a 6h 
-ahead forecast, our model with GPS data provides a CC of 0.873 and a RMSE of 9.86, while Lazzús et al. \citet{Lazzus} 
+ahead forecast, our model with GPS data provides a CC of 0.873 and a RMSE of 9.86, while \citet{Lazzus} 
 obtained a CC of 0.826 and a RMSE of 13.09. The model presented in \citet{Lazzus} is based only on 
 previous Dst values, it shows the benefit of using exogenous data when predicting a geomagnetic index. 
-Bala and Reiff \citet{Bala2012} used the Boyle index as an input function, and obtained quite similar 
+\citet{Bala2012} used the Boyle index as an input function, and obtained quite similar 
 performance as ours. If we consider again a forecast of 6h ahead, their model presents a\ CC of 0.77 
 and a RMSE of 11.09. It is slightly worse than our model with or without GPS data. We also decided to compare 
-our model with the one provided by Wu and Lundstedt \citet{wu1997geomagnetic} as it is the first model using 
+our model with the one provided by \citet{wu1997geomagnetic} as it is the first model using 
 recurrent network. 
+
+\begin{figure}
+	\includegraphics[width=\textwidth]{lstmCompCC.pdf}
+	\caption{Comparison of CC of $Dst$ forecast models.}
+	\label{fig:lstmCC}
+\end{figure}
+
 
 We wanted to compare the performance of a classic recurrent network to the LSTM, and see 
 how the complexity of the LSTM cell could provide more accurate predictions. Wu and Lundstedt \citet{wu1997geomagnetic} 
@@ -447,6 +457,19 @@ As we described before, the GP process aim to provide not only a\ single\ point\
 but also an asssociated  uncertainty. Metrics like RMSE and CC are defined for single point prediction 
 and  are not adequate  to evaluate  probabilistic forecast.
 
+\begin{table}[h]
+	%\fontsize{8}{9.6}\selectfont
+	\centering
+	\caption{Storm Classification}
+	\label{table:stormclass}
+	\begin{tabular}{ccccc}
+	\hline
+	Level of Activity & Storm Classification \\ \hline
+	Dst $> -50 nT$ & Moderate\\
+	$-250 nT \leq $ Dst $\leq -50 nT$ & Intense\\
+	Dst $\leq -250 nT$ & Super Storm\\ \hline
+	\end{tabular}
+\end{table}
 
 Storm activity is often classified using given thresholds of Dst values. According to the most common 
 classification, we distinguished 3 levels of storms summarised in Table \ref{table:stormclass} 
@@ -528,8 +551,7 @@ real value. For example, for 5h ahead, the real peak of activity of -422 nT has 
 
 The main contribution of the GP process here is shown for the 6h ahead forecast. While the LSTM alone failed to 
 reach the highest peak of activity, the GPNN manages to have a predicted value closer to the real value than 
-the LSTM one, and the covariance over the mean value encompasses the peak of activity 
-(compare with Figure \ref{fig:lstmperf})
+the LSTM one, and the covariance over the mean value encompasses the peak of activity.
 
 
 
@@ -562,43 +584,128 @@ evaluate the optimisation required to improve the reliability of the GPNN, and p
 re-calibrate the prediction
 
 
-%%%%%%%%%%%%%%%%%%%% Figure/Image No: 1 starts here %%%%%%%%%%%%%%%%%%%%
+\begin{table}[h]
+	\centering
+	\caption{ROC contingency table for the $t+1$ GPNN model.}
+	\label{table:rocgpnn1h}
+	\begin{tabular}{c| c c | c c | c c}
+		\hline
+		\multicolumn{7}{c}{\textbf{1‐hr‐ahead prediction}} \\ 
+		\hline
+		 & \multicolumn{2}{c}{\textit{Super Storm}} & \multicolumn{2}{c}{\textit{Intense Storm}} & \multicolumn{2}{c}{\textit{Moderate}} \\ 
+		\hline
+		\textbf{Threshold} & \textbf{TPR} & \textbf{FPR} & \textbf{TPR} & \textbf{FPR} & \textbf{TPR} & \textbf{FPR} \\ 
+		\hline
+		$10\%$ & $0.969$ & $2.70\times10^{-3}$ & $0.981$ & $0.163$ & $0.999$ &$ 0.434$ \\ 
+		$20\%$ & $0.969$ & $1.11\times10^{-3}$ & $0.961$ & $0.105$ & $0.996$ & $0.321$ \\ 
+		$30\%$ & $\mathbf{0.969}$ & $\mathbf{6.40\times10^{-4}}$ & $\mathbf{0.927}$ & $\mathbf{0.0719}$ & $0.991$ & $0.240$ \\ 
+		$40\%$ & $0.969$ & $4.00\times10^{-4}$ & $0.895$ & $0.049$ & $0.984$ & $0.185$ \\ 
+		$50\%$ & $0.844$ & $3.00\times10^{-4}$ & $0.855$ & $0.0270$ & $0.972$ & $0.138$ \\ 
+		$60\%$ & $0.812$ & $2.78\times10^{-4}$ & $0.806$ & $0.0161$ & $0.951$ & $0.102$ \\ 
+		$70\%$ & $0.656$ & $2.78\times10^{-4}$ & $0.753$ & $9.30.10^{-3}$ & $\mathbf{0.929}$ & $\mathbf{0.0705}$ \\ 
+		$80\%$ & $0.625$ & $2.78\times10^{-4}$ & $0.670$ & $3.95.10^{-3}$ & $0.895$ & $0.0371$ \\ 
+		$90\%$ & $0.468$ & $9.27\times10^{-5}$ & $0.554$ & $1.61.10^{-3}$ & $0.838$ & $0.0178$\\
+		\hline
+	\end{tabular}
+	
+\end{table}
 
-\begin{figure}
-	\includegraphics[width=\textwidth]{image1.png}
-	\caption{False and True positive ratios for each storm category. The optimal value is in bold and red.}
-	\label{fig:tpfp}
-\end{figure}
+\begin{table}[h]
+	\centering
+	\caption{ROC contingency table for the $t+2$ GPNN model.}
+	\label{table:rocgpnn2h}
+	\begin{tabular}
+		{c| c c | c c | c c}
+		\hline
+		\multicolumn{7}{c}{\textbf{2‐hr‐ahead prediction}} \\ 
+		\hline
+		 & \multicolumn{2}{c}{\textit{Super Storm}} & \multicolumn{2}{c}{\textit{Intense Storm}} & \multicolumn{2}{c}{\textit{Moderate}} \\ 
+		\hline
+		\textbf{Threshold} & \textbf{TPR} & \textbf{FPR} & \textbf{TPR} & \textbf{FPR} & \textbf{TPR} & \textbf{FPR} \\ 
+		\hline
+		$10\%$ & $0.969$ & $3.15\times10^{-3}$ & $0.963$ & $0.199$ & $0.999$ & $0.388$ \\ 
+		$20\%$ & $0.937$ & $9.27\times10^{-4}$ & $0.934$ & $0.142$ & $0.984$ & $0.273$ \\ 
+		$30\%$ & $\mathbf{0.937}$ & $\mathbf{3.71\times10^{-4}}$ & $\mathbf{0.914}$ & $\mathbf{0.105}$ & $0.973$ & $0.211$ \\ 
+		$40\%$ & $0.906$ & $1.85\times10^{-4}$ & $0.891$ & $0.0834$ & $0.961$ & $0.167$ \\ 
+		$50\%$ & $0.781$ & $1.85\times10^{-4}$ & $0.863$ & $0.0565$ & $0.943$ & $0.134$ \\ 
+		$60\%$ & $0.6875$ & $9.27\times10^{-5}$ & $0.824$ & $0.0390$ & $\mathbf{0.917}$ & $\mathbf{0.107}$ \\ 
+		$70\%$ & $0.656$ & $9.27\times10^{-5}$ & $0.783$ & $0.0268$ & $0.895$ & $0.0845$ \\ 
+		$80\%$ & $0.500$ & $9.27\times10^{-5}$ & $0.720$ & $0.0156$ & $0.858$ & $0.0646$ \\ 
+		$90\%$ & $0.437$ & $0$ & $0.601$ & 5.6810$^-3$ & $0.802$ & $0.0363$\\
+		\hline
+	\end{tabular}
+\end{table}
+
+\begin{table}[h]
+	\centering
+	\caption{ROC contingency table for the $t+3$ GPNN model.}
+	\label{table:rocgpnn3h}
+	\begin{tabular}
+		{c| c c | c c | c c}
+		\hline
+		\multicolumn{7}{c}{\textbf{3‐hr‐ahead prediction}} \\ 
+		\hline
+		 & \multicolumn{2}{c}{\textit{Super Storm}} & \multicolumn{2}{c}{\textit{Intense Storm}} & \multicolumn{2}{c}{\textit{Moderate}} \\ 
+		\hline
+		\textbf{Threshold} & \textbf{TPR} & \textbf{FPR} & \textbf{TPR} & \textbf{FPR} & \textbf{TPR} & \textbf{FPR} \\ 
+		\hline
+		$10\%$ & $0.875$ & $3.24\times10^{-3}$ & $0.958$ & $0.254$ & $0.984$ & $0.373$ \\ 
+		$20\%$ & $\mathbf{0.843}$ & $\mathbf{9.27\times10^{-4}}$ & $0.939$ & $0.186$ & $0.971$ & $0.278$ \\ 
+		$30\%$ & $0.813$ & $4.64\times10^{-4}$ & $0.912$ & $0.139$ & $0.955$ & $0.228$ \\ 
+		$40\%$ & $0.750$ & $1.86\times10^{-4}$ & $\mathbf{0.890}$ & $\mathbf{0.106}$ & $0.940$ & $0.182$ \\ 
+		$50\%$ & $0.625$ & $9.27\times10^{-5}$ & $0.880$ & $0.0819$ & $0.919$ & $0.146$ \\ 
+		$60\%$ & $0.593$ & $0$ & $0.809$ & $0.0606$ & $\mathbf{0.893}$ & $\mathbf{0.1058}$ \\ 
+		$70\%$ & $0.593$ & $0$ & $0.766$ & $0.0451$ & $0.826$ & $0.0865$ \\ 
+		$80\%$ & $0.437$ & $0$ & $0.714$ & $0.0291$ & $0.814$ & $0.0594$ \\ 
+		$90\%$ & $0.406$ & $0$ & $0.614$ & $0.0164$ & $0.747$ & $0.0413$\\
+		\hline
+	\end{tabular}
+\end{table}
+
+
+% 	\begin{tabular}\textbf{} & \textbf{4‐hr‐ahead prediction} \\ 
+% 	\textbf{} & \textbf{\textit{P} (Dst)\nolinebreak$<$\nolinebreak-250           } & \textbf{-250\nolinebreak$<$\nolinebreak\textit{P} (Dst)\nolinebreak$<$\nolinebreak-50           } & \textbf{\textit{P} (Dst)\nolinebreak$>$\nolinebreak-50           } \\ 
+% 	\textbf{Threshold} & \textbf{TPR} & \textbf{FPR} & \textbf{TPR} & \textbf{FPR} & \textbf{TPR} & \textbf{FPR} \\ 
+% 	10\% & 0.906 & 3.24.10$^-3$ & 0.968 & 0.311 & 0.970 & 0.339 \\ 
+% 	20\% & \textbf{0.875} & \textbf{1.29.10$^-3$} & 0.953 & 0.252 & 0.949 & 0.243 \\ 
+% 	30\% & 0.813 & 7.42.10$^-4$ & 0.933 & 0.208 & 0.931 & 0.192 \\ 
+% 	40\% & 0.813 & 6.49.10$^-4$ & \textbf{0.916} & \textbf{0.169} & 0.906 & 0.144 \\ 
+% 	50\% & 0.781 & 9.27.10$^-5$ & 0.895 & 0.138 & \textbf{0.874} & \textbf{0.104} \\ 
+% 	60\% & 0.687 & 9.27.10$^-5$ & 0.843 & 0.106 & 0.841 & 0.0803 \\ 
+% 	70\% & 0.562 & 9.27.10$^-5$ & 0.795 & 0.0812 & 0.802 & 0.0636 \\ 
+% 	80\% & 0.468 & 9.27.10$^-5$ & 0.742 & 0.0621 & 0.76 & 0.0449 \\ 
+% 	90\% & 0.437 & 9.27.10$^-5$ & 0.640 & 0.0403 & 0.699 & 0.0300
+% 	\end{tabular}
+% 	\begin{tabular}\textbf{} & \textbf{5‐hr‐ahead prediction} \\ 
+% 	\textbf{} & \textbf{\textit{P} (Dst)\nolinebreak$<$\nolinebreak-250           } & \textbf{-250\nolinebreak$<$\nolinebreak\textit{P} (Dst)\nolinebreak$<$\nolinebreak-50           } & \textbf{\textit{P} (Dst)\nolinebreak$>$\nolinebreak-50           } \\ 
+% 	\textbf{Threshold} & \textbf{TPR} & \textbf{FPR} & \textbf{TPR} & \textbf{FPR} & \textbf{TPR} & \textbf{FPR} \\ 
+% 	10\% & 0.812 & 3.06.10$^-3$ & 0.956 & 0.316 & 0.962 & 0.346 \\ 
+% 	20\% & \textbf{0.812} & \textbf{1.02.10$^-3$} & 0.934 & 0.246 & 0.945 & 0.265 \\ 
+% 	30\% & 0.750 & 4.63.10$^-4$ & 0.917 & 0.189 & 0.926 & 0.215 \\ 
+% 	40\% & 0.719 & 9.27.10$^-5$ & 0.891 & 0.148 & 0.906 & 0.171 \\ 
+% 	50\% & 0.625 & 9.27.10$^-5$ & \textbf{0.856} & \textbf{0.120} & 0.881 & 0.139 \\ 
+% 	60\% & 0.562 & 9.27.10$^-5$ & 0.824 & 0.0942 & \textbf{0.853} & \textbf{0.107} \\ 
+% 	70\% & 0.468 & 0 & 0.779 & 0.0740 & 0.810 & 0.081 \\ 
+% 	80\% & 0.468 & 0 & 0.725 & 0.055 & 0.754 & 0.0654 \\ 
+% 	90\% & 0.468 & 0 & 0.639 & 0.0381 & 0.685 & 0.0430
+% 	\end{tabular}
+% 	\begin{tabular}\textbf{} & \textbf{6‐hr‐ahead prediction} \\ 
+% 	\textbf{} & \textbf{\textit{P} (Dst)\nolinebreak$<$\nolinebreak-250           } & \textbf{-250\nolinebreak$<$\nolinebreak\textit{P} (Dst)\nolinebreak$<$\nolinebreak-50           } & \textbf{\textit{P} (Dst)\nolinebreak$>$\nolinebreak-50           } \\ 
+% 	\textbf{Threshold} & \textbf{TPR} & \textbf{FPR} & \textbf{TPR} & \textbf{FPR} & \textbf{TPR} & \textbf{FPR} \\ 
+% 	10\% & \textbf{0.500} & \textbf{8.34.10$^-3$} & 0.953 & 0.352 & 0.932 & 0.307 \\ 
+% 	20\% & 0.437 & 4.92.10$^-3$ & 0.928 & 0.289 & 0.909 & 0.241 \\ 
+% 	30\% & 0.437 & 3.24.10$^-3$ & 0.904 & 0.244 & 0.886 & 0.186 \\ 
+% 	40\% & 0.406 & 2.78.10$^-3$ & 0.890 & 0.202 & 0.862 & 0.161 \\ 
+% 	50\% & 0.375 & 1.76.10$^-3$ & \textbf{0.859} & \textbf{0.167} & \textbf{0.834} & \textbf{0.130} \\ 
+% 	60\% & 0.375 & 1.39.10$^-3$ & 0.821 & 0.138 & 0.798 & 0.113 \\ 
+% 	70\% & 0.281 & 7.47.10$^-4$ & 0.788 & 0.115 & 0.757 & 0.0914 \\ 
+% 	80\% & 0.281 & 3.70.10$^-4$ & 0.735 & 0.0926 & 0.712 & 0.0693 \\ 
+% 	90\% & 0.281 & 2.78.10$^-4$ & 0.661 & 0.0691 & 0.649 & 0.0455
+% 	\end{tabular}
 
 
 %%%%%%%%%%%%%%%%%%%% Figure/Image No: 1 Ends here %%%%%%%%%%%%%%%%%%%%
 
-
-
-
-%%%%%%%%%%%%%%%%%%%% Figure/Image No: 4 starts here %%%%%%%%%%%%%%%%%%%%
-
-\begin{figure}
-	\includegraphics[width=\textwidth]{image4.png}
-	\caption{LSTM performance in comparison to previous models. Our model with and without GPS data is highlighted in blue.}
-	\label{fig:lstmperf}
-\end{figure}
-
-
-%%%%%%%%%%%%%%%%%%%% Figure/Image No: 4 Ends here %%%%%%%%%%%%%%%%%%%%
-
-
-
-%%%%%%%%%%%%%%%%%%%% Figure/Image No: 5 starts here %%%%%%%%%%%%%%%%%%%%
-
-\begin{figure}
-	\includegraphics[width=\textwidth]{image5.png}
-	\caption{LSTM predictions without GPS data (in red dot line) and with GPS data (in blue dot line) for the 2003 Halloween storm. The real value is the grey line.}
-	\label{fig:lstmpredswoGPS}
-\end{figure}
-
-
-%%%%%%%%%%%%%%%%%%%% Figure/Image No: 5 Ends here %%%%%%%%%%%%%%%%%%%%
 
 
 %%%%%%%%%%%%%%%%%%%% Figure/Image No: 6 starts here %%%%%%%%%%%%%%%%%%%%
@@ -628,8 +735,11 @@ re-calibrate the prediction
 %%%%%%%%%%%%%%%%%%%% Figure/Image No: 8 starts here %%%%%%%%%%%%%%%%%%%%
 
 \begin{figure}
-	\includegraphics[width=\textwidth]{image8.png}
-	\caption{GPNN performance to predict Dst for the 2003 Halloween storm. The predicted value is the purple dot line. The real value is the deep blue line The covariance is the grey shadow.}
+	\includegraphics[width=\textwidth]{halloween_storm_GPNN.pdf}
+	\caption{$Dst$ predictions made by the GPNN for the 2003 Halloween storm. 
+	The most probable prediction is the dotted purple line. 
+	The ground truth $Dst$ is the deep blue line. 
+	The grey shadow represents $\pm\sigma$ error bars on the prediction.}
     \label{fig:gpnnhalloween}
 \end{figure}
 
@@ -697,19 +807,7 @@ re-calibrate the prediction
 	\end{tabular}%
 	\end{table}
 
-	\begin{table}[h]
-		%\fontsize{8}{9.6}\selectfont
-		\centering
-		\caption{Storm Classification}
-		\label{table:stormclass}
-		\begin{tabular}{ccccc}
-		\hline
-		Level of Activity & Storm Classification \\ \hline
-		Dst $> -50 nT$ & Moderate\\
-		$-250 nT \leq $ Dst $\leq -50 nT$ & Intense\\
-		Dst $\leq -250 nT$ & Super Storm\\ \hline
-		\end{tabular}
-	\end{table}
+	
 
 
 %\bibliographystyle{plainnat}
