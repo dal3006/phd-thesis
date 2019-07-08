@@ -613,7 +613,7 @@ re-calibrate the prediction
 	
 \end{table}
 
-\begin{table}[h]
+\begin{table}[ht]
 	\centering
 	\caption{ROC contingency table for the $t+2$ GPNN model.}
 	\label{table:rocgpnn2h}
@@ -639,7 +639,7 @@ re-calibrate the prediction
 	\end{tabular}
 \end{table}
 
-\begin{table}[h]
+\begin{table}[ht]
 	\centering
 	\caption{ROC contingency table for the $t+3$ GPNN model.}
 	\label{table:rocgpnn3h}
@@ -666,46 +666,83 @@ re-calibrate the prediction
 \end{table}
 
 
-% 	\begin{tabular}\textbf{} & \textbf{4‐hr‐ahead prediction} \\ 
-% 	\textbf{} & \textbf{\textit{P} (Dst)\nolinebreak$<$\nolinebreak-250           } & \textbf{-250\nolinebreak$<$\nolinebreak\textit{P} (Dst)\nolinebreak$<$\nolinebreak-50           } & \textbf{\textit{P} (Dst)\nolinebreak$>$\nolinebreak-50           } \\ 
-% 	\textbf{Threshold} & \textbf{TPR} & \textbf{FPR} & \textbf{TPR} & \textbf{FPR} & \textbf{TPR} & \textbf{FPR} \\ 
-% 	10\% & 0.906 & 3.24.10$^-3$ & 0.968 & 0.311 & 0.970 & 0.339 \\ 
-% 	20\% & \textbf{0.875} & \textbf{1.29.10$^-3$} & 0.953 & 0.252 & 0.949 & 0.243 \\ 
-% 	30\% & 0.813 & 7.42.10$^-4$ & 0.933 & 0.208 & 0.931 & 0.192 \\ 
-% 	40\% & 0.813 & 6.49.10$^-4$ & \textbf{0.916} & \textbf{0.169} & 0.906 & 0.144 \\ 
-% 	50\% & 0.781 & 9.27.10$^-5$ & 0.895 & 0.138 & \textbf{0.874} & \textbf{0.104} \\ 
-% 	60\% & 0.687 & 9.27.10$^-5$ & 0.843 & 0.106 & 0.841 & 0.0803 \\ 
-% 	70\% & 0.562 & 9.27.10$^-5$ & 0.795 & 0.0812 & 0.802 & 0.0636 \\ 
-% 	80\% & 0.468 & 9.27.10$^-5$ & 0.742 & 0.0621 & 0.76 & 0.0449 \\ 
-% 	90\% & 0.437 & 9.27.10$^-5$ & 0.640 & 0.0403 & 0.699 & 0.0300
-% 	\end{tabular}
-% 	\begin{tabular}\textbf{} & \textbf{5‐hr‐ahead prediction} \\ 
-% 	\textbf{} & \textbf{\textit{P} (Dst)\nolinebreak$<$\nolinebreak-250           } & \textbf{-250\nolinebreak$<$\nolinebreak\textit{P} (Dst)\nolinebreak$<$\nolinebreak-50           } & \textbf{\textit{P} (Dst)\nolinebreak$>$\nolinebreak-50           } \\ 
-% 	\textbf{Threshold} & \textbf{TPR} & \textbf{FPR} & \textbf{TPR} & \textbf{FPR} & \textbf{TPR} & \textbf{FPR} \\ 
-% 	10\% & 0.812 & 3.06.10$^-3$ & 0.956 & 0.316 & 0.962 & 0.346 \\ 
-% 	20\% & \textbf{0.812} & \textbf{1.02.10$^-3$} & 0.934 & 0.246 & 0.945 & 0.265 \\ 
-% 	30\% & 0.750 & 4.63.10$^-4$ & 0.917 & 0.189 & 0.926 & 0.215 \\ 
-% 	40\% & 0.719 & 9.27.10$^-5$ & 0.891 & 0.148 & 0.906 & 0.171 \\ 
-% 	50\% & 0.625 & 9.27.10$^-5$ & \textbf{0.856} & \textbf{0.120} & 0.881 & 0.139 \\ 
-% 	60\% & 0.562 & 9.27.10$^-5$ & 0.824 & 0.0942 & \textbf{0.853} & \textbf{0.107} \\ 
-% 	70\% & 0.468 & 0 & 0.779 & 0.0740 & 0.810 & 0.081 \\ 
-% 	80\% & 0.468 & 0 & 0.725 & 0.055 & 0.754 & 0.0654 \\ 
-% 	90\% & 0.468 & 0 & 0.639 & 0.0381 & 0.685 & 0.0430
-% 	\end{tabular}
-% 	\begin{tabular}\textbf{} & \textbf{6‐hr‐ahead prediction} \\ 
-% 	\textbf{} & \textbf{\textit{P} (Dst)\nolinebreak$<$\nolinebreak-250           } & \textbf{-250\nolinebreak$<$\nolinebreak\textit{P} (Dst)\nolinebreak$<$\nolinebreak-50           } & \textbf{\textit{P} (Dst)\nolinebreak$>$\nolinebreak-50           } \\ 
-% 	\textbf{Threshold} & \textbf{TPR} & \textbf{FPR} & \textbf{TPR} & \textbf{FPR} & \textbf{TPR} & \textbf{FPR} \\ 
-% 	10\% & \textbf{0.500} & \textbf{8.34.10$^-3$} & 0.953 & 0.352 & 0.932 & 0.307 \\ 
-% 	20\% & 0.437 & 4.92.10$^-3$ & 0.928 & 0.289 & 0.909 & 0.241 \\ 
-% 	30\% & 0.437 & 3.24.10$^-3$ & 0.904 & 0.244 & 0.886 & 0.186 \\ 
-% 	40\% & 0.406 & 2.78.10$^-3$ & 0.890 & 0.202 & 0.862 & 0.161 \\ 
-% 	50\% & 0.375 & 1.76.10$^-3$ & \textbf{0.859} & \textbf{0.167} & \textbf{0.834} & \textbf{0.130} \\ 
-% 	60\% & 0.375 & 1.39.10$^-3$ & 0.821 & 0.138 & 0.798 & 0.113 \\ 
-% 	70\% & 0.281 & 7.47.10$^-4$ & 0.788 & 0.115 & 0.757 & 0.0914 \\ 
-% 	80\% & 0.281 & 3.70.10$^-4$ & 0.735 & 0.0926 & 0.712 & 0.0693 \\ 
-% 	90\% & 0.281 & 2.78.10$^-4$ & 0.661 & 0.0691 & 0.649 & 0.0455
-% 	\end{tabular}
+\begin{table}[ht]
+	\centering
+	\caption{ROC contingency table for the $t+4$ GPNN model.}
+	\label{table:rocgpnn4h}
+	\begin{tabular}
+		{c| c c | c c | c c}
+		\hline
+		\multicolumn{7}{c}{\textbf{4‐hr‐ahead prediction}} \\ 
+		\hline
+		 & \multicolumn{2}{c}{\textit{Super Storm}} & \multicolumn{2}{c}{\textit{Intense Storm}} & \multicolumn{2}{c}{\textit{Moderate}} \\ 
+		\hline
+		\textbf{Threshold} & \textbf{TPR} & \textbf{FPR} & \textbf{TPR} & \textbf{FPR} & \textbf{TPR} & \textbf{FPR} \\ 
+		\hline
+		$10\%$ & $0.906$ & $3.24\times10^{-3}$ & $0.968$ & $0.311$ & $0.970$ & $0.339$ \\ 
+		$20\%$ & $\mathbf{0.875}$ & $\mathbf{1.29\times10^{-3}}$ & $0.953$ & $0.252$ & $0.949$ & $0.243$ \\ 
+		$30\%$ & $0.813$ & $7.42\times10^{-4}$ & $0.933$ & $0.208$ & $0.931$ & $0.192$ \\ 
+		$40\%$ & $0.813$ & $6.49\times10^{-4}$ & $\mathbf{0.916}$ & $\mathbf{0.169}$ & $0.906$ & $0.144$ \\ 
+		$50\%$ & $0.781$ & $9.27\times10^{-5}$ & $0.895$ & $0.138$ & $\mathbf{0.874}$ & $\mathbf{0.104}$ \\ 
+		$60\%$ & $0.687$ & $9.27\times10^{-5}$ & $0.843$ & $0.106$ & $0.841$ & $0.0803$ \\ 
+		$70\%$ & $0.562$ & $9.27\times10^{-5}$ & $0.795$ & $0.0812$ & $0.802$ & $0.0636$ \\ 
+		$80\%$ & $0.468$ & $9.27\times10^{-5}$ & $0.742$ & $0.0621$ & $0.76$ & $0.0449$ \\ 
+		$90\%$ & $0.437$ & $9.27\times10^{-5}$ & $0.640$ & $0.0403$ & $0.699$ & $0.0300$\\
+		\hline
+	\end{tabular}
+\end{table}
 
+\begin{table}[ht]
+	\centering
+	\caption{ROC contingency table for the $t+5$ GPNN model.}
+	\label{table:rocgpnn5h}
+	\begin{tabular}
+		{c| c c | c c | c c}
+		\hline
+		\multicolumn{7}{c}{\textbf{5‐hr‐ahead prediction}} \\ 
+		\hline
+		 & \multicolumn{2}{c}{\textit{Super Storm}} & \multicolumn{2}{c}{\textit{Intense Storm}} & \multicolumn{2}{c}{\textit{Moderate}} \\ 
+		\hline
+		\textbf{Threshold} & \textbf{TPR} & \textbf{FPR} & \textbf{TPR} & \textbf{FPR} & \textbf{TPR} & \textbf{FPR} \\ 
+		\hline
+		$ 10\%$ & $ 0.812 $ & $3.06\times10^{-3}$ & $ 0.956 $ & $ 0.316 $ & $ 0.962 $ & $0.346$ \\ 
+		$ 20\%$ & $\mathbf{0.812}$ & $\mathbf{1.02\times10^{-3}}$ & $ 0.934 $ & $ 0.246 $ & $ 0.945 $ & $0.265$ \\ 
+		$ 30\%$ & $ 0.750 $ & $4.63\times10^{-4}$ & $ 0.917 $ & $ 0.189 $ & $ 0.926 $ & $0.215$ \\ 
+		$ 40\%$ & $ 0.719 $ & $9.27\times10^{-5}$ & $ 0.891 $ & $ 0.148 $ & $ 0.906 $ & $0.171$ \\ 
+		$ 50\%$ & $ 0.625 $ & $9.27\times10^{-5}$ & $\mathbf{0.856}$ & $\mathbf{0.120}$ & $ 0.881 $ & $0.139$ \\ 
+		$ 60\%$ & $ 0.562 $ & $9.27\times10^{-5}$ & $ 0.824 $ & $ 0.0942 $ & $\mathbf{0.853}$ & $\mathbf{0.107}$ \\ 
+		$ 70\%$ & $ 0.468 $ & $ 0 $ & $ 0.779 $ & $ 0.0740 $ & $ 0.810 $ & $0.081$ \\ 
+		$ 80\%$ & $ 0.468 $ & $ 0 $ & $ 0.725 $ & $ 0.055 $ & $ 0.754 $ & $0.0654$ \\ 
+		$ 90\%$ & $ 0.468 $ & $ 0 $ & $ 0.639 $ & $ 0.0381 $ & $ 0.685 $ & $0.0430$\\
+		\hline
+	\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+	\centering
+	\caption{ROC contingency table for the $t+6$ GPNN model.}
+	\label{table:rocgpnn6h}
+	\begin{tabular}
+		{c| c c | c c | c c}
+		\hline
+		\multicolumn{7}{c}{\textbf{5‐hr‐ahead prediction}} \\ 
+		\hline
+		 & \multicolumn{2}{c}{\textit{Super Storm}} & \multicolumn{2}{c}{\textit{Intense Storm}} & \multicolumn{2}{c}{\textit{Moderate}} \\ 
+		\hline
+		\textbf{Threshold} & \textbf{TPR} & \textbf{FPR} & \textbf{TPR} & \textbf{FPR} & \textbf{TPR} & \textbf{FPR} \\ 
+		\hline
+		$ 10\%$ & $\mathbf{0.500}$ & $\mathbf{8.34.10^{-3}}$ & $ 0.953 $ & $ 0.352 $ & $ 0.932 $ & $ 0.307 $ \\ 
+		$ 20\%$ & $ 0.437 $ & $4.92\times10^{-3}$ & $ 0.928 $ & $ 0.289 $ & $ 0.909 $ & $ 0.241 $ \\ 
+		$ 30\%$ & $ 0.437 $ & $3.24\times10^{-3}$ & $ 0.904 $ & $ 0.244 $ & $ 0.886 $ & $ 0.186 $ \\ 
+		$ 40\%$ & $ 0.406 $ & $2.78\times10^{-3}$ & $ 0.890 $ & $ 0.202 $ & $ 0.862 $ & $ 0.161 $ \\ 
+		$ 50\%$ & $ 0.375 $ & $1.76\times10^{-3}$ & $\mathbf{0.859}$ & $\mathbf{0.167}$ & $\mathbf{0.834}$ & $\mathbf{0.130}$\\ 
+		$ 60\%$ & $ 0.375 $ & $1.39\times10^{-3}$ & $ 0.821 $ & $ 0.138 $ & $ 0.798 $ & $ 0.113 $ \\ 
+		$ 70\%$ & $ 0.281 $ & $7.47\times10^{-4}$ & $ 0.788 $ & $ 0.115 $ & $ 0.757 $ & $ 0.0914 $ \\ 
+		$ 80\%$ & $ 0.281 $ & $3.70\times10^{-4}$ & $ 0.735 $ & $ 0.0926 $ & $ 0.712 $ & $ 0.0693 $ \\ 
+		$ 90\%$ & $ 0.281 $ & $2.78\times10^{-4}$ & $ 0.661 $ & $ 0.0691 $ & $ 0.649 $ & $ 0.0455 $ \\
+		\hline
+	\end{tabular}
+\end{table}
 
 %%%%%%%%%%%%%%%%%%%% Figure/Image No: 1 Ends here %%%%%%%%%%%%%%%%%%%%
 
