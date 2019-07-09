@@ -84,17 +84,17 @@ probabilistic forecast provided by a GP. We use the so called \emph{long short-t
 hours ahead. The prediction produced by the LSTM is used as the mean function of a GP, to obtain a 
 probabilistic forecast. We call this hybrid model the \emph{Gaussian Process Neural Network} (GPNN). 
 Input parameters of the GPNN are solar wind parameters (density, velocity,  
-\( IMF  \vert B \vert  \)  and \(  Bz \) ), six hour time history of Dst, and the magnetic field 
+\( \text{IMF}  \vert B \vert  \)  and \(  Bz \) ), six hour time history of Dst, and the magnetic field 
 measured onboard GPS satellites. To the best of our knowledge, the LSTM architecture has never 
 been used in space weather applications before.
 
-The remainder of this chapter is organised as follows: section \ref{sec:data} presents the data used in this study, 
+The remainder of this chapter is organised as follows: section \ref{sec:datagpnn} presents the data used in this study, 
 section \ref{sec:methodgpnn} describes the computational method, how the LSTM and its combination with the GP are 
 developed and optimised. Section \ref{sec:resultsgpnn} presents the performance of the LSTM model when producing 
 point predictions for the Dst one to six hours ahead, and the evaluation of the probabilistic forecasts provided 
 by the GPNN model. 
 
-\section{Data}\label{sec:data}
+\section{Data}\label{sec:datagpnn}
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{image2.png}
@@ -124,11 +124,11 @@ This includes 49 storm events, listed in Table \ref{table:teststormsgpnn}. Some 
 
 Studies done in the past to predict the geomagnetic index Dst have shown that various solar wind parameters 
 are of interest when improving performance of Dst models. In the present study, we focused on the use 
-of the solar wind density  \( n \) , velocity  \( V \) , the IMF \( \vert B \vert  \) and its  \( B_{z} \) component. 
-Concerning parameters provided by the GPS ns41, we use the magnetic field measured by the GPS, \( Bsat_{\text{gps}} \) .
+of the solar wind density $n$ , velocity  $V_{\text{sw}}$, the interplanetary magnetic field 
+strength $\|\mathbf{B}|$ and its north-south component $B_{z}$. Concerning parameters provided by 
+the GPS satellite ns41, we use its magnetic field measurement, $B_{\text{gps}}$.
 
 \section{Methodology}\label{sec:methodgpnn}
-
 
 \subsection{Long Short-Term Memory Network}\label{sec:lstmcomponent}
 
@@ -227,14 +227,37 @@ for the next cell.
 	\mathbf{h}_{t} &= \mathbf{o}_{t} \circ \text{tanh}(\mathbf{c}_t)
 \end{align}
 
-We trained 6 LSTM models corresponding to Dst forecasts from one to six hours ahead. This was implemented using the 
-Lasagne library in Python (\url{http://lasagne.readthedocs.io/en/latest/index.html}). We thus obtained a 
-vector of outputs \( \textbf{m}_{\text{NN}} \left( \mathbf{x} \right)  = [m^{i}_{\textbf{NN}}(\mathbf{x}); \ i = {1, \cdots, 6}] \), 
-for every input \( \mathbf{x} \), which serves as the mean function for the Gaussian process component outlined 
-in section \S~\ref{sec:gpcomponent}. 
+\subsection{The LSTM Dst Model}
 
-\subsection{Training of the LSTM}
+To produce predictions of Dst upto six hours ahead, we trained six LSTM models. Thus for every input, we 
+obtained a vector of outputs $[\hat{D}st\left(t + p\right)], p\in \{ 1, \cdots, 6 \}$.
 
+For inputs $\mathbf{x}_t$, we use solar wind parameters ($n$, $V_{\text{sw}}$, $|\mathbf{B}|$, $B_{z}$) 
+and GPS data ($B_{\text{gps}}$) described in section \ref{sec:datagpnn}. We also use the time history of Dst, 
+from one to six hours back. This is summarised in equation \ref{eq:dstmodel}.
+
+\subsubsection*{Architecture \& Implementation}
+
+LSTM cells can be \emph{stacked} such that the output of one cell provides the input for the next. One 
+may construct LSTM stacks of increasing size depending on the task at hand. To find the LSTM structure which 
+is the most suitable for predicting geomagnetic storms, we train it using varying number of cells. After 
+training and validating each candidate architecture, the best performing LSTM network consisting of $20$ 
+stacked cells was chosen as the mean function for the Gaussian process component outlined in 
+section \S~\ref{sec:gpcomponent} 
+
+The LSTM component of the GPNN model was implemented using the Lasagne library in Python 
+(\url{http://lasagne.readthedocs.io/en/latest/index.html}). 
+
+\begin{equation}\label{eq:dstmodel}
+	\begin{aligned}
+		\hat{D}st \left( t+p \right) &= m^{p}_{\text{NN}} (\mathbf{x}_t) \\
+		\mathbf{x}_t &= (n \left( t \right) , V_{\text{sw}}\left( t \right), 
+		|\mathbf{B}\left( t \right)|, B_{z}\left( t \right) , B_{\text{gps}} \left( t \right),\\ 
+		& \ \  \ \  \ Dst \left( t-1 \right) ,Dst \left( t-2 \right) , \ldots , Dst \left( t-6 \right) )
+	\end{aligned}
+\end{equation}
+
+\subsection{LSTM Model Training}
 
 The LSTM architecture can be trained with a backpropagation based optimization algorithm and thanks to 
 its architecture, the vanishing gradient problem does not persist. A number of stochastic gradient based 
@@ -270,7 +293,7 @@ $\sqrt{E \left[ g^{2} \right]_{t,i}}$ preventing numerical overflow).
 \end{align}
 
 
-\subsubsection*{LSTM Model Evaluation}
+\subsection{LSTM Model Evaluation}
 
 For the purposes of training and evaluation, the data set is divided as follows : 70$\%$ for training, 20$\%$  
 for testing and 10$\%$ for validation. The LSTM model is evaluated using the Root Mean Square Error (RMSE) 
@@ -312,11 +335,11 @@ section \S~\ref{sec:osaGPmethod} for a detailed review of Gaussian process model
 A GP is completely specified by its mean function  \( m \left( \mathbf{x} \right)  \) and its covariance function  
 \( K (\mathbf{x}, \mathbf{x}') \)  in equation \ref{eq:gpformulation}. 
 
-The covariance function specifies how exactly each point influences the values that the other points are 
-likely to take on. The main idea is that if  \( x_{i} \) and  \( x_{j} \)  are close by, 
-we expect the output from the functions at these points to be similar . Different types of covariance 
-functions exist, also called kernels, which determine the form of the model. 
+The covariance function specifies an apriori assumption about how each point influences the values that the 
+other points are likely to take on. The main idea is that if $K(\mathbf{x}_t, \mathbf{x}_s) \gg 0$, 
+we expect the output from the functions at these points to be similar. 
 
+Different types of covariance functions exist, also called kernels, which determine the form of the model. 
 \citet{ChandorkarDst} listed common kernels used in machine learning and described how the choice of 
 it is fundamental. In this study, we focused on the neural network kernel \citep{williams1998computation} 
 described in equation \ref{eq:gpcov}. 
@@ -333,8 +356,7 @@ described in equation \ref{eq:gpcov}.
 As \citet{Rasmussen:2005:GPM:1162254} described, if there is no prior knowledge about 
 the function to be approximated, the mean function is defined to be zero. The aim of our study here is to 
 combine the neural network and the gaussian process to obtain accurate forecast with an uncertainty distribution. 
-Hence, the mean function  \( m \left( \mathbf{x} \right)  \)  is provided by the  \( \textbf{m}_{\text{NN}} \left( \mathbf{x} \right)  \)  
-function described in section \S~\ref{sec:lstmcomponent}.
+Hence, the mean function is \( \mathbf{m}_{\text{NN}} \left( \mathbf{x} \right)  \) described in section \S~\ref{sec:lstmcomponent}.
 
 
 
@@ -369,7 +391,8 @@ the inherent process.
 \begin{align}\label{eq:dstgp}
 Dst \left( t+p \right) &= f_{p} \left( \mathbf{x}_{t} \right) + \epsilon \\ 
 \epsilon &\sim N \left( 0, \sigma ^{2} \right)  \\
-f_{p} \left( \mathbf{x}_{t} \right)  &\sim GP \left( m^{p}_{\text{NN}}(\mathbf{x}) , K_{NN}(\mathbf{x}_{t}, x_{s} ) \right)
+f_{p} \left( \mathbf{x}_{t} \right)  &\sim 
+GP \left( m^{p}_{\text{NN}}(\mathbf{x}_t) , K_{NN}(\mathbf{x}_{t}, \mathbf{x}_{s} ) \right)
 \end{align}
 
 With  \( p \)  being the expected time forecast. Here we consider $p  = {1,2,3,4,5,6}$ to provide 
@@ -384,25 +407,7 @@ Matlab Software GPML \citep{rasmussen2010gaussian}.
 
 
 The first step in the development of the GPNN model is to optimise the performance of each 
-LSTM to provide predictions of Dst from 1h to 6h ahead. To train LSTM, we use solar wind data and 
-GPS data described in section 2 (the density \(  n \) , the velocity  \( V \) , the  
-\( IMF  \vert B \vert  \) , its  \( B_{z} \)  component and the magnetic field measured 
-by the GPS ns41,  \( Bsat_{\text{gps}} \) ).\ We also use the past history of Dst, from 1h  to 6h back. 
-This is summarised with the equation \ref{eq:dstmodel}.
-
-
-
-\begin{equation}\label{eq:dstmodel}
-	\begin{aligned}
-		Dst \left( t+p \right)_{NN} = NN ( 
-			& n \left( t \right) , V \left( t \right) , IMF \vert B \vert  \left( t \right) ,Bz \left( t \right) , Bsat_{\text{gps}} \left( t \right) , \\ 
-			&	Dst \left( t-1 \right) ,Dst \left( t-2 \right) , \ldots ,Dst \left( t-6 \right) )
-	\end{aligned}
-\end{equation}
-
-To find the LSTM structure which is the most suitable for predicting geomagnetic storms, we train it 
-using various number of cells. The optimal number is 20 and after training, testing and validating each 
-LSTM, we compare their performance to neural network models proposed in the past to predict Dst. 
+LSTM to provide predictions of Dst from 1h to 6h ahead. 
 Figures \ref{fig:lstmCC} \ref{fig:lstmCC} presents a  comparison of correlation coefficient and root mean square error 
 between our model, with and without using GPS data, and previous models predicting Dst based on NN. 
 The temporal coverage of these previous studies are shown in Figure \ref{fig:datacoverage} so the reader 
@@ -725,7 +730,7 @@ re-calibrate the prediction
 	\begin{tabular}
 		{c| c c | c c | c c}
 		\hline
-		\multicolumn{7}{c}{\textbf{5‐hr‐ahead prediction}} \\ 
+		\multicolumn{7}{c}{\textbf{6‐hr‐ahead prediction}} \\ 
 		\hline
 		 & \multicolumn{2}{c}{\textit{Super Storm}} & \multicolumn{2}{c}{\textit{Intense Storm}} & \multicolumn{2}{c}{\textit{Moderate}} \\ 
 		\hline
