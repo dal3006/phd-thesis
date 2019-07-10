@@ -37,7 +37,7 @@ ggsave(
   scale = 1.0)
 
 ggplot(ccres, aes(x=as.factor(as.character(hour)), y=value, fill=model)) + 
-  geom_bar(stat="identity", position="dodge") + 
+  geom_bar(stat="identity", position="dodge") +
   geom_text(aes(label = round(value, digits = 2), group=model), size=5, position=position_dodge2(.9), vjust=.5, angle = 90, hjust=-.2) + 
   theme_gray(base_size = 20) +
   scale_fill_viridis_d(
@@ -45,6 +45,7 @@ ggplot(ccres, aes(x=as.factor(as.character(hour)), y=value, fill=model)) +
     labels = c("Bala & Reiff 2012", "GPNN", "GPNN - GPS", "Lazzus et. al 2017", "Persistence", "Wu & Lundstedt 1997"), 
     alpha = 1.) +
   theme(legend.position="top", legend.direction = "horizontal") +
+  coord_cartesian(ylim = c(0.7, 1)) +
   scale_x_discrete(
     name = "Prediction Horizon",
     breaks=c("1","2","3","4","5","6"),

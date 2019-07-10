@@ -84,7 +84,7 @@ probabilistic forecast provided by a GP. We use the so called \emph{long short-t
 hours ahead. The prediction produced by the LSTM is used as the mean function of a GP, to obtain a 
 probabilistic forecast. We call this hybrid model the \emph{Gaussian Process Neural Network} (GPNN). 
 Input parameters of the GPNN are solar wind parameters (density, velocity,  
-\( \text{IMF}  \vert B \vert  \)  and \(  Bz \) ), six hour time history of Dst, and the magnetic field 
+$\text{IMF}\vert B \vert$  and $Bz$ ), six hour time history of Dst, and the magnetic field 
 measured onboard GPS satellites. To the best of our knowledge, the LSTM architecture has never 
 been used in space weather applications before.
 
@@ -130,7 +130,7 @@ the GPS satellite ns41, we use its magnetic field measurement, $B_{\text{gps}}$.
 
 \section{Methodology}\label{sec:methodgpnn}
 
-\subsection{Long Short-Term Memory Network}\label{sec:lstmcomponent}
+\subsection{Long Short-Term Memory Network}\label{sec:lstmintro}
 
 The \emph{long short-term memory} network (LSTM) belongs to the family of \emph{recurrent neural networks} (RNN). 
 In an RNN, hidden layers are built to allow information persistence. They behave as a loop to allow information 
@@ -175,15 +175,14 @@ The forget gate is shown in equation \ref{eq:forgetgate}.
 
 \vspace{\baselineskip}
 
-With  \(  \sigma  \)  the component wise sigmoid function, and  \( \mathbf{W}_{f} \) \  and  
-\( \mathbf{b}_{f} \) the weight matrix and bias vector of the gate respectively. This notation is 
-kept for subsequent equations. The forget gate compares the information coming from the previous 
-cell  \( \mathbf{h}_{t-1} \) and the incoming information  \( \mathbf{x}_{t} \)  and outputs a number 
+With  $\sigma$  the component wise sigmoid function, and  $\mathbf{W}_{f}$ and $\mathbf{b}_{f}$ the weight matrix 
+and bias vector of the gate respectively. This notation is kept for subsequent equations. The forget gate compares 
+the information coming from the previous cell $\mathbf{h}_{t-1}$ and the incoming information  $  \mathbf{x}_{t} $  and outputs a number 
 between zero and one, zero if the information is entirely discarded, one if it is altogether retained.
 
 Correspondingly the input gate (equation \ref{eq:inputgate}) decides what information is retained, depending 
-on past hidden cell state $\mathbf{h}_{t-1}$ and exogenous inputs $\mathbf{x}_t$. \( \mathbf{W}_{i} \)  and  
-\( \mathbf{b}_{i} \) \ are the weight matrix and bias vector of the input gate respectively.
+on past hidden cell state $\mathbf{h}_{t-1}$ and exogenous inputs $\mathbf{x}_t$. $  \mathbf{W}_{i} $  and  
+$  \mathbf{b}_{i} $ \ are the weight matrix and bias vector of the input gate respectively.
 
 \begin{equation}\label{eq:inputgate}
  \mathbf{i}_{t} = \sigma  \left(\mathbf{W}_{i} \boldsymbol{\cdot} \left[ \mathbf{h}_{t-1}, \mathbf{x}_{t} \right] + 
@@ -193,9 +192,9 @@ on past hidden cell state $\mathbf{h}_{t-1}$ and exogenous inputs $\mathbf{x}_t$
 \subsubsection*{Cell State}
 
 The inputs $\mathbf{x}_t$ and cell hidden state $\mathbf{h}_{t-1}$ is then passed through a hyperbolic tangent 
-transformation create a vector of candidate values \(  \tilde{\mathbf{c}}_{t} \) as per equation \ref{eq:candidate}. 
+transformation create a vector of candidate values $   \tilde{\mathbf{c}}_{t} $ as per equation \ref{eq:candidate}. 
 This candidate state $\tilde{\mathbf{c}}_{t}$ is used to determine the updated cell state $\mathbf{c}_{t}$. 
-\( \mathbf{W}_{c} \)  and  \( \mathbf{b}_{c} \)  being the weight and bias of this layer respectively. 
+$  \mathbf{W}_{c} $  and  $\mathbf{b}_{c} $  being the weight and bias of this layer respectively. 
  
 
 \begin{equation}\label{eq:candidate}
@@ -203,7 +202,7 @@ This candidate state $\tilde{\mathbf{c}}_{t}$ is used to determine the updated c
  \mathbf{b}_{c} \right)
 \end{equation}
 
-The cell state  \( \mathbf{c}_{t-1} \) is then updated to obtain the new cell state \( \mathbf{c}_t \). This 
+The cell state  $\mathbf{c}_{t-1}$ is then updated to obtain the new cell state $\mathbf{c}_t$. This 
 is shown in equation \ref{eq:newstate}, where $\circ$ denotes the element wise (Hadamard) product. 
 
 \begin{equation}\label{eq:newstate}
@@ -217,8 +216,8 @@ sigmoid transformation helps to define the output $\mathbf{o}_t$. Second, the hi
 is computed by multiplying $\mathbf{o}_{t}$ with a hyperbolic tangent transformation of the cell state 
 $\mathbf{c}_{t}$. 
 
-$\mathbf{h}_{t}$ (seen in figure \ref{fig:lstmcell}) becomes the prediction computed LSTM cell and the input 
-for the next cell.
+$\mathbf{h}_{t}$ (seen in figure \ref{fig:lstmcell}) becomes the prediction computed LSTM cell for input 
+$\mathbf{x}_t$
 
 
 \begin{align} \label{eq:outputgate}
@@ -227,35 +226,45 @@ for the next cell.
 	\mathbf{h}_{t} &= \mathbf{o}_{t} \circ \text{tanh}(\mathbf{c}_t)
 \end{align}
 
-\subsection{The LSTM Dst Model}
+\subsection{The LSTM Dst Model}\label{sec:lstmDstArch}
 
 To produce predictions of Dst upto six hours ahead, we trained six LSTM models. Thus for every input, we 
 obtained a vector of outputs $[\hat{D}st\left(t + p\right)], p\in \{ 1, \cdots, 6 \}$.
 
 For inputs $\mathbf{x}_t$, we use solar wind parameters ($n$, $V_{\text{sw}}$, $|\mathbf{B}|$, $B_{z}$) 
 and GPS data ($B_{\text{gps}}$) described in section \ref{sec:datagpnn}. We also use the time history of Dst, 
-from one to six hours back. This is summarised in equation \ref{eq:dstmodel}.
+from one to six hours back.
 
-\subsubsection*{Architecture \& Implementation}
-
-LSTM cells can be \emph{stacked} such that the output of one cell provides the input for the next. One 
-may construct LSTM stacks of increasing size depending on the task at hand. To find the LSTM structure which 
-is the most suitable for predicting geomagnetic storms, we train it using varying number of cells. After 
-training and validating each candidate architecture, the best performing LSTM network consisting of $20$ 
-stacked cells was chosen as the mean function for the Gaussian process component outlined in 
-section \S~\ref{sec:gpcomponent} 
-
-The LSTM component of the GPNN model was implemented using the Lasagne library in Python 
-(\url{http://lasagne.readthedocs.io/en/latest/index.html}). 
-
-\begin{equation}\label{eq:dstmodel}
+\begin{equation}\label{eq:lstminputs}
 	\begin{aligned}
-		\hat{D}st \left( t+p \right) &= m^{p}_{\text{NN}} (\mathbf{x}_t) \\
 		\mathbf{x}_t &= (n \left( t \right) , V_{\text{sw}}\left( t \right), 
 		|\mathbf{B}\left( t \right)|, B_{z}\left( t \right) , B_{\text{gps}} \left( t \right),\\ 
 		& \ \  \ \  \ Dst \left( t-1 \right) ,Dst \left( t-2 \right) , \ldots , Dst \left( t-6 \right) )
 	\end{aligned}
 \end{equation}
+
+\subsubsection*{Architecture \& Implementation}
+
+LSTM cells can be \emph{stacked} such that the output of one cell provides the input for the next. One 
+may construct LSTM stacks of increasing size depending on the task at hand.  
+
+Equations \ref{eq:dstmodel} and \ref{eq:lstmstack} describe the Dst prediction architecture.
+The $p$ hour ahead prediction $\hat{D}st \left(t + p \right)$ is the output of the function 
+$m^{p}_{\text{NN}}(\cdot)$ which is obtained by successive operation of $d$ LSTM cells. Mathematically 
+this is equivalent to function composition $h^{p}_{d} ( h^{p}_{d-1}( \cdots (h^{p}_{1}(\cdot)\cdots))$.
+
+\begin{align}
+	\hat{D}st \left(t + p \right) &= m^{p}_{\text{NN}} (\mathbf{x}_t) \label{eq:dstmodel}\\
+	m^{p}_{\text{NN}} (\mathbf{x}_t) &= h^{p}_{d} ( h^{p}_{d-1}( \cdots (h^{p}_{1}(\mathbf{x}_t)\cdots)) \label{eq:lstmstack}
+\end{align}
+
+To find the LSTM structure which is the most suitable for predicting geomagnetic activity, we built networks 
+consisting of varying number of cells. After training and validating each candidate architecture, the best 
+performing LSTM network was chosen as the mean function for the Gaussian process component outlined in 
+section \S~\ref{sec:gpcomponent}.
+
+The LSTM component of the GPNN model was implemented using the Lasagne library in Python 
+(\url{http://lasagne.readthedocs.io/en/latest/index.html}). 
 
 \subsection{LSTM Model Training}
 
@@ -273,15 +282,15 @@ a brief explaination of its functioning.
 
 For the purposes of notational simplicity, the weights and biases of the LSTM cell are concatenated into a 
 single vector $\mathbf{\theta}$, where $\theta_i$ denotes an individual scalar element of $\mathbf{\theta}$. 
-We then define \( g_{t,i} \) in equation \ref{eq:gradient} as the gradient of the objective function with respect 
-to the parameters \(   \theta_{i} \) at time step t. 
+We then define $g_{t,i}$ in equation \ref{eq:gradient} as the gradient of the objective function with respect 
+to the parameters $\theta_{i}$ at time step t. 
 
 \begin{equation}\label{eq:gradient}
  g_{t,i} = \triangledown_{ \mathbf{\theta} } J \left(  \theta_{t,i} \right)
 \end{equation}
 
 The update of parameters using RMSprop is described by equation \ref{eq:learningrmsprop}. First the running average 
-of the second order moment of the gradients \( E \left( g^{2} \right)  \) is computed at each iteration $t$, then 
+of the second order moment of the gradients $  E \left( g^{2} \right)  $ is computed at each iteration $t$, then 
 the updated parameters $\theta_{t+1,i}$ are calculated using the gradient $g_{t,i}$ and a damped learning rate of 
 $\frac{\eta}{\sqrt{E \left[ g^{2} \right]_{t,i}} + \epsilon }$ ($\epsilon$ is a small number added to 
 $\sqrt{E \left[ g^{2} \right]_{t,i}}$ preventing numerical overflow).
@@ -292,12 +301,75 @@ $\sqrt{E \left[ g^{2} \right]_{t,i}}$ preventing numerical overflow).
  \theta_{t+1,i} &= \theta_{t,i} - \frac{ \eta }{\sqrt[]{E \left[ g^{2} \right]_{t,i}} + \epsilon } g_{t,i}
 \end{align}
 
+\subsection{Gaussian Processes}\label{sec:gpcomponent}
+
+Gaussian processes are a family of models which provide a principled probabilistic framework for forecasting.
+GP models output a predictive distribution instead of a point forecast. Starting from a \emph{prior distribution},
+GP models construct a \emph{posterior predictive distribution}. The appeal of using GP models is that, even though 
+their theoretical formulation is general, the practical implementation is rather straightforward, boiling down to 
+simple analytical expression that requires no more than linear algebra. 
+
+We will not give a complete review of the GP methodology here, the interested reader can refer to 
+section \S~\ref{sec:osaGPmethod} for a detailed review of Gaussian process models and their mathematical formulation.
+
+A GP is completely specified by its mean function  $m \left( \mathbf{x} \right)$ and its covariance function 
+or \emph{kernel} $K (\mathbf{x}, \mathbf{x}')$ in equation \ref{eq:gpformulation}. The GP component is implemented 
+using the GPML Matlab software package \citep{rasmussen2010gaussian}. 
+
+\subsubsection*{Kernel Function}
+
+Kernels determine how each point $\mathbf{x}_t$ influences the values that the GP will have on another point 
+$\mathbf{x}_s$. The main idea is that if $K(\mathbf{x}_t, \mathbf{x}_s) \gg 0$, we expect the output from the 
+GP model at these points to be statistically correlated. 
+
+\begin{equation}\label{eq:gpcov}
+	K_{\text{NN}} \left( \mathbf{x}, \mathbf{x}' \right) = 
+	\frac{2}{ \pi } \text{sin}^{-1} \left( \frac{2\mathbf{x}\boldsymbol{\cdot}\mathbf{x}'}{
+		\sqrt{ \left( 1+2\mathbf{x}\boldsymbol{\cdot} \mathbf{x} \right) }\sqrt{ \left( 1+2\mathbf{x}'\boldsymbol{\cdot}\mathbf{x}' \right)}
+		} \right)
+\end{equation}
+
+Kernels often introduce assumptions about the continuity of the functions that will be 
+represented by the resulting GP regression model. \citet[ch.~4]{Rasmussen:2005:GPM:1162254} gives an 
+introduction to common kernels used in machine learning applications and the type of continuity assumptions 
+of their resulting GP models. In this study, we use the neural network kernel \citep{williams1998computation} 
+described in equation \ref{eq:gpcov}. 
+
+\subsubsection*{Mean Function}
+
+The mean function $m \left( \mathbf{x} \right)$ defines an apriori mean value of the GP predictive disribution for 
+some input $\mathbf{x}$. It is quite common to set $m(\mathbf{x}) = 0$ without loss of generality for situations where 
+it is difficult to define an apriori expression for the predictive mean. \citet[ch.~2,sec.~2.7]{Rasmussen:2005:GPM:1162254} 
+states that using mean functions is a good way to incorporate domain knowledge or to augment the model's capabilities in 
+capturing complex behavior. This outlines the structure of the hybrid GPNN model consisting of an LSTM and GP components. 
+
+\subsection{The GPNN Model}
+
+\begin{align}
+	Dst \left( t+p \right) &= f_{p} \left( \mathbf{x}_{t} \right) + \epsilon \label{eq:dstgpnn}\\ 
+	\epsilon &\sim N \left( 0, \sigma ^{2} \right)  \label{eq:gpnnNoise}\\
+	f_{p} \left( \mathbf{x}_{t} \right)  &\sim 
+	GP \left( m^{p}_{\text{NN}}(\mathbf{x}_t) , K_{NN}(\mathbf{x}_{t}, \mathbf{x}_{s} ) \right) \label{eq:gpnnGPForm}
+\end{align}
+	
+
+Equations \cref{eq:dstgpnn,eq:gpnnNoise,eq:gpnnGPForm} give a formal specification of the proposed GPNN model in terms of 
+the notations introduced in section \S~\ref{sec:osaGPmethod}. The ground truth $Dst\left(t + p \right)$ is assumed 
+to be the result of a Gaussian Process $f_{p}$ corrupted by Gaussian measurement noise $\epsilon$, with $p = {1,2,3,4,5,6}$ 
+being the forecast horizon going from one to six hours ahead. The mean function of the Gaussian process $f_{p}$ is set to 
+$m^{p}_{\text{NN}} \left( \mathbf{x} \right)$ described in section \S~\ref{sec:lstmDstArch} and the covariance is set to 
+the neural network covariance function from equation \ref{eq:gpcov}. 
+
+
+\section{Experiments} \label{sec:resultsgpnn}
 
 \subsection{LSTM Model Evaluation}
 
 For the purposes of training and evaluation, the data set is divided as follows : 70$\%$ for training, 20$\%$  
 for testing and 10$\%$ for validation. The LSTM model is evaluated using the Root Mean Square Error (RMSE) 
-and the Correlation Coefficient (CC) defined by equations \ref{eq:rmse} and \ref{eq:cc} respectively. 
+and the Correlation Coefficient (CC) defined by equations \ref{eq:rmse} and \ref{eq:cc} respectively. Based 
+on the performance calculated on the validation data, an LSTM network of depth $d = 20$ cells was chosen as 
+the mean function of the GPNN model.
 
 
 \begin{equation}\label{eq:rmse}
@@ -309,109 +381,29 @@ and the Correlation Coefficient (CC) defined by equations \ref{eq:rmse} and \ref
 \end{equation}
 
 
-\subsection{Gaussian Processes}\label{sec:gpcomponent}
+In order to give context for the performance of our LSTM model, we compare the following models for Dst predictions 
+for the time horizon $t+1 \cdots t+6$, summarised in table \ref{table:competingmodels}.
 
-% \begin{equation}\label{eq:gp}
-%  f \left( x \right)  \sim  \mathcal{GP} \left( m \left( x \right) , k \left( x,x' \right)  \right) 
-% \end{equation}
+\begin{table}[ht]
+	\centering
+	\caption{Summary of Dst forecasting models compared in this study}
+	\label{table:competingmodels}
+	\begin{tabular}{| l | p{0.65\textwidth} |}
+		\hline
+		Model & Description\\
+		\hline
+		\citet{wu1997geomagnetic} & An Elman RNN model having explicitly computed solar wind magnetospheric coupling functions as inputs.\\
+		\citet{Bala2012} & A feedforward neural network model using the \emph{Boyle} function as input.\\
+		\citet{Lazzus} & A feedforward neural network model using only the time history of Dst. Trained using particle swarm optimization.\\
+		Persistence model & $\hat{D}st(t + p) = Dst(t)$, also used for benchmarking in section \S~\ref{sec:gpOSAEval}.\\
+		GPNN & Our proposed LSTM and GP hybrid. Inputs are solar wind parameters (section \S~\ref{sec:datagpnn}) and time history of Dst.\\
+		GPNN-GPS & The GPNN model but with gps magnetic field data $B_{\text{gps}}$ also included in the inputs. \\
+		\hline
+	\end{tabular}
+\end{table}
 
-% \begin{equation}\label{eq:meanfunc}
-%  m \left( x \right) = \mathbb{E} \left[ f \left( x \right)  \right]
-% \end{equation}
-
-% \begin{equation}\label{eq:kernelfunc}
-%  k ( x,x') = \mathbb{E} \left[  \left( f \left( x \right) -m \left( x \right)  \right)  ( f ( x' ) -m ( x') )  \right]
-% \end{equation}
-
-Gaussian processes are a family of models which provide a principled probabilistic framework for forecasting.
-GP models output a predictive distribution instead of a point forecast. Starting from a \emph{prior distribution},
-GP models construct a \emph{posterior predictive distribution} . The appeal of using GP models is that, even though 
-their theoretical formulation might seem rather abstract, the practical implementation is rather straightforward, 
-boiling down to simple analytical expression that requires no more than linear algebra. 
-
-We will not give a complete review of the GP methodology here , the interested reader can refer to 
-section \S~\ref{sec:osaGPmethod} for a detailed review of Gaussian process models and their mathematical formulation.
-
-A GP is completely specified by its mean function  \( m \left( \mathbf{x} \right)  \) and its covariance function  
-\( K (\mathbf{x}, \mathbf{x}') \)  in equation \ref{eq:gpformulation}. 
-
-The covariance function specifies an apriori assumption about how each point influences the values that the 
-other points are likely to take on. The main idea is that if $K(\mathbf{x}_t, \mathbf{x}_s) \gg 0$, 
-we expect the output from the functions at these points to be similar. 
-
-Different types of covariance functions exist, also called kernels, which determine the form of the model. 
-\citet{ChandorkarDst} listed common kernels used in machine learning and described how the choice of 
-it is fundamental. In this study, we focused on the neural network kernel \citep{williams1998computation} 
-described in equation \ref{eq:gpcov}. 
-
-
-\begin{equation}\label{eq:gpcov}
- K_{\text{NN}} \left( \mathbf{x}, \mathbf{x}' \right) = 
- \frac{2}{ \pi } \text{sin}^{-1} \left( \frac{2\mathbf{x}\boldsymbol{\cdot}\mathbf{x}'}{
-	 \sqrt{ \left( 1+2\mathbf{x}\boldsymbol{\cdot} \mathbf{x} \right) }\sqrt{ \left( 1+2\mathbf{x}'\boldsymbol{\cdot}\mathbf{x}' \right)}
-	 } \right)
-\end{equation}
-
-
-As \citet{Rasmussen:2005:GPM:1162254} described, if there is no prior knowledge about 
-the function to be approximated, the mean function is defined to be zero. The aim of our study here is to 
-combine the neural network and the gaussian process to obtain accurate forecast with an uncertainty distribution. 
-Hence, the mean function is \( \mathbf{m}_{\text{NN}} \left( \mathbf{x} \right)  \) described in section \S~\ref{sec:lstmcomponent}.
-
-
-
-% \begin{equation}\label{eq:jointdist}
-%   \left[ \begin{array}{ll}
-% 	f\\
-% 	f_{\ast}\\
-% 	\end{array} \right] = \mathcal{N}   \left(  \left[ \begin{array}{ll}
-% 	m \left( x \right) \\
-% 	m \left( x_{\ast} \right) \\
-% 	\end{array} \right] ,  \left[ \begin{matrix}
-% K \left( X,X \right)   &  K \left( X,X_{\ast} \right) \\
-% K \left( X_{\ast},X \right)   &  K \left( X_{\ast},X_{\ast} \right) \\
-% \end{matrix}
-%  \right]  \right) 
-% \end{equation}
-
-
-
-% \begin{align}\label{eq:preddist}
-%  f_{\ast} \vert X_{\ast},X,f &\sim N \left( f_{\ast},cov \left( f_{\ast} \right)  \right)  \\ 
-%  f_{\ast} &= m \left( x_{\ast} \right) +K \left( X_{\ast},X \right)  \left[ K \left( X,X_{\ast}  \right)  \right] ^{-1} \left( y-m \left( x \right)  \right) \\ 
-%  cov \left( f_{\ast} \right) &= K \left( X_{\ast},X_{\ast} \right) -K \left( X_{\ast},X \right)  \left[ K \left( X,X \right)  \right] ^{-1} K \left( X,X_{\ast} \right) 
-% \end{align}
-
-
-To predict the geomagnetic index Dst based on input features \( x \) , the equation \ref{eq:dstgp} sumarises 
-the inherent process. 
-
-
-
-\begin{align}\label{eq:dstgp}
-Dst \left( t+p \right) &= f_{p} \left( \mathbf{x}_{t} \right) + \epsilon \\ 
-\epsilon &\sim N \left( 0, \sigma ^{2} \right)  \\
-f_{p} \left( \mathbf{x}_{t} \right)  &\sim 
-GP \left( m^{p}_{\text{NN}}(\mathbf{x}_t) , K_{NN}(\mathbf{x}_{t}, \mathbf{x}_{s} ) \right)
-\end{align}
-
-With  \( p \)  being the expected time forecast. Here we consider $p  = {1,2,3,4,5,6}$ to provide 
-multi-step ahead prediction of the Dst index from 1h to 6h ahead. The GP component is implemented using the 
-Matlab Software GPML \citep{rasmussen2010gaussian}.
-
-
-\section{Results} \label{sec:resultsgpnn}
-
-
-\subsection{Optimisation of the LSTM}
-
-
-The first step in the development of the GPNN model is to optimise the performance of each 
-LSTM to provide predictions of Dst from 1h to 6h ahead. 
-Figures \ref{fig:lstmCC} \ref{fig:lstmCC} presents a  comparison of correlation coefficient and root mean square error 
+Figures \cref{fig:lstmCC,fig:lstmCC} presents a comparison of correlation coefficient and root mean square error 
 between our model, with and without using GPS data, and previous models predicting Dst based on NN. 
-The temporal coverage of these previous studies are shown in Figure \ref{fig:datacoverage} so the reader 
-can have an estimation of the storm times used in them. 
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{lstmCompRMSE.pdf}
@@ -421,19 +413,14 @@ can have an estimation of the storm times used in them.
 
 
 
-
-
-Our model, with or without GPS data provides performance which are close to the one obtained by 
-\citet{Lazzus} from 1h ahead to 3h ahead but when the expected forecast goes from 4h ahead to 6h ahead, 
-our models, with or without GPS data provide better global performance. As an example, when considering a 6h 
-ahead forecast, our model with GPS data provides a CC of 0.873 and a RMSE of 9.86, while \citet{Lazzus} 
-obtained a CC of 0.826 and a RMSE of 13.09. The model presented in \citet{Lazzus} is based only on 
-previous Dst values, it shows the benefit of using exogenous data when predicting a geomagnetic index. 
-\citet{Bala2012} used the Boyle index as an input function, and obtained quite similar 
-performance as ours. If we consider again a forecast of 6h ahead, their model presents a\ CC of 0.77 
-and a RMSE of 11.09. It is slightly worse than our model with or without GPS data. We also decided to compare 
-our model with the one provided by \citet{wu1997geomagnetic} as it is the first model using 
-recurrent network. 
+Our models GPNN \& GPNN-GPS provide performance which is competitive to that obtained by 
+\citet{Lazzus} from 1h ahead to 3h ahead. When the forecast horizon goes from 4h ahead to 6h ahead, 
+GPNN \& GPNN-GPS provide better global performance. As an example, when considering a 6h 
+ahead forecast, GPNN-GPS provides a CC of $0.873$ and a RMSE of $9.86$, while \citet{Lazzus} 
+obtained a CC of $0.826$ and a RMSE of $13.09$. The model presented in \citet{Lazzus} uses only time history of Dst, 
+this emphasizes the performance benefits of using exogenous data when predicting geomagnetic activity. 
+\citet{Bala2012} used the Boyle index as an input function, and obtained competitive RMSE performance to GPNN for 
+six hour ahead predictions, their model presents a\ CC of $0.77$ and a RMSE of $11.09$.
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{lstmCompCC.pdf}
@@ -442,28 +429,27 @@ recurrent network.
 \end{figure}
 
 
-We wanted to compare the performance of a classic recurrent network to the LSTM, and see 
-how the complexity of the LSTM cell could provide more accurate predictions. Wu and Lundstedt \citet{wu1997geomagnetic} 
-provided for a 6h ahead forecast a CC of 0.82 and a RMSE of 20.8, showing in comparison to our model with or 
+\citet{wu1997geomagnetic} 
+provided for a 6h ahead forecast a CC of $0.82$ and a RMSE of $20.8$, showing in comparison to our model with or 
 without GPS data, that the LSTM cell brings more accuracy. We observed that using GPS data generally results 
-in an improvement when considering important geomagnetic storms. Figure 4 presents predictions obtained with 
-the LSTM NN, with GPS data in blue and without GPS data in red, for Dst forecast from 1h ahead to 6h ahead, 
-for the 2003 Halloween storm event (peak at -422 nT). Predictions for 1h to 2h ahead are very similar, but when 
-we consider the forecast of 3h ahead, the model without GPS data predicts a peak of -348 nT while the model 
-with the GPS data provides a prediction of -405 nT. 
+in an improvement when considering important geomagnetic storms. Figure \ref{fig:gpnngpshalloween} presents forecasts 
+produced the GPNN-GPS model in blue and GPNN model in red, for the $2003$ Halloween storm event 
+(maximum strength of $-422 \text{nT}$). Predictions for one to two hours ahead are very similar, but when we consider 
+the forecasts made three hours ahead, GPNN predicts a storm peak of $-348 \text{nT}$ while GPNN-GPS provides a 
+prediction of $-405 \text{nT}$. 
 
-For a forecast done 4h ahead, the model without GPS data 
-provides a prediction of -335 nT and the one with GPS data, a forecast of -380 nT. For predictions done 5 h ahead, 
-predicted peak values are quite the same. However, the 6h ahead forecast shows that a single point prediction 
-provided by the NN is not good enough and offers a strong rationale to combine the NN performance with the 
-GP model to obtain a probabilistic forecast. 
+For a four hour ahead forecast, GPNN predicts a storm peak of $-335 \text{nT}$ while GPNN-GPS predicts $-380 \text{nT}$.
 
+\begin{figure}
+	\includegraphics[width=\textwidth]{image5.png}
+	\caption{$Dst$ predictions made by GPNN and GPNN-GPS for the 2003 Halloween storm.}
+    \label{fig:gpnngpshalloween}
+\end{figure}
 
-\subsection{Evaluation of the GPNN model}
+\subsection{GPNN Evaluation}
 
-As we described before, the GP process aim to provide not only a\ single\ point\ prediction,\ 
-but also an asssociated  uncertainty. Metrics like RMSE and CC are defined for single point prediction 
-and  are not adequate  to evaluate  probabilistic forecast.
+Since GP models output a predictive distribution, metrics like RMSE and CC, which are defined for single point 
+predictionsm, are not adequate while evaluating probabilistic forecasts.
 
 \begin{table}[h]
 	%\fontsize{8}{9.6}\selectfont
@@ -480,11 +466,10 @@ and  are not adequate  to evaluate  probabilistic forecast.
 \end{table}
 
 Storm activity is often classified using given thresholds of Dst values. According to the most common 
-classification, we distinguished 3 levels of storms summarised in Table \ref{table:stormclass} 
-($\text{Dst} <= 250$, $-250 <= \text{Dst} <= 50$, $\text{Dst} >= -50$). The aim here is to use metrics 
-which will be able to evaluate how the GPNN manages to forecast geomagnetic storms into the 
-right family of storm. To do so, we focused on the Receiver Operating Characteristic Curve and 
-Reliability diagram.
+classification, we distinguished three levels of storms summarised in table \ref{table:stormclass}. 
+The aim here is to use metrics which will be able to evaluate how the GPNN model manages to correctly classify 
+geomagnetic storms from one to six hours ahead. To do so, we used receiver operating characteristic (ROC) curves and 
+reliability diagrams.
 
 
 
@@ -506,7 +491,8 @@ true positives divided by the total number of positives. For perfect classificat
 and TPR equal to 1, thus the value of the threshold that produces the point closest to these values is optimal. 
 
 
-Table 3 presents ROC values obtained from 1h to 6h ahead forecasts, depending on the level of the storm. 
+Tables \cref{table:rocgpnn1h,table:rocgpnn2h,table:rocgpnn3h,table:rocgpnn4h,table:rocgpnn5h,table:rocgpnn6h} 
+present ROC values obtained from 1h to 6h ahead forecasts, depending on the level of the storm. 
 The ROC is usually shown graphically, but numerical values are more relevant for the reader to analyse 
 variations depending on the threshold. The optimal threshold is in red and bold, it is computed to 
 minimise the Euclidean distance from FPR =0 and TPR =1. ROC values obtained for the highest level of activity, 
@@ -592,9 +578,9 @@ evaluate the optimisation required to improve the reliability of the GPNN, and p
 re-calibrate the prediction
 
 
-\begin{table}[h]
+\begin{table}[ht]
 	\centering
-	\caption{ROC contingency table for the $t+1$ GPNN model.}
+	\caption{ROC contingency table for the $t+1$ GPNN-GPS model.}
 	\label{table:rocgpnn1h}
 	\begin{tabular}{c| c c | c c | c c}
 		\hline
@@ -620,7 +606,7 @@ re-calibrate the prediction
 
 \begin{table}[ht]
 	\centering
-	\caption{ROC contingency table for the $t+2$ GPNN model.}
+	\caption{ROC contingency table for the $t+2$ GPNN-GPS model.}
 	\label{table:rocgpnn2h}
 	\begin{tabular}
 		{c| c c | c c | c c}
@@ -646,7 +632,7 @@ re-calibrate the prediction
 
 \begin{table}[ht]
 	\centering
-	\caption{ROC contingency table for the $t+3$ GPNN model.}
+	\caption{ROC contingency table for the $t+3$ GPNN-GPS model.}
 	\label{table:rocgpnn3h}
 	\begin{tabular}
 		{c| c c | c c | c c}
@@ -673,7 +659,7 @@ re-calibrate the prediction
 
 \begin{table}[ht]
 	\centering
-	\caption{ROC contingency table for the $t+4$ GPNN model.}
+	\caption{ROC contingency table for the $t+4$ GPNN-GPS model.}
 	\label{table:rocgpnn4h}
 	\begin{tabular}
 		{c| c c | c c | c c}
@@ -699,7 +685,7 @@ re-calibrate the prediction
 
 \begin{table}[ht]
 	\centering
-	\caption{ROC contingency table for the $t+5$ GPNN model.}
+	\caption{ROC contingency table for the $t+5$ GPNN-GPS model.}
 	\label{table:rocgpnn5h}
 	\begin{tabular}
 		{c| c c | c c | c c}
@@ -725,7 +711,7 @@ re-calibrate the prediction
 
 \begin{table}[ht]
 	\centering
-	\caption{ROC contingency table for the $t+6$ GPNN model.}
+	\caption{ROC contingency table for the $t+6$ GPNN-GPS model.}
 	\label{table:rocgpnn6h}
 	\begin{tabular}
 		{c| c c | c c | c c}
