@@ -16,16 +16,18 @@ thesis aims to be a step towards that goal.
 The research questions addressed in this dissertation center around three key themes.
 
 \begin{enumerate}
-    \item \textit{Forecasting}: How can we create probabilistic forecasting systems for key geomagnetic quantities? 
-    What is the time horizon for such forecasts and how can we improve it, if possible?.
+    \item \textit{Standard Forecasting}: How can we create probabilistic forecasting systems 
+    for key geomagnetic quantities? What is the time horizon for such forecasts? Is it possible 
+    to get accurate predictions while increasing the forecast horizons?
     
-    \item \textit{Parameter Inference \& Uncertainty Quantification}: Are machine learning models and physics models two 
-    separate pieces? Can they be a married together in a way which enables identification of unobserved physical parameters?  
+    \item \textit{Parameter Inference \& Uncertainty Quantification}: Are machine learning models 
+    and physics models two separate pieces or can they be a married together in a way which enables 
+    identification of unobserved physical parameters?  
     
-    \item \textit{Probabilistic Time Lag Prediction}: How can we predict near Earth solar wind speed and its propagation time from solar data? 
-    More generally, is it possible to infer using time series data, when the impacts of events will be felt at their downstream destinations? How 
-    can we deal with the challenge that the propagation time is dynamic and uncertain?  
-    
+    \item \textit{Probabilistic Time Lag Prediction}: How can we predict near Earth solar wind speed 
+    and its propagation time from solar data? More generally, is it possible to infer using time series 
+    data, \emph{when} the impacts of events will be felt at their downstream destinations? This is different 
+    from standard forecasting which always concerns predictions for a \emph{fixed} time ahead.
 \end{enumerate}
     
 \section{Chapter Outline}
@@ -36,24 +38,29 @@ The dissertation is organised as follows.
     \item Chapter \ref{chapter:introduction} provides context for the space weather project and its 
     links to terrestrial weather via historical anecdotes. It highlights impacts of space weather events 
     and speculates why space weather research will become even more important in the coming decades.
+
     \item Chapter \ref{chapter:preliminaries} provides a short introduction to the concepts needed to 
     understand the problems considered in this thesis. Section \S~\ref{sec:mag} talks about the magnetosphere and 
-    the motions of charged particles trapped within it, this is the starting point for the material in chapters 
-    \ref{chapter:dst_osa}, \ref{chapter:dst_msa} \& \ref{chapter:bayes_diff_chapter}. Section \S~\ref{sec:solar} gives a 
+    the motions of charged particles trapped within it. This is the starting point for the material in chapters 
+    \cref{chapter:dst_osa,chapter:dst_msa,chapter:bayes_diff_chapter}. Section \S~\ref{sec:solar} gives a 
     quick overview about the structure of the Sun, its magnetic field and the solar wind which is the target 
     application for the method proposed in chapter \ref{chapter:pdt}.
-    \item Chapter \ref{chapter:dst_osa} applies \emph{gaussian process} (GP) models for making probabilistic forecasts of 
+    
+    \item Chapter \ref{chapter:dst_osa} applies \emph{Gaussian process} (GP) models for making probabilistic forecasts of 
     Earth based geomagnetic quantities and gives a practical methodology for building and evaluating such models. 
     Chapter \ref{chapter:dst_msa} extends the time horizon of the forecasting models proposed in chapter \ref{chapter:dst_osa} 
-    by using a hybrid model based on \emph{long short term memory} (LSTM) networks and gaussian processes.
+    by proposing a hybrid model based on \emph{long short term memory} (LSTM) networks and Gaussian processes.
+    
     \item Chapter \ref{chapter:bayes_diff_chapter} proposes a model based on the \emph{least squares support vector machine} (LSSVM) 
     for estimating magnetospheric plasma density. The parameters of the model are estimated by minimizing error with respect to 
-    observed data and the physical dynamics of plasma diffusion. Combining this with the \emph{markov chain monte carlo} procedure, we 
+    observed data and the physical dynamics of plasma diffusion. Combining this with the \emph{Markov chain Monte Carlo} procedure, we 
     obtain Bayesian estimates on unobserved parameters of the plasma diffusion system.   
+    
     \item Chapter \ref{chapter:pdt} introduces \emph{dynamic time lag regression} (DTLR) a novel supervised regression framework 
-    which captures probabilistic and dynamic propogation time delays between time series. We propose a solution methodology for 
+    which captures probabilistic and dynamic propagation time delays between time series. We propose a solution methodology for 
     the DTLR setting and provide a theoretical framework for understading its convergence. The DTLR methodology is applied to the 
     forecasting of solar wind from solar magnetic data. 
+    
     \item Chapter \ref{chapter:conclusions} discusses the progress made in the thesis and offers perspectives for future research.
 \end{itemize}
 
