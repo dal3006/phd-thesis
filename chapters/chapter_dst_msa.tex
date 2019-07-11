@@ -262,7 +262,8 @@ $h^{p}_{d} ( h^{p}_{d-1}( \cdots (h^{p}_{1}(\cdot)\cdots))$.
 \end{align}
 
 To find the LSTM structure which is the most suitable for predicting geomagnetic activity, we 
-built networks consisting of varying number of cells. After training and validating each candidate architecture, the best performing LSTM network was chosen as the mean function for the Gaussian process component outlined in 
+built networks consisting of varying number of cells. After training and validating each candidate architecture, 
+the best performing LSTM network was chosen as the mean function for the Gaussian process component outlined in 
 section \S~\ref{sec:gpcomponent}.
 
 The LSTM component of the GPNN model was implemented using the Lasagne library in Python 
@@ -274,7 +275,8 @@ The LSTM architecture can be trained with a backpropagation based optimization a
 to its architecture, the vanishing gradient problem does not persist. A number of stochastic 
 gradient based variants are used for training neural networks, such as but not limited to 
 \emph{Levenburg - Maquardt} \citep{marquardt1963algorithm}, \emph{Nesterov Accelerated Gradient} (NAG) 
-\citep{nesterov1983method}, adaptive learning rates for each network weight \citep{SilvaAlmeida}, adaptive gradient based methods such as AdaGrad \citep{duchi2011adaptive}, adaptive learning rate methods like RMSprop \citep{tieleman2012lecture}. 
+\citep{nesterov1983method}, adaptive learning rates for each network weight \citep{SilvaAlmeida}, adaptive gradient 
+based methods such as AdaGrad \citep{duchi2011adaptive}, adaptive learning rate methods like RMSprop \citep{tieleman2012lecture}. 
 
 In this work, we use the RMSProp algorithm for training the LSTM component of the GPNN model, 
 below we give a brief explaination of its functioning.
@@ -421,43 +423,47 @@ for the time horizon $t+1 \cdots t+6$, summarised in table \ref{table:competingm
 		particle swarm optimization.\\
 		Persistence model & $\mathrm{\hat{D}st}(t + p) = \mathrm{Dst}(t)$, also used for benchmarking in 
 		section \S~\ref{sec:gpOSAEval}.\\
-		GPNN & Our proposed LSTM and GP hybrid. Inputs are solar wind parameters (section \S~\ref{sec:datagpnn}) 
+		LSTM-Dst & Our proposed LSTM model. Inputs are solar wind parameters (section \S~\ref{sec:datagpnn}) 
 		and time history of Dst.\\
-		GPNN-GPS & The GPNN model but with gps magnetic field data $B_{\text{gps}}$ also included in the inputs. \\
+		LSTM-Dst-GPS & The LSTM model but with gps magnetic field data $B_{\text{gps}}$ also included in the inputs. \\
 		\hline
 	\end{tabular}
 \end{table}
 
-Figures \cref{fig:lstmCC,fig:lstmCC} presents a comparison of correlation coefficient and root mean square error 
-between our model, with and without using GPS data, and previous models predicting Dst based on NN. 
+Figures \cref{fig:lstmCC,fig:lstmCC} present a comparison of $\mathrm{CC}$ and $\mathrm{RMSE}$ performance of the 
+$\mathrm{Dst}$ prediction models listed in table \ref{table:competingmodels}. 
 
-Our models GPNN \& GPNN-GPS provide performance which is competitive to that obtained by 
+Our models LSTM-Dst \& LSTM-Dst-GPS provide performance which is competitive to that obtained by 
 \citet{Lazzus} from 1h ahead to 3h ahead. When the forecast horizon goes from 4h ahead to 6h ahead, 
-GPNN \& GPNN-GPS provide better global performance. As an example, when considering a 6h 
-ahead forecast, GPNN-GPS provides a CC of $0.873$ and a RMSE of $\SI{9.86}{\nano\tesla}$, while \citet{Lazzus} 
-obtained a CC of $0.826$ and a RMSE of $\SI{13.09}{\nano\tesla}$. The model presented in \citet{Lazzus} uses only time history of Dst, 
-this emphasizes the performance benefits of using exogenous data when predicting geomagnetic activity. 
-\citet{Bala2012} used the Boyle index as an input function, and obtained competitive RMSE performance to GPNN for 
+LSTM-Dst \& LSTM-Dst-GPS provide better global performance. As an example, when considering a 6h 
+ahead forecast, LSTM-Dst-GPS provides a CC of $0.873$ and a RMSE of $\SI{9.86}{\nano\tesla}$, while \citet{Lazzus} 
+obtained a CC of $0.826$ and a RMSE of $\SI{13.09}{\nano\tesla}$. The model presented in \citet{Lazzus} uses only 
+time history of Dst, this emphasizes the performance benefits of using exogenous data when predicting geomagnetic activity 
+with a time horizon greater than one hour. 
+
+\citet{Bala2012} used the Boyle index as an input function, and obtained competitive RMSE performance to LSTM for 
 six hour ahead predictions, their model presents a\ CC of $0.77$ and a RMSE of $\SI{11.09}{\nano\tesla}$.
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{image5.png}
-	\caption{$\mathrm{Dst}$ predictions made by GPNN and GPNN-GPS for the 2003 Halloween storm.}
-    \label{fig:gpnngpshalloween}
+	\caption{$\mathrm{Dst}$ predictions made by the LSTM model for the 2003 Halloween storm.}
+    \label{fig:lstmhalloween}
 \end{figure}
 
 
-\citet{wu1997geomagnetic} provided for a 6h ahead forecast a CC of $0.82$ and a RMSE of $\SI{20.8}{\nano\tesla}$, showing 
-in comparison to our model with or without GPS data, that the LSTM cell brings more accuracy. 
-
-
-We observed that using GPS data generally results in an improvement when considering important geomagnetic storms. 
-Figure \ref{fig:gpnngpshalloween} presents forecasts produced the GPNN-GPS model in blue and GPNN model in red, 
+The Elman RNN proposed in \citet{wu1997geomagnetic} is an important benchmark for the GPNN model because the 
+LSTM architecture is a more sophisticated form of the RNN structure. \citet{wu1997geomagnetic} provided for a 
+six ahead forecast, a CC of $0.82$ and a RMSE of $\SI{20.8}{\nano\tesla}$. The LSTM architecture thus offers 
+performance benefits over standard RNNs when making geomagnetic activity.
+ 
+We observed that using GPS data generally results in an improved forecasts of important geomagnetic storm events. 
+Figure \ref{fig:lstmhalloween} presents forecasts produced the LSTM-Dst in blue and LSTM-Dst-GPS in red, 
 for the $2003$ Halloween storm event (maximum strength of $\SI{-422}{\nano\tesla}$). Predictions for one to two hours 
-ahead are very similar, but when we consider the forecasts made three hours ahead, GPNN predicts a storm peak 
-of $\SI{-348}{\nano\tesla}$ while GPNN-GPS provides a prediction of $\SI{-405}{\nano\tesla}$. 
+ahead are very similar, but when we consider the forecasts made three hours ahead, LSTM-Dst predicts a storm peak 
+of $\SI{-348}{\nano\tesla}$ while LSTM-Dst-GPS provides a prediction of $\SI{-405}{\nano\tesla}$. 
 
-For a four hour ahead forecast, GPNN predicts a storm peak of $\SI{-335}{\nano\tesla}$ while GPNN-GPS predicts $\SI{-380}{\nano\tesla}$.
+For a four hour ahead forecast, LSTM-Dst predicts a storm peak of $\SI{-335}{\nano\tesla}$ while LSTM-Dst-GPS predicts 
+$\SI{-380}{\nano\tesla}$.
 
 
 
@@ -495,112 +501,133 @@ reliability diagrams.
 \subsubsection{Receiver Operating Characteristic Curve}
 
 The ROC curve is based on a contingency table which maps how often a model correctly classifies outcomes when 
-working in a binary classification context. In the case of the GPNN model, we can analytically compute the 
-probability that Dst lies within a particular interval or outside it (i.e. 
-$\mathbb{P}[\SI{-250}{\nano\tesla} \leq \mathrm{Dst} \leq \SI{-50}{\nano\tesla}]$ is the probability of occurrence of an intense storm 
-as per classification in table \ref{table:stormclass}). 
+working in a binary classification setting i.e. occurrence or non occurrence of a predefined event, denoted by labels 
+$1$ and $0$ respectively. From table \ref{table:stormclass}, we constructed three binary classification problems for each 
+storm class.
 
+In the case of the GPNN model, we can analytically compute the probability that Dst lies within a particular storm class 
+or outside it (e.g. $\mathbb{P}[\SI{-250}{\nano\tesla} \leq \mathrm{Dst} \leq \SI{-50}{\nano\tesla}]$ is the probability 
+of occurrence of an intense storm). For any storm class, by choosing a threshold probability, we can assign a classification 
+of $1$ (belonging to that storm class) if the probability predicted by the GPNN model is greater than the choosen threshold, 
+and $0$ if otherwise. 
 
-\citet{camporeale2017classification} used the same process to classify the category of solar events between 
-ejecta, Coronal Hole, Sector reversal and streamer belt. The ROC curves represents the false positive ratio (FPR) 
-versus the true positive ratio (TPR). The FPR is the ratio of false positive divided by the total number of negatives. 
-The TPR also called sensitivity is the ratio of true positives divided by the total number of positives. For perfect 
-classifications, the FPR has to be equal to 0 and TPR equal to 1, thus the value of the threshold that produces 
-the point closest to these values is optimal. 
-
+The ROC contingency table is then constructed by tabulating the relationship between the \emph{true positive ratio} (TPR) and 
+\emph{false positive ratio}, for varying threshold probabilities. A \emph{true positive} is when an occurrence of the event in 
+question is correctly classified by the model as such. A \emph{false positive} is when a non occurrence is classified as an 
+occurrence. The TPR is then the ratio of true positives to the total number of event occurrences, while the FPR is the ratio of 
+false positives to the number of non occurrences. For perfect classification, $\mathrm{FPR} = 0$ and $\mathrm{TPR} = 1$, thus 
+the value of the threshold that produces the point closest to these values is optimal.  
 
 Tables \cref{table:rocgpnn1h,table:rocgpnn2h,table:rocgpnn3h,table:rocgpnn4h,table:rocgpnn5h,table:rocgpnn6h} 
-present ROC values obtained from 1h to 6h ahead forecasts, depending on the level of the storm. 
+present ROC curves obtained from one to six hour ahead forecasts, depending on the category of the storm. 
 The ROC is usually shown graphically, but numerical values are more relevant for the reader to analyse 
-variations depending on the threshold. The optimal threshold is in red and bold, it is computed to 
-minimise the Euclidean distance from $\text{FPR} = 0$ and $\text{TPR} = 1$. ROC values obtained for the 
-highest level of activity, meaning $\mathrm{Dst} < \SI{-250}{\nano\tesla}$ provide FPR for each threshold (the highest 
-value is $2.7\times10^{-3}$ for a $10\%$ threshold when $t+1$ forecast). The TPR behaviour is more 
-complicated to generalise. 
+variations depending on the choosen threshold probability. The optimal TPR and FPR values are in bold, computed to 
+minimise the Euclidean distance from $\text{FPR} = 0$ and $\text{TPR} = 1$.
 
-For predictions done from 1h ahead to 5h ahead, values are always greater than $0.719$ for thresholds from 
-$10\%$  to $40\%$, and then there is a decrease. If we focuse on the 6h ahead forecast, the best TPR is $0.5$ 
+For predictions done from one to five hours ahead, TPR values are always greater than $0.719$ for thresholds from 
+$10\%$  to $40\%$, and then decrease. If we focuse on the 6h ahead forecast, the best TPR is $0.5$ 
 for a $10\%$ threshold. It means that the more there is an increasing probability for a superstorm to occur, 
 the less the model is able to forecast it without misjudgements 6h in advance. However, for intense storms 
-($\SI{-250}{\nano\tesla} < \mathrm{Dst} < \SI{-50}{\nano\tesla}$), the GPNN provides TPR higher than $0.670$ for thresholds 
-between $10\%$ and $80\%$, and for moderate storms, this model provides TPR higher than $0.649$ for every 
-thresholds, from 1h to 6h ahead. 
+($\SI{-250}{\nano\tesla} < \mathrm{Dst} < \SI{-50}{\nano\tesla}$), the GPNN provides TPR higher than $0.670$ 
+for thresholds between $10\%$ and $80\%$, and for moderate storms, this model provides TPR higher than $0.649$ for all 
+thresholds, from one to six ahead. 
 
 
 \subsubsection{Reliability diagram}
 
 
-The ROC discussed in the previous section gives information about the ability of the forecast system to 
-detect the occurrence of a geomagnetic storm event for a given threshold, in terms of false and true positive. 
+The ROC tables discussed in the previous section give information about the ability of the forecasting system to 
+detect the occurrence of geomagnetic storms event based a chosen decision threshold, in terms of false and true positives. 
 Reliability diagrams measure how closely the forecast probabilities of an event correspond to the actual 
-frequency with which an event is observed. A perfectly reliable forecast is one in which an\ event\ predicted\ 
-with probability p is observed, on average, with frequency p. The reliability diagram bins the forecasts into 
-groups according to the issued probability, shown on the horizontal axis. The frequency with which an event was 
-observed to occur for each bin is then plotted on the vertical axis.  If the reliability curve lies above/below 
-than the perfect diagonal slope, the resulting forecasts  are under/over confident, i.e. they yield  
+frequency with which an event is observed. A perfectly reliable forecast is one in which an event predicted 
+with probability $p$ is observed, on average, with frequency $p$. The reliability diagram bins the forecasts into 
+groups according to the predicted probability, shown on the horizontal axis. The frequency with which an event was 
+observed to occur for each bin is then plotted on the vertical axis. If the reliability curve lies above/below 
+than the perfect diagonal slope, the resulting forecasts are under/over confident, i.e. they yield  
 smaller/higher probabilities for a specific outcome than observed. 
 
+Figure \ref{fig:gpnnreliability} presents reliability diagrams obtained from one to six hour ahead forecasts made 
+by the GPNN. It shows that the one hour ahead forecast slightly underestimates the likelihood of storm events, when their 
+occurrence probabily is $35\%$. For example, when there is $80\%$ predicted chance of a storm, 
+the real observed frequency of it is $90\%$. The GPNN provides reliable forecast for two hour ahead prediction, 
+as the observed frequency of storm regarding the predicted probability lies almost perfectly on the diagonal. 
+For predictions further than three hours ahead, GPNN tends to overestimate the probability of storms. 
 
-Figure \ref{fig:gpnnreliability} presents reliability diagrams obtained from 1h to 6h ahead forecasts. 
-It shows that the 1h ahead forecast slightly underestimates the storm, when there is more than 35$\%$  of 
-probabilities for a given value of Dst. For example, when there is 80$\%$  of risk for a predicted storm, 
-the real observed frequency of it is 90$\%$. The GPNN provides reliable forecast for 2h ahead prediction, 
-as the observed frequency of storm regarding the predicted probability defines almost perfectly a diagonal. 
-For predictions further than 3h ahead, the more it goes in time, the more it overestimates the probability of storms. 
+If we focus on the six hour ahead prediciton, when the GPNN model provides a predicted probability of $90\%$, the 
+real frequency is of $65\%$. GPNN $t+6$ model is thus overconfident. 
 
-If we focus on the 6h ahead prediciton, when the GPNN model provides a predicted probability of 90$\%$, the 
-real observed frequency is of 65$\%$ . This model is over-confident. Once the reliability diagram is obtained, 
-it is of interest to seek simple corrections to the forecast probabilities (re-calibration). This issue will be 
-investigated elsewhere in greater detail. Here, we just show Figure \ref{fig:gpnnreliabilitysigma} that by multiplying 
-the standard deviation by a\ factor of 2 or 3, it it possible to improve the reliability for predicted probability 
-higher than 50$\%$ (Figure \ref{fig:gpnnreliability}). For example, if the predicted probability is 90$\%$, 
-by multiplying sigma by 2, the corresponding real frequency is 72$\%$ and if we multiply by 3 we get 80$\%$. 
-This way, we managed to get closer to the diagonal, when the probability of events increase. Conversely, 
-a simple rescaling of the obtained standard deviation yields worse reliability for probabilities smaller than 50$\%$ .  
+% Once the reliability diagram is obtained, 
+% it is of interest to seek simple corrections to the forecast probabilities (re-calibration). This issue will be 
+% investigated elsewhere in greater detail. Here, we just show Figure \ref{fig:gpnnreliabilitysigma} that by multiplying 
+% the standard deviation by a\ factor of 2 or 3, it it possible to improve the reliability for predicted probability 
+% higher than $50\%$ (Figure \ref{fig:gpnnreliability}). For example, if the predicted probability is $90\%$, 
+% by multiplying sigma by 2, the corresponding real frequency is $72\%$ and if we multiply by 3 we get $80\%$. 
+% This way, we managed to get closer to the diagonal, when the probability of events increase. Conversely, 
+% a simple rescaling of the obtained standard deviation yields worse reliability for probabilities smaller 
+% than $50\%$ .  
+
+
+\begin{figure}
+	\includegraphics[width=\textwidth]{image6.png}
+	\caption{Reliability diagram for Dst forecast from one to six hours ahead. The diagonal is in red dot line.}
+	\label{fig:gpnnreliability}
+\end{figure}
+
+
+% \begin{figure}
+% 	\includegraphics[width=\textwidth]{image7.png}
+% 	\caption{Reliability diagram for the Dst prediction depending on the sigma value. The diagonal is in red dot line.}
+% 	\label{fig:gpnnreliabilitysigma}	
+% \end{figure}
 
 
 Figure \ref{fig:gpnnhalloween} presents predictions provided by the GPNN model for the 2003 Halloween storm. 
-For predictions from 1h ahead to 5h ahead, thanks to this process, the predicted value of Dst is close to the 
-real value. For example, for 5h ahead, the real peak of activity of \SI{-422}{\nano\tesla} has a predicted value of \SI{-391}{\nano\tesla}. 
+For predictions from one to five hour ahead, GPNN provides accurate predictions with plausible error bars. 
+For example, for the five hours ahead forecast, the storm peak of \SI{-422}{\nano\tesla} is forecasted as 
+\SI{-391}{\nano\tesla}. 
 
-The main contribution of the GP process here is shown for the 6h ahead forecast. While the LSTM alone failed to 
-reach the highest peak of activity, the GPNN manages to have a predicted value closer to the real value than 
-the LSTM one, and the covariance over the mean value encompasses the peak of activity.
+The main benefit of the GP component in GPNN can be appreciated when comparing figures \ref{fig:lstmhalloween} 
+and \ref{fig:gpnnhalloween} which show that the GPNN model gave more accurate six hour ahead forecasts for the 
+2003 Halloween storm. The error bars calculated by the GPNN model include the storm peak for one to six hour 
+ahead forecasts.
+
+\begin{figure}
+	\includegraphics[width=\textwidth]{halloween_storm_GPNN.pdf}
+	\caption{$\mathrm{Dst}$ predictions made by the GPNN for the 2003 Halloween storm. 
+	The most probable prediction is the dotted purple line. 
+	The ground truth $\mathrm{Dst}$ is the deep blue line. 
+	The grey shadow represents $\pm\sigma$ error bars on the prediction.}
+    \label{fig:gpnnhalloween}
+\end{figure}
 
 
 
 \section{Conclusion}
 
 
-In this paper, we have presented a model to predict the geomagnetic index Dst from 1h to 6h ahead, 
-based on the combination of ANN and GP, called GPNN. 
+In this paper, we have presented a hybrid model for Dst forecasting, the GPNN, based on LSTM networks and Gaussian Processes. 
 
-First, we developed a \emph{long short-term memory} neural network, to provide Dst predictions from 1h to 6h ahead. 
-A specific LSTM has been developed for each time predictions, then global performance of LSTM have been compared 
-to past forecasting models of Dst. It shows that the LSTM provides very good global performance in comparison 
-to previous models. When focusing on superstorm like the well known 2003 Halloween storm, we underlined that 
-even if global metrics are excellent, the 6h ahead forecast fails to predict the highest peak of activity. 
+First, we developed a LSTM network, to provide Dst predictions one to six hours ahead. A separate LSTM was 
+developed for each time step of the forecast horizon, then global performance of LSTM was compared to previously 
+proposed neural network based Dst forecast models. We observed that the LSTM provides competitive performance in comparison 
+to the state of the art in Dst forecasting. When focusing on extreme events like the well known 2003 Halloween storm, we noted that 
+even though our model's global performance metrics are excellent, the six hour ahead forecast fails to anticipate the storm peak. 
 
+Second, to obtain probabilistic forecasts, we developed a GP which encapsulates the LSTM model as the mean function. Thanks to this 
+combination, we observed that the GPNN model managed to give accurate predictions for the 2003 Halloween storm for a one to five hour 
+ahead time horizon. For the six ahead prediction, the GPNN's predictive variance managed to encompass the storm peak. 
 
-Second, to obtain a probabilistic forecast instead of a single point prediction, we developed a GP which 
-considers the LSTM as the mean function. Thanks to this combination, we observed that we managed to predict 
-accurately superstorm like the 2003 Halloween storm for predictions from 1h ahead to 5h ahead. For the 
-6h ahead prediction, the covariance manages to encompass the peak of activity. 
-
-To evaluate this probabilistic forecast, we use ROC curves and reliability diagram. ROC curves demonstrate that, 
-for each time forecast, storm level and threshold, the False Positive Ratio is very low. However, concerning 
-True Positive Ratio, values are great for moderate and intense storms, but for 6h ahead prediction of superstorm, 
-misjudgement is possible when the threshold increases. In this case, the optimal threshold is around 10$\%$ , 
-which will need further improvement The reliability diagram shows that as the prediction goes further in time, 
-the GPNN provides great performance for predictions from 1h to 3h ahead, but for 4h to 6h ahead, 
-an overestimation of the storm is possible. We also demonstrate that thanks to this diagram, it is possible to 
-evaluate the optimisation required to improve the reliability of the GPNN, and possibly to 
-re-calibrate the prediction
+To evaluate this probabilistic forecast, we used ROC curves and reliability diagrams. The ROC curves demonstrated that, 
+for each forecast horizon, storm category and acceptance threshold, the FPR is low. The TPR, values are excellent for moderate 
+and intense storms, but for six hour ahead prediction of superstorms, misjudgement is possible when the acceptance threshold increased. 
+For six hour ahead prediction, the optimal acceptance threshold is around $10\%$, which evidenced room for further improvement. The 
+reliability diagram showed that the GPNN provides great performance for predictions from one to three ahead, but for four to six hours 
+ahead, an overestimation of storm likelihoods is possible.
 
 
 \begin{table}[ht]
 	\centering
-	\caption{ROC contingency table for the $t+1$ GPNN-GPS model.}
+	\caption{ROC contingency table for the $t+1$ GPNN model.}
 	\label{table:rocgpnn1h}
 	\begin{tabular}{c| c c | c c | c c}
 		\hline
@@ -626,7 +653,7 @@ re-calibrate the prediction
 
 \begin{table}[ht]
 	\centering
-	\caption{ROC contingency table for the $t+2$ GPNN-GPS model.}
+	\caption{ROC contingency table for the $t+2$ GPNN model.}
 	\label{table:rocgpnn2h}
 	\begin{tabular}
 		{c| c c | c c | c c}
@@ -652,7 +679,7 @@ re-calibrate the prediction
 
 \begin{table}[ht]
 	\centering
-	\caption{ROC contingency table for the $t+3$ GPNN-GPS model.}
+	\caption{ROC contingency table for the $t+3$ GPNN model.}
 	\label{table:rocgpnn3h}
 	\begin{tabular}
 		{c| c c | c c | c c}
@@ -679,7 +706,7 @@ re-calibrate the prediction
 
 \begin{table}[ht]
 	\centering
-	\caption{ROC contingency table for the $t+4$ GPNN-GPS model.}
+	\caption{ROC contingency table for the $t+4$ GPNN model.}
 	\label{table:rocgpnn4h}
 	\begin{tabular}
 		{c| c c | c c | c c}
@@ -705,7 +732,7 @@ re-calibrate the prediction
 
 \begin{table}[ht]
 	\centering
-	\caption{ROC contingency table for the $t+5$ GPNN-GPS model.}
+	\caption{ROC contingency table for the $t+5$ GPNN model.}
 	\label{table:rocgpnn5h}
 	\begin{tabular}
 		{c| c c | c c | c c}
@@ -731,7 +758,7 @@ re-calibrate the prediction
 
 \begin{table}[ht]
 	\centering
-	\caption{ROC contingency table for the $t+6$ GPNN-GPS model.}
+	\caption{ROC contingency table for the $t+6$ GPNN model.}
 	\label{table:rocgpnn6h}
 	\begin{tabular}
 		{c| c c | c c | c c}
@@ -755,47 +782,8 @@ re-calibrate the prediction
 	\end{tabular}
 \end{table}
 
-%%%%%%%%%%%%%%%%%%%% Figure/Image No: 1 Ends here %%%%%%%%%%%%%%%%%%%%
 
 
-
-%%%%%%%%%%%%%%%%%%%% Figure/Image No: 6 starts here %%%%%%%%%%%%%%%%%%%%
-
-\begin{figure}
-	\includegraphics[width=\textwidth]{image6.png}
-	\caption{Reliability diagram for Dst forecast from 1h ahead to 6h ahead. The diagonal is in red dot line.}
-	\label{fig:gpnnreliability}
-\end{figure}
-
-
-%%%%%%%%%%%%%%%%%%%% Figure/Image No: 6 Ends here %%%%%%%%%%%%%%%%%%%%
-
-
-
-%%%%%%%%%%%%%%%%%%%% Figure/Image No: 7 starts here %%%%%%%%%%%%%%%%%%%%
-
-\begin{figure}
-	\includegraphics[width=\textwidth]{image7.png}
-	\caption{Reliability diagram for the Dst prediction depending on the sigma value. The diagonal is in red dot line.}
-	\label{fig:gpnnreliabilitysigma}	
-\end{figure}
-
-
-%%%%%%%%%%%%%%%%%%%% Figure/Image No: 7 Ends here %%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%% Figure/Image No: 8 starts here %%%%%%%%%%%%%%%%%%%%
-
-\begin{figure}
-	\includegraphics[width=\textwidth]{halloween_storm_GPNN.pdf}
-	\caption{$\mathrm{Dst}$ predictions made by the GPNN for the 2003 Halloween storm. 
-	The most probable prediction is the dotted purple line. 
-	The ground truth $\mathrm{Dst}$ is the deep blue line. 
-	The grey shadow represents $\pm\sigma$ error bars on the prediction.}
-    \label{fig:gpnnhalloween}
-\end{figure}
-
-
-%%%%%%%%%%%%%%%%%%%% Figure/Image No: 8 Ends here %%%%%%%%%%%%%%%%%%%%
 
 
 \begin{table}[h]

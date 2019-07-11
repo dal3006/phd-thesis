@@ -21,7 +21,7 @@ ggplot(rmseres, aes(x=hour, y=value, fill=model)) +
   theme_gray(base_size = 20) +
   scale_fill_viridis_d(
     name = "Model", 
-    labels = c("Bala & Reiff 2012", "GPNN", "GPNN - GPS", "Lazzus et. al 2017", "Persistence", "Wu & Lundstedt 1997"), 
+    labels = c("Bala & Reiff 2012", "LSTM-Dst", "LSTM-Dst-GPS", "Lazzus et. al 2017", "Persistence", "Wu & Lundstedt 1997"), 
     alpha = 1.) +
   theme(legend.position="top", legend.direction = "horizontal") +
   scale_x_discrete(
@@ -42,7 +42,7 @@ ggplot(ccres, aes(x=as.factor(as.character(hour)), y=value, fill=model)) +
   theme_gray(base_size = 20) +
   scale_fill_viridis_d(
     name = "Model", 
-    labels = c("Bala & Reiff 2012", "GPNN", "GPNN - GPS", "Lazzus et. al 2017", "Persistence", "Wu & Lundstedt 1997"), 
+    labels = c("Bala & Reiff 2012", "LSTM-Dst", "LSTM-Dst-GPS", "Lazzus et. al 2017", "Persistence", "Wu & Lundstedt 1997"), 
     alpha = 1.) +
   theme(legend.position="top", legend.direction = "horizontal") +
   coord_cartesian(ylim = c(0.7, 1)) +
