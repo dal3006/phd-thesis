@@ -1,4 +1,33 @@
-\chapter{Multiple Step Ahead Forecasting of the Disturbance Storm Time Index: The GPNN Model}\label{chapter:dst_msa}
+\chapter{Multiple Step Ahead Forecasts of the Disturbance Storm Time Index: The GPNN Model}\label{chapter:dst_msa}
+
+\small{
+	In this study, we present a method that combines a \emph{long short-term memory} (LSTM) recurrent neural network with a Gaussian process (GP) 
+	model to provide up to 6-hr-ahead probabilistic forecasts of the Dst geomagnetic index. The proposed approach brings together the 
+	sequence modeling capabilities of a recurrent neural network with the error bars and confidence bounds provided by a GP. Our model is 
+	trained using the hourly OMNI and Global Positioning System (GPS) databases, both of which are publicly available. We first develop a 
+	LSTM network to get a single-point prediction of Dst. This model yields great accuracy in forecasting the Dst index from one to six hours ahead, 
+	with a correlation coefficient always higher than $0.873$ and a root-mean-square error lower than $\SI{9.86}{\nano\tesla}$. However, even 
+	if global metrics show excellent performance, it remains poor in predicting superstorms ($\mathrm{Dst} \leq \SI{-250}{\nano\tesla}$) six hours 
+	in advance. To improve it and to obtain probabilistic forecasts, we combine the LSTM model obtained with a GP and evaluate the hybrid predictor 
+	using the receiver operating characteristic curve and the reliability diagram. We conclude that this hybrid methodology provides improvements 
+	in the forecast of geomagnetic storms.
+
+}
+	
+\vspace{5pt}
+%\hrule
+\vspace{6pt}
+\vfill
+
+\noindent
+	\parbox{\textwidth}{%
+		\small This chapter is based on the following:\\
+
+		\small \textbf{Article}:\\
+		\small \bibentry{doi:10.1029/2018SW001898}
+    }%
+
+\clearpage
 
 \section{Introduction}
 
