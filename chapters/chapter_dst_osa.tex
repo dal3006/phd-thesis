@@ -5,22 +5,21 @@
 
 The magnetosphere's dynamics and its associated solar wind driver form a complex dynamical system. It is therefore instructive and greatly simplifying to use representative indices to quantify the state of geomagnetic activity.
 
-Geomagnetic indices come in various forms, they may take continuous or discrete values and may be defined with varying time resolutions. Their values are often calculated by averaging or combining a number of readings taken by instruments, usually magnetometers, around the Earth. Each geomagnetic index is a proxy for a particular kind of phenomenon. Some popular indices are the $\text{\text{Kp}}$, $\text{Dst}$ and the $\text{AE}$ index.
+Geomagnetic indices come in various forms, they may take continuous or discrete values and may be defined with varying time resolutions. Their values are often calculated by averaging or combining a number of readings taken by instruments, usually magnetometers, around the Earth. Each geomagnetic index is a proxy for a particular kind of phenomenon. Some popular indices are the $\mathrm{Kp}$, $\mathrm{Dst}$ and the $\mathrm{AE}$ index.
 
 
 \begin{enumerate}
-    \item $\text{Kp}$: The Kp-index is a discrete valued global geomagnetic activity index and is based on 3 hour measurements of the K-indices \citep{Bartels}. The K-index itself is a three hour long quasi-logarithmic local index of the geomagnetic activity, relative to a calm day curve for the given location.
+    \item $\mathrm{Kp}$: The Kp-index is a discrete valued global geomagnetic activity index and is based on 3 hour measurements of the K-indices \citep{Bartels}. The K-index itself is a three hour long quasi-logarithmic local index of the geomagnetic activity, relative to a calm day curve for the given location.
     
-    \item $\text{AE}$: The Auroral Electrojet Index, $\text{AE}$, is designed to provide a global, quantitative measure of auroral zone magnetic activity produced by enhanced Ionospheric currents flowing below and within the auroral oval \citep{AEIndex}. It is a continuous index which is calculated every hour.
+    \item $\mathrm{AE}$: The Auroral Electrojet Index, $\mathrm{AE}$, is designed to provide a global, quantitative measure of auroral zone magnetic activity produced by enhanced Ionospheric currents flowing below and within the auroral oval \citep{AEIndex}. It is a continuous index which is calculated every hour.
     
-    \item $\text{Dst}$: A continuous hourly index which gives a measure of the weakening or strengthening of the Earth's equatorial magnetic field due to particle injection in the magnetosphere. Particle injection has a number of sources such as, weakening or strengthening of the ring currents and the geomagnetic storms \citep{DesslerAndParker}, near Earth cross tail current \citep{ganushkina2004long,angeo-28-123-2010}, partial ring current 
-    \citep{JGRA:JGRA15878}, substorm current wedge \citep{JGRA:JGRA15211}, magnetopause current, etc . 
+    \item $\mathrm{Dst}$: A continuous hourly index which gives a measure of the weakening or strengthening of the Earth's equatorial magnetic field due to particle injection in the magnetosphere. Particle injection has a number of sources such as, weakening or strengthening of the ring currents and the geomagnetic storms \citep{DesslerAndParker}, near Earth cross tail current \citep{ganushkina2004long,angeo-28-123-2010}, partial ring current \citep{JGRA:JGRA15878}, substorm current wedge \citep{JGRA:JGRA15211}, magnetopause current, etc . 
 \end{enumerate}
 
 %Talk about Burton and friends
-For the present study, we focus on prediction of the hourly $\text{Dst}$ index which is a straightforward indicator of geomagnetic storms. More specifically, we focus on the \emph{one step ahead} (OSA) (in this case one hour ahead) prediction of $\text{Dst}$ because it is the simplest model towards building long term predictions of geomagnetic response of the Earth to changing space weather conditions. 
+For the present study, we focus on prediction of the hourly $\mathrm{Dst}$ index which is a straightforward indicator of geomagnetic storms. More specifically, we focus on the \emph{one step ahead} (OSA) (in this case one hour ahead) prediction of $\mathrm{Dst}$ because it is the simplest model towards building long term predictions of geomagnetic response of the Earth to changing space weather conditions. 
 
-The $\text{Dst}$ OSA prediction problem has been the subject of several modeling efforts in the literature. One of the earliest models has been presented by \citet{JGR:JGR10260} who calculated $\text{Dst}(t)$ as the solution of an \emph{Ordinary Differential Equation} (ODE) which expressed the rate of change of $\text{Dst}(t)$ as a combination of two terms: decay and injection $\frac{d}{dt} \text{Dst}(t) = Q(t) - \frac{\text{Dst}(t)}{\tau}$, where $Q(t)$ relates 
+The $\mathrm{Dst}$ OSA prediction problem has been the subject of several modeling efforts in the literature. One of the earliest models has been presented by \citet{JGR:JGR10260} who calculated $\mathrm{Dst}(t)$ as the solution of an \emph{Ordinary Differential Equation} (ODE) which expressed the rate of change of $\mathrm{Dst}(t)$ as a combination of two terms: decay and injection $\frac{d}{dt} \mathrm{Dst}(t) = Q(t) - \frac{\mathrm{Dst}(t)}{\tau}$, where $Q(t)$ relates 
 to the particle injection from the plasma sheet into the inner magnetosphere. 
 
 The \citet{JGR:JGR10260} model has proven to be very influential particularly due to its simplicity. Many subsequent works have modified the proposed ODE by proposing alternative expressions for the injection term $Q(t)$ 
@@ -28,33 +27,38 @@ The \citet{JGR:JGR10260} model has proven to be very influential particularly du
 for the injection and decay terms in Burton's equation.
 
 %Talk about NARMAX Dst
-Another important empirical model used to predict $ \text{Dst}$ is the \emph{Nonlinear Auto-Regessive Moving Average with eXogenous inputs} (NARMAX) methodology developed in \citet{doi:10.1080/00207178908559767,GRL:GRL13494,GRL:GRL20944,JGRA:JGRA18657,balikhin:narmax,JGRA:JGRA20661,JGRA:JGRA50192}. The NARMAX methodology builds models by constructing polynomial expansions of inputs and determines the best combinations of monomials to include in the refined model by using a criterion called the \emph{error reduction ratio} (ERR). The parameters of the so called NARMAX OLS-ERR model are calculated by solving the \emph{ordinary least squares} (OLS) problem arising from a quadratic objective function. It must be noted that the NARMAX methodology is not limited to polynomial functions, rather any set of basis function expansions can be used with it, such as radial basis functions, wavelets etc \citep{doi:10.1080/00207720600903011,JGRA:JGRA17327}. The reader may refer to \citet{billings2013nonlinear} for a detailed exposition of the NARMAX methodology.
+Another important empirical model used to predict $ \mathrm{Dst}$ is the \emph{Nonlinear Auto-Regessive Moving Average with eXogenous inputs} (NARMAX) methodology developed in \citet{doi:10.1080/00207178908559767,GRL:GRL13494,GRL:GRL20944,JGRA:JGRA18657,balikhin:narmax,JGRA:JGRA20661,JGRA:JGRA50192}. The NARMAX methodology builds models by constructing polynomial expansions of inputs and determines the best combinations of monomials to include in the refined model by using a criterion called the \emph{error reduction ratio} (ERR). The parameters of the so called NARMAX OLS-ERR model are calculated by solving the \emph{ordinary least squares} (OLS) problem arising from a quadratic objective function. It must be noted that the NARMAX methodology is not limited to polynomial functions, rather any set of basis function expansions can be used with it, such as radial basis functions, wavelets etc \citep{doi:10.1080/00207720600903011,JGRA:JGRA17327}. The reader may refer to \citet{billings2013nonlinear} for a detailed exposition of the NARMAX methodology.
 
 %Talk about neural networks
-Yet another family of forecasting methods is based on \emph{Artificial Neural Networks} (ANN) that have been a popular choice for building predictive models. Researchers have employed both the standard \emph{feed forward} and the more specialized \emph{recurrent} architectures. \citet{Lund} proposed an \emph{Elman} recurrent network architecture called Lund $\text{Dst}$, which used the solar wind velocity, \emph{interplanetary magnetic field} (IMF) and historical $\text{Dst}$ data as inputs. \citet{JGRA:JGRA17461} used recurrent neural networks to predict $\text{Kp}$. 
-\citet{SWE:SWE286} originally proposed a \emph{feed forward} network for predicting the $\text{Kp}$ index which used the \emph{Boyle coupling function} \citet{boyle1997empirical}. The same architecture is adapted for prediction of $\text{Dst}$ in \citet{SWE:SWE286}, popularly known as the Rice $\text{Dst}$ model. \citet{pallocchia:hal-00318011} proposed a \emph{neural network} model called EDDA to predict $\text{Dst}$ using only the IMF data.
+Yet another family of forecasting methods is based on \emph{Artificial Neural Networks} (ANN) that have been a popular choice for building predictive models. Researchers have employed both the standard \emph{feed forward} and the more specialized \emph{recurrent} architectures. \citet{Lund} proposed an \emph{Elman} recurrent network architecture called Lund $\mathrm{Dst}$, which used the solar wind velocity, \emph{interplanetary magnetic field} (IMF) and historical $\mathrm{Dst}$ data as inputs. \citet{JGRA:JGRA17461} used recurrent neural networks to predict $\mathrm{Kp}$. 
+\citet{SWE:SWE286} originally proposed a \emph{feed forward} network for predicting the $\mathrm{Kp}$ index which used the \emph{Boyle coupling function} \citet{boyle1997empirical}. The same architecture is adapted for prediction of $\mathrm{Dst}$ in \citet{SWE:SWE286}, popularly known as the Rice $\mathrm{Dst}$ model. \citet{pallocchia:hal-00318011} proposed a \emph{neural network} model called EDDA to predict $\mathrm{Dst}$ using only the IMF data.
 
 %Local neurofuzzy modelling and singular spectrum analysis.
-Apart from the NARMAX and neural network approaches, fuzzy methods have also been applied for $\text{Dst}$ prediction, \citet{SWE:SWE146} and \citet{Sharifi2006} outline the application of \emph{Local Neurofuzzy} models for one hour and two hour predictions of $\text{Dst}$ respectively. Local neuro-fuzzy models reduce the input space into a number of regions each with its own expert predictor. The combined model predicts $\text{Dst}$ for a new point as a linear combinations of the predictions from each expert weighted by a fuzzy score signifying the importance of each model for the provided input. For improving predictive performance of two hour $\text{Dst}$ forecasts in \citet{Sharifi2006}, the authors use \emph{singular spectrum analysis} (SSA). Singular spectrum analysis consists of extracting orthogonal components from a lagged time series, it is equivalent to \emph{principal component analysis} (PCA) which is quite extensively used in the machine learning community. \citet{loskutov2001testing} and \citet{loskutov2001study} provide a good background to the theory and application of SSA to geomagnetic time series.
+Apart from the NARMAX and neural network approaches, fuzzy methods have also been applied for $\mathrm{Dst}$ prediction, \citet{SWE:SWE146,Sharifi2006} outline the application of \emph{local neurofuzzy} models for one hour and two hour predictions of $\mathrm{Dst}$ respectively. Local neuro-fuzzy models reduce the input space into a number of regions each with its own expert predictor. The combined model predicts $\mathrm{Dst}$ for a new point as a linear combinations of the predictions from each expert weighted by a fuzzy score signifying the importance of each model for the provided input. For improving predictive performance of two hour 
+$\mathrm{Dst}$ forecasts in \citet{Sharifi2006}, the authors use \emph{singular spectrum analysis} (SSA). Singular spectrum analysis consists of extracting orthogonal components from a lagged time series, it is equivalent to \emph{principal component analysis} (PCA) which is quite extensively used in the machine learning community. \citet{loskutov2001testing,loskutov2001study} provide a good background to the theory and application of SSA to geomagnetic time series.
 
 %Talk about need for probabilistic forecasts.
-Although much research has been done on prediction of the $\text{Dst}$ index, much less has been done on probabilistic forecasting of $\text{Dst}$. One such work described in \citet{McPherron:2013} involves identification of high speed solar wind streams using the WSA model (see \citet{WSAModel}), using predictions of high speed streams to construct ensembles of $\text{Dst}$ trajectories which yield the quartiles of $\text{Dst}$ time series. 
+Although much research has been done on prediction of the $\mathrm{Dst}$ index, much less has been done on probabilistic forecasting of $\mathrm{Dst}$. One such work described in \citet{McPherron:2013} involves identification of high speed solar wind streams using the WSA model \citep{WSAModel}, using predictions of high speed streams to construct ensembles of $\mathrm{Dst}$ trajectories which yield the quartiles of 
+$\mathrm{Dst}$ time series. 
 
 A simple way to construct error bars on the predictions of forecasting models is by using the so called \textit{past cast} performance i.e. by calculating the standard deviations of the predictions generated by the model on a hold out data set. One limitation of such an approach is that the variance of the model predictions is computed once and for all. It does not adapt according to the inputs provided to the model. This may lead to overestimation or underestimation of the uncertainty around a given prediction, depending on the prevelant geo-magnetic conditions and the data set used to calculate the \textit{past cast} model performance.
 
-In this work we propose a technique for probabilistic forecasting of $\text{Dst}$, which yields a predictive distribution as a closed form expression. Our models take as input past values of $\text{Dst}$, solar wind speed and the \textit{z} component of the \emph{Interplanetary Magnetic Field} (IMF) and output a Gaussian distribution with a specific mean and variance as the OSA prediction of the $\text{Dst}$. 
+In this work we propose a technique for probabilistic forecasting of $\mathrm{Dst}$, which yields a predictive distribution as a closed form expression. Our models take as input past values of $\mathrm{Dst}$, solar wind speed and the \textit{z} component of the \emph{Interplanetary Magnetic Field} (IMF) and output a Gaussian distribution with a specific mean and variance as the OSA prediction of the $\mathrm{Dst}$. 
 
-We use the \emph{Gaussian Process Regression} methodology to construct auto-regressive models for $ \text{Dst}$ and show how to perform exact inference in this framework. We further outline a methodology to perform model selection with respect to its free parameters and time histories.
+We use the \emph{Gaussian Process Regression} methodology to construct auto-regressive models for $ \mathrm{Dst}$ and show how to perform exact inference in this framework. We further outline a methodology to perform model selection with respect to its free parameters and time histories.
 
-The remainder of this paper is organised as follows: Section \ref{sec:osaGPmethod} gives the reader an overview of the history of \emph{Gaussian Process} models as well as how they are formulated and how to perform inference with them. Sections \ref{sec:osa}, \ref{sec:modeltraining} describe the GP-AR and GP-ARX models for OSA prediction of $ \text{Dst}$ and how to choose their free parameters for better performance. 
+The remainder of this paper is organised as follows: Section \ref{sec:osaGPmethod} gives the reader an overview of the history of \emph{Gaussian Process} models as well as how they are formulated and how to perform inference with them. Sections \ref{sec:osa}, \ref{sec:modeltraining} describe the GP-AR and GP-ARX models for OSA prediction of $ \mathrm{Dst}$ and how to choose their free parameters for better performance. 
 
 \section{Methodology: Gaussian Process} \label{sec:osaGPmethod}
 
-\emph{Gaussian Processes} first appeared in machine learning research in \citet{Neal:1996:BLN:525544}, as the limiting case of Bayesian inference performed on neural networks with infinitely many neurons in the hidden layers. Although their inception in the machine learning community is recent, their origins can be traced back to the geo-statistics research community where they are known as \emph{Kriging} methods (\citet{krige1951statistical}). In pure mathematics area \emph{Gaussian Processes} have been studied extensively and their existence was first proven by Kolmogorov's extension theorem (\citet{tao2011introduction}). The reader is referred to \citet{Rasmussen:2005:GPM:1162254} for an in depth treatment of Gaussian Processes in machine learning.
+\emph{Gaussian Processes} first appeared in machine learning research in \citet{Neal:1996:BLN:525544}, as the limiting case of Bayesian inference performed on neural networks with infinitely many neurons in the hidden layers. Although their inception in the machine learning community is recent, their origins can be traced back to the geo-statistics research community where they are known as \emph{Kriging} methods 
+\citep{krige1951statistical}. In pure mathematics area \emph{Gaussian Processes} have been studied extensively and their existence was first proven by Kolmogorov's extension theorem \citep{tao2011introduction}. 
+The reader is referred to \citet{Rasmussen:2005:GPM:1162254} for an in depth treatment of Gaussian Processes in machine learning.
 
 Let us assume that we want to model a process in which a scalar quantity $y$ is specified as $y = f(\mathbf{x}) + \epsilon$ where   $f(.): \mathbb{R}^d \rightarrow \mathbb{R}$ is an unknown scalar function of a multidimensional input vector $\mathbf{x} \in \mathbb{R}^d$, $d$ is the dimensionality of the input space, and $\epsilon \sim \mathcal{N}(0, \sigma^2)$ is zero mean Gaussian noise with variance $\sigma^2$.
 
-A set of labeled data points ${(\mathbf{x}_i, y_i); i = 1 \cdots N}$ can be conveniently expressed by a $N \times d$ data matrix $\mathbf{X}$ and a $N \times 1$ response vector $\mathbf{y}$, as shown in equations (\ref{eq:feat}) and (\ref{eq:labels}).
+A set of labeled data points ${(\mathbf{x}_i, y_i); i = 1 \cdots N}$ can be conveniently expressed by a $N \times d$ data matrix $\mathbf{X}$ and a $N \times 1$ response vector $\mathbf{y}$, as shown in equations 
+\cref{eq:feat,eq:labels}.
 
 \begin{align}
   \mathbf{X}  = & \left( \begin{array}{c} \mathbf{x}^{T}_1 \\ \mathbf{x}^{T}_2 \\ \vdots \\ \mathbf{x}^{T}_N \end{array} \right)_{N \times d} \label{eq:feat} \\
@@ -176,43 +180,43 @@ The objective function $Q(\theta)$ in the general case can have multiple local m
 
 \section{One Step Ahead Prediction} \label{sec:osa}
 
-Below in equations (\ref{eq:Dst}) - (\ref{eq:DstGP}) we outline a \emph{Gaussian Process} formulation for \emph{OSA} prediction of $ \text{Dst}$. A vector of features $\mathbf{x}_{t-1}$ is used as input to an unknown function $f(\mathbf{x}_{t-1})$.
+Below in equations (\ref{eq:Dst}) - (\ref{eq:DstGP}) we outline a \emph{Gaussian Process} formulation for \emph{OSA} prediction of $ \mathrm{Dst}$. A vector of features $\mathbf{x}_{t-1}$ is used as input to an unknown function $f(\mathbf{x}_{t-1})$.
 
-The features $ \mathbf{x}_{t-1}$ can be any collection of quantities in the hourly resolution OMNI data set. Generally $\mathbf{x}_{t-1}$ are time histories of $\text{Dst}$ and other important variables such as plasma pressure $p(t)$, solar wind speed $V(t)$, $z$ component of the interplanetary magnetic field $B_z(t)$.
+The features $ \mathbf{x}_{t-1}$ can be any collection of quantities in the hourly resolution OMNI data set. Generally $\mathbf{x}_{t-1}$ are time histories of $\mathrm{Dst}$ and other important variables such as plasma pressure $p(t)$, solar wind speed $V(t)$, $z$ component of the interplanetary magnetic field $B_z(t)$.
 
 
 \begin{align}
-    \text{Dst}(t) & =  f(\mathbf{x}_{t-1}) + \epsilon \label{eq:Dst} \\
+    \mathrm{Dst}(t) & =  f(\mathbf{x}_{t-1}) + \epsilon \label{eq:Dst} \\
     \epsilon & \sim  \mathcal{N}(0, \sigma^2) \label{eq:GPNoise} \\
     f(x_t) & \sim  \mathcal{GP}(m(\mathbf{x}_t), K_{\text{osa}}(\mathbf{x}_t, \mathbf{x}_s)) \label{eq:DstGP}
 \end{align}
 
-We consider two choices for the input features $ \mathbf{x}_{t-1}$ leading to two variants of \emph{Gaussian Process} regression for $\text{Dst}$ time series prediction.
+We consider two choices for the input features $ \mathbf{x}_{t-1}$ leading to two variants of \emph{Gaussian Process} regression for $\mathrm{Dst}$ time series prediction.
 
 \subsection{Gaussian Process Auto-Regressive (GP-AR)} \label{sec:gpar}
 
-The simplest auto-regressive models for \emph{OSA} prediction of $\text{Dst}$ are those that use only the history of $\text{Dst}$ to construct input features for model training. The input features $\mathbf{x}_{t-1}$ at each time step are the history of $\text{Dst}(t)$ until a time lag of $p$ hours.
+The simplest auto-regressive models for \emph{OSA} prediction of $\mathrm{Dst}$ are those that use only the history of $\mathrm{Dst}$ to construct input features for model training. The input features $\mathbf{x}_{t-1}$ at each time step are the history of $\mathrm{Dst}(t)$ until a time lag of $p$ hours.
 
 \begin{align*}
-    \mathbf{x}_{t-1} = & \left(\text{Dst}(t-1), \cdots , \text{Dst}(t-p+1)\right)
+    \mathbf{x}_{t-1} = & \left(\mathrm{Dst}(t-1), \cdots , \mathrm{Dst}(t-p+1)\right)
 \end{align*}
 
 \subsection{Gaussian Process Auto-Regressive with eXogenous inputs (GP-ARX)} \label{sec:gparx}
 
-Auto-regressive models can be augmented by including exogenous quantities in the inputs $ \mathbf{x}_{t-1}$ at each time step, in order to improve predictive accuracy. While modeling $\text{Dst}$ using the OMNI data, one must choose which solar wind quantities to include in the exogenous inputs of the predictive model. This choice is not straight forward and eventually requires a compromise between including important solar wind quantities and keeping the input space managable in the interest of simplicity.
+Auto-regressive models can be augmented by including exogenous quantities in the inputs $ \mathbf{x}_{t-1}$ at each time step, in order to improve predictive accuracy. While modeling $\mathrm{Dst}$ using the OMNI data, one must choose which solar wind quantities to include in the exogenous inputs of the predictive model. This choice is not straight forward and eventually requires a compromise between including important solar wind quantities and keeping the input space managable in the interest of simplicity.
 
 \subsubsection{Choice of Solar Wind Inputs}
 
-$ \text{Dst}$ gives a measure of ring currents, which are modulated by plasma sheet particle injections into the inner magnetosphere during sub-storms. Studies have shown that the substorm occurrence rate increases with solar wind velocity (high speed streams) \citet{Kissinger2011,Newell2016}. Prolonged southward interplanetary magnetic field (IMF) $z$-component ($B_z$) is needed for sub-storms to occur \citep{McPherron1986}. An increase in the solar wind electric field, $V_{\text{sw}}B_z$, can increase the dawn-dusk electric field in the magnetotail, which in turn determines the amount of plasma sheet particle that move to the inner magnetosphere \citet{Friedel2001}. 
+$ \mathrm{Dst}$ gives a measure of ring currents, which are modulated by plasma sheet particle injections into the inner magnetosphere during sub-storms. Studies have shown that the substorm occurrence rate increases with solar wind velocity (high speed streams) \citet{Kissinger2011,Newell2016}. Prolonged southward interplanetary magnetic field (IMF) $z$-component ($B_z$) is needed for sub-storms to occur \citep{McPherron1986}. An increase in the solar wind electric field, $V_{\text{sw}}B_z$, can increase the dawn-dusk electric field in the magnetotail, which in turn determines the amount of plasma sheet particle that move to the inner magnetosphere \citet{Friedel2001}. 
 
 Apart from $V$ and $B_z$, other quantities which have been shown to correlate with geomagnetic activity are solar wind dynamic pressure $P$, clock angle $tan \theta = \frac{B_y}{B_z}$, Akasofu $\epsilon$ \citep{1986AkasofuE} and solar wind magnetosphere coupling functions \citep{JGRA:JGRA21451}. 
 
 Although solar wind magnetospheric coupling functions have been shown to have correlation with geomagnetic indices, they are expressed in terms of $V$ and $B_z$, and hence we do not include them as explicit inputs to the model. \emph{Gaussian Process} models derive their strength from automatic feature construction achieved by the covariance functions (interested readers may refer to chapters 6 and 7  in \citet{Rasmussen:2005:GPM:1162254}). As long as coupling functions can be approximated in the \emph{eigenspace} of the covariance function we need not make them explicit in the input features. 
 
-Therefore, our exogenous parameters consist of solar wind velocity $ V_{\text{sw}}$ and IMF $B_z$. In this model we choose distinct time lags $p$, $p_{v}$ and $p_{b}$ for $\text{Dst}$, $V$ and $B_z$ respectively.
+Therefore, our exogenous parameters consist of solar wind velocity $ V_{\text{sw}}$ and IMF $B_z$. In this model we choose distinct time lags $p$, $p_{v}$ and $p_{b}$ for $\mathrm{Dst}$, $V$ and $B_z$ respectively.
     
 \begin{align*}
-       \mathbf{x}_{t-1} & = (\text{Dst}(t-1), \cdots , \text{Dst}(t-p+1), \\
+       \mathbf{x}_{t-1} & = (\mathrm{Dst}(t-1), \cdots , \mathrm{Dst}(t-p+1), \\
         & \ \ \ \ \  V_{\text{sw}}(t-1), \cdots, V_{\text{sw}}(t-p_{v}+1),\\
         & \ \ \ \ \  B_{z}(t-1), \cdots, B_{z}(t-p_{b}+1))
 \end{align*}
@@ -221,9 +225,10 @@ It is an important question as to how unaccounted inputs such as solar wind dyna
 
 \subsection{Choice of Mean Function}
 
-Mean functions in GPR models encode trends in the data, they are the baseline predictions the model falls back to in case the training and test data have little correlation as predicted by the kernel function. If there is no prior knowledge about the function to be approximated, \citet{Rasmussen:2005:GPM:1162254} state that it is perfectly reasonable to choose $ m(\mathbf{x} = 0)$ as the mean function, as long as the target values are normalized. In the case of the $\text{Dst}$ time series, it is known that the so called \emph{persistence model} $\hat{D}st(t) = Dst(t-1)$ has high correlation with \emph{OSA} $\text{Dst}$. Due to its simplicity, we choose the \emph{persistence model} as the prior mean function in our OSA Dst models. 
+Mean functions in GPR models encode trends in the data, they are the baseline predictions the model falls back to in case the training and test data have little correlation as predicted by the kernel function. If there is no prior knowledge about the function to be approximated, \citet{Rasmussen:2005:GPM:1162254} state that it is perfectly reasonable to choose $ m(\mathbf{x} = 0)$ as the mean function, as long as the target values are normalized. In the case of the $\mathrm{Dst}$ time series, it is known that the so called \emph{persistence model} 
+$\mathrm{\hat{D}st}(t) = \mathrm{Dst}(t-1)$ has high correlation with \emph{OSA} $\mathrm{Dst}$. Due to its simplicity, we choose the \emph{persistence model} as the prior mean function in our OSA Dst models. 
 
-The \emph{persistence model} can be described as \emph{Markovian} prediction mechanism, when it is chosen as the prior mean of the GP-AR and GP-ARX model, it is indeed the case that the prior probability distribution of $ \text{Dst}(t)$ is Gaussian with a strong \emph{Markovian} behavior $P(\text{Dst}(t)|\mathbf{x}_t) \sim \mathcal{N}(Dst(t-1), \sqrt{K_{\text{osa}}(\mathbf{x}_t, \mathbf{x}_t)})$, but the posterior predictive distribution of $\text{Dst}(t)$ conditional on the model training data (given in equation \ref{eq:posteriormean}) is non-\emph{Markovian} due its dependence on the term denoted by $\mathbf{K}_{*}$ which contains kernel values computed between the test data and training data features. Thus the GP-AR and GP-ARX models when used conditional on training data are non-\emph{Markovian} predictive models.
+The \emph{persistence model} can be described as \emph{Markovian} prediction mechanism, when it is chosen as the prior mean of the GP-AR and GP-ARX model, it is indeed the case that the prior probability distribution of $ \mathrm{Dst}(t)$ is Gaussian with a strong \emph{Markovian} behavior $P(\mathrm{Dst}(t)|\mathbf{x}_t) \sim \mathcal{N}(\mathrm{Dst}(t-1), \sqrt{K_{\text{osa}}(\mathbf{x}_t, \mathbf{x}_t)})$, but the posterior predictive distribution of $\mathrm{Dst}(t)$ conditional on the model training data (given in equation \ref{eq:posteriormean}) is non-\emph{Markovian} due its dependence on the term denoted by $\mathbf{K}_{*}$ which contains kernel values computed between the test data and training data features. Thus the GP-AR and GP-ARX models when used conditional on training data are non-\emph{Markovian} predictive models.
 
 \subsection{Choice of Kernel}
 
@@ -239,7 +244,7 @@ In this study, we construct Gaussian Process regression models with a combinatio
 
 \subsection*{Training}
 
-We selected OMNI data sections 00:00 January 3 2010 to 23:00 January 23 2010 and 20:00 August 5 2011 to 22:00 August 6 2011 for training the GP-AR and GP-ARX models. The first training data section consists of ambient fluctuations of $ \text{Dst}$ while the second contains a geomagnetic storm.
+We selected OMNI data sections 00:00 January 3 2010 to 23:00 January 23 2010 and 20:00 August 5 2011 to 22:00 August 6 2011 for training the GP-AR and GP-ARX models. The first training data section consists of ambient fluctuations of $ \mathrm{Dst}$ while the second contains a geomagnetic storm.
 
 The computational complexity of calculation of the predictive distribution is $O(N^3)$, as discussed in section \ref{sec:inference}. This can limit the size of the covariance matrix constructed from the training data. Note that this computation overhead is paid for every unique assignment to the model hyper-parameters. However, our chosen training set has a size of 243 which is still very much below the computational limits of the method and in our case solving equation \ref{eq:posteriormean} on a laptop computer takes less than a second for the training set considered in our analysis. 
 
@@ -260,15 +265,15 @@ For measuring performance of model instances on the validation set storm events,
 \begin{enumerate}
     \item The mean absolute error.
     \begin{equation}
-        MAE = \sum_{t=1}^{n} \left |(\text{Dst}(t) - \hat{D}st(t)) \right | / n
+        \mathrm{MAE} = \sum_{t=1}^{n} \left |(\mathrm{Dst}(t) - \mathrm{\hat{D}st}(t)) \right | / n
     \end{equation}
     \item The root mean square error.
     \begin{equation}
-        RMSE = \sqrt{\sum_{t=1}^{n} (\text{Dst}(t) - \hat{D}st(t))^2 / n}
+        \mathrm{RMSE} = \sqrt{\sum_{t=1}^{n} (\mathrm{Dst}(t) - \mathrm{\hat{D}st}(t))^2 / n}
     \end{equation}
-    \item Correlation coefficient between the predicted and actual value of $ \text{Dst}$.
+    \item Correlation coefficient between the predicted and actual value of $ \mathrm{Dst}$.
     \begin{equation}
-        CC = Cov(Dst, \hat{D}st)/\sqrt{Var(Dst) Var(\hat{D}st)}
+        \mathrm{CC} = \Cov(\mathrm{Dst}, \mathrm{\hat{D}st})/\sqrt{\Var(\mathrm{Dst}) \Var(\mathrm{\hat{D}st})}
     \end{equation}
 \end{enumerate}
 
@@ -277,7 +282,8 @@ In the case of GP-AR we let the model order $p$ vary from $5$ to $12$ while for 
 
 \subsection*{Evaluation}\label{sec:gpOSAEval}
 
-After selecting the best performing GP-AR and GP-ARX models in the validation phase, we test and compare the performance of these models with the predictions generated from the \emph{persistence model} $ \hat{D}st(t) = \text{Dst}(t-1)$, on a set of 63 storm events occurring between 1998 and 2006 as given in Table \ref{table:teststorms}, which is the same list of storm events as used in \citet{Ji2012}.
+After selecting the best performing GP-AR and GP-ARX models in the validation phase, we test and compare the performance of these models with the predictions generated from the \emph{persistence model} 
+$\mathrm{\hat{D}st}(t) = \mathrm{Dst}(t-1)$, on a set of 63 storm events occurring between 1998 and 2006 as given in Table \ref{table:teststorms}, which is the same list of storm events as used in \citet{Ji2012}.
 
 
 \section{Results}\label{sec:res}
@@ -294,18 +300,18 @@ Figures \ref{fig:ComparePred1}, \ref{fig:ComparePred2} and \ref{fig:ComparePred3
 
 \section{Conclusions}
 
-In this paper, we describe a flexible and expressive methodology for generating probabilistic forecasts of the $ \text{Dst}$ index. We proposed two \emph{Gaussian Process} auto-regressive models, \emph{GP-ARX} and \emph{GP-AR}, to generate hourly predictions and their associated error bars. We also describe how to carry out model selection and validation of GP-AR and GP-ARX models.
+In this paper, we describe a flexible and expressive methodology for generating probabilistic forecasts of the $ \mathrm{Dst}$ index. We proposed two \emph{Gaussian Process} auto-regressive models, \emph{GP-ARX} and \emph{GP-AR}, to generate hourly predictions and their associated error bars. We also describe how to carry out model selection and validation of GP-AR and GP-ARX models.
 
 
 Our results can be summarized as follows.
 \begin{enumerate}
-      \item \emph{Persistence} model plays an important role in the model building and evaluation process in the context of \emph{one step ahead} prediction of the $ \text{Dst}$ index. Although it is not a robust predictor for the onset of intense geomagnetic storms, the \emph{persistence model} performs well on classical error metrics such as \emph{root mean square error} and such. From the considerations above, it is quite evident that classical performance metrics are not adequate for model evaluation, nevertheless in space weather literature, metrics such as \emph{RMSE} are very commonly used to compare predictive performance of models. Although not the research focus of this study, we note that there exists a need for the formulation of more informative performance metrics for measurement of predictive performance of geomagnetic predictive models.
+      \item \emph{Persistence} model plays an important role in the model building and evaluation process in the context of \emph{one step ahead} prediction of the $ \mathrm{Dst}$ index. Although it is not a robust predictor for the onset of intense geomagnetic storms, the \emph{persistence model} performs well on classical error metrics such as \emph{root mean square error} and such. From the considerations above, it is quite evident that classical performance metrics are not adequate for model evaluation, nevertheless in space weather literature, metrics such as \emph{RMSE} are very commonly used to compare predictive performance of models. Although not the research focus of this study, we note that there exists a need for the formulation of more informative performance metrics for measurement of predictive performance of geomagnetic predictive models.
       
       \item \emph{Gaussian Process} AR and ARX models give encouraging benefits in OSA prediction. Leveraging the strengths of the Bayesian approach, they are able to learn robust predictors from data. If one considers the size of the data used in our study, one can appreciate that the models presented here need relatively small training and validations sets: the training set contains 243 instances, while the validation set contains 782 instances.
       
       \item Since the GP models generate predictive distributions for test data and not just point predictions they lend themselves to the requirements of space weather prediction very well because of the need to generate error bars on predictions.
       
-      \item The \emph{Gaussian Process} regression framework described in this study can also be extended to multiple hour ahead prediction of $ \text{Dst}$, which is currently a work in progress.
+      \item The \emph{Gaussian Process} regression framework described in this study can also be extended to multiple hour ahead prediction of $ \mathrm{Dst}$, which is currently a work in progress.
 \end{enumerate}
 
 
@@ -345,7 +351,7 @@ Our results can be summarized as follows.
 
 \begin{figure}
     \noindent\includegraphics[width=\textwidth]{Compare-mae.png}
-    \caption{Mean Absolute Error on validation set storms vs model order for GP-AR and GP-ARX. \\ \textbf{Key}: Rectangle borders represent the first and third quartiles, with a horizontal line inside to indicate the median value, outlying points are shown as dots and whiskers indicate the smallest and largest non-outliers}
+    \caption{Mean Absolute Error (\si{\nano\tesla}) on validation set storms vs model order for GP-AR and GP-ARX. \\ \textbf{Key}: Rectangle borders represent the first and third quartiles, with a horizontal line inside to indicate the median value, outlying points are shown as dots and whiskers indicate the smallest and largest non-outliers}
     \label{fig:CompareMae}
     \end{figure}
     
@@ -358,7 +364,7 @@ Our results can be summarized as follows.
     
     \begin{figure}
     \noindent\includegraphics[width=\textwidth]{Compare-mae-arx.png}
-    \caption{Mean Absolute Error on validation set storms vs model order for GP-AR and GP-ARX for \emph{CSA}, \emph{GS} and \emph{ML} model selection routines \\ \textbf{Key}: Rectangle borders represent the first and third quartiles, with a horizontal line inside to indicate the median value, outlying points are shown as dots and whiskers indicate the smallest and largest non-outliers}
+    \caption{Mean Absolute Error (\si{\nano\tesla}) on validation set storms vs model order for GP-AR and GP-ARX for \emph{CSA}, \emph{GS} and \emph{ML} model selection routines \\ \textbf{Key}: Rectangle borders represent the first and third quartiles, with a horizontal line inside to indicate the median value, outlying points are shown as dots and whiskers indicate the smallest and largest non-outliers}
     \label{fig:CompareMaeARX}
     \end{figure}
     
@@ -416,9 +422,9 @@ Our results can be summarized as follows.
     \hline
     Procedure & Grid Size & Step & Max Iterations \\
     \hline
-    Grid Search & 10 & 0.2 & NA \\
-    Coupled Simulated Annealing & 4 & 0.2 & 30 \\
-    Maximum likelihood & NA & 0.2 & 150\\
+    Grid Search & $10$ & $0.2$ & NA \\
+    Coupled Simulated Annealing & $4$ & $0.2$ & $30$ \\
+    Maximum likelihood & NA & $0.2$ & $150$\\
     \end{tabular}
     \label{table:modelselection}
     \end{table}
@@ -431,9 +437,9 @@ Our results can be summarized as follows.
     \begin{tabular}{l c c c}
     \hline
     Model & Mean Absolute Error & Root Mean Square Error & Coefficient of Correlation\\ \hline
-    GP-ARX & 7.219 & 11.88 & 0.972\\
-    GP-AR & 8.37 & 14.04 & 0.963\\
-    Persistence & 9.182 & 14.94 & 0.957\\
+    GP-ARX & $\SI{7.219}{\nano\tesla}$ & $\SI{11.88}{\nano\tesla}$ & $0.972$\\
+    GP-AR & $\SI{8.37}{\nano\tesla}$ & $\SI{14.04}{\nano\tesla}$ & $0.963$\\
+    Persistence & $\SI{9.182}{\nano\tesla}$ & $\SI{14.94}{\nano\tesla}$ & $0.957$\\
     \end{tabular}
     \end{table}
     
@@ -444,30 +450,30 @@ Our results can be summarized as follows.
     \begin{tabular}{llllll}
     \hline
     Event Id & Start Date & Start Hour & End Date & End Hour & min. Dst \\ \hline
-    1 & 1995/03/26 & 05:00 & 1995/03/26 & 23:00 & $-107$ \\
-    2 & 1995/04/07 & 13:00 & 1995/04/09 & 09:00 & $-149$ \\
-    3 & 1995/09/27 & 01:00 & 1995/09/28 & 04:00 & $-108$ \\
-    4 & 1995/10/18 & 13:00 & 1995/10/19 & 14:00 & $-127$ \\
-    5 & 1996/10/22 & 22:00 & 1996/10/23 & 11:00 & $-105$ \\
-    6 & 1997/04/21 & 10:00 & 1997/04/22 & 09:00 & $-107$ \\
-    7 & 1997/05/15 & 03:00 & 1997/05/16 & 00:00 & $-115$ \\
-    8 & 1997/10/10 & 18:00 & 1997/10/11 & 19:00 & $-130$ \\
-    9 & 1997/11/07 & 00:00 & 1997/11/07 & 18:00 & $-110$ \\
-    10 & 1997/11/22 & 21:00 & 1997/11/24 & 04:00 & $-108$ \\
-    11 & 2005/06/12 & 17:00 & 2005/06/13 & 19:00 & $-106$ \\
-    12 & 2005/08/31 & 12:00 & 2005/09/01 & 12:00 & $-122$ \\
-    13 & 2006/12/14 & 21:00 & 2006/12/16 & 03:00 & $-162$ \\
-    14 & 2011/09/26 & 14:00 & 2011/09/27 & 12:00 & $-101$ \\
-    15 & 2011/10/24 & 20:00 & 2011/10/25 & 14:00 & $-132$ \\
-    16 & 2012/03/08 & 12:00 & 2012/03/10 & 16:00 & $-131$ \\
-    17 & 2012/04/23 & 11:00 & 2012/04/24 & 13:00 & $-108$ \\
-    18 & 2012/07/15 & 01:00 & 2012/07/16 & 23:00 & $-127$ \\
-    19 & 2012/09/30 & 13:00 & 2012/10/01 & 18:00 & $-119$ \\
-    20 & 2012/10/08 & 02:00 & 2012/10/09 & 17:00 & $-105$ \\
-    21 & 2012/11/13 & 18:00 & 2012/11/14 & 18:00 & $-108$ \\
-    22 & 2013/03/17 & 07:00 & 2013/03/18 & 10:00 & $-132$ \\
-    23 & 2013/05/31 & 18:00 & 2013/06/01 & 20:00 & $-119$ \\
-    24 & 2014/02/18 & 15:00 & 2014/02/19 & 16:00 & $-112$ \\ \hline
+    1 & 1995/03/26 & 05:00 & 1995/03/26 & 23:00 & $ \SI{-107}{\nano\tesla}$ \\
+    2 & 1995/04/07 & 13:00 & 1995/04/09 & 09:00 & $ \SI{-149}{\nano\tesla}$ \\
+    3 & 1995/09/27 & 01:00 & 1995/09/28 & 04:00 & $ \SI{-108}{\nano\tesla}$ \\
+    4 & 1995/10/18 & 13:00 & 1995/10/19 & 14:00 & $ \SI{-127}{\nano\tesla}$ \\
+    5 & 1996/10/22 & 22:00 & 1996/10/23 & 11:00 & $ \SI{-105}{\nano\tesla}$ \\
+    6 & 1997/04/21 & 10:00 & 1997/04/22 & 09:00 & $ \SI{-107}{\nano\tesla}$ \\
+    7 & 1997/05/15 & 03:00 & 1997/05/16 & 00:00 & $ \SI{-115}{\nano\tesla}$ \\
+    8 & 1997/10/10 & 18:00 & 1997/10/11 & 19:00 & $ \SI{-130}{\nano\tesla}$ \\
+    9 & 1997/11/07 & 00:00 & 1997/11/07 & 18:00 & $ \SI{-110}{\nano\tesla}$ \\
+    10 & 1997/11/22 & 21:00 & 1997/11/24 & 04:00 & $ \SI{-108}{\nano\tesla}$ \\
+    11 & 2005/06/12 & 17:00 & 2005/06/13 & 19:00 & $ \SI{-106}{\nano\tesla}$ \\
+    12 & 2005/08/31 & 12:00 & 2005/09/01 & 12:00 & $ \SI{-122}{\nano\tesla}$ \\
+    13 & 2006/12/14 & 21:00 & 2006/12/16 & 03:00 & $ \SI{-162}{\nano\tesla}$ \\
+    14 & 2011/09/26 & 14:00 & 2011/09/27 & 12:00 & $ \SI{-101}{\nano\tesla}$ \\
+    15 & 2011/10/24 & 20:00 & 2011/10/25 & 14:00 & $ \SI{-132}{\nano\tesla}$ \\
+    16 & 2012/03/08 & 12:00 & 2012/03/10 & 16:00 & $ \SI{-131}{\nano\tesla}$ \\
+    17 & 2012/04/23 & 11:00 & 2012/04/24 & 13:00 & $ \SI{-108}{\nano\tesla}$ \\
+    18 & 2012/07/15 & 01:00 & 2012/07/16 & 23:00 & $ \SI{-127}{\nano\tesla}$ \\
+    19 & 2012/09/30 & 13:00 & 2012/10/01 & 18:00 & $ \SI{-119}{\nano\tesla}$ \\
+    20 & 2012/10/08 & 02:00 & 2012/10/09 & 17:00 & $ \SI{-105}{\nano\tesla}$ \\
+    21 & 2012/11/13 & 18:00 & 2012/11/14 & 18:00 & $ \SI{-108}{\nano\tesla}$ \\
+    22 & 2013/03/17 & 07:00 & 2013/03/18 & 10:00 & $ \SI{-132}{\nano\tesla}$ \\
+    23 & 2013/05/31 & 18:00 & 2013/06/01 & 20:00 & $ \SI{-119}{\nano\tesla}$ \\
+    24 & 2014/02/18 & 15:00 & 2014/02/19 & 16:00 & $ \SI{-112}{\nano\tesla}$ \\ \hline
     \end{tabular}
     \end{table}
     
@@ -482,69 +488,69 @@ Our results can be summarized as follows.
     \begin{tabular}{cccccc}
     \hline
     Event Id & Start Date & Start Time & End Date & End Time & min. Dst \\ \hline
-    1 & 1998/02/17 & 12:00 & 1998/02/18 & 10:00 & $ -100 $ \\
-    2 & 1998/03/10 & 11:00 & 1998/03/11 & 18:00 & $ -116 $ \\
-    3 & 1998/05/04 & 02:00 & 1998/05/05 & 02:00 & $ -205 $ \\
-    4 & 1998/08/26 & 10:00 & 1998/08/29 & 07:00 & $ -155 $ \\
-    5 & 1998/09/25 & 01:00 & 1998/09/26 & 00:00 & $ -207 $ \\
-    6 & 1998/10/19 & 05:00 & 1998/10/20 & 08:00 & $ -112 $ \\
-    7 & 1998/11/09 & 03:00 & 1998/11/10 & 16:00 & $ -142 $ \\
-    8 & 1998/11/13 & 00:00 & 1998/11/15 & 04:00 & $ -131 $ \\
-    9 & 1999/01/13 & 16:00 & 1999/01/14 & 20:00 & $ -112 $ \\
-    10 & 1999/02/18 & 03:00 & 1999/02/19 & 21:00 & $ -123 $ \\
-    11 & 1999/09/22 & 20:00 & 1999/09/23 & 23:00 & $ -173 $ \\
-    12 & 1999/10/22 & 00:00 & 1999/10/23 & 14:00 & $ -237 $ \\
-    13 & 2000/02/12 & 05:00 & 2000/02/13 & 15:00 & $ -133 $ \\
-    14 & 2000/04/06 & 17:00 & 2000/04/08 & 09:00 & $ -288 $ \\
-    15 & 2000/05/24 & 01:00 & 2000/05/25 & 20:00 & $ -147 $ \\
-    16 & 2000/08/10 & 20:00 & 2000/08/11 & 18:00 & $ -230 $ \\
-    17 & 2000/08/12 & 02:00 & 2000/08/13 & 17:00 & $ -235 $ \\
-    18 & 2000/10/13 & 02:00 & 2000/10/14 & 23:00 & $ -107 $ \\
-    19 & 2000/10/28 & 20:00 & 2000/10/29 & 20:00 & $ -127 $ \\
-    20 & 2000/11/06 & 13:00 & 2000/11/07 & 18:00 & $ -159 $ \\
-    21 & 2000/11/28 & 18:00 & 2000/11/29 & 23:00 & $ -119 $ \\
-    22 & 2001/03/19 & 15:00 & 2001/03/21 & 23:00 & $ -149 $ \\
-    23 & 2001/03/31 & 04:00 & 2001/04/01 & 21:00 & $ -387 $ \\
-    24 & 2001/04/11 & 16:00 & 2001/04/13 & 07:00 & $ -271 $ \\
-    25 & 2001/04/18 & 01:00 & 2001/04/18 & 13:00 & $ -114 $ \\
-    26 & 2001/04/22 & 02:00 & 2001/04/23 & 15:00 & $ -102 $ \\
-    27 & 2001/08/17 & 16:00 & 2001/08/18 & 16:00 & $ -105 $ \\
-    28 & 2001/09/30 & 23:00 & 2001/10/02 & 00:00 & $ -148 $ \\
-    29 & 2001/10/21 & 17:00 & 2001/10/24 & 11:00 & $ -187 $ \\
-    30 & 2001/10/28 & 03:00 & 2001/10/29 & 22:00 & $ -157 $ \\
-    31 & 2002/03/23 & 14:00 & 2002/03/25 & 05:00 & $ -100 $ \\
-    32 & 2002/04/17 & 11:00 & 2002/04/19 & 02:00 & $ -127 $ \\
-    33 & 2002/04/19 & 09:00 & 2002/04/21 & 06:00 & $ -149 $ \\
-    34 & 2002/05/11 & 10:00 & 2002/05/12 & 16:00 & $ -110 $ \\
-    35 & 2002/05/23 & 12:00 & 2002/05/24 & 23:00 & $ -109 $ \\
-    36 & 2002/08/01 & 23:00 & 2002/08/02 & 09:00 & $ -102 $ \\
-    37 & 2002/09/04 & 01:00 & 2002/09/05 & 00:00 & $ -109 $ \\
-    38 & 2002/09/07 & 14:00 & 2002/09/08 & 20:00 & $ -181 $ \\
-    39 & 2002/10/01 & 06:00 & 2002/10/03 & 08:00 & $ -176 $ \\
-    40 & 2002/10/03 & 10:00 & 2002/10/04 & 18:00 & $ -146 $ \\
-    41 & 2002/11/20 & 16:00 & 2002/11/22 & 06:00 & $ -128 $ \\
-    42 & 2003/05/29 & 20:00 & 2003/05/30 & 10:00 & $ -144 $ \\
-    43 & 2003/06/17 & 19:00 & 2003/06/19 & 03:00 & $ -141 $ \\
-    44 & 2003/07/11 & 15:00 & 2003/07/12 & 16:00 & $ -105 $ \\
-    45 & 2003/08/17 & 18:00 & 2003/08/19 & 11:00 & $ -148 $ \\
-    46 & 2003/11/20 & 12:00 & 2003/11/22 & 00:00 & $ -422 $ \\
-    47 & 2004/01/22 & 03:00 & 2004/01/24 & 00:00 & $ -149 $ \\
-    48 & 2004/02/11 & 10:00 & 2004/02/12 & 00:00 & $ -105 $ \\
-    49 & 2004/04/03 & 14:00 & 2004/04/04 & 08:00 & $ -112 $ \\
-    50 & 2004/07/22 & 20:00 & 2004/07/23 & 20:00 & $ -101 $ \\
-    51 & 2004/07/24 & 21:00 & 2004/07/26 & 17:00 & $ -148 $ \\
-    52 & 2004/07/26 & 22:00 & 2004/07/30 & 05:00 & $ -197 $ \\
-    53 & 2004/08/30 & 05:00 & 2004/08/31 & 21:00 & $ -126 $ \\
-    54 & 2004/11/07 & 21:00 & 2004/11/08 & 21:00 & $ -373 $ \\
-    55 & 2004/11/09 & 11:00 & 2004/11/11 & 09:00 & $ -289 $ \\
-    56 & 2004/11/11 & 22:00 & 2004/11/13 & 13:00 & $ -109 $ \\
-    57 & 2005/01/21 & 18:00 & 2005/01/23 & 05:00 & $ -105 $ \\
-    58 & 2005/05/07 & 20:00 & 2005/05/09 & 10:00 & $ -127 $ \\
-    59 & 2005/05/29 & 22:00 & 2005/05/31 & 08:00 & $ -138 $ \\
-    60 & 2005/06/12 & 17:00 & 2005/06/13 & 19:00 & $ -106 $ \\
-    61 & 2005/08/31 & 12:00 & 2005/09/01 & 12:00 & $ -131 $ \\
-    62 & 2006/04/13 & 20:00 & 2006/04/14 & 23:00 & $ -111 $ \\
-    63 & 2006/12/14 & 21:00 & 2006/12/16 & 03:00 & $ -147 $ \\ \hline
+    1 & 1998/02/17 & 12:00 & 1998/02/18 & 10:00 & $ \SI{-100}{\nano\tesla}$ \\
+    2 & 1998/03/10 & 11:00 & 1998/03/11 & 18:00 & $ \SI{-116}{\nano\tesla}$ \\
+    3 & 1998/05/04 & 02:00 & 1998/05/05 & 02:00 & $ \SI{-205}{\nano\tesla}$ \\
+    4 & 1998/08/26 & 10:00 & 1998/08/29 & 07:00 & $ \SI{-155}{\nano\tesla}$ \\
+    5 & 1998/09/25 & 01:00 & 1998/09/26 & 00:00 & $ \SI{-207}{\nano\tesla}$ \\
+    6 & 1998/10/19 & 05:00 & 1998/10/20 & 08:00 & $ \SI{-112}{\nano\tesla}$ \\
+    7 & 1998/11/09 & 03:00 & 1998/11/10 & 16:00 & $ \SI{-142}{\nano\tesla}$ \\
+    8 & 1998/11/13 & 00:00 & 1998/11/15 & 04:00 & $ \SI{-131}{\nano\tesla}$ \\
+    9 & 1999/01/13 & 16:00 & 1999/01/14 & 20:00 & $ \SI{-112}{\nano\tesla}$ \\
+    10 & 1999/02/18 & 03:00 & 1999/02/19 & 21:00 & $ \SI{-123}{\nano\tesla}$ \\
+    11 & 1999/09/22 & 20:00 & 1999/09/23 & 23:00 & $ \SI{-173}{\nano\tesla}$ \\
+    12 & 1999/10/22 & 00:00 & 1999/10/23 & 14:00 & $ \SI{-237}{\nano\tesla}$ \\
+    13 & 2000/02/12 & 05:00 & 2000/02/13 & 15:00 & $ \SI{-133}{\nano\tesla}$ \\
+    14 & 2000/04/06 & 17:00 & 2000/04/08 & 09:00 & $ \SI{-288}{\nano\tesla}$ \\
+    15 & 2000/05/24 & 01:00 & 2000/05/25 & 20:00 & $ \SI{-147}{\nano\tesla}$ \\
+    16 & 2000/08/10 & 20:00 & 2000/08/11 & 18:00 & $ \SI{-230}{\nano\tesla}$ \\
+    17 & 2000/08/12 & 02:00 & 2000/08/13 & 17:00 & $ \SI{-235}{\nano\tesla}$ \\
+    18 & 2000/10/13 & 02:00 & 2000/10/14 & 23:00 & $ \SI{-107}{\nano\tesla}$ \\
+    19 & 2000/10/28 & 20:00 & 2000/10/29 & 20:00 & $ \SI{-127}{\nano\tesla}$ \\
+    20 & 2000/11/06 & 13:00 & 2000/11/07 & 18:00 & $ \SI{-159}{\nano\tesla}$ \\
+    21 & 2000/11/28 & 18:00 & 2000/11/29 & 23:00 & $ \SI{-119}{\nano\tesla}$ \\
+    22 & 2001/03/19 & 15:00 & 2001/03/21 & 23:00 & $ \SI{-149}{\nano\tesla}$ \\
+    23 & 2001/03/31 & 04:00 & 2001/04/01 & 21:00 & $ \SI{-387}{\nano\tesla}$ \\
+    24 & 2001/04/11 & 16:00 & 2001/04/13 & 07:00 & $ \SI{-271}{\nano\tesla}$ \\
+    25 & 2001/04/18 & 01:00 & 2001/04/18 & 13:00 & $ \SI{-114}{\nano\tesla}$ \\
+    26 & 2001/04/22 & 02:00 & 2001/04/23 & 15:00 & $ \SI{-102}{\nano\tesla}$ \\
+    27 & 2001/08/17 & 16:00 & 2001/08/18 & 16:00 & $ \SI{-105}{\nano\tesla}$ \\
+    28 & 2001/09/30 & 23:00 & 2001/10/02 & 00:00 & $ \SI{-148}{\nano\tesla}$ \\
+    29 & 2001/10/21 & 17:00 & 2001/10/24 & 11:00 & $ \SI{-187}{\nano\tesla}$ \\
+    30 & 2001/10/28 & 03:00 & 2001/10/29 & 22:00 & $ \SI{-157}{\nano\tesla}$ \\
+    31 & 2002/03/23 & 14:00 & 2002/03/25 & 05:00 & $ \SI{-100}{\nano\tesla}$ \\
+    32 & 2002/04/17 & 11:00 & 2002/04/19 & 02:00 & $ \SI{-127}{\nano\tesla}$ \\
+    33 & 2002/04/19 & 09:00 & 2002/04/21 & 06:00 & $ \SI{-149}{\nano\tesla}$ \\
+    34 & 2002/05/11 & 10:00 & 2002/05/12 & 16:00 & $ \SI{-110}{\nano\tesla}$ \\
+    35 & 2002/05/23 & 12:00 & 2002/05/24 & 23:00 & $ \SI{-109}{\nano\tesla}$ \\
+    36 & 2002/08/01 & 23:00 & 2002/08/02 & 09:00 & $ \SI{-102}{\nano\tesla}$ \\
+    37 & 2002/09/04 & 01:00 & 2002/09/05 & 00:00 & $ \SI{-109}{\nano\tesla}$ \\
+    38 & 2002/09/07 & 14:00 & 2002/09/08 & 20:00 & $ \SI{-181}{\nano\tesla}$ \\
+    39 & 2002/10/01 & 06:00 & 2002/10/03 & 08:00 & $ \SI{-176}{\nano\tesla}$ \\
+    40 & 2002/10/03 & 10:00 & 2002/10/04 & 18:00 & $ \SI{-146}{\nano\tesla}$ \\
+    41 & 2002/11/20 & 16:00 & 2002/11/22 & 06:00 & $ \SI{-128}{\nano\tesla}$ \\
+    42 & 2003/05/29 & 20:00 & 2003/05/30 & 10:00 & $ \SI{-144}{\nano\tesla}$ \\
+    43 & 2003/06/17 & 19:00 & 2003/06/19 & 03:00 & $ \SI{-141}{\nano\tesla}$ \\
+    44 & 2003/07/11 & 15:00 & 2003/07/12 & 16:00 & $ \SI{-105}{\nano\tesla}$ \\
+    45 & 2003/08/17 & 18:00 & 2003/08/19 & 11:00 & $ \SI{-148}{\nano\tesla}$ \\
+    46 & 2003/11/20 & 12:00 & 2003/11/22 & 00:00 & $ \SI{-422}{\nano\tesla}$ \\
+    47 & 2004/01/22 & 03:00 & 2004/01/24 & 00:00 & $ \SI{-149}{\nano\tesla}$ \\
+    48 & 2004/02/11 & 10:00 & 2004/02/12 & 00:00 & $ \SI{-105}{\nano\tesla}$ \\
+    49 & 2004/04/03 & 14:00 & 2004/04/04 & 08:00 & $ \SI{-112}{\nano\tesla}$ \\
+    50 & 2004/07/22 & 20:00 & 2004/07/23 & 20:00 & $ \SI{-101}{\nano\tesla}$ \\
+    51 & 2004/07/24 & 21:00 & 2004/07/26 & 17:00 & $ \SI{-148}{\nano\tesla}$ \\
+    52 & 2004/07/26 & 22:00 & 2004/07/30 & 05:00 & $ \SI{-197}{\nano\tesla}$ \\
+    53 & 2004/08/30 & 05:00 & 2004/08/31 & 21:00 & $ \SI{-126}{\nano\tesla}$ \\
+    54 & 2004/11/07 & 21:00 & 2004/11/08 & 21:00 & $ \SI{-373}{\nano\tesla}$ \\
+    55 & 2004/11/09 & 11:00 & 2004/11/11 & 09:00 & $ \SI{-289}{\nano\tesla}$ \\
+    56 & 2004/11/11 & 22:00 & 2004/11/13 & 13:00 & $ \SI{-109}{\nano\tesla}$ \\
+    57 & 2005/01/21 & 18:00 & 2005/01/23 & 05:00 & $ \SI{-105}{\nano\tesla}$ \\
+    58 & 2005/05/07 & 20:00 & 2005/05/09 & 10:00 & $ \SI{-127}{\nano\tesla}$ \\
+    59 & 2005/05/29 & 22:00 & 2005/05/31 & 08:00 & $ \SI{-138}{\nano\tesla}$ \\
+    60 & 2005/06/12 & 17:00 & 2005/06/13 & 19:00 & $ \SI{-106}{\nano\tesla}$ \\
+    61 & 2005/08/31 & 12:00 & 2005/09/01 & 12:00 & $ \SI{-131}{\nano\tesla}$ \\
+    62 & 2006/04/13 & 20:00 & 2006/04/14 & 23:00 & $ \SI{-111}{\nano\tesla}$ \\
+    63 & 2006/12/14 & 21:00 & 2006/12/16 & 03:00 & $ \SI{-147}{\nano\tesla}$ \\ \hline
     \end{tabular}%
     \end{adjustbox}
     \end{table}

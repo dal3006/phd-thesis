@@ -229,7 +229,7 @@ $\mathbf{x}_t$
 \subsection{The LSTM Dst Model}\label{sec:lstmDstArch}
 
 To produce predictions of Dst upto six hours ahead, we trained six LSTM models. Thus for every input, we 
-obtained a vector of outputs $[\hat{D}st\left(t + p\right)], p\in \{ 1, \cdots, 6 \}$.
+obtained a vector of outputs $[\mathrm{\hat{D}st}\left(t + p\right)], p\in \{ 1, \cdots, 6 \}$.
 
 For inputs $\mathbf{x}_t$, we use solar wind parameters ($n$, $V_{\text{sw}}$, $|\mathbf{B}|$, $B_{z}$) 
 and GPS data ($B_{\text{gps}}$) described in section \ref{sec:datagpnn}. We also use the time history of Dst, 
@@ -239,8 +239,8 @@ from one to six hours back.
 	\begin{aligned}
 		\mathbf{x}_t &= (n \left( t \right) , V_{\text{sw}}\left( t \right), 
 		|\mathbf{B}\left( t \right)|, B_{z}\left( t \right) , B_{\text{gps}} \left( t \right),\\ 
-		& \ \  \ \  \ \text{Dst} \left( t-1 \right), \text{Dst} \left( t-2 \right) , \ldots , 
-		\text{Dst} \left( t-6 \right) )
+		& \ \  \ \  \ \mathrm{Dst} \left( t-1 \right), \mathrm{Dst} \left( t-2 \right) , \ldots , 
+		\mathrm{Dst} \left( t-6 \right) )
 	\end{aligned}
 \end{equation}
 
@@ -250,12 +250,12 @@ LSTM cells can be \emph{stacked} such that the output of one cell provides the i
 One may construct LSTM stacks of increasing size depending on the task at hand.  
 
 Equations \ref{eq:dstmodel} and \ref{eq:lstmstack} describe the Dst prediction architecture.The $p$ hour 
-ahead prediction $\hat{D}st \left(t + p \right)$ is the output of the function $m^{p}_{\text{NN}}(\cdot)$ which 
+ahead prediction $\mathrm{\hat{D}st} \left(t + p \right)$ is the output of the function $m^{p}_{\text{NN}}(\cdot)$ which 
 is obtained by successive operation of $d$ LSTM cells. Mathematically this is equivalent to function composition 
 $h^{p}_{d} ( h^{p}_{d-1}( \cdots (h^{p}_{1}(\cdot)\cdots))$.
 
 \begin{align}
-	\hat{\text{D}}\text{st} \left(t + p \right) &= 
+	\mathrm{\hat{D}st} \left(t + p \right) &= 
 	m^{p}_{\text{NN}} (\mathbf{x}_t) \label{eq:dstmodel}\\
 	m^{p}_{\text{NN}} (\mathbf{x}_t) &= 
 	h^{p}_{d} ( h^{p}_{d-1}( \cdots (h^{p}_{1}(\mathbf{x}_t)\cdots)) \label{eq:lstmstack}
@@ -348,15 +348,15 @@ of the hybrid GPNN model consisting of an LSTM and GP components.
 \subsection{The GPNN Model}
 
 \begin{align}
-	Dst \left( t+p \right) &= f_{p} \left( \mathbf{x}_{t} \right) + \epsilon \label{eq:dstgpnn}\\ 
+	\mathrm{Dst} \left( t+p \right) &= f_{p} \left( \mathbf{x}_{t} \right) + \epsilon \label{eq:dstgpnn}\\ 
 	\epsilon &\sim N \left( 0, \sigma ^{2} \right)  \label{eq:gpnnNoise}\\
 	f_{p} \left( \mathbf{x}_{t} \right)  &\sim 
-	GP \left( m^{p}_{\text{NN}}(\mathbf{x}_t) , K_{NN}(\mathbf{x}_{t}, \mathbf{x}_{s} ) \right) \label{eq:gpnnGPForm}
+	\mathcal{GP}\left(m^{p}_{\text{NN}}(\mathbf{x}_t), K_{NN}(\mathbf{x}_{t},\mathbf{x}_{s})\right)\label{eq:gpnnGPForm}
 \end{align}
 	
 
 Equations \cref{eq:dstgpnn,eq:gpnnNoise,eq:gpnnGPForm} give a formal specification of the proposed GPNN model in 
-terms of the notations introduced in section \S~\ref{sec:osaGPmethod}. The ground truth $\text{Dst}\left(t + p \right)$ 
+terms of the notations introduced in section \S~\ref{sec:osaGPmethod}. The ground truth $\mathrm{Dst}\left(t + p\right)$ 
 is assumed to be the result of a Gaussian Process $f_{p}$ corrupted by Gaussian measurement noise $\epsilon$, 
 with $p = {1,2,3,4,5,6}$ being the forecast horizon going from one to six hours ahead. The mean function of the 
 Gaussian process $f_{p}$ is set to $m^{p}_{\text{NN}} \left( \mathbf{x} \right)$ described in 
@@ -368,31 +368,38 @@ from equation \ref{eq:gpcov}.
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{lstmCompRMSE.pdf}
-	\caption{Comparison of RMSE of $\text{Dst}$ forecast models.}
+	\caption{Comparison of RMSE of $\mathrm{Dst}$ forecast models.}
 	\label{fig:lstmRMSE}
 \end{figure}
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{lstmCompCC.pdf}
-	\caption{Comparison of CC of $\text{Dst}$ forecast models.}
+	\caption{Comparison of CC of $\mathrm{Dst}$ forecast models.}
 	\label{fig:lstmCC}
 \end{figure}
 
 \subsection{LSTM Model Evaluation}
 
-For the purposes of training and evaluation, the data set is divided as follows : 70$\%$ for training, 20$\%$  
-for testing and 10$\%$ for validation. The LSTM model is evaluated using the Root Mean Square Error (RMSE) 
+For the purposes of training and evaluation, the data set is divided as follows: $70\%$ for training, $20\%$  
+for testing and $10\%$ for validation. The LSTM model is evaluated using the Root Mean Square Error (RMSE) 
 and the Correlation Coefficient (CC) defined by equations \ref{eq:rmse} and \ref{eq:cc} respectively. Based 
 on the performance calculated on the validation data, an LSTM network of depth $d = 20$ cells was chosen as 
 the mean function of the GPNN model.
 
 
 \begin{equation}\label{eq:rmse}
- RMSE = \sqrt[]{ \sum_{t=1}^{n} \left( Dst \left( t \right) - \hat{D}st \left( t \right)  \right) ^{2}/n}
+ \mathrm{RMSE} = \sqrt[]{\sum_{t=1}^{n}\left( 
+	 \mathrm{Dst} \left( t \right) - \mathrm{\hat{D}st}\left(t\right)
+ \right) ^{2}/n}
 \end{equation}
 
 \begin{equation}\label{eq:cc}
- CC = \frac{Cov \left( Dst, \hat{D}st \right)}{\sqrt[]{Var \left( Dst \right) Var \left( \hat{D}st \right)}} 
+ \mathrm{CC} = \frac{\Cov(
+	 \mathrm{Dst},\mathrm{\hat{D}st})}{
+		 \sqrt[]{
+			 \Var(\mathrm{Dst}) \Var(\mathrm{\hat{D}st})
+		 }
+	} 
 \end{equation}
 
 
@@ -412,7 +419,7 @@ for the time horizon $t+1 \cdots t+6$, summarised in table \ref{table:competingm
 		\citet{Bala2012} & A feedforward neural network model using the \emph{Boyle} function as input.\\
 		\citet{Lazzus} & A feedforward neural network model using only the time history of Dst. Trained using 
 		particle swarm optimization.\\
-		Persistence model & $\hat{\text{D}}\text{st}(t + p) = \text{Dst}(t)$, also used for benchmarking in 
+		Persistence model & $\mathrm{\hat{D}st}(t + p) = \mathrm{Dst}(t)$, also used for benchmarking in 
 		section \S~\ref{sec:gpOSAEval}.\\
 		GPNN & Our proposed LSTM and GP hybrid. Inputs are solar wind parameters (section \S~\ref{sec:datagpnn}) 
 		and time history of Dst.\\
@@ -427,29 +434,30 @@ between our model, with and without using GPS data, and previous models predicti
 Our models GPNN \& GPNN-GPS provide performance which is competitive to that obtained by 
 \citet{Lazzus} from 1h ahead to 3h ahead. When the forecast horizon goes from 4h ahead to 6h ahead, 
 GPNN \& GPNN-GPS provide better global performance. As an example, when considering a 6h 
-ahead forecast, GPNN-GPS provides a CC of $0.873$ and a RMSE of $9.86$, while \citet{Lazzus} 
-obtained a CC of $0.826$ and a RMSE of $13.09$. The model presented in \citet{Lazzus} uses only time history of Dst, 
+ahead forecast, GPNN-GPS provides a CC of $0.873$ and a RMSE of $\SI{9.86}{\nano\tesla}$, while \citet{Lazzus} 
+obtained a CC of $0.826$ and a RMSE of $\SI{13.09}{\nano\tesla}$. The model presented in \citet{Lazzus} uses only time history of Dst, 
 this emphasizes the performance benefits of using exogenous data when predicting geomagnetic activity. 
 \citet{Bala2012} used the Boyle index as an input function, and obtained competitive RMSE performance to GPNN for 
-six hour ahead predictions, their model presents a\ CC of $0.77$ and a RMSE of $11.09$.
+six hour ahead predictions, their model presents a\ CC of $0.77$ and a RMSE of $\SI{11.09}{\nano\tesla}$.
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{image5.png}
-	\caption{$\text{Dst}$ predictions made by GPNN and GPNN-GPS for the 2003 Halloween storm.}
+	\caption{$\mathrm{Dst}$ predictions made by GPNN and GPNN-GPS for the 2003 Halloween storm.}
     \label{fig:gpnngpshalloween}
 \end{figure}
 
 
-\citet{wu1997geomagnetic} provided for a 6h ahead forecast a CC of $0.82$ and a RMSE of $20.8$, showing 
+\citet{wu1997geomagnetic} provided for a 6h ahead forecast a CC of $0.82$ and a RMSE of $\SI{20.8}{\nano\tesla}$, showing 
 in comparison to our model with or without GPS data, that the LSTM cell brings more accuracy. 
 
 
-We observed that using GPS data generally results in an improvement when considering important geomagnetic storms. Figure \ref{fig:gpnngpshalloween} presents forecasts produced the GPNN-GPS model in blue and GPNN model in red, 
-for the $2003$ Halloween storm event (maximum strength of $-422 \text{nT}$). Predictions for one to two hours 
+We observed that using GPS data generally results in an improvement when considering important geomagnetic storms. 
+Figure \ref{fig:gpnngpshalloween} presents forecasts produced the GPNN-GPS model in blue and GPNN model in red, 
+for the $2003$ Halloween storm event (maximum strength of $\SI{-422}{\nano\tesla}$). Predictions for one to two hours 
 ahead are very similar, but when we consider the forecasts made three hours ahead, GPNN predicts a storm peak 
-of $-348 \text{nT}$ while GPNN-GPS provides a prediction of $-405 \text{nT}$. 
+of $\SI{-348}{\nano\tesla}$ while GPNN-GPS provides a prediction of $\SI{-405}{\nano\tesla}$. 
 
-For a four hour ahead forecast, GPNN predicts a storm peak of $-335 \text{nT}$ while GPNN-GPS predicts $-380 \text{nT}$.
+For a four hour ahead forecast, GPNN predicts a storm peak of $\SI{-335}{\nano\tesla}$ while GPNN-GPS predicts $\SI{-380}{\nano\tesla}$.
 
 
 
@@ -466,9 +474,9 @@ predictionsm, are not adequate while evaluating probabilistic forecasts.
 	\begin{tabular}{ccccc}
 	\hline
 	Level of Activity & Storm Classification \\ \hline
-	$\text{Dst} > -50 nT$ & Moderate\\
-	$-250 nT \leq \text{Dst} \leq -50 nT$ & Intense\\
-	$\text{Dst} \leq -250 nT$ & Super Storm\\ \hline
+	$\mathrm{Dst} > \SI{-50}{\nano\tesla}$ & Moderate\\
+	$\SI{-250}{\nano\tesla} \leq \mathrm{Dst} \leq \SI{-50}{\nano\tesla}$ & Intense\\
+	$\mathrm{Dst} \leq \SI{-250}{\nano\tesla}$ & Super Storm\\ \hline
 	\end{tabular}
 \end{table}
 
@@ -489,13 +497,14 @@ reliability diagrams.
 The ROC curve is based on a contingency table which maps how often a model correctly classifies outcomes when 
 working in a binary classification context. In the case of the GPNN model, we can analytically compute the 
 probability that Dst lies within a particular interval or outside it (i.e. 
-$\mathbb{P}[-250 nT \leq \text{Dst} \leq -50 nT]$ is the probability of occurrence of an intense storm 
+$\mathbb{P}[\SI{-250}{\nano\tesla} \leq \mathrm{Dst} \leq \SI{-50}{\nano\tesla}]$ is the probability of occurrence of an intense storm 
 as per classification in table \ref{table:stormclass}). 
 
 
 \citet{camporeale2017classification} used the same process to classify the category of solar events between 
 ejecta, Coronal Hole, Sector reversal and streamer belt. The ROC curves represents the false positive ratio (FPR) 
-versus the true positive ratio (TPR). The FPR is the ratio of false positive divided by the total number of negatives. The TPR also called sensitivity is the ratio of true positives divided by the total number of positives. For perfect 
+versus the true positive ratio (TPR). The FPR is the ratio of false positive divided by the total number of negatives. 
+The TPR also called sensitivity is the ratio of true positives divided by the total number of positives. For perfect 
 classifications, the FPR has to be equal to 0 and TPR equal to 1, thus the value of the threshold that produces 
 the point closest to these values is optimal. 
 
@@ -505,7 +514,7 @@ present ROC values obtained from 1h to 6h ahead forecasts, depending on the leve
 The ROC is usually shown graphically, but numerical values are more relevant for the reader to analyse 
 variations depending on the threshold. The optimal threshold is in red and bold, it is computed to 
 minimise the Euclidean distance from $\text{FPR} = 0$ and $\text{TPR} = 1$. ROC values obtained for the 
-highest level of activity, meaning $\text{Dst} < -250 \text{nT}$ provide FPR for each threshold (the highest 
+highest level of activity, meaning $\mathrm{Dst} < \SI{-250}{\nano\tesla}$ provide FPR for each threshold (the highest 
 value is $2.7\times10^{-3}$ for a $10\%$ threshold when $t+1$ forecast). The TPR behaviour is more 
 complicated to generalise. 
 
@@ -513,7 +522,7 @@ For predictions done from 1h ahead to 5h ahead, values are always greater than $
 $10\%$  to $40\%$, and then there is a decrease. If we focuse on the 6h ahead forecast, the best TPR is $0.5$ 
 for a $10\%$ threshold. It means that the more there is an increasing probability for a superstorm to occur, 
 the less the model is able to forecast it without misjudgements 6h in advance. However, for intense storms 
-($-250 \text{nT} < \text{Dst} < -50 \text{nT}$), the GPNN provides TPR higher than $0.670$ for thresholds 
+($\SI{-250}{\nano\tesla} < \mathrm{Dst} < \SI{-50}{\nano\tesla}$), the GPNN provides TPR higher than $0.670$ for thresholds 
 between $10\%$ and $80\%$, and for moderate storms, this model provides TPR higher than $0.649$ for every 
 thresholds, from 1h to 6h ahead. 
 
@@ -552,7 +561,7 @@ a simple rescaling of the obtained standard deviation yields worse reliability f
 
 Figure \ref{fig:gpnnhalloween} presents predictions provided by the GPNN model for the 2003 Halloween storm. 
 For predictions from 1h ahead to 5h ahead, thanks to this process, the predicted value of Dst is close to the 
-real value. For example, for 5h ahead, the real peak of activity of -422 nT has a predicted value of -391 nT. 
+real value. For example, for 5h ahead, the real peak of activity of \SI{-422}{\nano\tesla} has a predicted value of \SI{-391}{\nano\tesla}. 
 
 The main contribution of the GP process here is shown for the 6h ahead forecast. While the LSTM alone failed to 
 reach the highest peak of activity, the GPNN manages to have a predicted value closer to the real value than 
@@ -778,9 +787,9 @@ re-calibrate the prediction
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{halloween_storm_GPNN.pdf}
-	\caption{$\text{Dst}$ predictions made by the GPNN for the 2003 Halloween storm. 
+	\caption{$\mathrm{Dst}$ predictions made by the GPNN for the 2003 Halloween storm. 
 	The most probable prediction is the dotted purple line. 
-	The ground truth $\text{Dst}$ is the deep blue line. 
+	The ground truth $\mathrm{Dst}$ is the deep blue line. 
 	The grey shadow represents $\pm\sigma$ error bars on the prediction.}
     \label{fig:gpnnhalloween}
 \end{figure}
@@ -797,55 +806,55 @@ re-calibrate the prediction
 	\begin{tabular}{ccccc}
 	\hline
 	Start Date & Start Time & End Date & End Time & min. Dst \\ \hline
-	2001/03/19 & 15:00 & 2001/03/21 & 23:00 & $ -149 $ \\
-	2001/03/31 & 04:00 & 2001/04/01 & 21:00 & $ -387 $ \\
-	2001/04/18 & 01:00 & 2001/04/18 & 13:00 & $ -114 $ \\
-	2001/04/22 & 02:00 & 2001/04/23 & 15:00 & $ -102 $ \\
-	2001/08/17 & 16:00 & 2001/08/18 & 16:00 & $ -105 $ \\
-	2001/09/30 & 23:00 & 2001/10/02 & 00:00 & $ -148 $ \\
-	2001/10/21 & 17:00 & 2001/10/24 & 11:00 & $ -187 $ \\
-	2001/10/28 & 03:00 & 2001/10/29 & 22:00 & $ -157 $ \\
-	2002/03/23 & 14:00 & 2002/03/25 & 05:00 & $ -100 $ \\
-	2002/04/17 & 11:00 & 2002/04/19 & 02:00 & $ -127 $ \\
-	2002/04/19 & 09:00 & 2002/04/21 & 06:00 & $ -149 $ \\
-	2002/05/11 & 10:00 & 2002/05/12 & 16:00 & $ -110 $ \\
-	2002/05/23 & 12:00 & 2002/05/24 & 23:00 & $ -109 $ \\
-	2002/08/01 & 23:00 & 2002/08/02 & 09:00 & $ -102 $ \\
-	2002/09/04 & 01:00 & 2002/09/05 & 00:00 & $ -109 $ \\
-	2002/09/07 & 14:00 & 2002/09/08 & 20:00 & $ -181 $ \\
-	2002/10/01 & 06:00 & 2002/10/03 & 08:00 & $ -176 $ \\
-	2002/11/20 & 16:00 & 2002/11/22 & 06:00 & $ -128 $ \\
-	2003/05/29 & 20:00 & 2003/05/30 & 10:00 & $ -144 $ \\
-	2003/06/17 & 19:00 & 2003/06/19 & 03:00 & $ -141 $ \\
-	2003/07/11 & 15:00 & 2003/07/12 & 16:00 & $ -105 $ \\
-	2003/08/17 & 18:00 & 2003/08/19 & 11:00 & $ -148 $ \\
-	2003/11/20 & 12:00 & 2003/11/22 & 00:00 & $ -422 $ \\
-	2004/01/22 & 03:00 & 2004/01/24 & 00:00 & $ -149 $ \\
-	2004/02/11 & 10:00 & 2004/02/12 & 00:00 & $ -105 $ \\
-	2004/04/03 & 14:00 & 2004/04/04 & 08:00 & $ -112 $ \\
-	2004/07/22 & 20:00 & 2004/07/23 & 20:00 & $ -101 $ \\
-	2004/07/24 & 21:00 & 2004/07/26 & 17:00 & $ -148 $ \\
-	2004/07/26 & 22:00 & 2004/07/30 & 05:00 & $ -197 $ \\
-	2004/08/30 & 05:00 & 2004/08/31 & 21:00 & $ -126 $ \\
-	2004/11/11 & 22:00 & 2004/11/13 & 13:00 & $ -109 $ \\
-	2005/01/21 & 18:00 & 2005/01/23 & 05:00 & $ -105 $ \\
-	2005/05/07 & 20:00 & 2005/05/09 & 10:00 & $ -127 $ \\
-	2005/05/29 & 22:00 & 2005/05/31 & 08:00 & $ -138 $ \\
-	2005/06/12 & 17:00 & 2005/06/13 & 19:00 & $ -106 $ \\
-	2005/08/31 & 12:00 & 2005/09/01 & 12:00 & $ -131 $ \\
-	2006/04/13 & 20:00 & 2006/04/14 & 23:00 & $ -111 $ \\
-	2006/12/14 & 21:00 & 2006/12/16 & 03:00 & $ -147 $ \\ 
-	2011/09/26 & 14:00 & 2011/09/27 & 12:00 & $ -101 $ \\
-	2011/10/24 & 20:00 & 2011/10/25 & 14:00 & $ -132 $ \\
-	2012/03/08 & 12:00 & 2012/03/10 & 16:00 & $ -131 $ \\
-	2012/04/23 & 11:00 & 2012/04/24 & 13:00 & $ -108 $ \\
-	2012/07/15 & 01:00 & 2012/07/16 & 23:00 & $ -127 $ \\
-	2012/09/30 & 13:00 & 2012/10/01 & 18:00 & $ -119 $ \\
-	2012/10/08 & 02:00 & 2012/10/09 & 17:00 & $ -105 $ \\
-	2012/11/13 & 18:00 & 2012/11/14 & 18:00 & $ -108 $ \\
-	2013/03/17 & 07:00 & 2013/03/18 & 10:00 & $ -132 $ \\
-	2013/05/31 & 18:00 & 2013/06/01 & 20:00 & $ -119 $ \\
-	2014/02/18 & 15:00 & 2014/02/19 & 16:00 & $ -112 $ \\ \hline
+	2001/03/19 & 15:00 & 2001/03/21 & 23:00 & $ \SI{-149}{\nano\tesla}$ \\
+	2001/03/31 & 04:00 & 2001/04/01 & 21:00 & $ \SI{-387}{\nano\tesla}$ \\
+	2001/04/18 & 01:00 & 2001/04/18 & 13:00 & $ \SI{-114}{\nano\tesla}$ \\
+	2001/04/22 & 02:00 & 2001/04/23 & 15:00 & $ \SI{-102}{\nano\tesla}$ \\
+	2001/08/17 & 16:00 & 2001/08/18 & 16:00 & $ \SI{-105}{\nano\tesla}$ \\
+	2001/09/30 & 23:00 & 2001/10/02 & 00:00 & $ \SI{-148}{\nano\tesla}$ \\
+	2001/10/21 & 17:00 & 2001/10/24 & 11:00 & $ \SI{-187}{\nano\tesla}$ \\
+	2001/10/28 & 03:00 & 2001/10/29 & 22:00 & $ \SI{-157}{\nano\tesla}$ \\
+	2002/03/23 & 14:00 & 2002/03/25 & 05:00 & $ \SI{-100}{\nano\tesla}$ \\
+	2002/04/17 & 11:00 & 2002/04/19 & 02:00 & $ \SI{-127}{\nano\tesla}$ \\
+	2002/04/19 & 09:00 & 2002/04/21 & 06:00 & $ \SI{-149}{\nano\tesla}$ \\
+	2002/05/11 & 10:00 & 2002/05/12 & 16:00 & $ \SI{-110}{\nano\tesla}$ \\
+	2002/05/23 & 12:00 & 2002/05/24 & 23:00 & $ \SI{-109}{\nano\tesla}$ \\
+	2002/08/01 & 23:00 & 2002/08/02 & 09:00 & $ \SI{-102}{\nano\tesla}$ \\
+	2002/09/04 & 01:00 & 2002/09/05 & 00:00 & $ \SI{-109}{\nano\tesla}$ \\
+	2002/09/07 & 14:00 & 2002/09/08 & 20:00 & $ \SI{-181}{\nano\tesla}$ \\
+	2002/10/01 & 06:00 & 2002/10/03 & 08:00 & $ \SI{-176}{\nano\tesla}$ \\
+	2002/11/20 & 16:00 & 2002/11/22 & 06:00 & $ \SI{-128}{\nano\tesla}$ \\
+	2003/05/29 & 20:00 & 2003/05/30 & 10:00 & $ \SI{-144}{\nano\tesla}$ \\
+	2003/06/17 & 19:00 & 2003/06/19 & 03:00 & $ \SI{-141}{\nano\tesla}$ \\
+	2003/07/11 & 15:00 & 2003/07/12 & 16:00 & $ \SI{-105}{\nano\tesla}$ \\
+	2003/08/17 & 18:00 & 2003/08/19 & 11:00 & $ \SI{-148}{\nano\tesla}$ \\
+	2003/11/20 & 12:00 & 2003/11/22 & 00:00 & $ \SI{-422}{\nano\tesla}$ \\
+	2004/01/22 & 03:00 & 2004/01/24 & 00:00 & $ \SI{-149}{\nano\tesla}$ \\
+	2004/02/11 & 10:00 & 2004/02/12 & 00:00 & $ \SI{-105}{\nano\tesla}$ \\
+	2004/04/03 & 14:00 & 2004/04/04 & 08:00 & $ \SI{-112}{\nano\tesla}$ \\
+	2004/07/22 & 20:00 & 2004/07/23 & 20:00 & $ \SI{-101}{\nano\tesla}$ \\
+	2004/07/24 & 21:00 & 2004/07/26 & 17:00 & $ \SI{-148}{\nano\tesla}$ \\
+	2004/07/26 & 22:00 & 2004/07/30 & 05:00 & $ \SI{-197}{\nano\tesla}$ \\
+	2004/08/30 & 05:00 & 2004/08/31 & 21:00 & $ \SI{-126}{\nano\tesla}$ \\
+	2004/11/11 & 22:00 & 2004/11/13 & 13:00 & $ \SI{-109}{\nano\tesla}$ \\
+	2005/01/21 & 18:00 & 2005/01/23 & 05:00 & $ \SI{-105}{\nano\tesla}$ \\
+	2005/05/07 & 20:00 & 2005/05/09 & 10:00 & $ \SI{-127}{\nano\tesla}$ \\
+	2005/05/29 & 22:00 & 2005/05/31 & 08:00 & $ \SI{-138}{\nano\tesla}$ \\
+	2005/06/12 & 17:00 & 2005/06/13 & 19:00 & $ \SI{-106}{\nano\tesla}$ \\
+	2005/08/31 & 12:00 & 2005/09/01 & 12:00 & $ \SI{-131}{\nano\tesla}$ \\
+	2006/04/13 & 20:00 & 2006/04/14 & 23:00 & $ \SI{-111}{\nano\tesla}$ \\
+	2006/12/14 & 21:00 & 2006/12/16 & 03:00 & $ \SI{-147}{\nano\tesla}$ \\ 
+	2011/09/26 & 14:00 & 2011/09/27 & 12:00 & $ \SI{-101}{\nano\tesla}$ \\
+	2011/10/24 & 20:00 & 2011/10/25 & 14:00 & $ \SI{-132}{\nano\tesla}$ \\
+	2012/03/08 & 12:00 & 2012/03/10 & 16:00 & $ \SI{-131}{\nano\tesla}$ \\
+	2012/04/23 & 11:00 & 2012/04/24 & 13:00 & $ \SI{-108}{\nano\tesla}$ \\
+	2012/07/15 & 01:00 & 2012/07/16 & 23:00 & $ \SI{-127}{\nano\tesla}$ \\
+	2012/09/30 & 13:00 & 2012/10/01 & 18:00 & $ \SI{-119}{\nano\tesla}$ \\
+	2012/10/08 & 02:00 & 2012/10/09 & 17:00 & $ \SI{-105}{\nano\tesla}$ \\
+	2012/11/13 & 18:00 & 2012/11/14 & 18:00 & $ \SI{-108}{\nano\tesla}$ \\
+	2013/03/17 & 07:00 & 2013/03/18 & 10:00 & $ \SI{-132}{\nano\tesla}$ \\
+	2013/05/31 & 18:00 & 2013/06/01 & 20:00 & $ \SI{-119}{\nano\tesla}$ \\
+	2014/02/18 & 15:00 & 2014/02/19 & 16:00 & $ \SI{-112}{\nano\tesla}$ \\ \hline
 	\end{tabular}%
 	\end{table}
 
