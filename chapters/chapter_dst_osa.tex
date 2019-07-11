@@ -1,19 +1,18 @@
 \chapter{Forecasting the Disturbance Storm Time Index: Gaussian Process Models}\label{chapter:dst_osa}
 
-
 {\small
-        We present a methodology for generating probabilistic predictions for the \emph{Disturbance Storm Time} ($\mathrm{Dst}$) 
-        geomagnetic activity index. We focus on the \emph{One Step Ahead} (OSA) prediction task and use the OMNI hourly resolution 
-        data to build our models. Our proposed methodology is based on the technique of \emph{Gaussian Process Regression} (GPR). 
-        Within this framework we develop two models; \emph{Gaussian Process Auto-Regressive} (GP-AR) and 
-        \emph{Gaussian Process Auto-Regressive with eXogenous inputs} (GP-ARX). We also propose a criterion to aid model selection 
-        with respect to the order of auto-regressive inputs. Finally we test the performance of the GP-AR and GP-ARX models on a set 
-        of 63 geomagnetic storms between 1998 and 2006 and illustrate sample predictions with error bars for some of these events.
+    We present a methodology for generating probabilistic predictions for the \emph{Disturbance Storm Time} 
+    ($\mathrm{Dst}$) geomagnetic activity index. We focus on the \emph{One Step Ahead} (OSA) prediction task and 
+    use the OMNI hourly resolution data to build our models. Our proposed methodology is based on the technique of 
+    \emph{Gaussian Process Regression} (GPR). Within this framework we develop two models; 
+    \emph{Gaussian Process Auto-Regressive} (GP-AR) and \emph{Gaussian Process Auto-Regressive with eXogenous inputs} 
+    (GP-ARX). We also propose a criterion to aid model selection with respect to the order of auto-regressive inputs. 
+    Finally we test the performance of the GP-AR and GP-ARX models on a set of 63 geomagnetic storms between 1998 
+    and 2006 and illustrate sample predictions with error bars for some of these events.
 }
         
-\vspace{5pt}
-%\hrule
-\vspace{6pt}
+\vfill
+\sectionlinetwo{DarkGreen}{88}
 \vfill
 
 \noindent
@@ -76,7 +75,8 @@ In this work we propose a technique for probabilistic forecasting of $\mathrm{Ds
 
 We use the \emph{Gaussian Process Regression} methodology to construct auto-regressive models for $ \mathrm{Dst}$ and show how to perform exact inference in this framework. We further outline a methodology to perform model selection with respect to its free parameters and time histories.
 
-The remainder of this paper is organised as follows: Section \ref{sec:osaGPmethod} gives the reader an overview of the history of \emph{Gaussian Process} models as well as how they are formulated and how to perform inference with them. Sections \ref{sec:osa}, \ref{sec:modeltraining} describe the GP-AR and GP-ARX models for OSA prediction of $ \mathrm{Dst}$ and how to choose their free parameters for better performance. 
+The remainder of this paper is organised as follows: Section \S~\ref{sec:osaGPmethod} gives the reader an overview of the history of \emph{Gaussian Process} models as well as how they are formulated and how to perform inference with them. Sections \S~\ref{sec:osa}, \S~\ref{sec:gpar}, \S~\ref{sec:gparx} \& \S~\ref{sec:modeltraining} describe the GP-AR 
+and GP-ARX models for OSA prediction of $\mathrm{Dst}$ and how to choose their free parameters for better performance. Sections \S~\ref{sec:gpOSAEval} \& \S~\ref{sec:res} evaluate the performance of the proposed GP-AR and GP-ARX models.
 
 \section{Methodology: Gaussian Process} \label{sec:osaGPmethod}
 

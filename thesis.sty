@@ -128,7 +128,8 @@
 \usepackage{grffile}                    % So that we can use spaces in image names...
 \usepackage{pifont}                     % For ticks and crosses
 \usepackage{paralist}                   % Compact enumerate and itemize
-\usepackage[usenames,dvipsnames]{color} % Colored text
+%\PassOptionsToPackage{svgnames,usenames,dvipsnames}{xcolor}
+\usepackage[svgnames,usenames,dvipsnames]{xcolor} % Colored text
 \usepackage{moreverb}                   % To include keywords
 \usepackage{lscape}                     % Landscape page
 \usepackage[nottoc]{tocbibind}
@@ -139,7 +140,7 @@
 \usepackage{epigraph}                   % For quotations, proverbs
 \usepackage{wrapfig}                    % For wrapping text around figures
 \usepackage[inline]{enumitem}           % For in-line lists
-\usepackage{color}
+%\usepackage{color}
 \definecolor{darkred}{rgb}{0.5,0,0}
 \definecolor{darkgreen}{rgb}{0,0.5,0}
 \definecolor{darkblue}{rgb}{0,0,0.5}
@@ -155,7 +156,7 @@
             linkcolor=toclinkcolor,
             bookmarks=true,
             filecolor=gray,
-            urlcolor=Aquamarine,
+            urlcolor=darkblue,
             citecolor=toclinkcolor
            ]{hyperref} % Make links clickable and generate bookmarks (so you can easily click through in acroread)
 
@@ -179,6 +180,40 @@
 \usepackage{adjustbox}
 \usepackage{listings}                   % For code formatting
 \usepackage{cleveref}                   % For multiple references
+
+
+\usepackage[object=vectorian]{pgfornament}
+\usepackage{lipsum,tikz}
+
+\newcommand{\sectionline}{%
+  \noindent
+  \begin{center}
+  {\color{DarkViolet}
+    \resizebox{0.5\linewidth}{1ex}
+    {{%
+    {\begin{tikzpicture}
+    \node  (C) at (0,0) {};
+    \node (D) at (9,0) {};
+    \path (C) to [ornament=85] (D);
+    \end{tikzpicture}}}}}%
+    \end{center}
+  }
+%% A macro with two arguments to change ornaments and colors easily
+%% Syntax -- \sectionlinetwo{<color>}{<ornament>}
+\newcommand{\sectionlinetwo}[2]{%
+  \nointerlineskip \vspace{.5\baselineskip}\hspace{\fill}
+  {\color{#1}
+    \resizebox{0.5\linewidth}{2ex}
+    {{%
+    {\begin{tikzpicture}
+    \node  (C) at (0,0) {};
+    \node (D) at (9,0) {};
+    \path (C) to [ornament=#2] (D);
+    \end{tikzpicture}}}}}%
+    \hspace{\fill}
+    \par\nointerlineskip \vspace{.5\baselineskip}
+  }
+
 
 \newcommand{\crefrangeconjunction}{ to~}
 

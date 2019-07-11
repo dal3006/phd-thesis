@@ -1,16 +1,18 @@
 \chapter{Dynamic Time Lag Regression: Predicting What \& When}\label{chapter:pdt}
 
 {\small
-  We the joint regression problem where a signal drives another signal with an unknown time delay, with the modelling of the solar wind speed based 
-  on the sun's magnetic flux, as motivating application. This problem, called \emph{dynamic time lag regression} (\XX) is formalized using a probabilistic setting, modelling 
-  the non-stationary time delay between the causes and the effects on the one hand, and the cause-effect relationship on the other hand. A Bayesian approach is presented to 
-  tackle the \XX\ problem together with theoretical justifications based on linear stability analysis. The approach is empirically validated with proofs of concept on 
-  synthetic and real-world problems. 
+  We the joint regression problem where a signal drives another signal with an unknown time delay, with the modelling 
+  of the solar wind speed based on the sun's magnetic flux, as motivating application. This problem, called 
+  \emph{dynamic time lag regression} (\XX) is formalized using a probabilistic setting, modelling the non-stationary 
+  time delay between the causes and the effects on the one hand, and the cause-effect relationship on the other hand. 
+  A Bayesian approach is presented to tackle the \XX\ problem together with theoretical justifications based on 
+  linear stability analysis. The approach is empirically validated with proofs of concept on synthetic and 
+  real-world problems. 
 }
 
-\vspace{5pt}
-%\hrule
-\vspace{6pt}
+
+\vfill
+\sectionlinetwo{DarkGreen}{88}
 \vfill
 
 \noindent
@@ -23,9 +25,9 @@
 
 
 \section{Introduction}\label{sec:intro}
-A significant body of work in machine learning concerns the modeling of spatio-temporal phenomena \citep{SurveyST,NIPSForecasting18}, 
-ranging from markets \citep{Pedreschi} to weather forecasting \citep{Horvitz}.
-This paper focuses on the problem of modeling the temporal dependency between two time series, 
+A significant body of work in machine learning concerns the modeling of spatio-temporal phenomena 
+\citep{SurveyST,NIPSForecasting18}, ranging from markets \citep{Pedreschi} to weather forecasting 
+\citep{Horvitz}. This work focuses on the problem of modeling the temporal dependency between two time series, 
 where the latter one is {\em caused} by the former one \citep{Granger} with a non-stationary time delay. 
 
 The motivating application domain is that of space weather. The sun, a perennial source of charged energetic particles, 
@@ -39,30 +41,31 @@ but can sporadically lead to much larger losses.}
 A key prediction task thus is to forecast the speed of the \emph{solar wind} in the vicinity of the Earth 
 \citep{doi:10.1002/jgra.50429,doi:10.1029/2009SW000542}, sufficiently early to emit an alarm and be able to prevent 
 the damages to the best possible extent. Formally the goal is to model the dependency between heliospheric 
-observations (available at light speed), referred to as {\em cause series}, and the solar wind speed series recorded at the 
-Lagrangian point $L_1$ (distant from the Earth by 1.5 million kilometers), referred to as {\em effect series}. The 
-key difficulty is that the time lag between an input and its effect, the solar wind recorded at $L_1$, varies from circa 2 to 5 days
-depending on, among many factors, the initial direction of emitted particles and their energy. Would the lag be constant, the solar wind 
-prediction problem would boil down to a mainstream regression problem. The challenge here is to predict, from the solar image $x(t)$ at time $t$ the 
-value $y(t+\tau)$ of the solar wind speed reaching the earth at time $t+\tau$ where both the value $y(t+\tau)$ and the time lag $\tau$ depend on $x(t)$.
+observations (available at light speed), referred to as {\em cause series}, and the solar wind speed series 
+recorded at the Lagrangian point $L_1$ (distant from the Earth by 1.5 million kilometers), referred to as 
+{\em effect series}. The key difficulty is that the time lag between an input and its effect, the solar wind 
+recorded at $L_1$, varies from circa 2 to 5 days depending on, among many factors, the initial direction of 
+emitted particles and their energy. Would the lag be constant, the solar wind prediction problem would boil 
+down to a mainstream regression problem. The challenge here is to predict, from the solar image $x(t)$ at 
+time $t$ the value $y(t+\tau)$ of the solar wind speed reaching the earth at time $t+\tau$ where both the 
+value $y(t+\tau)$ and the time lag $\tau$ depend on $x(t)$.
 
-To our knowledge the regression problem of predicting both {\em what} the effect is and {\em when} the effect is observed constitutes a new ML problem, 
-that we called {\em Dynamic TimeLag Regression} (\XX). Indeed, the modeling of dependencies among financial 
-time series has been intensively tackled (see e.g. \citet{ZHOU2006195}). When considering varying time lag, 
-many approaches rely on dynamic time warping (DTW) \citep{SakoeShiba1978}. For instance, DTW is used in 
-\citet{SignalDiffusion}, taking a Bayesian approach to achieve the temporal alignment of both series under some restricting assumptions 
-(considering slowly varying time lags and linear relationships between the cause and effect time series). More generally, 
-the use of DTW in time series analysis relies on simplifying assumptions on the cause and effect series 
-(same dimensionality and structure) and build upon available cost 
-matrices for the temporal alignment. 
+To our knowledge the regression problem of predicting both {\em what} the effect is and {\em when} the effect 
+is observed constitutes a new ML problem, that we called {\em Dynamic TimeLag Regression} (\XX). Indeed, the 
+modeling of dependencies among financial time series has been intensively tackled (see e.g. \citet{ZHOU2006195}). 
+When considering varying time lag, many approaches rely on dynamic time warping (DTW) \citep{SakoeShiba1978}. 
+For instance, DTW is used in \citet{SignalDiffusion}, taking a Bayesian approach to achieve the temporal alignment 
+of both series under some restricting assumptions (considering slowly varying time lags and linear relationships 
+between the cause and effect time series). More generally, the use of DTW in time series analysis relies on 
+simplifying assumptions on the cause and effect series (same dimensionality and structure) and build upon 
+available cost matrices for the temporal alignment. 
 
-This paper focuses on the \XX\ regression problem and the identification of varying time-lag phenomena involving stochastic dependencies of
-arbitrary complexity. The originality of the proposed approach compared to the state of the art 
-in DTW series alignment is threefold. Firstly, the cause and effect series are of different dimensionality. 
-While the effect series is scalar, the cause series can be high-dimensional (e.g. images). %, vectors, etc). 
-Secondly, the relationship 
-between the cause and the effect series can be non-linear (the {\em what} model). Thirdly, the time lag phenomenon 
-(the {\em when} model) can be non smooth (as opposed to e.g. \citet{ZHOU2006195}).
+This paper focuses on the \XX\ regression problem and the identification of varying time-lag phenomena involving 
+stochastic dependencies of arbitrary complexity. The originality of the proposed approach compared to the state of 
+the art in DTW series alignment is threefold. Firstly, the cause and effect series are of different dimensionality. 
+While the effect series is scalar, the cause series can be high-dimensional (e.g. images, vectors, etc). 
+Secondly, the relationship between the cause and the effect series can be non-linear (the {\em what} model). 
+Thirdly, the time lag phenomenon (the {\em when} model) can be non smooth (as opposed to e.g. \citet{ZHOU2006195}).
 
 The Bayesian approach proposed to tackle the \XX\ regression problem and the associated learning 
 equations are described in section \ref{sec-formulation}, followed by a stability analysis and a 
@@ -91,40 +94,61 @@ $\tau(t)\in \mathbb{R}^+$ represents the time delay between inputs and outputs.
 Vectors are written using bold fonts.
 
 \section{Probabilistic Dynamically Delayed Regression}\label{sec-formulation}
-As said, Eqs \ref{eq:pb1}-\ref{eq:pb2} define a regression problem that differs from standard regression along two lines. 
-Firstly, the time lag $\tau(t)$ is non-stationary as it depends on $x(t)$.  
-Secondly, $\tau(t)$ is unknown, i.e. it 
-is not recorded explicitly in the training data as is typically the case in the space weather context. 
-\subsection{Assumptions}
-For the sake of the model identifiability and computational stability, the delay function $\phi(t) = t + \tau(t)$ is assumed to be sufficiently regular w.r.t. $t$. Formally,  $\phi(.)$ is assumed to be continuous. % and \emph{bijective}. I remove this, which is not consistent with the model
+As said, Eqs \ref{eq:pb1}-\ref{eq:pb2} define a regression problem that differs from standard regression 
+along two lines. Firstly, the time lag $\tau(t)$ is non-stationary as it depends on $x(t)$.  Secondly, 
+$\tau(t)$ is unknown, i.e. it is not recorded explicitly in the training data as is typically the case in 
+the space weather context. 
 
-For some authors  \citep{ZHOU2006195} the monotonicity of $\phi(.)$ is additionally required and enforced using constraints:   $$\phi(t_1) \leq \phi(t_2), \forall t_1 \leq t_2$$
-However, this assumption will not be retained in the following as it does not hold in the space weather domain (e.g. fast moving 
-solar wind can reach the Earth before slow moving solar wind which departed before it). 
+\subsection{Assumptions}
+
+For the sake of the model identifiability and computational stability, the delay function 
+$\phi(t) = t + \tau(t)$ is assumed to be sufficiently regular w.r.t. $t$. Formally, $\phi(.)$ is assumed 
+to be continuous. % and \emph{bijective}. I remove this, which is not consistent with the model
+
+For some authors  \citep{ZHOU2006195} the monotonicity of $\phi(.)$ is additionally required and enforced 
+using constraints:   $$\phi(t_1) \leq \phi(t_2), \forall t_1 \leq t_2$$. However, this assumption will not 
+be retained in the following as it does not hold in the space weather domain (e.g. fast moving solar wind 
+can reach the Earth before slow moving solar wind which departed before it). 
 
 \subsection{Probabilistic Dynamic Time-Lag regression}
-For practical reasons, cause and effect series are sampled with a constant rate $\delta t$, and respectively noted ${x_m}$ and ${y_m}$ in the following. Accordingly, mapping $g$ might be sought as a discrete time lag, where the delay between cause $x_m$ and effect $y_{m+g(x_m)}$ ranges in a finite set $T = [\tau_{min}, \ldots, \tau_{max}]$, with  $\tau_{min}$ and  $\tau_{max}$ defined from prior knowledge, e.g. space weather theory. 
 
-The unavoidable error due to the discretization of the continuous time lag is mitigated along a probabilistic model, associating to each cause $x$, a set of independent predictors $\{\hat y_i(x),i=$ in $T\}$ and a probability distribution $\hat p(x)$ on $T$ estimating the probability of delay of the effects of $x$. Overall, the \XX\ solution is sought as a probability distribution conditioned on cause $x$, mixture of Gaussians centered on the predictors $\hat y_i(x)$, where the mixture weights are defined from $\hat p(x)$. More formally, letting ${\bf y}_m$ denote the vector of random variables $y_{m+i}, i$ in $T$, 
+For practical reasons, cause and effect series are sampled with a constant rate $\delta t$, and respectively 
+noted ${x_m}$ and ${y_m}$ in the following. Accordingly, mapping $g$ might be sought as a discrete time lag, 
+where the delay between cause $x_m$ and effect $y_{m+g(x_m)}$ ranges in a finite set 
+$T = [\tau_{min}, \ldots, \tau_{max}]$, with  $\tau_{min}$ and  $\tau_{max}$ defined from prior knowledge, 
+e.g. space weather theory. 
+
+The unavoidable error due to the discretization of the continuous time lag is mitigated along a probabilistic model,
+associating to each cause $x$, a set of independent predictors $\{\hat y_i(x),i=$ in $T\}$ and a probability 
+distribution $\hat p(x)$ on $T$ estimating the probability of delay of the effects of $x$. Overall, the \XX\ 
+solution is sought as a probability distribution conditioned on cause $x$, mixture of Gaussians centered on the 
+predictors $\hat y_i(x)$, where the mixture weights are defined from $\hat p(x)$. More formally, letting ${\bf y}_m$ 
+denote the vector of random variables $y_{m+i}, i$ in $T$, 
 \begin{equation}\label{eq:py}
   P\bigl[{\bf y}_{m}\vert x_m=x\bigr] = \sum_{i \in T, \tau_i\in\{0,1\}}  \hat p\bigl(\tau_1,\ldots,\tau_n\vert x)
 \prod_{i\in T} {\cal N}\bigl(\hat y_i(x),\sigma_i(\tau)\bigr)
 \end{equation}
-Two simplifications are made for the sake of the analysis. Firstly, the stochastic time lag is modelled as the set $\{\tau_i, i$ in $ T\}$ of binary 
-latent variables, where $\tau_i$ indicates whether $x$ drives $y_i$ ($\tau_i=1$) or not ($\tau_i=0$). The assumption that every cause has a single effect is modelled by imposing:\footnote{Note however that the cause-effect correspondence might be many-to-one, with an effect depending on several causes.}
+Two simplifications are made for the sake of the analysis. Firstly, the stochastic time lag is modelled as the set 
+$\{\tau_i, i$ in $ T\}$ of binary latent variables, where $\tau_i$ indicates whether $x$ drives $y_i$ ($\tau_i=1$) 
+or not ($\tau_i=0$). The assumption that every cause has a single effect is modelled by imposing:
+\footnote{Note however that the cause-effect correspondence might be many-to-one, with an effect depending on 
+several causes.}
 \begin{equation}\label{eq:cs1}
 \sum_{i \in T} \tau_i = 1.
 \end{equation}
-From constraint~(\ref{eq:cs1}), probability distribution $\hat p(x)$ thus is sought as a set of $\hat p_i(x)$ for $i$ in $T$, summing to 1, such that $\hat p_i(x)$ stands for the 
-probability of the effect of $x_m=x$ to occur with delay $i$ in $T$. \\
-The second simplifying assumption is that the variance $\sigma_i^2({\bf \tau})$ of predictor $\hat h_i$ does not depend on $x$, by setting:
+From constraint~(\ref{eq:cs1}), probability distribution $\hat p(x)$ thus is sought as a set of $\hat p_i(x)$ 
+for $i$ in $T$, summing to 1, such that $\hat p_i(x)$ stands for the probability of the effect of $x_m=x$ to occur 
+with delay $i$ in $T$. \\
+The second simplifying assumption is that the variance $\sigma_i^2({\bf \tau})$ of predictor $\hat h_i$ does not 
+depend on $x$, by setting:
 \[
 \sigma_i({\bf \tau})^{-2} = \Bigl(1+\sum_j\alpha_{ij} \tau_j\Bigr)\sigma^{-2},
 \]
 with $\sigma^2$ a default variance and $\alpha_{ij}\ge 0$ a matrix of non-negative real parameters. 
 The fact that $x$ can influence $y_i$ through predictor $\hat y_i(x)$ even when $\tau_i=0$ reflects an indirect
-influence due to the auto-correlation of the $y$ series. This influence comes with a higher variance, enforced by making 
-$\alpha_{ij}$ a decreasing function of $\vert i-j\vert$. More generally, a large value of $\alpha_{ii}$ compared to $\alpha_{ij}$ for $i\ne j$ corresponds to a small auto-correlation time of the effect series. 
+influence due to the auto-correlation of the $y$ series. This influence comes with a higher variance, enforced by 
+making $\alpha_{ij}$ a decreasing function of $\vert i-j\vert$. More generally, a large value of $\alpha_{ii}$ 
+compared to $\alpha_{ij}$ for $i\ne j$ corresponds to a small auto-correlation time of the effect series. 
 
 
 \subsection{Learning criterion}
