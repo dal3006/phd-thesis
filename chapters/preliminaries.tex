@@ -1,13 +1,39 @@
 \chapter{Preliminaries}\label{chapter:preliminaries}
 
-This chapter gives a qualitative and somewhat quantitative treatment of various scientific ideas 
-relevant to space weather research. Section \S~\ref{sec:plasma} discusses space plasmas and their properties, 
-\S~\ref{sec:mag} introduces the \emph{magnetosphere}, giving context for chapters \ref{chapter:dst_osa},\ref{chapter:dst_msa}. 
-Section \S~\ref{sec:plasmadiff} introduces the plasma diffusion model \ref{eq:fokker} and its simplified 
-radial diffusion system \ref{eq:radialDiff} which is used as the underlying physical model for chapter 
+\emph{Space weather} is a branch of physics studies time varying phenomena in the solar system. The principal 
+driver of space weather phenomena is the Sun, specifically its magnetic field variations and the \emph{solar wind}.
+The effect of Solar variations on the planetary environment are caused due to coupling between solar wind particles 
+and the magnetic field produced by the Earth. This chapter gives a qualitative and semi-quantitative treatment of 
+various scientific ideas relevant to space weather research.
+
+\begin{table}
+    \centering
+    \begin{tabular}{l p{0.35\textwidth} r}
+        \hline
+        \textbf{Chapters} & \textbf{Themes} & \textbf{Recommended Reading}\\
+        \hline
+        \vspace{5pt}
+        \ref{chapter:dst_osa} \& \ref{chapter:dst_msa} & Forecasting of geomagnetic index $\mathrm{Dst}$. & \S~\ref{sec:geoindex}, \S~\ref{sec:mag}\textsuperscript{*}, \S~\ref{sec:plasma}\textsuperscript{*} \\
+        \ref{chapter:bayes_diff_chapter} & Inference of radiation belt parameters. & \S~\ref{sec:plasmadiff}, \S~\ref{sec:plasma}\textsuperscript{*} \S~\ref{sec:mag}\textsuperscript{*} \\
+        \ref{chapter:pdt} & Forecasting of near Earth solar wind speed using solar data. & \S~\ref{sec:hmfsolarwind}, \S~\ref{sec:sunspots}, \S~\ref{sec:solar}\textsuperscript{*}\\
+        \hline
+    \end{tabular}
+    \caption{Dissertation Guide. {\small Asterik\textsuperscript{*} denotes optional material.}}
+    \label{table:chapterguide}
+\end{table}
+
+Table \ref{table:chapterguide} provides the reader with a condensed guide to this dissertation. 
+It connects the content presented in this chapter with the main research problems analyzed in the later chapters 
+and provides recommended prerequisite reading for each chapter.
+
+Section \S~\ref{sec:plasma} discusses space plasmas and their properties, \S~\ref{sec:mag} introduces the 
+\emph{magnetosphere}, giving context for chapters \ref{chapter:dst_osa},\ref{chapter:dst_msa}. 
+Section \S~\ref{sec:plasmadiff} introduces the plasma diffusion model (equation \ref{eq:fokker}) and its simplified 
+radial diffusion system (equation \ref{eq:radialDiff}) which is used as the underlying physical model for chapter 
 \ref{chapter:bayes_diff_chapter}. Section \S~\ref{sec:solar} provides some background about the Sun and 
 the solar wind which is the driver for all space weather phenomena, this is used in the solar wind prediction 
 task considered in chapter \ref{chapter:pdt}.    
+
 
 \section{Space Plasma}\label{sec:plasma}
 
@@ -74,7 +100,7 @@ for the \emph{adiabatic} theory of plasma motions in the Earth's magnetosphere w
 
 \begin{figure}
     \noindent\centering\includegraphics[width=\textwidth]{Sun_poster.png}
-    \caption{\small{Cross section of the Sun \\ 
+    \caption{{\small Cross section of the Sun \\ 
     Author: Kelvinsong [CC BY-SA 3.0 (\url{https://creativecommons.org/licenses/by-sa/3.0})]}}
     \label{fig:SunLayers}
 \end{figure}
@@ -114,7 +140,7 @@ be thousands of times stronger than the on the Earth.
 % \begin{wrapfigure}{r}{0.4\textwidth}
 %     \centering\includegraphics[width=0.38\textwidth]{chromosphere.jpg}
 %     \caption{
-%         \small{Chromosphere viewed using an $H\alpha$ filter. \\ \textit{Source}: CWitte (Public domain)}}
+%         {\small Chromosphere viewed using an $H\alpha$ filter. \\ \textit{Source}: CWitte (Public domain)}}
 %     \label{fig:chromosphere}
 % \end{wrapfigure}
 
@@ -139,7 +165,7 @@ not well understood, there various explanations using concepts of magnetic recon
 \citep{russell2001solar,SolarCorona} and Alfv\'en waves \citep{AlfvenCorona}.
 
 
-\subsection{Heliospheric Magnetic Field \& Solar Wind}
+\subsection{Heliospheric Magnetic Field \& Solar Wind}\label{sec:hmfsolarwind}
 
 The existence of the solar wind was first postulated via observations of Halley's coment in 
 \citet{Bierman1,Bierman2,Bierman3} and subsequently models of the \emph{Heliospheric Magnetic Field} (HMF) 
@@ -165,7 +191,7 @@ in-depth review on the phenomena that drive the HMF.
 
 \begin{figure}
     \noindent\includegraphics[width=0.8\textwidth]{parker-spiral.jpg}
-    \caption{\small{An illustration of the Heliospheric Magnetic Field in the \emph{ecliptic plane}. 
+    \caption{{\small An illustration of the Heliospheric Magnetic Field in the \emph{ecliptic plane}. 
     In the heliosphere, rotation of the HMF footpoints within a radial solar wind flow generates an azimuthal 
     component of the HMF, $B_{\phi}$, leading to a spiral geometry. Red and blue lines, 
     showing regions of opposite polarity, are separated by the heliospheric current sheet (HCS), 
@@ -185,7 +211,7 @@ $\sim 700 \text{km}/\text{s}$ (figure \ref{fig:solarwinddist}).
 \begin{figure}
     \noindent\centering\includegraphics[width=0.75\textwidth]{solarwinddist.pdf}
     \caption{
-        \small{Distribution of solar wind speed recorded at 1 AU for the time period $2008 - 2018$}}
+        {\small Distribution of solar wind speed recorded at 1 AU for the time period $2008 - 2018$}}
     \label{fig:solarwinddist}
 \end{figure}
 
@@ -213,7 +239,7 @@ this cyclical behaviour is called the \emph{sunspot cycle} or \emph{solar cycle}
 
 \begin{figure}
     \noindent\includegraphics[width=\textwidth]{sunspot-cycle.jpeg}
-    \caption{\small{The sunspot butterfly diagram.  \\ 
+    \caption{{\small The sunspot butterfly diagram.  \\ 
     Author: David Hathaway, NASA, Marshall Space Flight Center (Public domain) \\ 
     Source: Wikipedia}}
     \label{fig:SolarCycle}
@@ -248,7 +274,7 @@ well as the propagation time. Measurements of the solar wind speed will be used 
 
 % \begin{figure}
 %     \noindent\includegraphics[width=0.7\textwidth]{mag.png}
-%     \caption{\small{Schematic diagram of the Earth's magnetosphere: \\
+%     \caption{{\small Schematic diagram of the Earth's magnetosphere: \\
 %     The Sun (not shown) is to the left of the figure, the solar wind propagates from left to right.\\
 %     1) Bow shock. 2) Magnetosheath. 3) Magnetopause. 4) Magnetosphere. \\
 %     5) Northern tail lobe. 6) Southern tail lobe. 7) Plasmasphere.\\ 
@@ -259,7 +285,7 @@ well as the propagation time. Measurements of the solar wind speed will be used 
 
 \begin{figure}
     \noindent\includegraphics[width=0.8\textwidth]{mag3.png}
-    \caption{\small{Three-dimensional cutaway view of the magnetosphere. The light blue outer surface is the magnetopause, 
+    \caption{{\small Three-dimensional cutaway view of the magnetosphere. The light blue outer surface is the magnetopause, 
     its boundary layers are shown in darker blue. Magnetic field lines are shown in blue, electric currents in yellow. 
     The polar region where the magnetic field lines converge is the polar cusp. The bow shock has been omitted for clarity. 
     Reproduced from \citet{DeKeyser2005}}
@@ -281,7 +307,7 @@ is $\sim 10R_E$ ($R_E = 6372 \text{km}$, the radius of the Earth).
 \begin{wrapfigure}{r}{0.4\textwidth}
     \centering\includegraphics[width=0.35\textwidth]{adiabatic_motions.jpeg}
     \caption{
-        \small{Periodic components of particle motion, Reproduced from \citet{roederer2012dynamics}}}
+        {\small Periodic components of particle motion, Reproduced from \citet{roederer2012dynamics}}}
     \label{fig:particlemotions}
 \end{wrapfigure}
 
@@ -451,17 +477,17 @@ can be obtained from \ref{eq:fokker} by keeping $\mathcal{M}, J$ fixed, consider
 
 The resulting system is shown in \ref{eq:radialDiff}, the term 
 $\ell^2 \frac{\partial}{\partial{\ell}} \left( \frac{\kappa(\ell,t)}{\ell^{2}} \frac{\partial{f}}{\partial{\ell}}
-\right)_{\mathcal{M}, J}$ models diffusive phenomena in $\Phi$ but it expressed in the drift shell coordinate $\ell$. 
+\right)_{\mathcal{M}, J}$ models diffusive phenomena in $\Phi$ but it is expressed in the drift shell coordinate $\ell$. 
 Pitch angle diffusion is approximated using a loss process $\lambda(\ell,t) f$, where $\lambda(\ell,t)$ is the 
 \emph{loss rate}, as an alternative it is also possible to express the loss rate as a \emph{loss time scale} 
 $\tau(\ell,t) = \frac{1}{\lambda(\ell,t)}$, but in this thesis we will use the former convention.
 
 The radial diffusion system in equation \ref{eq:raddiffusion} is the starting point for chapter 
 \ref{chapter:bayes_diff_chapter} where a surrogate model of the phase space density $\hat{f}$ is built to 
-perform bayesian inference over the parameters of the diffusion coefficient $\kappa$ and loss rate 
+perform Bayesian inference over the parameters of the diffusion coefficient $\kappa$ and loss rate 
 $\lambda$.
 
-\subsection{Current Systems \& Geomagnetic Indices}
+\subsection{Current Systems \& Geomagnetic Indices}\label{sec:geoindex}
 
 As was noted earlier, the solar wind is largely deflected by the Earth's magnetic field but some particles still 
 leak into the magnetosphere. This particle injection is governed by the interaction between the magnetic field carried 
