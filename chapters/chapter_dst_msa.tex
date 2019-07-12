@@ -9,7 +9,7 @@
 	to get a single-point prediction of Dst. This model yields great accuracy in forecasting the Dst index from 
 	one to six hours ahead, with a correlation coefficient always higher than $0.873$ and a root mean square error 
 	lower than $\SI{9.86}{\nano\tesla}$. However, even if global metrics show excellent performance, it remains 
-	poor in predicting superstorms ($\mathrm{Dst} \leq \SI{-250}{\nano\tesla}$) six hours in advance. To improve it 
+	poor in predicting superstorms ($\mathrm{Dst} < \SI{-250}{\nano\tesla}$) six hours in advance. To improve it 
 	and to obtain probabilistic forecasts, we combine the LSTM model obtained with a GP and evaluate the hybrid 
 	predictor using the receiver operating characteristic curve and the reliability diagram. We conclude that 
 	this hybrid methodology provides improvements in the forecast of geomagnetic storms.
@@ -443,9 +443,9 @@ for the time horizon $t+1 \cdots t+6$, summarised in table \ref{table:competingm
 	\centering
 	\caption{Summary of Dst forecasting models compared in this study}
 	\label{table:competingmodels}
-	\begin{tabular}{| l | p{0.65\textwidth} |}
+	\begin{tabular}{ l  p{0.65\textwidth} }
 		\hline
-		Model & Description\\
+		\textbf{Model} & \textbf{Description}\\
 		\hline
 		\citet{wu1997geomagnetic} & An Elman RNN model having explicitly computed solar wind magnetospheric 
 		coupling functions as inputs.\\
@@ -477,7 +477,7 @@ six hour ahead predictions, their model presents a\ CC of $0.77$ and a RMSE of $
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{image5.png}
-	\caption{$\mathrm{Dst}$ predictions made by the LSTM model for the 2003 Halloween storm.}
+	\caption{$\mathrm{Dst}$ predictions made by the LSTM-Dst and LSTM-Dst-GPS models for the 2003 Halloween storm.}
     \label{fig:lstmhalloween}
 \end{figure}
 
@@ -510,10 +510,10 @@ predictionsm, are not adequate while evaluating probabilistic forecasts.
 	\label{table:stormclass}
 	\begin{tabular}{ccccc}
 	\hline
-	Level of Activity & Storm Classification \\ \hline
+	\textbf{Level of Activity} & \textbf{Storm Classification} \\ \hline
 	$\mathrm{Dst} > \SI{-50}{\nano\tesla}$ & Moderate\\
 	$\SI{-250}{\nano\tesla} \leq \mathrm{Dst} \leq \SI{-50}{\nano\tesla}$ & Intense\\
-	$\mathrm{Dst} \leq \SI{-250}{\nano\tesla}$ & Super Storm\\ \hline
+	$\mathrm{Dst} < \SI{-250}{\nano\tesla}$ & Super Storm\\ \hline
 	\end{tabular}
 \end{table}
 

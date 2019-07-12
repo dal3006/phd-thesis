@@ -174,6 +174,27 @@ function $K$. In machine learning, these symmetric positive definite functions o
 covariance functions or \emph{kernels}. Kernel based methods are applied extensively in data analysis 
 i.e. regression, clustering, classification, density estimation \citep{Scholkopf:2001:LKS:559923,hofmann2008}.
 
+\begin{table}[h]
+    \caption{Popular Kernel functions used in GPR models}
+    \centering
+    \begin{tabular}{l l l}
+    \hline
+     \textbf{Name}  & \textbf{Expression} & \textbf{Hyperparameters}  \\
+    \hline
+      {\small Radial Basis Function (RBF)}  & ${\scriptstyle \frac{1}{2} \exp(-||\mathbf{x} - \mathbf{y}||^2/l^2)}$  & ${\scriptstyle l \in \mathbb{R}}$   \\
+      
+      {\small Polynomial}  & ${\scriptstyle (\mathbf{x}\boldsymbol{\cdot} \mathbf{y} + b)^d}$ & ${\scriptstyle b \in \mathbb{R}, d \in \mathbb{N}}$   \\
+      
+      {\small Laplacian}  & ${\scriptstyle \exp(-||\mathbf{x} - \mathbf{y}||_{1}/\theta)}$  & ${\scriptstyle \theta \in \mathbb{R}^+}$  \\
+      
+      {\small Student's T}  & ${\scriptstyle 1/(1 + ||\mathbf{x} - \mathbf{y}||_{2}^d)}$ & ${\scriptstyle d \in \mathbb{R}^{+}}$\\
+      
+      {\small Maximum Likelihood Perceptron (MLP)}  & ${\scriptstyle \sin^{-1}\left(\frac{w\mathbf{x}\boldsymbol{\cdot} \mathbf{y} + b}{\sqrt{w\mathbf{x}\boldsymbol{\cdot} \mathbf{x} + b + 1} \sqrt{w\mathbf{y}\boldsymbol{\cdot} \mathbf{y} + b + 1}}\right)}$ & ${\scriptstyle w, b \in \mathbb{R}^{+}}$\\
+    \hline
+    \end{tabular}
+    \label{table:kernel}
+\end{table}
+    
 \subsection{Kernel Functions}
 
 For the success of a \emph{Gaussian Process} model an appropriate choice of kernel function is paramount. The symmetry and positive semi-definiteness of \emph{Gaussian Process} kernels implies that they represent inner-products between some basis function representation of the data. The interested reader is suggested to refer to \citet{Berlinet2004,Scholkopf:2001:LKS:559923,hofmann2008} for a thorough treatment of kernel functions and the rich theory behind them. Some common kernel functions used in machine learning are listed in Table \ref{table:kernel}. 
@@ -265,11 +286,26 @@ In this study, we construct Gaussian Process regression models with a combinatio
 
 \begin{align}
     K_{\text{osa}}(\mathbf{x}, \mathbf{y}) & = K_{\text{mlp}}(\mathbf{x}, \mathbf{y}) + K_{\text{st}}(\mathbf{x}, \mathbf{y}) \label{eq:usedKernel} \\
-    K_{\text{mlp}}(\mathbf{x}, \mathbf{y}) & = \sin^{-1}(\frac{w\mathbf{x}\boldsymbol{\cdot} \mathbf{y} + b}{\sqrt{w\mathbf{x}\boldsymbol{\cdot} \mathbf{x} + b + 1} \sqrt{w\mathbf{y}\boldsymbol{\cdot} \mathbf{y} + b + 1}}) \\
+    K_{\text{mlp}}(\mathbf{x}, \mathbf{y}) & = \sin^{-1}\left(\frac{w\mathbf{x}\boldsymbol{\cdot} \mathbf{y} + b}{\sqrt{w\mathbf{x}\boldsymbol{\cdot} \mathbf{x} + b + 1} \sqrt{w\mathbf{y}\boldsymbol{\cdot} \mathbf{y} + b + 1}}\right) \\
     K_{\text{st}}(\mathbf{x}, \mathbf{y}) & = \frac{1}{1 + ||\mathbf{x} - \mathbf{y}||_{2}^d}
 \end{align}
 
 \section{Experiments} \label{sec:modeltraining}
+
+\begin{table}[h]
+    \centering
+    \caption{Settings of model selection procedures}
+    \begin{tabular}{l c c c}
+    \hline
+    \textbf{Procedure} & \textbf{Grid Size} & \textbf{Step} & \textbf{Max Iterations} \\
+    \hline
+    Grid Search & $10$ & $0.2$ & NA \\
+    Coupled Simulated Annealing & $4$ & $0.2$ & $30$ \\
+    Maximum likelihood & NA & $0.2$ & $150$\\
+    \hline
+    \end{tabular}
+    \label{table:modelselection}
+\end{table}
 
 \subsection*{Training}
 
@@ -309,13 +345,55 @@ For measuring performance of model instances on the validation set storm events,
 
 In the case of GP-AR we let the model order $p$ vary from $5$ to $12$ while for GP-ARX we let the total model order $p_t = p + p_v + p_b$ vary from $3$ to $12$ and for each $p_t$ evaluate every possible combination of $p$, $p_v$ and $p_b$ such that $p_t = p + p_v + p_b$ and $p, p_{v}, p_b > 0$.
 
+
 \subsection*{Evaluation}\label{sec:gpOSAEval}
 
 After selecting the best performing GP-AR and GP-ARX models in the validation phase, we test and compare the performance of these models with the predictions generated from the \emph{persistence model} 
-$\mathrm{\hat{D}st}(t) = \mathrm{Dst}(t-1)$, on a set of 63 storm events occurring between 1998 and 2006 as given in Table \ref{table:teststorms}, which is the same list of storm events as used in \citet{Ji2012}.
+$\mathrm{\hat{D}st}(t) = \mathrm{Dst}(t-1)$, on a set of 63 storm events occurring between 1998 and 2006 as given in Table \ref{table:teststorms}, which is the same list of storm events as used in 
+\citet{Ji2012}.
 
+
+\begin{table}[h]
+    \centering
+    \caption{Evaluation results for models on storm events listed in table \ref{table:teststorms}}
+    \label{table:results}
+    \begin{tabular}{l c c c}
+    \hline
+    \textbf{Model} & $\mathrm{MAE}$ & $\mathrm{RMSE}$ & $\mathrm{CC}$\\ \hline
+    GP-ARX & $\SI{7.219}{\nano\tesla}$ & $\SI{11.88}{\nano\tesla}$ & $0.972$\\
+    GP-AR & $\SI{8.37}{\nano\tesla}$ & $\SI{14.04}{\nano\tesla}$ & $0.963$\\
+    Persistence & $\SI{9.182}{\nano\tesla}$ & $\SI{14.94}{\nano\tesla}$ & $0.957$\\
+    \hline
+    \end{tabular}
+\end{table}
 
 \section{Results}\label{sec:res}
+
+\begin{figure}
+    \noindent\includegraphics[width=\textwidth]{Compare-mae.png}
+    \caption{Mean Absolute Error (\si{\nano\tesla}) on validation set storms vs model order for GP-AR and GP-ARX. \\ \textbf{Key}: Rectangle borders represent the first and third quartiles, with a horizontal line inside to indicate the median value, outlying points are shown as dots and whiskers indicate the smallest and largest non-outliers}
+    \label{fig:CompareMae}
+\end{figure}
+    
+\begin{figure}
+    \noindent\includegraphics[width=\textwidth]{Compare-cc.png}
+    \caption{Coefficient of Correlation on validation set storms vs model order for GP-AR and GP-ARX \\ \textbf{Key}: Rectangle borders represent the first and third quartiles, with a horizontal line inside to indicate the median value, outlying points are shown as dots and whiskers indicate the smallest and largest non-outliers}
+    \label{fig:CompareCC}
+\end{figure}
+    
+    
+\begin{figure}
+    \noindent\includegraphics[width=\textwidth]{Compare-mae-arx.png}
+    \caption{Mean Absolute Error (\si{\nano\tesla}) on validation set storms vs model order for GP-AR and GP-ARX for \emph{CSA}, \emph{GS} and \emph{ML} model selection routines \\ \textbf{Key}: Rectangle borders represent the first and third quartiles, with a horizontal line inside to indicate the median value, outlying points are shown as dots and whiskers indicate the smallest and largest non-outliers}
+    \label{fig:CompareMaeARX}
+\end{figure}
+    
+\begin{figure}
+    \noindent\includegraphics[width=\textwidth]{Compare-cc-arx.png}
+    \caption{Coefficient of Correlation on validation set storms vs model order for GP-AR and GP-ARX for \emph{CSA}, \emph{GS} and \emph{ML} model selection routines \\ \textbf{Key}: Rectangle borders represent the first and third quartiles, with a horizontal line inside to indicate the median value, outlying points are shown as dots and whiskers indicate the smallest and largest non-outliers}
+    \label{fig:CompareCCARX}
+\end{figure}
+    
 
 Figures \ref{fig:CompareMae} and \ref{fig:CompareCC} show how the mean absolute error and coefficient of correlation as calculated on the validation set storm events of Table \ref{table:validationstorms}, vary with increasing model order for GP-AR and GP-ARX. The results are represented as box and whisker plots, in which a rectangle is drawn to represent the first and third quartiles, with a horizontal line inside to indicate the median value, outlying points are shown as dots while the whiskers indicate the smallest and largest non-outliers. In both cases, the predictive performance first improves and then stagnates or worsens with increasing model order. 
 
@@ -378,107 +456,39 @@ Our results can be summarized as follows.
 %We acknowledge use of NASA/GSFC's Space Physics Data Facility's OMNIWeb (or CDAWeb or ftp) service, and OMNI data. Simon Wing acknowledges supports from CWI and NSF Grant AGS-1058456 and NASA Grants (NNX13AE12G, NNX15AJ01G, NNX16AC39G).
 %\end{acknowledgments}
 
+
+    
 \begin{figure}
-    \noindent\includegraphics[width=\textwidth]{Compare-mae.png}
-    \caption{Mean Absolute Error (\si{\nano\tesla}) on validation set storms vs model order for GP-AR and GP-ARX. \\ \textbf{Key}: Rectangle borders represent the first and third quartiles, with a horizontal line inside to indicate the median value, outlying points are shown as dots and whiskers indicate the smallest and largest non-outliers}
-    \label{fig:CompareMae}
-    \end{figure}
-    
-    \begin{figure}
-    \noindent\includegraphics[width=\textwidth]{Compare-cc.png}
-    \caption{Coefficient of Correlation on validation set storms vs model order for GP-AR and GP-ARX \\ \textbf{Key}: Rectangle borders represent the first and third quartiles, with a horizontal line inside to indicate the median value, outlying points are shown as dots and whiskers indicate the smallest and largest non-outliers}
-    \label{fig:CompareCC}
-    \end{figure}
-    
-    
-    \begin{figure}
-    \noindent\includegraphics[width=\textwidth]{Compare-mae-arx.png}
-    \caption{Mean Absolute Error (\si{\nano\tesla}) on validation set storms vs model order for GP-AR and GP-ARX for \emph{CSA}, \emph{GS} and \emph{ML} model selection routines \\ \textbf{Key}: Rectangle borders represent the first and third quartiles, with a horizontal line inside to indicate the median value, outlying points are shown as dots and whiskers indicate the smallest and largest non-outliers}
-    \label{fig:CompareMaeARX}
-    \end{figure}
-    
-    \begin{figure}
-    \noindent\includegraphics[width=\textwidth]{Compare-cc-arx.png}
-    \caption{Coefficient of Correlation on validation set storms vs model order for GP-AR and GP-ARX for \emph{CSA}, \emph{GS} and \emph{ML} model selection routines \\ \textbf{Key}: Rectangle borders represent the first and third quartiles, with a horizontal line inside to indicate the median value, outlying points are shown as dots and whiskers indicate the smallest and largest non-outliers}
-    \label{fig:CompareCCARX}
-    \end{figure}
-    
-    
-    \begin{figure}
     \noindent\includegraphics[width=\textwidth]{PredictionsModel1/PredErrBars_Storm43.png}
     \caption{OSA Predictions with $\pm \sigma$ error bars for event: 2003/06/17 to 2003/06/19}
     \label{fig:ComparePred1}
-    \end{figure}
+\end{figure}
     
     
-    \begin{figure}
+\begin{figure}
     \noindent\includegraphics[width=\textwidth]{PredictionsModel1/PredErrBars_Storm16.png}
     \caption{OSA Predictions with $\pm \sigma$ error bars for event: 2012/03/08 to 2012/03/10}
     \label{fig:ComparePred2}
-    \end{figure}
+\end{figure}
     
-    \begin{figure}
+\begin{figure}
     \noindent\includegraphics[width=\textwidth]{PredictionsModel1/PredErrBars_Storm46.png}
     \caption{OSA Predictions with $\pm \sigma$ error bars for event: 2003/11/20 to 2003/11/22}
     \label{fig:ComparePred3}
-    \end{figure}
-    
-    \begin{table}[h]
-    \caption{Popular Kernel functions used in GPR models}
-    \centering
-    \begin{tabular}{l c c}
-    \hline
-     Name  & Expression & Hyperparameters  \\
-    \hline
-      Radial Basis Function (RBF)  & $\frac{1}{2} \exp(-||\mathbf{x} - \mathbf{y}||^2/l^2)$  & $l \in \mathbb{R}$   \\
-      
-      Polynomial  & $(\mathbf{x}\boldsymbol{\cdot} \mathbf{y} + b)^d$ & $b \in \mathbb{R}, d \in \mathbb{N}$   \\
-      
-      Laplacian  & $\exp(-||\mathbf{x} - \mathbf{y}||_{1}/\theta)$  & $\theta \in \mathbb{R}^+$  \\
-      
-      Student's T  & $1/(1 + ||\mathbf{x} - \mathbf{y}||_{2}^d)$ & $d \in \mathbb{R}^{+}$\\
-      
-      Maximum Likelihood Perceptron  & $\sin^{-1}(\frac{w\mathbf{x}\boldsymbol{\cdot} \mathbf{y} + b}{\sqrt{w\mathbf{x}\boldsymbol{\cdot} \mathbf{x} + b + 1} \sqrt{w\mathbf{y}\boldsymbol{\cdot} \mathbf{y} + b + 1}})$ & $w, b \in \mathbb{R}^{+}$\\
-    \hline
-    \end{tabular}
-    \label{table:kernel}
-    \end{table}
-    
-    \begin{table}[h]
-    \centering
-    \caption{Settings of model selection procedures}
-    \begin{tabular}{l c c c}
-    \hline
-    Procedure & Grid Size & Step & Max Iterations \\
-    \hline
-    Grid Search & $10$ & $0.2$ & NA \\
-    Coupled Simulated Annealing & $4$ & $0.2$ & $30$ \\
-    Maximum likelihood & NA & $0.2$ & $150$\\
-    \end{tabular}
-    \label{table:modelselection}
-    \end{table}
+\end{figure}
     
     
-    \begin{table}[h]
-    \centering
-    \caption{Evaluation results for models on storm events listed in table \ref{table:teststorms}}
-    \label{table:results}
-    \begin{tabular}{l c c c}
-    \hline
-    Model & Mean Absolute Error & Root Mean Square Error & Coefficient of Correlation\\ \hline
-    GP-ARX & $\SI{7.219}{\nano\tesla}$ & $\SI{11.88}{\nano\tesla}$ & $0.972$\\
-    GP-AR & $\SI{8.37}{\nano\tesla}$ & $\SI{14.04}{\nano\tesla}$ & $0.963$\\
-    Persistence & $\SI{9.182}{\nano\tesla}$ & $\SI{14.94}{\nano\tesla}$ & $0.957$\\
-    \end{tabular}
-    \end{table}
     
-    \begin{table}[h]
+    
+    
+    
+\begin{table}[h]
     \centering
     \caption{Storm events used for model selection of GP-AR and GP-ARX}
     \label{table:validationstorms}
     \begin{tabular}{llllll}
     \hline
-    Event Id & Start Date & Start Hour & End Date & End Hour & min. Dst \\ \hline
+    \textbf{Event Id} & \textbf{Start Date} & \textbf{Start Hour} & \textbf{End Date} & \textbf{End Hour} & \textbf{Storm Peak} \\ \hline
     1 & 1995/03/26 & 05:00 & 1995/03/26 & 23:00 & $ \SI{-107}{\nano\tesla}$ \\
     2 & 1995/04/07 & 13:00 & 1995/04/09 & 09:00 & $ \SI{-149}{\nano\tesla}$ \\
     3 & 1995/09/27 & 01:00 & 1995/09/28 & 04:00 & $ \SI{-108}{\nano\tesla}$ \\
@@ -516,7 +526,7 @@ Our results can be summarized as follows.
     \begin{adjustbox}{width=\textwidth,totalheight=0.9\textheight,keepaspectratio}
     \begin{tabular}{cccccc}
     \hline
-    Event Id & Start Date & Start Time & End Date & End Time & min. Dst \\ \hline
+    \textbf{Event Id} & \textbf{Start Date} & \textbf{Start Hour} & \textbf{End Date} & \textbf{End Hour} & \textbf{Storm Peak} \\ \hline
     1 & 1998/02/17 & 12:00 & 1998/02/18 & 10:00 & $ \SI{-100}{\nano\tesla}$ \\
     2 & 1998/03/10 & 11:00 & 1998/03/11 & 18:00 & $ \SI{-116}{\nano\tesla}$ \\
     3 & 1998/05/04 & 02:00 & 1998/05/05 & 02:00 & $ \SI{-205}{\nano\tesla}$ \\
