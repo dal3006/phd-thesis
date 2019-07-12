@@ -30,7 +30,7 @@ ggplot(rmseres, aes(x=hour, y=value, fill=model)) +
     labels=c(
       parse(text = TeX('$t+1$')), parse(text = TeX('$t+2$')), parse(text = TeX('$t+3$')), 
       parse(text = TeX('$t+4$')), parse(text = TeX('$t+5$')), parse(text = TeX('$t+6$')))) +
-  ylab("RMSE")
+  ylab("RMSE (nT)")
 
 ggsave(
   filename = "lstmCompRMSE.pdf", 
