@@ -166,7 +166,10 @@ where
 
 The practical implementation of \emph{Gaussian Process} models requires the inversion of the training data kernel matrix $[\mathbf{K} + \sigma^{2} \mathbf{I}]^{-1}$ to calculate the parameters of the predictive distribution $\mathbf{f_*}|\mathbf{X},\mathbf{y},\mathbf{X_*}$. The computational complexity of this inference is dominated by the linear problem in equation \ref{eq:posteriormean}), which can be solved via Cholesky decomposition, with a time complexity of $O(N^3)$, where $N$ is the number of data points.
 
-The distribution of $\mathbf{f_*}| \mathbf{X},\mathbf{y},\mathbf{X_*}$ is known in Bayesian analysis as the \emph{Posterior Predictive Distribution}. This illustrates a key difference between \emph{Gaussian Processes} and other regression models such as \emph{Neural Networks}, \emph{Linear Models} and \emph{Support Vector Machines}: a \emph{Gaussian Process} model does not generate point predictions for new data but outputs a predictive distribution for the quantity sought, thus allowing to construct error bars on the predictions. This property of Bayesian models such as \emph{Gaussian Processes} makes them very appealing for Space Weather forecasting applications. 
+The distribution of $\mathbf{f_*}| \mathbf{X},\mathbf{y},\mathbf{X_*}$ is known in Bayesian analysis as the \emph{Posterior Predictive Distribution}. This illustrates a key difference between 
+\emph{Gaussian Processes} and other regression models such as \emph{Neural Networks}, \emph{Linear Models} and \emph{Support Vector Machines}: a \emph{Gaussian Process} model does not generate 
+point predictions for new data but outputs a predictive distribution for the quantity sought, thus allowing to construct error bars on the predictions. This property of Bayesian models such as 
+\emph{Gaussian Processes} makes them very appealing for Space Weather forecasting applications. 
 
 The central design issue in applying \emph{Gaussian Process} models is the choice of the function 
 $K(\mathbf{x}, \mathbf{x}')$. The same constraints that apply to $\mathbf{\Lambda}$ also apply to the 
@@ -247,9 +250,13 @@ We consider two choices for the input features $ \mathbf{x}_{t-1}$ leading to tw
 
 The simplest auto-regressive models for \emph{OSA} prediction of $\mathrm{Dst}$ are those that use only the history of $\mathrm{Dst}$ to construct input features for model training. The input features $\mathbf{x}_{t-1}$ at each time step are the history of $\mathrm{Dst}(t)$ until a time lag of $p$ hours.
 
-\begin{align*}
-    \mathbf{x}_{t-1} = & \left(\mathrm{Dst}(t-1), \cdots , \mathrm{Dst}(t-p+1)\right)
-\end{align*}
+\begin{equation}\label{eq:gpOSAAR}
+    \mathbf{x}_{t-1} = \left(\mathrm{Dst}(t-1), \cdots , \mathrm{Dst}(t-p+1)\right)
+\end{equation}
+
+This description of the GP-AR model (\cref{eq:Dst,eq:GPNoise,eq:DstGP,eq:gpOSAAR}), as a Gaussian process $Dst(t)$ 
+whose input space $\mathbf{x}(t)$ comprises previous realizations of itself has been discussed in time series \citep{roberts2013gaussian}, 
+control systems \citep{kocijan2015modelling} and machine learning literature \citep{wang2006gaussian,wang2007gaussian}.  
 
 \subsection{Gaussian Process Auto-Regressive with eXogenous inputs (GP-ARX)} \label{sec:gparx}
 
