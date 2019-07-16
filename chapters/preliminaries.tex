@@ -28,8 +28,8 @@ and provides recommended prerequisite reading for each chapter.
 
 Section \S~\ref{sec:plasma} discusses space plasmas and their properties, \S~\ref{sec:mag} introduces the 
 \emph{magnetosphere}, giving context for chapters \ref{chapter:dst_osa},\ref{chapter:dst_msa}. 
-Section \S~\ref{sec:plasmadiff} introduces the plasma diffusion model (equation \ref{eq:fokker}) and its simplified 
-radial diffusion system (equation \ref{eq:radialDiff}) which is used as the underlying physical model for chapter 
+Section \S~\ref{sec:plasmadiff} introduces the plasma diffusion model (\cref{eq:fokker}) and its simplified 
+radial diffusion system (\cref{eq:radialDiff}) which is used as the underlying physical model for chapter 
 \ref{chapter:bayes_diff_chapter}. Section \S~\ref{sec:solar} provides some background about the Sun and 
 the solar wind which is the driver for all space weather phenomena, this is used in the solar wind prediction 
 task considered in chapter \ref{chapter:pdt}.    
@@ -71,12 +71,12 @@ on the electron temperature and plasma density.
     \lambda_d = \sqrt{\frac{\epsilon_0 k_b T_e}{n_e e^2}}
 \end{equation}
 
-In equation \ref{eq:debye}, the Debye length scale is expressed in terms of the \emph{Boltzmann constant} $k_b$, 
+In \cref{eq:debye}, the Debye length scale is expressed in terms of the \emph{Boltzmann constant} $k_b$, 
 the electron temperature $T_e$, free space permitivity $\epsilon_0$ and electron charge $e$. One can visualise the 
 positively charged ions having a cloud of electrons shielding them at the distance of $\lambda_d$. 
 
 It is also possible to take into account the shielding effect of the ions. The effective Debye length is now 
-expressed as an addition of two terms, one for electrons (\ref{eq:debye}) and a similar term for the ions by replacing 
+expressed as an addition of two terms, one for electrons (\cref{eq:debye}) and a similar term for the ions by replacing 
 $T_e$ for the ion temperature $T_i$ ($n_i \approx n_e$). 
 
 \subsection*{Plasma Parameter}
@@ -333,19 +333,19 @@ forces must be understood.
 
 It is well known from classical electromagnetism that the force exerted on a particle with charge $q$ by a 
 magnetic field $\mathbf{B}$ and an electric field $\mathbf{E}$ is given by the so called \emph{Lorentz force} 
-(eq \ref{eq:lorentzforce}).
+(\cref{eq:lorentzforce}).
 
 \begin{equation}\label{eq:lorentzforce}
     \mathbf{F} = m\frac{d\mathbf{v}}{dt} = q\mathbf{E} + q\mathbf{v} \times \mathbf{B}
 \end{equation}
 
 
-The first component of equation \ref{eq:lorentzforce} ($q\mathbf{E}$) is either parallel or opposite to the local electric 
+The first component of \cref{eq:lorentzforce} ($q\mathbf{E}$) is either parallel or opposite to the local electric 
 field depending on the charge of the particle. The second component $q\mathbf{v} \times \mathbf{B}$ involves a vector 
 cross product so it is always perpendicular to the plane spanned by vectors $\mathbf{v}$ and $\mathbf{B}$. In order to 
 understand its effects, we can decompose the particle velocity in two components; $v_{\parallel}$ parallel to $\mathbf{B}$ and 
 $v_{\perp}$ perpendicular to $\mathbf{B}$. If $\mathbf{E} = \mathbf{0}$, then the particle executes a circular motion 
-whose properties are shown in equation \ref{eq:larmor}, $\rho$ is the gyroradius and $\omega$ is the gyrofrequency or 
+whose properties are shown in \cref{eq:larmor}, $\rho$ is the gyroradius and $\omega$ is the gyrofrequency or 
 cyclotron frequency. In case $v_{\parallel} \neq 0$ then the trajectory is helical.
 
 \begin{equation}\label{eq:larmor}
@@ -395,8 +395,8 @@ $\mathcal{H}(q,p|\theta)$.
     \dot p &= - \frac{\partial \mathcal{H}}{\partial q}
 \end{align}
 
-If the hamiltonian system shown in equation \ref{eq:hamilton} executes a periodic motion in the $q,p$ phase space, 
-then it admits an \emph{adiabatic invariant} $A$ given in equation \ref{eq:adiabatic_invariant}.
+If the hamiltonian system shown in \cref{eq:hamilton} executes a periodic motion in the $q,p$ phase space, 
+then it admits an \emph{adiabatic invariant} $A$ given in \cref{eq:adiabatic_invariant}.
 
 \begin{equation}\label{eq:adiabatic_invariant}
     A = \oint p dq
@@ -407,7 +407,7 @@ that is if changes in $\theta$ happen over a time period much greater than the p
 
 Applying this idea to charged particle motion in the \emph{magnetosphere}, it is possible to associate one 
 adiabatic invariant with each periodic motion i.e. gyromotion $\mathcal{M}$, bounce $J$ and drift 
-$\Phi$ (equation \ref{eq:plasmainv}). 
+$\Phi$ (\cref{eq:plasmainv}). 
 
 \begin{align}\label{eq:plasmainv}
     \mathcal{M} &= \frac{1}{2}\frac{mv^{2}_{\perp}}{B} \\
@@ -447,7 +447,7 @@ reasons such as:
 \end{enumerate*}
 
 The plasma diffusion system \citep{schulz2012particle} can be written as a generalized Fokker-Planck system as shown 
-in equation \ref{eq:fokker}.
+in \cref{eq:fokker}.
 
 \begin{align}\label{eq:fokker}
     \frac{\partial{f}}{\partial{t}} &= \sum^{3}_{p,q = 1}
@@ -465,7 +465,7 @@ diffusion moving the magnetic mirror points along the field lines.
 
 Rewriting $\Phi \propto \frac{1}{\ell}$, the third invariant can be expressed in terms of the 
 \emph{drift shell} $l$ (larger value of $l$ implies greater distance from the Earth). The radial diffusion system 
-can be obtained from \ref{eq:fokker} by keeping $\mathcal{M}, J$ fixed, considering diffusion in $\ell$ 
+can be obtained from \cref{eq:fokker} by keeping $\mathcal{M}, J$ fixed, considering diffusion in $\ell$ 
 (violation of $\Phi$ invariance) and by approximating pitch angle diffusion as a loss process 
 \citep{roederer2012dynamics,Walt1970}.  
 
@@ -475,14 +475,14 @@ can be obtained from \ref{eq:fokker} by keeping $\mathcal{M}, J$ fixed, consider
     \right)_{\mathcal{M}, J} - \lambda(\ell,t) f
 \end{equation}
 
-The resulting system is shown in \ref{eq:radialDiff}, the term 
+The resulting system is shown in \cref{eq:radialDiff}, the term 
 $\ell^2 \frac{\partial}{\partial{\ell}} \left( \frac{\kappa(\ell,t)}{\ell^{2}} \frac{\partial{f}}{\partial{\ell}}
 \right)_{\mathcal{M}, J}$ models diffusive phenomena in $\Phi$ but it is expressed in the drift shell coordinate $\ell$. 
 Pitch angle diffusion is approximated using a loss process $\lambda(\ell,t) f$, where $\lambda(\ell,t)$ is the 
 \emph{loss rate}, as an alternative it is also possible to express the loss rate as a \emph{loss time scale} 
 $\tau(\ell,t) = \frac{1}{\lambda(\ell,t)}$, but in this thesis we will use the former convention.
 
-The radial diffusion system in equation \ref{eq:raddiffusion} is the starting point for chapter 
+The radial diffusion system in \cref{eq:raddiffusion} is the starting point for chapter 
 \ref{chapter:bayes_diff_chapter} where a surrogate model of the phase space density $\hat{f}$ is built to 
 perform Bayesian inference over the parameters of the diffusion coefficient $\kappa$ and loss rate 
 $\lambda$.

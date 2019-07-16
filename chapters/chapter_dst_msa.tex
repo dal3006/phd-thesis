@@ -197,7 +197,7 @@ state depending on the information required by the LSTM unit. The important piec
 
 \subsubsection*{Forget Gate \& Input Gate}
 
-The forget gate is shown in equation \ref{eq:forgetgate}. 
+The forget gate is shown in \cref{eq:forgetgate}. 
 
 \begin{equation}\label{eq:forgetgate}
  \mathbf{f}_{t} = \sigma  \left( \mathbf{W}_f \boldsymbol{\cdot}  \left[ \mathbf{h}_{t-1}, \mathbf{x}_t \right] + 
@@ -211,7 +211,7 @@ and bias vector of the gate respectively. This notation is kept for subsequent e
 the information coming from the previous cell $\mathbf{h}_{t-1}$ and the incoming information  $  \mathbf{x}_{t} $  and outputs a number 
 between zero and one, zero if the information is entirely discarded, one if it is altogether retained.
 
-Correspondingly the input gate (equation \ref{eq:inputgate}) decides what information is retained, depending 
+Correspondingly the input gate \cref{eq:inputgate} decides what information is retained, depending 
 on past hidden cell state $\mathbf{h}_{t-1}$ and exogenous inputs $\mathbf{x}_t$. $  \mathbf{W}_{i} $  and  
 $  \mathbf{b}_{i} $ \ are the weight matrix and bias vector of the input gate respectively.
 
@@ -223,7 +223,7 @@ $  \mathbf{b}_{i} $ \ are the weight matrix and bias vector of the input gate re
 \subsubsection*{Cell State}
 
 The inputs $\mathbf{x}_t$ and cell hidden state $\mathbf{h}_{t-1}$ is then passed through a hyperbolic tangent 
-transformation create a vector of candidate values $   \tilde{\mathbf{c}}_{t} $ as per equation \ref{eq:candidate}. 
+transformation create a vector of candidate values $\tilde{\mathbf{c}}_{t}$ as per \cref{eq:candidate}. 
 This candidate state $\tilde{\mathbf{c}}_{t}$ is used to determine the updated cell state $\mathbf{c}_{t}$. 
 $  \mathbf{W}_{c} $  and  $\mathbf{b}_{c} $  being the weight and bias of this layer respectively. 
  
@@ -234,7 +234,7 @@ $  \mathbf{W}_{c} $  and  $\mathbf{b}_{c} $  being the weight and bias of this l
 \end{equation}
 
 The cell state  $\mathbf{c}_{t-1}$ is then updated to obtain the new cell state $\mathbf{c}_t$. This 
-is shown in equation \ref{eq:newstate}, where $\circ$ denotes the element wise (Hadamard) product. 
+is shown in \cref{eq:newstate}, where $\circ$ denotes the element wise (Hadamard) product. 
 
 \begin{equation}\label{eq:newstate}
  \mathbf{c}_t = \mathbf{f}_{t} \circ \mathbf{c}_{t-1} + \mathbf{i}_{t} \circ \tilde{\mathbf{c}}_{t}
@@ -242,7 +242,7 @@ is shown in equation \ref{eq:newstate}, where $\circ$ denotes the element wise (
 
 \subsubsection*{Output Gate \& Prediction}
 
-The output of the LSTM cell is calculated using equation \ref{eq:outputgate}. First, the 
+The output of the LSTM cell is calculated using \cref{eq:outputgate}. First, the 
 sigmoid transformation helps to define the output $\mathbf{o}_t$. Second, the hidden state $\mathbf{h}_t$ 
 is computed by multiplying $\mathbf{o}_{t}$ with a hyperbolic tangent transformation of the cell state 
 $\mathbf{c}_{t}$. 
@@ -280,7 +280,7 @@ from one to six hours back.
 LSTM cells can be \emph{stacked} such that the output of one cell provides the input for the next. 
 One may construct LSTM stacks of increasing size depending on the task at hand.  
 
-Equations \ref{eq:dstmodel} and \ref{eq:lstmstack} describe the Dst prediction architecture.The $p$ hour 
+In \cref{eq:dstmodel,eq:lstmstack}, we describe the Dst prediction architecture.The $p$ hour 
 ahead prediction $\mathrm{\hat{D}st} \left(t + p \right)$ is the output of the function $m^{p}_{\text{NN}}(\cdot)$ which 
 is obtained by successive operation of $d$ LSTM cells. Mathematically this is equivalent to function composition 
 $h^{p}_{d} ( h^{p}_{d-1}( \cdots (h^{p}_{1}(\cdot)\cdots))$.
@@ -302,37 +302,44 @@ The LSTM component of the GPNN model was implemented using the Lasagne library i
 
 \subsection{LSTM Model Training}
 
-The LSTM architecture can be trained with a backpropagation based optimization algorithm and thanks 
-to its architecture, the vanishing gradient problem does not persist. A number of stochastic 
+The LSTM architecture can be trained with an iterative backpropagation based optimization algorithm, 
+unlike the case of RNN network training, the vanishing gradient problem does not persist. A number of stochastic 
 gradient based variants are used for training neural networks, such as but not limited to 
 \emph{Levenburg - Maquardt} \citep{marquardt1963algorithm}, \emph{Nesterov Accelerated Gradient} (NAG) 
 \citep{nesterov1983method}, adaptive learning rates for each network weight \citep{SilvaAlmeida}, adaptive gradient 
-based methods such as AdaGrad \citep{duchi2011adaptive}, adaptive learning rate methods like RMSprop \citep{tieleman2012lecture}. 
+based methods such as AdaGrad \citep{duchi2011adaptive}, adaptive learning rate methods like RMSprop 
+\citep{tieleman2012lecture}. 
 
 In this work, we use the RMSProp algorithm for training the LSTM component of the GPNN model, 
 below we give a brief explaination of its functioning.
 
 \subsubsection*{The RMSProp Algorithm}
 
-For the purposes of notational simplicity, the weights and biases of the LSTM cell are 
+For the purposes of notational simplicity, the weights and biases of the LSTM architecture are 
 concatenated into a single vector $\mathbf{\theta}$, where $\theta_i$ denotes an individual 
-scalar element of $\mathbf{\theta}$. We then define $g_{t,i}$ in equation \ref{eq:gradient} as the 
-gradient of the objective function with respect to the parameters $\theta_{i}$ at time step $t$. 
+scalar element of $\mathbf{\theta}$ and $\theta^{k}_{i}$ the value of $\theta_i$ at iteration $k$. 
+The quantity $J(\mathbf{\theta})$ is the objective function which defines how well the outputs of 
+the LSTM model fit the observed data. The training process of the LSTM consists of computing an 
+approximate minimum of $J(\mathbf{\theta})$. We define $g_{k,i}$ in \cref{eq:gradient} as the gradient 
+of the objective function with respect to the parameter $\theta_{i}$ at iteration $k$. 
 
 \begin{equation}\label{eq:gradient}
- g_{t,i} = \triangledown_{ \mathbf{\theta} } J \left(  \theta_{t,i} \right)
+ g_{k,i} = \left. \frac{\partial{J}(\mathbf{\theta})}{{\partial \mathbf{\theta}_i}}\right\rvert_{\theta = \theta^k}
 \end{equation}
 
-The update of parameters using RMSprop is described by equation \ref{eq:learningrmsprop}. First the running average 
-of the second order moment of the gradients $  E \left( g^{2} \right)  $ is computed at each iteration $t$, then 
-the updated parameters $\theta_{t+1,i}$ are calculated using the gradient $g_{t,i}$ and a damped learning rate of 
-$\frac{\eta}{\sqrt{E \left[ g^{2} \right]_{t,i}} + \epsilon }$ ($\epsilon$ is a small number added to 
-$\sqrt{E \left[ g^{2} \right]_{t,i}}$ preventing numerical overflow).
+The aim of the training process is to successively decrease the value of $J(\mathbf{\theta})$ over a number of 
+training iterations. This is achieved as follows.
+
+First the running average of the second order moment of the gradients $\mathrm{E} \left( g^{2} \right)$ is computed at 
+each iteration $k$, then the updated parameters $\theta^{k+1}_{i}$ are calculated using the gradient $g_{k,i}$ and a 
+damped learning rate of $\frac{\eta}{\sqrt{\mathrm{E} \left[ g^{2} \right]_{k,i}} + \epsilon }$ ($\epsilon$ is a small 
+number added to $\sqrt{\mathrm{E} \left[ g^{2} \right]_{k,i}}$ preventing numerical overflow). The update of parameters 
+using RMSprop can then be computed using \cref{eq:learningrmsprop}.
 
 
 \begin{align}\label{eq:learningrmsprop}
- E \left( g^{2} \right)_{t+1,i} &= 0.9 E \left( g^{2} \right)_{t,i} + 0.1 g_{t,i}^{2}  \\ 
- \theta_{t+1,i} &= \theta_{t,i} - \frac{ \eta }{\sqrt[]{E \left[ g^{2} \right]_{t,i}} + \epsilon } g_{t,i}
+ \mathrm{E} \left[ g^{2} \right]_{k+1,i} &= 0.9 \mathrm{E} \left[ g^{2} \right]_{k,i} + 0.1 g_{k,i}^{2}  \\ 
+ \theta^{k+1}_{i} &= \theta^{k}_{i} - \frac{ \eta }{\sqrt[]{\mathrm{E} \left[ g^{2} \right]_{k,i}} + \epsilon } g_{k,i}
 \end{align}
 
 \subsection{Gaussian Processes}\label{sec:gpcomponent}
@@ -348,7 +355,7 @@ We will not give a complete review of the GP methodology here, the interested re
 section \S~\ref{sec:osaGPmethod} for a detailed review of Gaussian process models and their mathematical formulation.
 
 A GP is completely specified by its mean function  $m \left( \mathbf{x} \right)$ and its covariance function 
-or \emph{kernel} $K (\mathbf{x}, \mathbf{x}')$ in equation \ref{eq:gpformulation}.
+or \emph{kernel} $K (\mathbf{x}, \mathbf{x}')$ in \cref{eq:gpformulation}.
 
 \subsubsection*{Kernel Function}
 
@@ -367,7 +374,7 @@ Kernels often introduce assumptions about the continuity of the functions that w
 represented by the resulting GP regression model. \citet[ch.~4]{Rasmussen:2005:GPM:1162254} gives an 
 introduction to common kernels used in machine learning applications and the type of continuity assumptions 
 of their resulting GP models. In this study, we use the neural network kernel \citep{williams1998computation} 
-described in equation \ref{eq:gpcov}. 
+described in \cref{eq:gpcov}. 
 
 \subsubsection*{Mean Function}
 
@@ -388,13 +395,13 @@ of the hybrid GPNN model consisting of an LSTM and GP components.
 \end{align}
 	
 
-Equations \cref{eq:dstgpnn,eq:gpnnNoise,eq:gpnnGPForm} give a formal specification of the proposed GPNN model in 
+In \cref{eq:dstgpnn,eq:gpnnNoise,eq:gpnnGPForm}, we give a formal specification of the proposed GPNN model in 
 terms of the notations introduced in section \S~\ref{sec:osaGPmethod}. The ground truth $\mathrm{Dst}\left(t + p\right)$ 
 is assumed to be the result of a Gaussian Process $f_{p}$ corrupted by Gaussian measurement noise $\epsilon$, 
 with $p = {1,2,3,4,5,6}$ being the forecast horizon going from one to six hours ahead. The mean function of the 
 Gaussian process $f_{p}$ is set to $m^{p}_{\text{NN}} \left( \mathbf{x} \right)$ described in 
 section \S~\ref{sec:lstmDstArch} and the covariance is set to the neural network covariance function 
-from equation \ref{eq:gpcov}. 
+from \cref{eq:gpcov}. 
 
 
 \section{Experiments} \label{sec:resultsgpnn}
@@ -415,7 +422,7 @@ from equation \ref{eq:gpcov}.
 
 For the purposes of training and evaluation, the data set is divided as follows: $70\%$ for training, $20\%$  
 for testing and $10\%$ for validation. The LSTM model is evaluated using the Root Mean Square Error (RMSE) 
-and the Correlation Coefficient (CC) defined by equations \ref{eq:rmse} and \ref{eq:cc} respectively. Based 
+and the Correlation Coefficient (CC) defined by \cref{eq:rmse} and \cref{eq:cc} respectively. Based 
 on the performance calculated on the validation data, an LSTM network of depth $d = 20$ cells was chosen as 
 the mean function of the GPNN model.
 
@@ -549,8 +556,8 @@ occurrence. The TPR is then the ratio of true positives to the total number of e
 false positives to the number of non occurrences. For perfect classification, $\mathrm{FPR} = 0$ and $\mathrm{TPR} = 1$, thus 
 the value of the threshold that produces the point closest to these values is optimal.  
 
-Tables \cref{table:rocgpnn1h,table:rocgpnn2h,table:rocgpnn3h,table:rocgpnn4h,table:rocgpnn5h,table:rocgpnn6h} 
-present ROC curves obtained from one to six hour ahead forecasts, depending on the category of the storm. 
+In \cref{table:rocgpnn1h,table:rocgpnn2h,table:rocgpnn3h,table:rocgpnn4h,table:rocgpnn5h,table:rocgpnn6h} we 
+present ROC curves obtained from one to six hour ahead forecasts, organised by storm category. 
 The ROC is usually shown graphically, but numerical values are more relevant for the reader to analyse 
 variations depending on the choosen threshold probability. The optimal TPR and FPR values are in bold, computed to 
 minimise the Euclidean distance from $\text{FPR} = 0$ and $\text{TPR} = 1$.

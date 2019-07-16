@@ -76,9 +76,9 @@ how one may use it for performing inference over said diffusion parameters.
 
 The radial diffusion system is a simplified one-dimensional version of
 the \emph{Fokker-Planck} equation. It tracks the time evolution of the
-\emph{phase space density} of particles, $f$ which is governed by the
-differential equation (\ref{eq:raddiffusion}) known as \emph{radial
-  diffusion} in the radiation belt community \citep{JGRA:JGRA9345}.
+\emph{phase space density} of particles, $f$ which is governed by 
+\cref{eq:raddiffusion} known as \emph{radial diffusion equation} in the 
+radiation belt community \citep{JGRA:JGRA9345}.
 
 \begin{equation}\label{eq:raddiffusion}
   \frac{\partial{f}}{\partial{t}} = l^2 \frac{\partial}{\partial{l}}\left( \frac{\kappa(l,
@@ -104,7 +104,7 @@ The key quantities in the system above are.
 
 \subsubsection*{Diffusion Parameters}
 
-To solve the radial diffusion system \ref{eq:raddiffusion}, the
+To solve the radial diffusion system (\cref{eq:raddiffusion}), the
 quantities $\kappa(l, t)$, $\lambda(l, t)$ and $Q(l, t)$ need to be
 specified. It is a common practice \citetext{see \citealp{GRL:GRL10762},
 \citealp{JGRA:JGRA15067}, \citealp{JGRA:JGRA18021} and
@@ -133,7 +133,7 @@ In this formalism $\mathcal{L}_{\theta}$ is a differential operator,
 $Q_{\theta}$ is a \emph{source term} and $\theta$ is a collection of parameters
 which specify the operator and the source term.
 
-In the radial diffusion system (\ref{eq:raddiffusion}), $\mathcal{L}_{\theta} =
+In the radial diffusion system (\cref{eq:raddiffusion}), $\mathcal{L}_{\theta} =
 \frac{\partial}{\partial{t}} - l^2 \frac{\partial}{\partial{l}}\left( \frac{\kappa(l,
       t)}{l^{2}} \frac{\partial}{\partial{l}} \right) + \lambda(l,
   t)$. In this case $\theta$ would be a collection of parameters which
@@ -205,7 +205,7 @@ We approach the radial diffusion inference problem by formulating a
 modified version of the \emph{least squares support vector machine}
 predictor for obtaining a closed form approximation to the phase space
 density $f$ which tries to satisfy the radial diffusion PDE
-\ref{eq:raddiffusion} on a fixed set of \emph{colocation} points while
+(\cref{eq:raddiffusion}) on a fixed set of \emph{colocation} points while
 minimizing error on a set of sparse noisy observations. 
 Using the surrogate phase space density estimator as a baseline, we
 specify the likelihood of the observations.
@@ -242,7 +242,7 @@ least squares problem.
   & q_{i} = w^{T}\psi_{\theta}(x^{c}_{i}) + \epsilon_{i}, \ \ i = 1 \cdots n_{c}
 \end{align}
 
-It can be seen that system \ref{eq:surrogate} is similar to the
+It can be seen that system in \cref{eq:surrogate} is similar to the
 formulation of the LSSVM model, while incorporating the dynamics of
 linear PDE systems into its loss function. 
 
@@ -265,12 +265,12 @@ In order to solve this system one must construct its
 \end{align*}
 
 Given fixed values for $\gamma_{o}$, $\gamma_{c}$ and PDE parameters
-$\theta$, the equation above expresses the Lagrangian of system
-\ref{eq:surrogate}. The quantities $\alpha_{1}, \cdots, \alpha_{n_{o}}$ and
+$\theta$, the equation above expresses the Lagrangian of the system in 
+\cref{eq:surrogate}. The quantities $\alpha_{1}, \cdots, \alpha_{n_{o}}$ and
 $\beta_{1}, \cdots, \beta_{n_{c}}$ are the \emph{Lagrange multipliers}
 introduced for equality constraints of the system. Applying the
-\emph{Karush-Kuhn-Tucker}(KKT) conditions the solution of the
-optimization problem \ref{eq:surrogate} can be expressed in terms of
+\emph{Karush-Kuhn-Tucker}(KKT) conditions, the solution of the
+optimization problem in \cref{eq:surrogate} can be expressed in terms of
 the Lagrange multipliers $\alpha = (\alpha_{1}, \cdots, \alpha_{n_{o}})$
 $\beta = (\beta_{1}, \cdots, \beta_{n_{c}})$.
 
@@ -291,7 +291,7 @@ $\beta = (\beta_{1}, \cdots, \beta_{n_{c}})$.
 \end{equation}
 
 The components of the symmetric block matrix system on the left hand side of 
-\ref{eq:solution} are 
+\cref{eq:solution} are 
 \begin{enumerate}
 \item $\Omega \in \mathbb{R}^{n_{o} \times n_{o}}: \omega_{ij} = \varphi(x^{o}_{i})^{T} \varphi(x^{o}_{j})$
 \item $\Omega_{**} \in \mathbb{R}^{n_{c} \times n_{c}}: \omega^{**}_{ij} = \psi(x^{c}_{i})^{T} \psi(x^{c}_{j})$
@@ -341,7 +341,7 @@ is enforced as a hard constraint. This case is equivalent to the following formu
 
 Although choosing $\gamma_c = 0$ is an appropriate choice if one wishes
 to enforce the physical dynamics as a constraint, it can possibly lead to numerical
-instabilities in inverting system \ref{eq:solution} and hence choosing a non zero value 
+instabilities in inverting system in \cref{eq:solution} and hence choosing a non zero value 
 for $\gamma_c$ works better in practice.
 
 For the experiment outlined in \ref{sec:exp}, we choose $\gamma_o = \gamma_c = 10$.
@@ -359,7 +359,7 @@ In section \ref{sec:exp}, we use eight point \emph{Gauss Legendre} quadrature in
 We assume a multivariate Gaussian distribution for calculating the likelihood of 
 the observations conditioned on the system parameters $\theta$. 
 
-The surrogate model \ref{eq:model} gives a baseline or mean value for the phase space density, we use a
+The surrogate model (\cref{eq:model}) gives a baseline or mean value for the phase space density, we use a
 hybrid RBF covariance function $C(x_{i}, x_{j}) = \sigma^2 exp(-\frac{1}{2} (\frac{|l_i - l_j|^2}{s} + \frac{|t_i - t_j|}{r}))$
 to quantify the covariance of the phase space density $f$ over two points 
 $x_i = (l_i, t_i)$ and $x_j = (l_j, t_j)$ in the domain. 
@@ -436,7 +436,7 @@ of the Markov Chain.
 The technique presented is applied on synthetic data generated using a radial diffusion solver, 
 the ground truth values of the radial diffusion parameters are listed in table \ref{tab:ground-truth}.
 
-A slightly modified parameterization is adopted for the particle injection $Q$ as shown in equation \ref{eq:q} below. The particle injection has a strictly time varying component due to presence of a constant $\gamma$.
+A slightly modified parameterization is adopted for the particle injection $Q$ as shown in \cref{eq:q} below. The particle injection has a strictly time varying component due to presence of a constant $\gamma$.
 
 \begin{equation}\label{eq:q}
 Q(l,t)  \sim (\alpha l^{\beta} + \gamma) 10^{b Kp(t)}
