@@ -309,7 +309,6 @@ The architecture of the feature extractor is a 2-hidden layers fully connected n
   \textbf{Solar Wind} & $2$ & $[60, 80]$ & [ReLU, Sigmoid]\\
   \hline
   \end{tabular}
-  \label{tab:exp}
 \end{table}
 
 
@@ -357,7 +356,7 @@ Solar wind data is extracted from the OMNI data base from the \emph{Space Physic
 
 \XX\ is validated using a 4 fold CV, where the test data consists of one (continuous) month from October 2016 to January 2016. The performance is assessed comparatively to the best state of the art method \citep{Poduval_2014,neuralnetsw}, using  the FTE data and assuming a constant propagation time when combining FTE data with solar wind speed measurements close to the Earth. 
 
-Table \ref{tab:exp} summarises the dimensions of the synthetic and real problems used as proofs of concept for the \XX\ validation.
+Table \ref{tab:exp_data_info} summarises the dimensions of the synthetic and real problems used as proofs of concept for the \XX\ validation.
 \begin{table}[htbp]
   \caption{Synthetic and Real-World Problems}\label{tab:exp_data_info}
   \centering
@@ -372,7 +371,6 @@ Table \ref{tab:exp} summarises the dimensions of the synthetic and real problems
   \textbf{Solar Wind} & $77,367$ & $2,205$ & $180$ & $12$\\
   \hline
   \end{tabular}
-  \label{tab:exp}
 \end{table}
 
 \section{Empirical validation}\label{sec:proofconcept}
