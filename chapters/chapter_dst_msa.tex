@@ -181,12 +181,12 @@ Figure \ref{fig:lstmcell} shows the computational graph of the LSTM cell. The tw
 fundamental to this cell are the cell state and gates. The cell state $\mathbf{c}_{t}$ in figure \ref{fig:lstmcell} 
 is like a conveyor belt which is connected to various gates. Gates can add or remove information from the cell 
 state depending on the information required by the LSTM unit. The important pieces of this architecture are: 
-\begin{itemize*} 
-	\item the forget gate $\mathbf{f}_t$ 
-	\item the input gate $\mathbf{i}_t$ 
-	\item the cell state $\mathbf{c}_t$ 
+\begin{enumerate*} 
+	\item the forget gate $\mathbf{f}_t$,
+	\item the input gate $\mathbf{i}_t$, 
+	\item the cell state $\mathbf{c}_t$ \& 
 	\item the output gate $\mathbf{o}_t$  
-\end{itemize*}  
+\end{enumerate*}  
 
 \begin{figure}
 	\noindent\includegraphics[width=\textwidth]{lstm.png}
@@ -510,7 +510,7 @@ $\SI{-380}{\nano\tesla}$.
 Since GP models output a predictive distribution, metrics like RMSE and CC, which are defined for single point 
 predictionsm, are not adequate while evaluating probabilistic forecasts.
 
-\begin{table}[h]
+\begin{table}[ht]
 	%\fontsize{8}{9.6}\selectfont
 	\centering
 	\caption{Storm Classification}
@@ -824,7 +824,7 @@ ahead, an overestimation of storm likelihoods is possible.
 
 
 
-\begin{table}[h]
+\begin{table}[ht]
 	\fontsize{8}{9.6}\selectfont
 	\centering
 	\caption{Storm events used to evaluate GPNN model}
