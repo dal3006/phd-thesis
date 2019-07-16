@@ -55,21 +55,21 @@ The \citet{JGR:JGR10260} model has proven to be very influential particularly du
 for the injection and decay terms in Burton's equation.
 
 %Talk about NARMAX Dst
-Another important empirical model used to predict $ \mathrm{Dst}$ is the \emph{Nonlinear Auto-Regessive Moving Average with eXogenous inputs} (NARMAX) methodology developed in \citet{doi:10.1080/00207178908559767,GRL:GRL13494,GRL:GRL20944,JGRA:JGRA18657,balikhin:narmax,JGRA:JGRA20661,JGRA:JGRA50192}. The NARMAX methodology builds models by constructing polynomial expansions of inputs and determines the best combinations of monomials to include in the refined model by using a criterion called the \emph{error reduction ratio} (ERR). The parameters of the so called NARMAX OLS-ERR model are calculated by solving the \emph{ordinary least squares} (OLS) problem arising from a quadratic objective function. It must be noted that the NARMAX methodology is not limited to polynomial functions, rather any set of basis function expansions can be used with it, such as radial basis functions, wavelets etc \citep{doi:10.1080/00207720600903011,JGRA:JGRA17327}. The reader may refer to \citet{billings2013nonlinear} for a detailed exposition of the NARMAX methodology.
+Another important empirical model used to predict $ \mathrm{Dst}$ is the \emph{Nonlinear Auto-Regressive Moving Average with eXogenous inputs} (NARMAX) methodology developed in \citet{doi:10.1080/00207178908559767,GRL:GRL13494,GRL:GRL20944,JGRA:JGRA18657,balikhin:narmax,JGRA:JGRA20661,JGRA:JGRA50192}. The NARMAX methodology builds models by constructing polynomial expansions of inputs and determines the best combinations of monomials to include in the refined model by using a criterion called the \emph{error reduction ratio} (ERR). The parameters of the so called NARMAX OLS-ERR model are calculated by solving the \emph{ordinary least squares} (OLS) problem arising from a quadratic objective function. It must be noted that the NARMAX methodology is not limited to polynomial functions, rather any set of basis function expansions can be used with it, such as radial basis functions, wavelets etc \citep{doi:10.1080/00207720600903011,JGRA:JGRA17327}. The reader may refer to \citet{billings2013nonlinear} for a detailed exposition of the NARMAX methodology.
 
 %Talk about neural networks
-Yet another family of forecasting methods is based on \emph{Artificial Neural Networks} (ANN) that have been a popular choice for building predictive models. Researchers have employed both the standard \emph{feed forward} and the more specialized \emph{recurrent} architectures. \citet{Lund} proposed an \emph{Elman} recurrent network architecture called Lund $\mathrm{Dst}$, which used the solar wind velocity, \emph{interplanetary magnetic field} (IMF) and historical $\mathrm{Dst}$ data as inputs. \citet{JGRA:JGRA17461} used recurrent neural networks to predict $\mathrm{Kp}$. 
+Yet another family of forecasting methods is based on \emph{Artificial Neural Networks} (ANN) that have been a popular choice for building predictive models. Researchers have employed both the standard \emph{feed forward} and the more specialised \emph{recurrent} architectures. \citet{Lund} proposed an \emph{Elman} recurrent network architecture called Lund $\mathrm{Dst}$, which used the solar wind velocity, \emph{interplanetary magnetic field} (IMF) and historical $\mathrm{Dst}$ data as inputs. \citet{JGRA:JGRA17461} used recurrent neural networks to predict $\mathrm{Kp}$. 
 \citet{SWE:SWE286} originally proposed a \emph{feed forward} network for predicting the $\mathrm{Kp}$ index which used the \emph{Boyle coupling function} \citet{boyle1997empirical}. The same architecture is adapted for prediction of $\mathrm{Dst}$ in \citet{SWE:SWE286}, popularly known as the Rice $\mathrm{Dst}$ model. \citet{pallocchia:hal-00318011} proposed a \emph{neural network} model called EDDA to predict $\mathrm{Dst}$ using only the IMF data.
 
 %Local neurofuzzy modelling and singular spectrum analysis.
-Apart from the NARMAX and neural network approaches, fuzzy methods have also been applied for $\mathrm{Dst}$ prediction, \citet{SWE:SWE146,Sharifi2006} outline the application of \emph{local neurofuzzy} models for one hour and two hour predictions of $\mathrm{Dst}$ respectively. Local neuro-fuzzy models reduce the input space into a number of regions each with its own expert predictor. The combined model predicts $\mathrm{Dst}$ for a new point as a linear combinations of the predictions from each expert weighted by a fuzzy score signifying the importance of each model for the provided input. For improving predictive performance of two hour 
+Apart from the NARMAX and neural network approaches, fuzzy methods have also been applied for $\mathrm{Dst}$ prediction, \citet{SWE:SWE146,Sharifi2006} outline the application of \emph{local neurofuzzy} models for one hour and two hour predictions of $\mathrm{Dst}$ respectively. Local neurofuzzy models reduce the input space into a number of regions each with its own expert predictor. The combined model predicts $\mathrm{Dst}$ for a new point as a linear combinations of the predictions from each expert weighted by a fuzzy score signifying the importance of each model for the provided input. For improving predictive performance of two hour 
 $\mathrm{Dst}$ forecasts in \citet{Sharifi2006}, the authors use \emph{singular spectrum analysis} (SSA). Singular spectrum analysis consists of extracting orthogonal components from a lagged time series, it is equivalent to \emph{principal component analysis} (PCA) which is quite extensively used in the machine learning community. \citet{loskutov2001testing,loskutov2001study} provide a good background to the theory and application of SSA to geomagnetic time series.
 
 %Talk about need for probabilistic forecasts.
 Although much research has been done on prediction of the $\mathrm{Dst}$ index, much less has been done on probabilistic forecasting of $\mathrm{Dst}$. One such work described in \citet{McPherron:2013} involves identification of high speed solar wind streams using the WSA model \citep{WSAModel}, using predictions of high speed streams to construct ensembles of $\mathrm{Dst}$ trajectories which yield the quartiles of 
 $\mathrm{Dst}$ time series. 
 
-A simple way to construct error bars on the predictions of forecasting models is by using the so called \textit{past cast} performance i.e. by calculating the standard deviations of the predictions generated by the model on a hold out data set. One limitation of such an approach is that the variance of the model predictions is computed once and for all. It does not adapt according to the inputs provided to the model. This may lead to overestimation or underestimation of the uncertainty around a given prediction, depending on the prevelant geo-magnetic conditions and the data set used to calculate the \textit{past cast} model performance.
+A simple way to construct error bars on the predictions of forecasting models is by using the so called \textit{past cast} performance i.e. by calculating the standard deviations of the predictions generated by the model on a hold out data set. One limitation of such an approach is that the variance of the model predictions is computed once and for all. It does not adapt according to the inputs provided to the model. This may lead to overestimation or underestimation of the uncertainty around a given prediction, depending on the prevalent geo-magnetic conditions and the data set used to calculate the \textit{past cast} model performance.
 
 In this work we propose a technique for probabilistic forecasting of $\mathrm{Dst}$, which yields a predictive distribution as a closed form expression. Our models take as input past values of $\mathrm{Dst}$, solar wind speed and the \textit{z} component of the \emph{Interplanetary Magnetic Field} (IMF) and output a Gaussian distribution with a specific mean and variance as the OSA prediction of the $\mathrm{Dst}$. 
 
@@ -121,7 +121,7 @@ Inspecting the individual elements of $\mathbf{\mu}$ and $\mathbf{\Lambda}$, we 
       \Lambda_{ij} = & \mathbb{E}[(f(\mathbf{x}_i) - \mu_i)(f(\mathbf{x}_j) - \mu_j)] := K(\mathbf{x}_i, \mathbf{x}_j)
 \end{align}
 
-Here $\mathbb{E}$ denotes the expectation (average). The elements of $\mathbf{\mu}$ and $\mathbf{\Lambda}$ are expressed as functions $m(\mathbf{x}_i)$ and $K(\mathbf{x}_i, \mathbf{x}_j)$ of the inputs $\mathbf{x}_i,\ \mathbf{x}_j$. Specifying the functions $m(\mathbf{x})$ and $K(\mathbf{x}, \mathbf{x}')$ completely specifies each element of $\mathbf{\mu}$ and $\mathbf{\Lambda}$ and subsequently the finite dimensional distribution of $\mathbf{f} | \mathbf{x}_1, \cdots, \mathbf{x}_N $. In most practical applications of \emph{Gaussian Processes} the mean function is often defined as $m(\mathbf{x}) = 0$, which is not unreasonable if the data is standardized to have zero mean. \emph{Gaussian Processes} are represented in machine learning literature using the following notation:
+Here $\mathbb{E}$ denotes the expectation (average). The elements of $\mathbf{\mu}$ and $\mathbf{\Lambda}$ are expressed as functions $m(\mathbf{x}_i)$ and $K(\mathbf{x}_i, \mathbf{x}_j)$ of the inputs $\mathbf{x}_i,\ \mathbf{x}_j$. Specifying the functions $m(\mathbf{x})$ and $K(\mathbf{x}, \mathbf{x}')$ completely specifies each element of $\mathbf{\mu}$ and $\mathbf{\Lambda}$ and subsequently the finite dimensional distribution of $\mathbf{f} | \mathbf{x}_1, \cdots, \mathbf{x}_N $. In most practical applications of \emph{Gaussian Processes} the mean function is often defined as $m(\mathbf{x}) = 0$, which is not unreasonable if the data is standardised to have zero mean. \emph{Gaussian Processes} are represented in machine learning literature using the following notation:
 
 \begin{equation}\label{eq:gpformulation}
     f(\mathbf{x}) \sim \mathcal{GP}(m(\mathbf{x}), K(\mathbf{x}, \mathbf{x}'))
@@ -176,7 +176,7 @@ function $K$. In machine learning, these symmetric positive definite functions o
 covariance functions or \emph{kernels}. Kernel based methods are applied extensively in data analysis 
 i.e. regression, clustering, classification, density estimation \citep{Scholkopf:2001:LKS:559923,hofmann2008}.
 
-\begin{table}[h]
+\begin{table}[ht]
     \caption{Popular Kernel functions used in GPR models}
     \centering
     \begin{tabular}{l l l}
@@ -259,7 +259,7 @@ control systems \citep{kocijan2015modelling} and machine learning literature \ci
 
 \subsection{Gaussian Process Auto-Regressive with eXogenous inputs (GP-ARX)} \label{sec:gparx}
 
-Auto-regressive models can be augmented by including exogenous quantities in the inputs $ \mathbf{x}_{t-1}$ at each time step, in order to improve predictive accuracy. While modeling $\mathrm{Dst}$ using the OMNI data, one must choose which solar wind quantities to include in the exogenous inputs of the predictive model. This choice is not straight forward and eventually requires a compromise between including important solar wind quantities and keeping the input space managable in the interest of simplicity.
+Auto-regressive models can be augmented by including exogenous quantities in the inputs $ \mathbf{x}_{t-1}$ at each time step, in order to improve predictive accuracy. While modeling $\mathrm{Dst}$ using the OMNI data, one must choose which solar wind quantities to include in the exogenous inputs of the predictive model. This choice is not straight forward and eventually requires a compromise between including important solar wind quantities and keeping the input space manageable in the interest of simplicity.
 
 \subsubsection{Choice of Solar Wind Inputs}
 
@@ -281,7 +281,7 @@ It is an important question as to how unaccounted inputs such as solar wind dyna
 
 \subsection{Choice of Mean Function}
 
-Mean functions in GPR models encode trends in the data, they are the baseline predictions the model falls back to in case the training and test data have little correlation as predicted by the kernel function. If there is no prior knowledge about the function to be approximated, \citet{Rasmussen:2005:GPM:1162254} state that it is perfectly reasonable to choose $ m(\mathbf{x} = 0)$ as the mean function, as long as the target values are normalized. In the case of the $\mathrm{Dst}$ time series, it is known that the so called \emph{persistence model} 
+Mean functions in GPR models encode trends in the data, they are the baseline predictions the model falls back to in case the training and test data have little correlation as predicted by the kernel function. If there is no prior knowledge about the function to be approximated, \citet{Rasmussen:2005:GPM:1162254} state that it is perfectly reasonable to choose $ m(\mathbf{x} = 0)$ as the mean function, as long as the target values are normalised. In the case of the $\mathrm{Dst}$ time series, it is known that the so called \emph{persistence model} 
 $\mathrm{\hat{D}st}(t) = \mathrm{Dst}(t-1)$ has high correlation with \emph{OSA} $\mathrm{Dst}$. Due to its simplicity, we choose the \emph{persistence model} as the prior mean function in our OSA Dst models. 
 
 The \emph{persistence model} can be described as \emph{Markovian} prediction mechanism, when it is chosen as the prior mean of the GP-AR and GP-ARX model, it is indeed the case that the prior probability distribution of $ \mathrm{Dst}(t)$ is Gaussian with a strong \emph{Markovian} behavior $P(\mathrm{Dst}(t)|\mathbf{x}_t) \sim \mathcal{N}(\mathrm{Dst}(t-1), \sqrt{K_{\text{osa}}(\mathbf{x}_t, \mathbf{x}_t)})$, but the posterior predictive distribution of $\mathrm{Dst}(t)$ conditional on the model training data (given in \cref{eq:posteriormean}) is non-\emph{Markovian} due its dependence on the term denoted by $\mathbf{K}_{*}$ which contains kernel values computed between the test data and training data features. Thus the GP-AR and GP-ARX models when used conditional on training data are non-\emph{Markovian} predictive models.
@@ -298,7 +298,7 @@ In this study, we construct Gaussian Process regression models with a combinatio
 
 \section{Experiments} \label{sec:modeltraining}
 
-\begin{table}[h]
+\begin{table}[ht]
     \centering
     \caption{Settings of model selection procedures}
     \begin{tabular}{l c c c}
@@ -325,7 +325,7 @@ In order to find appropriate values of the hyper-parameters of the chosen kernel
 \emph{grid search}, \emph{coupled simulated annealing} and \emph{maximum likelihood} methods. We fix the parameters 
 $d$ and $\sigma^2$ of $K_{\text{st}}$ and model noise to values $0.01$ and $0.2$ respectively, the remaining 
 parameters $w$ and $b$ are kept free to be calculated by model selection. Table \ref{table:modelselection} 
-summarizes the settings used to run each model selection procedure.
+summarises the settings used to run each model selection procedure.
 
 \subsection*{Validation}
 
@@ -359,7 +359,7 @@ $\mathrm{\hat{D}st}(t) = \mathrm{Dst}(t-1)$, on a set of 63 storm events occurri
 \citet{Ji2012}.
 
 
-\begin{table}[h]
+\begin{table}[ht]
     \centering
     \caption{Evaluation results for models on storm events listed in table \ref{table:teststorms}}
     \label{table:results}
@@ -407,7 +407,7 @@ Figures \ref{fig:CompareMaeARX} and \ref{fig:CompareCCARX} break down the result
 
 From the validation results, we choose the model order which yields the best RMSE performance, for GP-AR it is $p_t = 6$ while for GP-ARX it is $p = 6, p_v = 1, p_b = 3$.
 
-After choosing the best performing GP-AR and GP-ARX models, we calculate their performance on the test set of Table \ref{table:teststorms}. The results of these model evaluations are summarized in Table \ref{table:results}, the GP-AR and GP-ARX models improve upon the performance of the \emph{persistence model}.
+After choosing the best performing GP-AR and GP-ARX models, we calculate their performance on the test set of Table \ref{table:teststorms}. The results of these model evaluations are summarised in Table \ref{table:results}, the GP-AR and GP-ARX models improve upon the performance of the \emph{persistence model}.
 
 Figures \ref{fig:ComparePred1}, \ref{fig:ComparePred2} and \ref{fig:ComparePred3} show OSA predictions of the GP-ARX model with $\pm \sigma$ error bars for three storm events in the time period between 1998 and 2003. The GP-ARX model gives accurate predictions along with plausible error bars around its mean predictions.
 
@@ -416,7 +416,7 @@ Figures \ref{fig:ComparePred1}, \ref{fig:ComparePred2} and \ref{fig:ComparePred3
 In this paper, we describe a flexible and expressive methodology for generating probabilistic forecasts of the $ \mathrm{Dst}$ index. We proposed two \emph{Gaussian Process} auto-regressive models, \emph{GP-ARX} and \emph{GP-AR}, to generate hourly predictions and their associated error bars. We also describe how to carry out model selection and validation of GP-AR and GP-ARX models.
 
 
-Our results can be summarized as follows.
+Our results can be summarised as follows.
 \begin{enumerate}
       \item \emph{Persistence} model plays an important role in the model building and evaluation process in the context of \emph{one step ahead} prediction of the $ \mathrm{Dst}$ index. Although it is not a robust predictor for the onset of intense geomagnetic storms, the \emph{persistence model} performs well on classical error metrics such as \emph{root mean square error} and such. From the considerations above, it is quite evident that classical performance metrics are not adequate for model evaluation, nevertheless in space weather literature, metrics such as \emph{RMSE} are very commonly used to compare predictive performance of models. Although not the research focus of this study, we note that there exists a need for the formulation of more informative performance metrics for measurement of predictive performance of geomagnetic predictive models.
       
@@ -488,7 +488,7 @@ Our results can be summarized as follows.
     
     
     
-\begin{table}[h]
+\begin{table}[ht]
     \centering
     \caption{Storm events used for model selection of GP-AR and GP-ARX}
     \label{table:validationstorms}
@@ -524,7 +524,7 @@ Our results can be summarized as follows.
     
     
 
-    \begin{table}[h]
+    \begin{table}[ht]
     %\fontsize{8}{9.6}\selectfont
     \centering
     \caption{Storm events used to evaluate GP-AR and GP-ARX models}

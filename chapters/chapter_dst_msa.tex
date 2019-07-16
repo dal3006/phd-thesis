@@ -166,12 +166,12 @@ the GPS satellite ns41, we use its magnetic field measurement, $B_{\text{gps}}$.
 The \emph{long short-term memory} network (LSTM) belongs to the family of \emph{recurrent neural networks} (RNN). 
 In an RNN, hidden layers are built to allow information persistence. They behave as a loop to allow information 
 to be passed from one cell of the network to the next. When this loop is unrolled, the RNN can then be thought 
-as multiple copies of the same network. The RNN architecture is particulary suited for time series forecasting 
+as multiple copies of the same network. The RNN architecture is particularly suited for time series forecasting 
 applications. 
 
 \citet{hochreiter1991untersuchungen,bengio1994learning} underlined a weakness of RNNs. They are supposed to connect 
 past information to the present, but if the information needed is too far in the past, RNNs are unable to to retain it. 
-This failure is due to the so called \emph{vanishing gradient problem} occuring during the training of RNNs. 
+This failure is due to the so called \emph{vanishing gradient problem} occurring during the training of RNNs. 
 
 LSTM networks are designed to overcome the vanishing gradient problem by retaining information pertaining to long range 
 temporal dependencies in time series data. LSTMs have a chain-like structure like RNNs, but the repeating module 
@@ -211,8 +211,8 @@ and bias vector of the gate respectively. This notation is kept for subsequent e
 the information coming from the previous cell $\mathbf{h}_{t-1}$ and the incoming information  $  \mathbf{x}_{t} $  and outputs a number 
 between zero and one, zero if the information is entirely discarded, one if it is altogether retained.
 
-Correspondingly the input gate \cref{eq:inputgate} decides what information is retained, depending 
-on past hidden cell state $\mathbf{h}_{t-1}$ and exogenous inputs $\mathbf{x}_t$. $  \mathbf{W}_{i} $  and  
+Correspondingly the input gate (\cref{eq:inputgate}) decides what information is retained, depending 
+on past hidden cell state $\mathbf{h}_{t-1}$ and exogenous inputs $\mathbf{x}_t$. $\mathbf{W}_{i} $  and  
 $  \mathbf{b}_{i} $ \ are the weight matrix and bias vector of the input gate respectively.
 
 \begin{equation}\label{eq:inputgate}
@@ -224,8 +224,8 @@ $  \mathbf{b}_{i} $ \ are the weight matrix and bias vector of the input gate re
 
 The inputs $\mathbf{x}_t$ and cell hidden state $\mathbf{h}_{t-1}$ is then passed through a hyperbolic tangent 
 transformation create a vector of candidate values $\tilde{\mathbf{c}}_{t}$ as per \cref{eq:candidate}. 
-This candidate state $\tilde{\mathbf{c}}_{t}$ is used to determine the updated cell state $\mathbf{c}_{t}$. 
-$  \mathbf{W}_{c} $  and  $\mathbf{b}_{c} $  being the weight and bias of this layer respectively. 
+This candidate state $\tilde{\mathbf{c}}_{t}$ is used to create the updated cell state $\mathbf{c}_{t}$. 
+$\mathbf{W}_{c}$  and  $\mathbf{b}_{c}$ being the weight and bias of this layer respectively. 
  
 
 \begin{equation}\label{eq:candidate}
@@ -259,7 +259,7 @@ $\mathbf{x}_t$
 
 \subsection{The LSTM Dst Model}\label{sec:lstmDstArch}
 
-To produce predictions of Dst upto six hours ahead, we trained six LSTM models. Thus for every input, we 
+To produce predictions of Dst up to six hours ahead, we trained six LSTM models. Thus for every input, we 
 obtained a vector of outputs $[\mathrm{\hat{D}st}\left(t + p\right)], p\in \{ 1, \cdots, 6 \}$.
 
 For inputs $\mathbf{x}_t$, we use solar wind parameters ($n$, $V_{\text{sw}}$, $|\mathbf{B}|$, $B_{z}$) 
@@ -311,7 +311,7 @@ based methods such as AdaGrad \citep{duchi2011adaptive}, adaptive learning rate 
 \citep{tieleman2012lecture}. 
 
 In this work, we use the RMSProp algorithm for training the LSTM component of the GPNN model, 
-below we give a brief explaination of its functioning.
+below we give a brief explanation of its functioning.
 
 \subsubsection*{The RMSProp Algorithm}
 
@@ -378,9 +378,9 @@ described in \cref{eq:gpcov}.
 
 \subsubsection*{Mean Function}
 
-The mean function $m \left( \mathbf{x} \right)$ defines an apriori mean value of the GP predictive disribution for 
+The mean function $m \left( \mathbf{x} \right)$ defines an a priori mean value of the GP predictive distribution for 
 some input $\mathbf{x}$. It is quite common to set $m(\mathbf{x}) = 0$ without loss of generality for situations where 
-it is difficult to define an apriori expression for the predictive mean. 
+it is difficult to define an a priori expression for the predictive mean. 
 \citet[ch.~2,sec.~2.7]{Rasmussen:2005:GPM:1162254} states that using mean functions is a good way to incorporate 
 domain knowledge or to augment the model's capabilities in capturing complex behavior. This outlines the structure 
 of the hybrid GPNN model consisting of an LSTM and GP components. 
@@ -463,7 +463,7 @@ for the time horizon $t+1 \cdots t+6$, summarised in table \ref{table:competingm
 		section \S~\ref{sec:gpOSAEval}.\\
 		LSTM-Dst & Our proposed LSTM model. Inputs are solar wind parameters (section \S~\ref{sec:datagpnn}) 
 		and time history of Dst.\\
-		LSTM-Dst-GPS & The LSTM model but with gps magnetic field data $B_{\text{gps}}$ also included in the inputs. \\
+		LSTM-Dst-GPS & The LSTM model but with GPS magnetic field data $B_{\text{gps}}$ also included in the inputs. \\
 		\hline
 	\end{tabular}
 \end{table}
@@ -472,11 +472,11 @@ Figures \cref{fig:lstmCC,fig:lstmCC} present a comparison of $\mathrm{CC}$ and $
 $\mathrm{Dst}$ prediction models listed in table \ref{table:competingmodels}. 
 
 Our models LSTM-Dst \& LSTM-Dst-GPS provide performance which is competitive to that obtained by 
-\citet{Lazzus} from 1h ahead to 3h ahead. When the forecast horizon goes from 4h ahead to 6h ahead, 
-LSTM-Dst \& LSTM-Dst-GPS provide better global performance. As an example, when considering a 6h 
+\citet{Lazzus} from one to three hours ahead. When the forecast horizon goes from four to six hours ahead, 
+LSTM-Dst \& LSTM-Dst-GPS provide better global performance. As an example, when considering a six hour 
 ahead forecast, LSTM-Dst-GPS provides a CC of $0.873$ and a RMSE of $\SI{9.86}{\nano\tesla}$, while \citet{Lazzus} 
 obtained a CC of $0.826$ and a RMSE of $\SI{13.09}{\nano\tesla}$. The model presented in \citet{Lazzus} uses only 
-time history of Dst, this emphasizes the performance benefits of using exogenous data when predicting geomagnetic activity 
+time history of Dst, this emphasises the performance benefits of using exogenous data when predicting geomagnetic activity 
 with a time horizon greater than one hour. 
 
 \citet{Bala2012} used the Boyle index as an input function, and obtained competitive RMSE performance to LSTM for 
@@ -508,7 +508,7 @@ $\SI{-380}{\nano\tesla}$.
 \subsection{GPNN Evaluation}
 
 Since GP models output a predictive distribution, metrics like RMSE and CC, which are defined for single point 
-predictionsm, are not adequate while evaluating probabilistic forecasts.
+predictions, are not adequate while evaluating probabilistic forecasts.
 
 \begin{table}[ht]
 	%\fontsize{8}{9.6}\selectfont
@@ -524,7 +524,7 @@ predictionsm, are not adequate while evaluating probabilistic forecasts.
 	\end{tabular}
 \end{table}
 
-The GPNN model provides an operator a probabilistic forecast, which can be important in a decision-maing scenario. 
+The GPNN model provides an operator a probabilistic forecast, which can be important in a decision making scenario. 
 For example, a decision made by an operator to turn off a system before an intense storm might be taken 
 when the forecast probability of this kind of event exceeds a predetermined trigger threshold.
 
@@ -546,7 +546,7 @@ storm class.
 In the case of the GPNN model, we can analytically compute the probability that Dst lies within a particular storm class 
 or outside it (e.g. $\mathbb{P}[\SI{-250}{\nano\tesla} \leq \mathrm{Dst} \leq \SI{-50}{\nano\tesla}]$ is the probability 
 of occurrence of an intense storm). For any storm class, by choosing a threshold probability, we can assign a classification 
-of $1$ (belonging to that storm class) if the probability predicted by the GPNN model is greater than the choosen threshold, 
+of $1$ (belonging to that storm class) if the probability predicted by the GPNN model is greater than the chosen threshold, 
 and $0$ if otherwise. 
 
 The ROC contingency table is then constructed by tabulating the relationship between the \emph{true positive ratio} (TPR) and 
@@ -559,13 +559,13 @@ the value of the threshold that produces the point closest to these values is op
 In \cref{table:rocgpnn1h,table:rocgpnn2h,table:rocgpnn3h,table:rocgpnn4h,table:rocgpnn5h,table:rocgpnn6h} we 
 present ROC curves obtained from one to six hour ahead forecasts, organised by storm category. 
 The ROC is usually shown graphically, but numerical values are more relevant for the reader to analyse 
-variations depending on the choosen threshold probability. The optimal TPR and FPR values are in bold, computed to 
+variations depending on the chosen threshold probability. The optimal TPR and FPR values are in bold, computed to 
 minimise the Euclidean distance from $\text{FPR} = 0$ and $\text{TPR} = 1$.
 
 For predictions done from one to five hours ahead, TPR values are always greater than $0.719$ for thresholds from 
-$10\%$  to $40\%$, and then decrease. If we focuse on the 6h ahead forecast, the best TPR is $0.5$ 
+$10\%$  to $40\%$, and then decrease. If we focus on the six hour ahead forecast, the best TPR is $0.5$ 
 for a $10\%$ threshold. It means that the more there is an increasing probability for a superstorm to occur, 
-the less the model is able to forecast it without misjudgements 6h in advance. However, for intense storms 
+the less the model is able to forecast it without misjudgments, six hours in advance. However, for intense storms 
 ($\SI{-250}{\nano\tesla} < \mathrm{Dst} < \SI{-50}{\nano\tesla}$), the GPNN provides TPR higher than $0.670$ 
 for thresholds between $10\%$ and $80\%$, and for moderate storms, this model provides TPR higher than $0.649$ for all 
 thresholds, from one to six ahead. 
@@ -586,12 +586,12 @@ smaller/higher probabilities for a specific outcome than observed.
 
 Figure \ref{fig:gpnnreliability} presents reliability diagrams obtained from one to six hour ahead forecasts made 
 by the GPNN. It shows that the one hour ahead forecast slightly underestimates the likelihood of storm events, when their 
-occurrence probabily is $35\%$. For example, when there is $80\%$ predicted chance of a storm, 
+occurrence probability is $35\%$. For example, when there is $80\%$ predicted chance of a storm, 
 the real observed frequency of it is $90\%$. The GPNN provides reliable forecast for two hour ahead prediction, 
 as the observed frequency of storm regarding the predicted probability lies almost perfectly on the diagonal. 
 For predictions further than three hours ahead, GPNN tends to overestimate the probability of storms. 
 
-If we focus on the six hour ahead prediciton, when the GPNN model provides a predicted probability of $90\%$, the 
+If we focus on the six hour ahead prediction, when the GPNN model provides a predicted probability of $90\%$, the 
 real frequency is of $65\%$. GPNN $t+6$ model is thus overconfident. 
 
 % Once the reliability diagram is obtained, 
@@ -657,7 +657,7 @@ ahead time horizon. For the six ahead prediction, the GPNN's predictive variance
 
 To evaluate this probabilistic forecast, we used ROC curves and reliability diagrams. The ROC curves demonstrated that, 
 for each forecast horizon, storm category and acceptance threshold, the FPR is low. The TPR, values are excellent for moderate 
-and intense storms, but for six hour ahead prediction of superstorms, misjudgement is possible when the acceptance threshold increased. 
+and intense storms, but for six hour ahead prediction of superstorms, misjudgment is possible when the acceptance threshold increased. 
 For six hour ahead prediction, the optimal acceptance threshold is around $10\%$, which evidenced room for further improvement. The 
 reliability diagram showed that the GPNN provides great performance for predictions from one to three ahead, but for four to six hours 
 ahead, an overestimation of storm likelihoods is possible.

@@ -3,7 +3,7 @@
 {\small
   We the joint regression problem where a signal drives another signal with an unknown time delay, with the modelling 
   of the solar wind speed based on the sun's magnetic flux, as motivating application. This problem, called 
-  \emph{dynamic time lag regression} (\XX) is formalized using a probabilistic setting, modelling the non-stationary 
+  \emph{dynamic time lag regression} (\XX) is formalised using a probabilistic setting, modelling the non-stationary 
   time delay between the causes and the effects on the one hand, and the cause-effect relationship on the other hand. 
   A Bayesian approach is presented to tackle the \XX\ problem together with theoretical justifications based on 
   linear stability analysis. The approach is empirically validated with proofs of concept on synthetic and 
@@ -25,7 +25,7 @@
 
 
 \section{Introduction}\label{sec:intro}
-A significant body of work in machine learning concerns the modeling of spatio-temporal phenomena 
+A significant body of work in machine learning concerns the modeling of spatiotemporal phenomena 
 \citep{SurveyST,NIPSForecasting18}, ranging from markets \citep{Pedreschi} to weather forecasting 
 \citep{Horvitz}. This work focuses on the problem of modeling the temporal dependency between two time series, 
 where the latter one is {\em caused} by the former one \citep{Granger} with a non-stationary time delay. 
@@ -188,7 +188,7 @@ alternatively, hyper-parameters $\sigma$ and $\alpha_{ij}$ are updated from \cre
 and predictors $\hat y_i$ and mixture weights  $\hat p_i$ are accordingly updated from \cref{eq:hyopt} and \cref{eq:tildep} respectively. 
 
 \section{Theoretical analysis}\label{sec-theory}
-The proposed \XX\ approach is shown to be consistent and analyzed in the simple case  where $\alpha$ is a diagonal matrix ($\alpha_{ij} = \alpha\delta_{ij}$).
+The proposed \XX\ approach is shown to be consistent and analysed in the simple case  where $\alpha$ is a diagonal matrix ($\alpha_{ij} = \alpha\delta_{ij}$).
 
 \subsection{Loss function and related optimal predictor}\label{sec:prop}
 Let us assume that the hyper-parameters of the model have been identified together with predictors $\hat  y_i(x)$ and weights $\hat p_i(x)$. These are leveraged to achieve the prediction of the effect series. 
@@ -212,7 +212,7 @@ In supplementary material, Appendix \ref{app:Hessian}.
 
 \subsection{Linear stability analysis}\label{sec:stability}
 The saddle point \cref{eq:var,eq:hatpi,eq:hyopt,eq:tildep} admit among others a degenerate solution, corresponding 
-to $\hat p_i(x) = 1/\vert T\vert$, $\alpha_{ij}=0$ for all pairs $(i,j)$, with $\sigma^2=\sigma_0^2$. Informally the model converges toward this degenerate trivial solution when there is not enough information to build specialized predictors $\hat y_i$. 
+to $\hat p_i(x) = 1/\vert T\vert$, $\alpha_{ij}=0$ for all pairs $(i,j)$, with $\sigma^2=\sigma_0^2$. Informally the model converges toward this degenerate trivial solution when there is not enough information to build specialised predictors $\hat y_i$. 
 
 Let us denote $\Delta y_i^2(x)= \bigl(y_i-\hat y_i(x)\bigr)^2$ the square error made by predictor $\hat y_i$ for $x$, and 
 \[
@@ -237,7 +237,7 @@ where ${\bf u}(x)$ is a $\vert T\vert$-vector of components
 C_{2+i}[x,\p] = \frac{1}{\sigma_0^2}{\mathbb E}_{data}
 \Bigl[ q_i(x,{\bf y})\bigl(\Delta y_i^2(x)-\sum_{j \in T} q_j(x,{\bf y})\Delta y_j^2(x)\bigr)\Big\vert x \Bigr].
 \]
-Up to a constant, $C_1$ represents the covariance between the latent variables $\{\tau_i\}$ and the normalized predictor errors. $C_1$ smaller than one 
+Up to a constant, $C_1$ represents the covariance between the latent variables $\{\tau_i\}$ and the normalised predictor errors. $C_1$ smaller than one 
 indicates a positive correlation between the latent variables and small errors; the smaller the better. For the degenerate solution, i.e. $\p=\p_{0}$ uniform, $C_1[\p_{0}]=1$ and $C_2[\p_{0}]$
 represents the default variability among the prediction errors. $C_{2+i}[x,\p]$ informally measures the quality of predictor $\hat y_i$ relatively to the other ones.
 More precisely, a negative value of  $C_{2+i}[x,\p]$ indicates that $\hat y_i$ is doing better than average in the neighborhood of $x$.  
@@ -257,16 +257,16 @@ In particular, the degenerate solution is unstable if
 C_2[\p_0] > 2\bigl(1-\frac{1}{\vert T\vert}\bigr).
 \]
 Note that for $\Delta y_i(x)$ iid centered with variance $\sigma_0^2$ and relative kurtosis $\kappa$ (conditionally to $x$)
-one has $C_2 = (2+\kappa)(1-1/\vert T\vert)$. Therefore, whenever $\Delta y_i^2(x)$ fluctuates and the relative curtosis is non-negative, % with non-negative relative kurtosis ($\kappa=0$ for a normal variable)
+one has $C_2 = (2+\kappa)(1-1/\vert T\vert)$. Therefore, whenever $\Delta y_i^2(x)$ fluctuates and the relative kurtosis is non-negative, % with non-negative relative kurtosis ($\kappa=0$ for a normal variable)
 the  degenerate solution is unstable and will thus be avoided.
 
 \paragraph{If $\hat {\bf p}$ is allowed to evolve} (after \cref{eq:tildep}) the degenerate trivial solution becomes unstable as soon as $\vert {\bf u}(x)\vert^2$ is non-zero, due to the fact that the gradient is inversely proportional to ${\bf u}(x)$ (with $d\hp(x)\propto -\vert {\bf u}(x)\vert^2 {\bf u}(x)$), thus rewarding the predictors with lowest errors by increasing their weights. \\
 
-The system is then driven toward other solutions, among which the localized solutions of the form: 
+The system is then driven toward other solutions, among which the localised solutions of the form: 
 \[
 \hat p_i(x) = \delta_{iI(x)},
 \]
-with an input dependent index $I(x)\in T$. As shown (supplementary material, Appendix \ref{app:Hessian}) the solution of highest likelihood of this type is also optimal with respect to the loss function~(\cref{eq:orloss}). The stability of such localized solutions and the existence of other (non-localized) solutions is left for further work.  
+with an input dependent index $I(x)\in T$. As shown (supplementary material, Appendix \ref{app:Hessian}) the solution of highest likelihood of this type is also optimal with respect to the loss function~(\cref{eq:orloss}). The stability of such localised solutions and the existence of other (non-localised) solutions is left for further work.  
 
 
 
@@ -280,14 +280,14 @@ with an input dependent index $I(x)\in T$. As shown (supplementary material, App
    $it \longleftarrow 0$ \;
    \While{it < max}{
     \While{epoch}{
-      $\theta \longleftarrow Optimize(\mathcal{L}(\theta, \alpha, \sigma^2))$ \;
+      $\theta \longleftarrow Optimise(\mathcal{L}(\theta, \alpha, \sigma^2))$ \;
     }
     $\sigma^2 \longleftarrow \sigma_0^2 \frac{\vert T\vert-C_1[\p]}{\vert T\vert-1}$ \;
     $\alpha \longleftarrow \frac{\vert T\vert}{\vert T\vert-1}\frac{1-C_1[\p]}{C_1[\p]}$ \;
    }
   \KwResult{Model parameters $\theta$, hyper-parameters $\alpha, \sigma^2$}
 \end{algorithm}
- The \XX\ algorithm learns both regression models $\hat {\bf y}(x)$ and $\hat {\bf p}(x)$ from series $x_m$ and $y_m$, using alternate optimization of the model parameters and the model hyper-parameters ${\bf \alpha}$ and $\sigma^2$, after \cref{eq:var,eq:hatpi,eq:hyopt,eq:tildep}. The model search space is that of neural nets, parameterized by their weight vector $\theta$. The inner optimization loop updates $\theta$ using mini-batch based stochastic gradient descent. At the end of each epoch, after all minibatches have been considered, the outer optimization loop computes hyper-parameters ${\bf \alpha}$ and $\sigma^2$ on the whole data. 
+ The \XX\ algorithm learns both regression models $\hat {\bf y}(x)$ and $\hat {\bf p}(x)$ from series $x_m$ and $y_m$, using alternate optimization of the model parameters and the model hyper-parameters ${\bf \alpha}$ and $\sigma^2$, after \cref{eq:var,eq:hatpi,eq:hyopt,eq:tildep}. The model search space is that of neural nets, parametrized by their weight vector $\theta$. The inner optimization loop updates $\theta$ using mini-batch based stochastic gradient descent. At the end of each epoch, after all mini-batches have been considered, the outer optimization loop computes hyper-parameters ${\bf \alpha}$ and $\sigma^2$ on the whole data. 
  
  The algorithm code is available in supplementary material and will be made public after the reviewing period.
 The initialization of hyper-parameters $\alpha$ and $\sigma$ is settled using preliminary experiments (same setting for all considered problems: $\alpha \sim U(0.75, 2)$; $\sigma^2 \sim U(10^{-5}, 5)$).
@@ -324,11 +324,11 @@ $(n^v,n_1^h,n_2^h,2\vert T\vert)$ in each layer.}
 
 %Proofs of concept for the  \XX\ algorithm are obtained using synthetic problems as well as our real-world %motivating application, the prediction of the solar wind (section \ref{sec:intro}). 
 The goal of the experiments is twofold. Firstly, the \XX\ predictive performance is assessed by considering i) the MSE of the predicted effect series $\hat y_m$, computed from Eq. (\ref{prop:opred}); 
-ii) the accuracy of the timelag prediction. The latter performance indicator is measured and compared to the ground truth using synthetic problems, detailed below: although time lag relationships do exist in real world data sets \citep{doi:10.1002/jgra.50429,ZHOU2006195}, we are not aware of datasets with time lag relationships explicitly annotated. The former performance indicator is comparatively assessed using the naive baseline, the regression model computed by assuming a fixed timelag set to $\frac{\tau_{min}+\tau_{max}}{2}$. The Pearson correlation of the true $y_m$ and predicted $\hat y_m$ series is also considered as overall performance indicator of the prediction.\\
+ii) the accuracy of the time lag prediction. The latter performance indicator is measured and compared to the ground truth using synthetic problems, detailed below: although time lag relationships do exist in real world data sets \citep{doi:10.1002/jgra.50429,ZHOU2006195}, we are not aware of datasets with time lag relationships explicitly annotated. The former performance indicator is comparatively assessed using the naive baseline, the regression model computed by assuming a fixed time lag set to $\frac{\tau_{min}+\tau_{max}}{2}$. The Pearson correlation of the true $y_m$ and predicted $\hat y_m$ series is also considered as overall performance indicator of the prediction.\\
 The second goal of experiments is to determine how informative are the key statistical quantities $\sigma_0$ and $C_1$ (section \ref{sec:stability}), and whether they can effectively be used as measures of confidence about the prediction results. 
 
 %said at the end
-%The dimensions of the synthetic and real problems used for validation are summarized in Table \ref{tab:exp}.
+%The dimensions of the synthetic and real problems used for validation are summarised in Table \ref{tab:exp}.
 
 \paragraph{In synthetic problems,} the driving force $x_m$ of the artificial system is generated in $\mathbb{R}^{10}$ using \emph{Stochastic Langevin Dynamics} (with $\eta = 0.02, s^2 = 0.7$); the time series $y_m$ is generated using the norm of $x_m$: 
 \begin{align}
@@ -337,9 +337,9 @@ The second goal of experiments is to determine how informative are the key stati
 \end{align}
 Four models of increasing complexity have been used for the time lag relationship $\tau(x_m)$; the width of the time lag interval $|T|$ is set to 20 except for Problem I where it is set to 15.\\
 
-{\bf Problem I}: Constant timelag $\tau(x_m) = 5$
+{\bf Problem I}: Constant time lag $\tau(x_m) = 5$
 
-In all other problems, the timelag $\tau(x_m)$ depends on the system velocity $v_m = k ||x_m||^2 + c$: 
+In all other problems, the time lag $\tau(x_m)$ depends on the system velocity $v_m = k ||x_m||^2 + c$: 
 
 {\bf Problem II}: Constant velocity $\tau(x_m) = 100/v_m,\ k = 1,\ c = 10$
 
@@ -357,7 +357,7 @@ Solar wind data is extracted from the OMNI data base from the \emph{Space Physic
 
 \XX\ is validated using a 4 fold CV, where the test data consists of one (continuous) month from October 2016 to January 2016. The performance is assessed comparatively to the best state of the art method \citep{Poduval_2014,neuralnetsw}, using  the FTE data and assuming a constant propagation time when combining FTE data with solar wind speed measurements close to the Earth. 
 
-Table \ref{tab:exp} summarizes the dimensions of the synthetic and real problems used as proofs of concept for the \XX\ validation.
+Table \ref{tab:exp} summarises the dimensions of the synthetic and real problems used as proofs of concept for the \XX\ validation.
 \begin{table}[htbp]
   \caption{Synthetic and Real-World Problems}\label{tab:exp_data_info}
   \centering
@@ -518,7 +518,7 @@ Table \ref{tab:exp} summarizes the dimensions of the synthetic and real problems
 \end{figure*}
 
 
-Table \ref{tab:results_syn} summarizes the \XX\ performance on the synthetic and real-world problems, respectively compared to the naive baseline (constant time lag) and to the state of the art for the real-world solar wind problem (please see supplementary material for more detail, plots of the results and timelag error histogram). 
+Table \ref{tab:results_syn} summarises the \XX\ performance on the synthetic and real-world problems, respectively compared to the naive baseline (constant time lag) and to the state of the art for the real-world solar wind problem (please see supplementary material for more detail, plots of the results and time lag error histogram). 
 
 The values of the $\sigma_0$ and $C_1$ quantities involved in the stability analysis (section \ref{sec:stability}) are also reported. As said, $C_1 < 1$ indicates a specialization among predictors found by the solution. The comparison of $\sigma_0$ and the RMSE indicates how better the learned model is compared to the trivial degenerate solution (uniform $\hat {\bf p}$, assigning an equal weight to all $\hat y_i$). 
 Finally, the Pearson correlation between $\hat y_m$ and $y_m$ is reported; while its absolute value is less informative than it appears due to the auto-correlation of the series, it allows to compare different predictors. 
@@ -550,9 +550,9 @@ Interestingly, Problems III and IV are better handled by \XX, despite a more com
   \label{fig:sw_preds}
 \end{figure}
 
-Concerning the solar wind problem, \XX\ finds an operational timelag relationship, with a significantly improved RMSE compared to the vanilla approach (uniform time lag distribution). It is however outperformed by the median time lag based predictor, except for the MAE. This fact is interpreted as the \XX\ model is penalized 
+Concerning the solar wind problem, \XX\ finds an operational time lag relationship, with a significantly improved RMSE compared to the vanilla approach (uniform time lag distribution). It is however outperformed by the median time lag based predictor, except for the MAE. This fact is interpreted as the \XX\ model is penalised 
 by large rare errors, associated to high speed solar wind (which corresponds to rare events). As usual in real world problems, these experiments raise the question of the quality and representativity of the selected data. Specifically, the geomagnetic phenomenon under consideration is known to be non-stationary \citep{nonstationarysolarwind}, following a 12 year cycle. A first perspective for improving the results thus consists of gathering data from at least one entire solar cycle. 
-%The statistic of the time lag is stationary wrt m (only the norm of $x$ is involved); 
+%The statistic of the time lag is stationary with respect to m (only the norm of $x$ is involved); 
 %not all the solar cycle; 12 years; more side information; 
 %noise is not Gaussian;
 %On the real-world problem of the solar wind prediction, \XX\ is dominated by the current best state of the art, intensively using domain theory XXXXXXXXXXXXX. 

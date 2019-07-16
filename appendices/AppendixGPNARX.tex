@@ -17,7 +17,7 @@ For any input space $x \in \mathcal{X}$, a real valued scalar GP (\cref{eq:gpfor
 
 It is important to note that there are no restrictions placed on the input space $\mathcal{X}$ in the definition of GPs. The inputs 
 can be continuous, discrete or having complex structure. \citet[ch.~4, sec.~4.4]{Rasmussen:2005:GPM:1162254} gives some examples of 
-covariance funtions defined over the space of strings (sequences of characters drawn from a finite alphabet) and note that it is indeed 
+covariance functions defined over the space of strings (sequences of characters drawn from a finite alphabet) and note that it is indeed 
 possible to construct covariance functions over structured objects such as trees and general graphs. 
 
 Gaussian process time series modelling has associated with it a rich body of work \citep{turner2012gaussian,frigola2016bayesian}. There 
@@ -26,7 +26,7 @@ are two ways in which GP models can be applied to time series data: \begin{enume
 \section*{Explicit vs Implicit Representation}
 
 Depending on whether or not time appears directly in the inputs space of a GP, we can classify a GP time series model as explicit or 
-imlicit respectively. Notationally, explicit and implicit time GP formulations are shown in \cref{eq:gpExplicit} and \cref{eq:gpImplicit} respectively.
+implicit respectively. Notationally, explicit and implicit time GP formulations are shown in \cref{eq:gpExplicit} and \cref{eq:gpImplicit} respectively.
 
 \begin{align}
     y(t) &\sim \mathcal{GP}(m(t), K(t, s)) \label{eq:gpExplicit}\\
@@ -37,6 +37,8 @@ In the explicit time GP model, the mean and covariance of the process are functi
 in implicit time GP models, the mean and covariance are functions of some state space $\mathbf{x}_t$. This key difference has significant 
 implications for the system trajectories and uncertainty characteristics.
 
+In section \S~\ref{sec:osa}, we build the $\mathrm{Dst}$ prediction model in the structure of \cref{eq:gpImplicit}. By setting $\mathbf{x}(t)$ to 
+a time history of $\mathrm{Dst}$ and possibly solar wind parameters, we built the GP-AR and GP-ARX prediction models.
 
 \subsection*{GP-AR \& GP-ARX as Simulation Models}
 
@@ -47,6 +49,9 @@ implications for the system trajectories and uncertainty characteristics.
     \label{fig:gparDiag}
 \end{figure}
 
+GP-AR and GP-ARX models can also be understood as iterative simulation models. In \cref{fig:gparDiag} we can see a schematic 
+simulation of the GP-AR model of order one (\cref{eq:gpARInit,eq:gpARProp}). At each time step, the system state $y_t$ determines 
+the mean and variance of the random variable $y_{t+1} \rvert y_t$.
 
 \begin{align}
     y_0 &= u \label{eq:gpARInit}\\
@@ -64,13 +69,13 @@ auto-regressive time series models shown in \cref{eq:ARp}. At each time step, th
 of $p$ previous system states $Y_{t-1}, \cdots, Y_{t-p}$ added to Gaussian noise.  
 
 \begin{align}
-    Y_t &= \sum^{p}_{k = 1}{\phi_{k}Y_{t-k}} + Z_t \label{eq:ARp} \\
+    Y_t &= \sum^{p}_{k = 1}{\beta_{k}Y_{t-k}} + Z_t \label{eq:ARp} \\
     Z_t &\sim \mathcal{N}(0, \sigma^{2}_{\varepsilon})
 \end{align}
 
 We can write \cref{eq:ARp} in probabilistic form as: 
 \begin{equation*}
-    Y_t \rvert Y_{t-1}, \cdots, Y_{t-p} \sim \mathcal{N}(\sum^{p}_{k = 1}{\phi_{k}Y_{t-k}}, \sigma^{2}_{\varepsilon})
+    Y_t \rvert Y_{t-1}, \cdots, Y_{t-p} \sim \mathcal{N}(\sum^{p}_{k = 1}{\beta_{k}Y_{t-k}}, \sigma^{2}_{\varepsilon})
 \end{equation*}
 
 

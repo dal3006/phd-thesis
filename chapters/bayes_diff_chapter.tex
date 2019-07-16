@@ -43,7 +43,7 @@ can then be represented diffusively along each component via the
 radiation belt dynamics \citep{schulz2012particle}.
 
 The third invariant represents the total magnetic flux enclosed within 
-a full particle orbit. It is common to use a normalized form of this, the 
+a full particle orbit. It is common to use a normalised form of this, the 
 so called Roederer $L^{*}$ \citep{Roederer1970}. It is analogous to radial 
 distance from the center of the Earth (in Earth radii) to the equatorial 
 crossing point of the bouncing particle. Diffusion in $L^{*}$ alone 
@@ -53,7 +53,7 @@ capture and inward radial transport of radiation belt particles
 
 One of the main difficulties of using a physics-based model for studying and 
 forecasting energetic electrons in the radiation belt is that the parameters 
-that characterize the Fokker-Planck equation, namely diffusion tensor and loss term,
+that characterise the Fokker-Planck equation, namely diffusion tensor and loss term,
 are not directly observable. Hence, their determination represents an inverse problem,
 which is generally difficult to solve and can often become ill-posed.
 
@@ -108,7 +108,7 @@ To solve the radial diffusion system (\cref{eq:raddiffusion}), the
 quantities $\kappa(l, t)$, $\lambda(l, t)$ and $Q(l, t)$ need to be
 specified. It is a common practice \citetext{see \citealp{GRL:GRL10762},
 \citealp{JGRA:JGRA15067}, \citealp{JGRA:JGRA18021} and
-\citealp{GRL:GRL22815}} to parameterise the diffusion field
+\citealp{GRL:GRL22815}} to parametrize the diffusion field
 $\kappa$ and loss rate $\lambda$ in the following manner.
 
 \begin{align}
@@ -142,7 +142,7 @@ In the radial diffusion system (\cref{eq:raddiffusion}), $\mathcal{L}_{\theta} =
 
 \subsection{Related Work}
 
-\subsubsection*{Meshfree PDE solutions}
+\subsubsection*{Mesh-free PDE solutions}
 
 \paragraph{Least Squares Support Vector Machines}
 
@@ -159,7 +159,7 @@ by the delay differential equations) in the parameter estimation process.
 \paragraph{Radial Basis Functions}
 
 (RBF) were first applied for solution of PDE problems in \citet{KANSA1990147}, 
-the authors used colocation with \emph{multiquadric} basis functions for approximating solutions
+the authors used colocation with \emph{multi-quadric} basis functions for approximating solutions
 of boundary value problems.
 
 Radial basis functions have been applied for the mesh-free solutions of Poisson PDE systems 
@@ -179,7 +179,7 @@ linear partial differential equations with Dirichlet and Von Neumann boundary co
 
 Interplay between linear operators and GP models applied to Bayesian filtering was investigated by \citet{Sarkka2011}. 
 \citet{pmlr-v31-dondelinger13a} proposed an adaptive gradient matching technique to used Gaussian Process models for 
-infering parameters of coupled ODE systems.
+inferring parameters of coupled ODE systems.
 
 \paragraph{Neural Networks} were also employed for solutions of boundary value problems in the works such as 
 \citet{Lagaris,Aarts2001,TSOULOS20092385,Baymani2011} which used Feedforward networks for 
@@ -191,7 +191,7 @@ feedforward network.
 \section{Methodology}
 
 Performing Bayesian inference over parameters of physical systems,
-involves synthesizing pre-exsiting knowledge of the physical system in
+involves synthesizing preexisting knowledge of the physical system in
 question i.e. the \emph{partial differential equation} (PDE), with
 statistical techniques. The aim of such an exercise is often the
 quantification of uncertainty over system parameters from an often
@@ -231,7 +231,7 @@ $\mathcal{L}_{\theta}$ and note that $\mathcal{L}_{\theta} [\hat{f}(x)]
 = w^{T} \mathcal{L}_{\theta}[\varphi(x)]$, yielding an estimator
 $\hat{Q}(x) = w^{T}\psi(x)$ where $\psi_{\theta}(x) =
 \mathcal{L}_{\theta}[\varphi(x)]$. Calculating $w \in \mathbb{R}^d$
-can now be cast as the following constrained $L_2$ regularized 
+can now be cast as the following constrained $L_2$ regularised 
 least squares problem.
 
 \begin{align}\label{eq:surrogate}

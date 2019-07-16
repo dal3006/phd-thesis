@@ -21,3 +21,4 @@
 thesis.synctex*
 *metals*
 !figures/*.pdf
+*.dict
