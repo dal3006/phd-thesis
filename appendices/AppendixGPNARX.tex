@@ -33,12 +33,14 @@ implicit respectively. Notationally, explicit and implicit time GP formulations 
     y(t) &\sim \mathcal{GP}(m(\mathbf{x}(t)), K(\mathbf{x}(t), \mathbf{x}(s))) \label{eq:gpImplicit}
 \end{align}
 
-In the explicit time GP model, the mean and covariance of the process are functions of the continuous time coordinate $t$. On the other hand 
-in implicit time GP models, the mean and covariance are functions of some state space $\mathbf{x}_t$. This key difference has significant 
-implications for the system trajectories and uncertainty characteristics.
+In the explicit time GP model, the mean and covariance of the process are functions of the continuous time 
+coordinate $t$. On the other hand in implicit time GP models, the mean and covariance are functions of some 
+state space $\mathbf{x}_t$. This key difference has significant implications for the system trajectories and 
+uncertainty characteristics.
 
-In section \S~\ref{sec:osa}, we build the $\mathrm{Dst}$ prediction model in the structure of \cref{eq:gpImplicit}. By setting $\mathbf{x}(t)$ to 
-a time history of $\mathrm{Dst}$ and possibly solar wind parameters, we built the GP-AR and GP-ARX prediction models.
+In section \S~\ref{sec:osa}, we build the $\mathrm{Dst}$ prediction model in the structure of \cref{eq:gpImplicit}. 
+By setting $\mathbf{x}(t)$ to a time history of $\mathrm{Dst}$ and possibly solar wind parameters, we built the 
+GP-AR and GP-ARX prediction models.
 
 \subsection*{GP-AR \& GP-ARX as Simulation Models}
 
@@ -49,9 +51,9 @@ a time history of $\mathrm{Dst}$ and possibly solar wind parameters, we built th
     \label{fig:gparDiag}
 \end{figure}
 
-GP-AR and GP-ARX models can also be understood as iterative simulation models. In \cref{fig:gparDiag} we can see a schematic 
-simulation of the GP-AR model of order one (\cref{eq:gpARInit,eq:gpARProp}). At each time step, the system state $y_t$ determines 
-the mean and variance of the random variable $y_{t+1} \rvert y_t$.
+GP-AR and GP-ARX models can also be understood as iterative simulation models. In \cref{fig:gparDiag} we can 
+see a schematic simulation of the GP-AR model of order one (\cref{eq:gpARInit,eq:gpARProp}). At each time step, 
+the system state $y_t$ determines the mean and variance of the random variable $y_{t+1} \rvert y_t$.
 
 \begin{align}
     y_0 &= u \label{eq:gpARInit}\\
