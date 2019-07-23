@@ -45,7 +45,7 @@ ggplot(adj_df, aes(x=time)) +
     fill="blue", alpha="0.25") +
   geom_line(
     aes(y=yvalue, colour=functype, linetype="solid"), 
-    size=0.8) +
+    size=1.2) +
   geom_point(size = 2, aes(y=yvalue, colour = functype)) +
   theme_gray(base_size = 2) + 
   scale_colour_manual(
@@ -66,7 +66,7 @@ ggplot(adj_df[adj_df$time > 40, ], aes(x=time)) +
     fill="blue", alpha="0.25") +
   geom_line(
     aes(y=yvalue, colour=functype, linetype="solid"), 
-    size=0.8) +
+    size=1.2) +
   geom_point(size = 2, aes(y=yvalue, colour = functype)) +
   theme_gray(base_size = 22) + 
   scale_colour_manual(
@@ -88,7 +88,7 @@ gp_nar_prior$path <- as.factor(as.character(gp_nar_prior$path))
 
 
 ggplot(gp_nar_prior, aes(x=time,y=yvalue, colour=path)) +
-  geom_line(aes(linetype="dash"), size=0.8) +
+  geom_line(aes(linetype="dash"), size=1.2) +
   geom_point(size = 2, aes(colour = path)) +
   theme_gray(base_size = 22) +
   theme(legend.position="top", legend.direction = "horizontal") +
@@ -114,7 +114,7 @@ nar_prior$path <- as.factor(as.character(nar_prior$path))
 
 
 ggplot(nar_prior, aes(x=time,y=yvalue, colour=path)) +
-  geom_line(aes(linetype="dash"), size=0.8) +
+  geom_line(aes(linetype="dash"), size=1.2) +
   geom_point(size = 2, aes(colour = path)) +
   theme_gray(base_size = 22) +
   theme(legend.position="top", legend.direction = "horizontal") +
@@ -140,7 +140,7 @@ gp_explicit_prior$path <- as.factor(as.character(gp_explicit_prior$path))
 
 
 ggplot(gp_explicit_prior, aes(x=time,y=yvalue, colour=path)) +
-  geom_line(aes(linetype="dash"), size=0.8) +
+  geom_line(aes(linetype="dash"), size=1.2) +
   geom_point(size = 2, aes(colour = path)) +
   theme_gray(base_size = 22) +
   theme(legend.position="top", legend.direction = "horizontal") +
