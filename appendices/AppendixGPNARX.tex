@@ -5,17 +5,17 @@ Their formulation is general and their existence is dependent on two key conditi
 which we restate here.
 
 For any input space $\mathcal{X}$, a real valued scalar GP (\cref{eq:gpformulationapp}) can be created given two functions.
-
+%
 \begin{enumerate}
     \item A mean function $m: \mathcal{X} \longrightarrow \mathbb{R}$.
     \item A symmetric positive definite covariance function (kernel) 
     $K: \mathcal{X} \times \mathcal{X} \longrightarrow \mathbb{R}^{+}$ \citep[ch.~1\&2]{Berlinet2004}.
 \end{enumerate}    
-
+%
 \begin{equation}\label{eq:gpformulationapp}
     f(x) \sim \mathcal{GP}(m(x), K(x, x'))
 \end{equation}
-
+%
 It is important to note that there are no restrictions placed on the input space $\mathcal{X}$ in GPs. The inputs 
 can be continuous, discrete or have complex structure. \citet[ch.~4, sec.~4.4]{Rasmussen:2005:GPM:1162254} give 
 some examples of covariance functions defined over the space of strings (sequences of characters drawn from a 
@@ -30,12 +30,12 @@ are two ways in which GP models can be applied to time series data: \begin{enume
 Depending on whether or not time appears directly in the inputs space of a GP, we can classify a GP time series 
 model as explicit or implicit respectively. Notationally, explicit and implicit time GP formulations are shown 
 in \cref{eq:gpExplicit} and \cref{eq:gpImplicit} respectively.
-
+%
 \begin{align}
     y(t) &\sim \mathcal{GP}(m(t), K(t, s)) \label{eq:gpExplicit}\\
     y(t) &\sim \mathcal{GP}(m(\mathbf{x}(t)), K(\mathbf{x}(t), \mathbf{x}(s))) \label{eq:gpImplicit}
 \end{align}
-
+%
 In the explicit time GP model, the mean and covariance of the process are functions of the continuous time 
 coordinate $t$. On the other hand in implicit time GP models, the mean and covariance are functions of some 
 state space $\mathbf{x}_t$. This key difference has significant implications for the system trajectories and 
@@ -58,7 +58,7 @@ The GP-ARX model is a straight forward extension of the GP-AR dynamics shown bel
 
 We first setup some background notation. The GP-AR system of order $p$, is determined by the system state 
 $\mathbf{x}_t$; a dimensional vector composed of the time history of the system, shown in \cref{eq:systemStateAR}.
-
+%
 \begin{equation}\label{eq:systemStateAR}
     \mathbf{x}_t = \begin{bmatrix}
         y_{t-1}\\ 
@@ -66,11 +66,11 @@ $\mathbf{x}_t$; a dimensional vector composed of the time history of the system,
         y_{t-p}\\ 
         \end{bmatrix}_{p \times 1}
 \end{equation}
-
+%
 For every time step $t$, we combine all system states $\mathbf{x}_t, \cdots, \mathbf{x}_{p-1}$ into a design matrix 
 $\mathbf{X}_t$ shown in \cref{eq:systemDesignMat}. The system trajectory $\mathbf{y}_t$ in \cref{eq:systemTraj} is the 
 path taken by the system from time step $p$ to time step $t$.
-
+%
 \begin{equation}\label{eq:systemDesignMat}
     \mathbf{X}_t = \begin{bmatrix}
         \mathbf{x}^{\intercal}_{t}\\ 
@@ -78,7 +78,7 @@ path taken by the system from time step $p$ to time step $t$.
         \mathbf{x}^{\intercal}_{p}\\ 
         \end{bmatrix}_{(t-p+1) \times p}
 \end{equation}
-
+%
 \begin{equation}\label{eq:systemTraj}
     \mathbf{y}_t = \begin{bmatrix}
         y_{t}\\ 
@@ -99,7 +99,7 @@ unless the entire trajectory is known beforehand.
 
 To circumvent the sampling intractability of \cref{eq:systemTrajProb}, we use a probabilistic simulation based approach 
 to the GP-AR process.
-
+%
 \begin{equation}\label{eq:systemTrajProb}
     y_{p}, \cdots, y_{t} \rvert y_{0}, \cdots, y_{p-1} \sim \mathcal{N}
     \left( 
@@ -136,12 +136,12 @@ system trajectory from time step $0$ to time step $p-1$ which is sampled from a 
 from a Gaussian distribution (\cref{eq:gpARProp}) whose mean and covariance are calculated by appropriately 
 conditioning the joint distribution in \cref{eq:systemTrajProb} and constructing the system state 
 $\mathbf{x}_t$ and design matrix $\mathbf{X}_{t-1}$.     
-
+%
 \begin{align}
     (y_0, \cdots, y_{p-1}) &\sim \mathcal{N}(\mathbf{0}, \mathbf{I}) \label{eq:gpARInit}\\
     y_t \rvert \mathbf{y}_{t-1} &\sim \mathcal{N}(\bar{m}_t, \bar{\sigma}_{t}^2) \label{eq:gpARProp}
 \end{align}
-
+%
 \begin{equation}\label{eq:postGPAR}
     \begin{aligned}
         \bar{m}_t &= m(\mathbf{x}_t) + 
@@ -150,7 +150,7 @@ $\mathbf{x}_t$ and design matrix $\mathbf{X}_{t-1}$.
         \mathbf{k}_{t}^{\intercal} \mathbf{K}_{t}^{-1} \mathbf{k}_{t}
     \end{aligned}
 \end{equation}
-
+%
 In \cref{eq:postGPAR}, the mean and variance of the conditional distribution of $y_t \rvert \mathbf{y}_{t-1}$ are 
 computed, where $\mathbf{K}_{t} = [K(\mathbf{X}_{t-1}, \mathbf{X}_{t-1})]_{(t-p) \times (t-p)}$ is the 
 covariance matrix computed between each pair of rows of $\mathbf{X}_{t-1}$ and 
@@ -178,10 +178,9 @@ We can see that the GP-AR model family contains the $\mathrm{AR}(p)$ model in \c
 By setting $m(\mathbf{x}_t) = \sum^{p}_{k = 1}{\beta_{k}Y_{t-k}}$ and 
 $K(\mathbf{x}_t, \mathbf{x}_s) = \sigma^2_{\varepsilon}\delta(\mathbf{x}_t, \mathbf{x}_s)$, where $\delta(.,.)$ 
 is the Dirac delta function, we obtain the conditional probability density of the random variable 
-$y_t \rvert y_{t-1}, \cdots, y_{t-p}$ described above.
-
-\cite{roberts2013gaussian} note that the $\mathrm{AR}(p)$ process is also equivalent to an explicit time GP model 
-having $m(t) = \mathbb{E}[y(0)]$ and a Mat\'{e}rn covariance function
+$y_t \rvert y_{t-1}, \cdots, y_{t-p}$ described above. \cite{roberts2013gaussian} note that the $\mathrm{AR}(p)$ 
+process is also equivalent to an explicit time GP model having $m(t) = \mathbb{E}[y(0)]$ and a Mat\'{e}rn 
+covariance function
 %
 \begin{equation*}
     K(t, s)=\sigma ^{2}{\frac {2^{1-\nu }}{\Gamma (\nu )}}
@@ -191,55 +190,94 @@ having $m(t) = \mathbb{E}[y(0)]$ and a Mat\'{e}rn covariance function
 \end{equation*}
 %
 with $\nu = p + \frac{1}{2}$, where $\Gamma(.)$ the gamma function, $\mathcal{K}_{\nu }(.)$ the modified 
-Bessel function of the second kind, $\rho$ being the length scale and $\sigma^2$ the amplitude of the 
-covariance function.
+Bessel function of the second kind, $\rho$ being the length scale and $\sigma^2$ the amplitude of $K(.,.)$.
 
 The advantage of the implicit time GP-AR model over the explicit time GP model is that the GP-AR family 
 can also simulate non-linear auto-regressive processes. This is because the kernel creates a Hilbert space 
 $\mathcal{H}(\mathbb{C})$ spanned by a basis of non-linear orthogonal basis functions 
-$\phi \in \mathcal{H}(\mathbb{C})$, such that the kernel can be decomposed  
+$\phi \in \mathcal{H}(\mathbb{C})$, such that the kernel can be decomposed 
+\citep[sec.~4.3]{Rasmussen:2005:GPM:1162254} in the following manner.
 %
 \begin{equation*}
     K(\mathbf{x}_t, \mathbf{x}_s) = \sum^{\infty}_{i = 1}{\lambda_{i}\phi(\mathbf{x}_t) \bar{\phi(\mathbf{x}_s)}}
 \end{equation*}
 %
-as noted in \citet[sec.~4.3]{Rasmussen:2005:GPM:1162254}.
-
-
+\citet[ch.~2]{Rasmussen:2005:GPM:1162254} also notes that \enquote{Gaussian process regression can be viewed as Bayesian linear regression with a possibly infinite number of basis functions}. We provide a simple example of how the GP-AR 
+model can approximate the dynamics of a non-linear auto-regressive system.
 
 \section*{Example: System Identification}
 
-
-\begin{equation}\label{eq:narp}
-    \begin{aligned}
-        y(t) &= -0.05 y_{t-1} + 0.25 y_{t-2} - 0.63 y_{t-3} - \\
-        & 4\times10^{-3} y^2_{t-1} - 0.02 y^{2}_{t-3} - 0.05 y^{2}_{t-2} \\ 
-        & - 0.048 y_{t-2} y_{t-1} - 0.02 y_{t-1} y_{t-3} - 0.06 y_{t-2} y_{t-3} + \varepsilon
-    \end{aligned}
-\end{equation}
-
-
-\begin{figure}
+\begin{figure}[ht]
     \centering
     \noindent\includegraphics[width=\textwidth]{nar_samples.pdf}
-    \caption{Samples drawn from non-linear autoregressive model in \cref{eq:narp}}
+    \caption{Samples drawn from non-linear autoregressive model in \cref{eq:narp}. 
+    The path coloured in black is used partially ($t \leq 40$) in the training and the rest 
+    as test data}
     \label{fig:narpSamples}
 \end{figure}
 
+Consider $y_t$, a quadratic auto-regressive system of order three, expressed below.
+%
+\begin{align}\label{eq:narp}
+    y_0 &\sim \mathcal{N}(0, 1)\\
+    \varepsilon &\sim \mathcal{N}(0, \sigma^{2}_{\varepsilon})\\
+    y_t &= -0.05 y_{t-1} + 0.25 y_{t-2} - 0.63 y_{t-3} \\
+        & - 4\times10^{-3} y^2_{t-1} - 0.02 y^{2}_{t-3} - 0.05 y^{2}_{t-2} \\ 
+        & - 0.048 y_{t-2} y_{t-1} - 0.02 y_{t-1} y_{t-3} - 0.06 y_{t-2} y_{t-3} \\
+        & + \varepsilon
+\end{align}
+%
+The initial state $y_0$ is sampled from the standard Gaussian distribution. At time $t$, $y_t$ is determined 
+by a series expansion up to degree two, of monomials constructed from $y_{t-1}, y_{t-2}, y_{t-3}$, plus Gaussian 
+distributed noise $\varepsilon$.
 
+Using the sampling procedure described above, we construct $10$ sample paths of temporal length $100$ for 
+training and testing the GP-AR model (some of them shown in \cref{fig:narpSamples}). The portion $t > 40$ of the 
+black path in \cref{fig:narpSamples} is reserved for model evaluation while its earlier segment as well 
+as all other sample paths are retained for model training.  
 
-
-\begin{figure}
+We construct a GP-AR model with input 
+$\mathbf{x}_t = \begin{bmatrix} y_{t-1}\\ y_{t-2}\\ y_{t-3}\\ \end{bmatrix}$, as
+%
+\begin{equation*}
+    \begin{aligned}
+        y_t &= f(\mathbf{x}_t) + \epsilon \\
+        f(\mathbf{x}_t) &\sim \mathcal{GP}(m(\mathbf{x}_t), K(\mathbf{x}_t, \mathbf{x}_s)) \\
+        \epsilon &\sim \mathcal{N}(0, \sigma_{\epsilon}^{2})
+    \end{aligned}
+\end{equation*}
+%
+with mean and covariance functions are defined as
+\begin{equation*}
+    \begin{aligned}
+        m(\mathbf{x}_t) &=  -0.05 y_{t-1} + 0.25 y_{t-2} - 0.63 y_{t-3}\\
+        K(\mathbf{x}_t, \mathbf{x}_s) &= \sigma^2 
+        \exp \left(-\frac{1}{2} \frac{\rvert \rvert \mathbf{x}_t - \mathbf{x}_s \rvert \rvert ^2}{l^2} \right)
+    \end{aligned}
+\end{equation*}
+where the kernel and noise parameters are initialised as follows $\sigma^2 = 2$, $l = 1$, 
+$\sigma_{\epsilon}^{2} = 0.5$. In \cref{fig:gparPrior}, we show some samples drawn from this GP-AR prior.
+%
+\begin{figure}[ht]
     \centering
     \noindent\includegraphics[width=\textwidth]{gp_nar_prior.pdf}
     \caption{Prior samples drawn from a GP-AR model (\cref{eq:gpARInit,eq:gpARProp}) with an squared exponential kernel.}
     \label{fig:gparPrior}
 \end{figure}
+%
+During the training procedure, the model's hyper-parameters are selected using the CSA procedure described in 
+section \S~\ref{sec:gpModelSelection}. After choosing the model hyper-parameters, the model is tested on the 
+portion $t > 40$ of the black path in \cref{fig:narpSamples}. 
 
-\begin{figure}
+In \cref{fig:gparPost}, the posterior predictive distribution of the GP-AR model is used to generate one step ahead 
+predictions with error bars. The GP-AR model is able to approximate the quadratic dynamics of \cref{eq:narp}, 
+although the prior mean function $m(\mathbf{x}_t) =  -0.05 y_{t-1} + 0.25 y_{t-2} - 0.63 y_{t-3}$ only captures 
+the linear components of \cref{eq:ARp}, the kernel enables modelling of the quadratic components.
+
+\begin{figure}[ht]
     \centering
     \noindent\includegraphics[width=\textwidth]{gp_nar_pred_partial.pdf}
-    \caption{Predictions made by the GP-AR model}
+    \caption{Predictions made by the GP-AR model, error bars shaded in blue.}
     \label{fig:gparPost}
 \end{figure}
 

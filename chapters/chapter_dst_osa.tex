@@ -204,7 +204,7 @@ For the success of a \emph{Gaussian Process} model an appropriate choice of kern
 
 The quantities $l$ in the RBF, and $b$ and $d$ in the polynomial kernel are known as \emph{hyper-parameters}. Hyper-parameters give flexibility to a particular kernel structure, for example $d = 1, 2, 3, \cdots$ in the polynomial kernel represents linear, quadratic, cubic and higher order polynomials respectively. The process of assigning values to the \emph{hyper-parameters} is crucial in the model building process and is known as \emph{model selection}. 
 
-\subsection{Model Selection}
+\subsection{Model Selection}\label{sec:gpModelSelection}
 
 Given a GP model with a kernel function $K_\theta$, the problem of model selection consists of finding appropriate values for the kernel hyper-parameters $\theta = \left(\theta_1, \theta_2, \cdots, \theta_i\right)$. In order to assign a value to $\theta$, we must define an objective function which represents our confidence that the GP model built from a particular value of $\theta$ is the best performing model. Since GP models encode assumptions about the probability distribution of the output data $\mathbf{y}$ given inputs $\mathbf{X}$, it is natural to use the negative log-likelihood of the training data as a model selection criterion. 
 %
