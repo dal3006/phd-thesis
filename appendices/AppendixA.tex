@@ -1,4 +1,4 @@
-\chapter{Log likelihood of the latent model~(\ref{eq:py})}\label{app:LL}
+\chapter{Log Likelihood Of The \XX \ Model}\label{app:LL}
 Assume that the number of learning samples tends to infinity, and so that in a small volume $dv = dxd{\bf y}$ around a given  joint configuration $(x,{\bf y})$,
 the number of data $N_{x,{\bf y}}$ becomes large. Restricting the likelihood to this subset of the data yields the following:
 \[
@@ -24,11 +24,9 @@ where the rate function simply reads from Sanov's theorem
 \sum_{i\in T}\Bigl[\bigl(y_i-\hat y_i(x)\bigr)^2\frac{1+\sum_{j\in T}\alpha_{ij}q_j}{2\sigma^2}
 -\frac{1}{2}q_i\sum_{j\in T}\log(1+\alpha_{ji})+q_i\log\frac{q_i}{\hat p_i}\Bigr].
 \]
-Taking the saddle point for $q_i$ yield as a function of $(x,{\bf y})$ %expression~(\ref{eq:hatpi}). Inserting this into ${\cal F}$ and taking
-expression~(7). Inserting this into ${\cal F}$ and taking
-%the average over the data set yields the log likelihood~(\ref{eq:LL}) with
-the average over the data set yields the log likelihood~(5) with 
-opposite sign:
+Taking the saddle point for $q_i$ yield as a function of $(x,{\bf y})$~(\cref{eq:hatpi}). 
+Inserting this into ${\cal F}$ and taking the average over the data set yields the log likelihood~(\cref{eq:LL}) 
+with the opposite sign:
 \[
 {\cal L}({\bf x},{\bf y};\hat {\bf y},\hp,\sigma,\alpha) = -{\mathbb E}_{data}\Bigl[{\cal F}_{x,{\bf y}}\bigl[\p(x,{\bf y})\bigr]\Bigr].
 \]
@@ -42,7 +40,7 @@ The optimization of $\hp$ gives:
 \]
 with $\lambda(x)$ a Lagrange multiplier to insure that $\sum_i\hat p_i(x)=1$ 
 %for any $x$ yielding expression~(\ref{eq:tildep}).
-for any $x$ yielding expression~(9).
+for any $x$ yielding \cref{eq:tildep}.
 
 Finally the optimization $\alpha$ reads:
 \[

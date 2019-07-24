@@ -1,8 +1,5 @@
 %
-% TU/e Style Master Thesis template for LaTeX
-%
-% Public version 1.0
-% 2010 - 2013 Thijs Nugteren and Joos Buijs
+% TU/e Style PhD thesis 
 %
 % THIS IS THE MAIN FILE (i.e. compile this file, compiling the others directly won't work)
 %
@@ -157,10 +154,12 @@
 
 \clearemptydoublepage
 
-%\clearemptydoublepage
-
 \appendix
-\addcontentsline{toc}{chapter}{Appendix}
+\clearpage % or \cleardoublepage
+\addappheadtotoc
+\appendixpage
+%\addcontentsline{toc}{chapter}{Appendix}
+
 
 \include{appendices/AppendixGPNARX}
 \include{appendices/AppendixA}
@@ -169,7 +168,6 @@
 
 %Choose a good bibliography style, plain would do often, but these might be nice too
 \bibliographystyle{plainnat}
-%\bibliographystyle{plain}
 \bibliography{references}
 
 

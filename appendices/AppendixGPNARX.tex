@@ -1,4 +1,4 @@
-\chapter{Notes on Gaussian Process Time Series Models}\label{app:gpNARX}
+\chapter{Notes On Gaussian Process Time Series Models}\label{app:gpNARX}
 
 Gaussian processes provide a systematic and flexible framework for probabilistic inference in machine learning. 
 Their formulation is general and their existence is dependent on two key conditions outlined in \cref{sec:osaGPmethod} 
@@ -16,9 +16,10 @@ For any input space $\mathcal{X}$, a real valued scalar GP (\cref{eq:gpformulati
 \end{equation}
 
 It is important to note that there are no restrictions placed on the input space $\mathcal{X}$ in GPs. The inputs 
-can be continuous, discrete or have complex structure. \citet[ch.~4, sec.~4.4]{Rasmussen:2005:GPM:1162254} gives some examples of 
-covariance functions defined over the space of strings (sequences of characters drawn from a finite alphabet) and note that it is indeed 
-possible to construct covariance functions over structured objects such as trees and general graphs. 
+can be continuous, discrete or have complex structure. \citet[ch.~4, sec.~4.4]{Rasmussen:2005:GPM:1162254} give 
+some examples of covariance functions defined over the space of strings (sequences of characters drawn from a 
+finite alphabet) and note that it is indeed possible to construct covariance functions over structured objects 
+such as trees and general graphs. 
 
 Gaussian process time series modelling has a rich body of work \citep{turner2012gaussian,frigola2016bayesian}. There 
 are two ways in which GP models can be applied to time series data: \begin{enumerate*} \item explicit time \& \item implicit time \end{enumerate*}
@@ -47,11 +48,12 @@ GP-AR and GP-ARX prediction models.
 \subsection*{GP-AR \& GP-ARX Models}
 
 Implicit time GP models (\cref{eq:gpImplicit}) define probabilistic dynamics for a system $y(t)$ in terms
-of some time varying system state $\mathbf{x}(t)$. To define their finite dimensional distributions using the GP methodology, we 
-discretely subsample $y(t)$ and $\mathbf(t)$ and denote their discrete analogues as $y_t$ and $\mathbf{x}_t$ respectively.  
+of some time varying system state $\mathbf{x}(t)$. To define their finite dimensional distributions using the 
+GP methodology, we discretely subsample $y(t)$ and $\mathbf(t)$ and denote their discrete analogues as $y_t$ and 
+$\mathbf{x}_t$ respectively.  
 
-We give a detailed picture of the GP-AR model, its finite dimensional distribution, its sampling and dynamics. The GP-ARX model 
-is a straight forward extension of the GP-AR dynamics shown below.
+We give a detailed picture of the GP-AR model, its finite dimensional distribution, its sampling and dynamics. 
+The GP-ARX model is a straight forward extension of the GP-AR dynamics shown below.
 
 We first setup some background notation. The GP-AR system of order $p$, is determined by the system state 
 $\mathbf{x}_t$; a dimensional vector composed of the time history of the system, shown in \cref{eq:systemStateAR}.
@@ -158,19 +160,25 @@ between the input features $\mathbf{x}_t$ and each row of the $\mathbf{X}_{t-1}$
 
 Due to the abstract nature of GPs, they actually generalize some popular time series models. Consider 
 $\mathrm{AR}(p)$, the family of discrete auto-regressive time series models shown in \cref{eq:ARp}. At each 
-time step, the systems state $Y_t$ is determined by a linear combination of $p$ previous system states 
-$Y_{t-1}, \cdots, Y_{t-p}$ added to Gaussian noise.  
+time step, the systems state $y_t$ is determined by a linear combination of $p$ previous system states 
+$y_{t-1}, \cdots, y_{t-p}$ added to Gaussian noise.  
 
 \begin{align}
-    Y_t &= \sum^{p}_{k = 1}{\beta_{k}Y_{t-k}} + Z_t \label{eq:ARp} \\
-    Z_t &\sim \mathcal{N}(0, \sigma^{2}_{\varepsilon})
+    y_t &= \sum^{p}_{k = 1}{\beta_{k}y_{t-k}} + z_t \label{eq:ARp} \\
+    z_t &\sim \mathcal{N}(0, \sigma^{2}_{\varepsilon})
 \end{align}
 
 We can write \cref{eq:ARp} in probabilistic form as: 
 \begin{equation*}
-    Y_t \rvert Y_{t-1}, \cdots, Y_{t-p} \sim \mathcal{N}(\sum^{p}_{k = 1}{\beta_{k}Y_{t-k}}, \sigma^{2}_{\varepsilon})
+    y_t \rvert y_{t-1}, \cdots, y_{t-p} \sim \mathcal{N}(\sum^{p}_{k = 1}{\beta_{k}y_{t-k}}, \sigma^{2}_{\varepsilon})
 \end{equation*}
 
+
+In fact the the GP-AR model family contains the $\mathrm{AR}(p)$ model in \cref{eq:ARp} as a special case; by 
+setting $m(\mathbf{x}_t) = \sum^{p}_{k = 1}{\beta_{k}Y_{t-k}}$ and 
+$K(\mathbf{x}_t, \mathbf{x}_s) = \sigma^2_{\varepsilon}\delta(\mathbf{x}_t, \mathbf{x}_s)$, where $\delta(.,.)$ 
+is the Dirac delta function, we obtain the conditional probability of $y_t \rvert y_{t-1}, \cdots, y_{t-p}$ as 
+described above.
 
 \section*{Example: System Identification}
 
