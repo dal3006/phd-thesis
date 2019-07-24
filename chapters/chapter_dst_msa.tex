@@ -197,24 +197,23 @@ state depending on the information required by the LSTM unit. The important piec
 
 \subsubsection*{Forget Gate \& Input Gate}
 
-The forget gate is shown in \cref{eq:forgetgate}. 
-
+The forget gate is shown in \cref{eq:forgetgate}.
+%
 \begin{equation}\label{eq:forgetgate}
  \mathbf{f}_{t} = \sigma  \left( \mathbf{W}_f \boldsymbol{\cdot}  \left[ \mathbf{h}_{t-1}, \mathbf{x}_t \right] + 
  \mathbf{b}_f \right)
 \end{equation}
-
-\vspace{\baselineskip}
-
-With  $\sigma$  the component wise sigmoid function, and  $\mathbf{W}_{f}$ and $\mathbf{b}_{f}$ the weight matrix 
+%
+With $\sigma$ the component wise sigmoid function, and  $\mathbf{W}_{f}$ and $\mathbf{b}_{f}$ the weight matrix 
 and bias vector of the gate respectively. This notation is kept for subsequent equations. The forget gate compares 
-the information coming from the previous cell $\mathbf{h}_{t-1}$ and the incoming information  $  \mathbf{x}_{t} $  and outputs a number 
-between zero and one, zero if the information is entirely discarded, one if it is altogether retained.
+the information coming from the previous cell $\mathbf{h}_{t-1}$ and the incoming information $\mathbf{x}_{t}$ 
+and outputs a number between zero and one, zero if the information is entirely discarded, one if it is 
+altogether retained.
 
 Correspondingly the input gate (\cref{eq:inputgate}) decides what information is retained, depending 
-on past hidden cell state $\mathbf{h}_{t-1}$ and exogenous inputs $\mathbf{x}_t$. $\mathbf{W}_{i} $  and  
-$  \mathbf{b}_{i} $ \ are the weight matrix and bias vector of the input gate respectively.
-
+on past hidden cell state $\mathbf{h}_{t-1}$ and exogenous inputs $\mathbf{x}_t$. $\mathbf{W}_{i} $ and  
+$\mathbf{b}_{i}$ are the weight matrix and bias vector of the input gate respectively.
+%
 \begin{equation}\label{eq:inputgate}
  \mathbf{i}_{t} = \sigma  \left(\mathbf{W}_{i} \boldsymbol{\cdot} \left[ \mathbf{h}_{t-1}, \mathbf{x}_{t} \right] + 
  \mathbf{b}_{i} \right)
@@ -225,17 +224,16 @@ $  \mathbf{b}_{i} $ \ are the weight matrix and bias vector of the input gate re
 The inputs $\mathbf{x}_t$ and cell hidden state $\mathbf{h}_{t-1}$ is then passed through a hyperbolic tangent 
 transformation create a vector of candidate values $\tilde{\mathbf{c}}_{t}$ as per \cref{eq:candidate}. 
 This candidate state $\tilde{\mathbf{c}}_{t}$ is used to create the updated cell state $\mathbf{c}_{t}$. 
-$\mathbf{W}_{c}$  and  $\mathbf{b}_{c}$ being the weight and bias of this layer respectively. 
- 
-
+$\mathbf{W}_{c}$  and  $\mathbf{b}_{c}$ being the weight and bias of this layer respectively.
+%
 \begin{equation}\label{eq:candidate}
  \tilde{\mathbf{c}}_{t} = \text{tanh} \left( \mathbf{W}_{c} \boldsymbol{\cdot}  \left[ \mathbf{h}_{t-1},\mathbf{x}_t \right] + 
  \mathbf{b}_{c} \right)
 \end{equation}
-
+%
 The cell state  $\mathbf{c}_{t-1}$ is then updated to obtain the new cell state $\mathbf{c}_t$. This 
 is shown in \cref{eq:newstate}, where $\circ$ denotes the element wise (Hadamard) product. 
-
+%
 \begin{equation}\label{eq:newstate}
  \mathbf{c}_t = \mathbf{f}_{t} \circ \mathbf{c}_{t-1} + \mathbf{i}_{t} \circ \tilde{\mathbf{c}}_{t}
 \end{equation}
@@ -245,12 +243,9 @@ is shown in \cref{eq:newstate}, where $\circ$ denotes the element wise (Hadamard
 The output of the LSTM cell is calculated using \cref{eq:outputgate}. First, the 
 sigmoid transformation helps to define the output $\mathbf{o}_t$. Second, the hidden state $\mathbf{h}_t$ 
 is computed by multiplying $\mathbf{o}_{t}$ with a hyperbolic tangent transformation of the cell state 
-$\mathbf{c}_{t}$. 
-
-$\mathbf{h}_{t}$ (seen in figure \ref{fig:lstmcell}) becomes the prediction computed LSTM cell for input 
-$\mathbf{x}_t$
-
-
+$\mathbf{c}_{t}$. $\mathbf{h}_{t}$ (seen in figure \ref{fig:lstmcell}) becomes the final prediction computed 
+LSTM cell for input $\mathbf{x}_t$.
+%
 \begin{align} \label{eq:outputgate}
 	\mathbf{o}_{t} &= \sigma \left( 
 		\mathbf{W}_o \boldsymbol{\cdot} \left[\mathbf{h}_{t-1}, \mathbf{x}_{t} \right] + \mathbf{b}_o \right) \\
@@ -265,7 +260,7 @@ obtained a vector of outputs $[\mathrm{\hat{D}st}\left(t + p\right)], p\in \{ 1,
 For inputs $\mathbf{x}_t$, we use solar wind parameters ($n$, $V_{\text{sw}}$, $|\mathbf{B}|$, $B_{z}$) 
 and GPS data ($B_{\text{gps}}$) described in section \ref{sec:datagpnn}. We also use the time history of Dst, 
 from one to six hours back.
-
+%
 \begin{equation}\label{eq:lstminputs}
 	\begin{aligned}
 		\mathbf{x}_t &= (n \left( t \right) , V_{\text{sw}}\left( t \right), 
@@ -284,7 +279,7 @@ In \cref{eq:dstmodel,eq:lstmstack}, we describe the Dst prediction architecture.
 ahead prediction $\mathrm{\hat{D}st} \left(t + p \right)$ is the output of the function $m^{p}_{\text{NN}}(\cdot)$ which 
 is obtained by successive operation of $d$ LSTM cells. Mathematically this is equivalent to function composition 
 $h^{p}_{d} ( h^{p}_{d-1}( \cdots (h^{p}_{1}(\cdot)\cdots))$.
-
+%
 \begin{align}
 	\mathrm{\hat{D}st} \left(t + p \right) &= 
 	m^{p}_{\text{NN}} (\mathbf{x}_t) \label{eq:dstmodel}\\
@@ -322,11 +317,11 @@ The quantity $J(\mathbf{\theta})$ is the objective function which defines how we
 the LSTM model fit the observed data. The training process of the LSTM consists of computing an 
 approximate minimum of $J(\mathbf{\theta})$. We define $g_{k,i}$ in \cref{eq:gradient} as the gradient 
 of the objective function with respect to the parameter $\theta_{i}$ at iteration $k$. 
-
+%
 \begin{equation}\label{eq:gradient}
  g_{k,i} = \left. \frac{\partial{J}(\mathbf{\theta})}{{\partial \mathbf{\theta}_i}}\right\rvert_{\theta = \theta^k}
 \end{equation}
-
+%
 The aim of the training process is to successively decrease the value of $J(\mathbf{\theta})$ over a number of 
 training iterations. This is achieved as follows.
 
@@ -335,8 +330,7 @@ each iteration $k$, then the updated parameters $\theta^{k+1}_{i}$ are calculate
 damped learning rate of $\frac{\eta}{\sqrt{\mathrm{E} \left[ g^{2} \right]_{k,i}} + \epsilon }$ ($\epsilon$ is a small 
 number added to $\sqrt{\mathrm{E} \left[ g^{2} \right]_{k,i}}$ preventing numerical overflow). The update of parameters 
 using RMSprop can then be computed using \cref{eq:learningrmsprop}.
-
-
+%
 \begin{align}\label{eq:learningrmsprop}
  \mathrm{E} \left[ g^{2} \right]_{k+1,i} &= 0.9 \mathrm{E} \left[ g^{2} \right]_{k,i} + 0.1 g_{k,i}^{2}  \\ 
  \theta^{k+1}_{i} &= \theta^{k}_{i} - \frac{ \eta }{\sqrt[]{\mathrm{E} \left[ g^{2} \right]_{k,i}} + \epsilon } g_{k,i}
@@ -362,13 +356,14 @@ or \emph{kernel} $K (\mathbf{x}, \mathbf{x}')$ in \cref{eq:gpformulation}.
 Kernels determine how each point $\mathbf{x}_t$ influences the values that the GP will have on another point 
 $\mathbf{x}_s$. The main idea is that if $K(\mathbf{x}_t, \mathbf{x}_s) \gg 0$, we expect the output from the 
 GP model at these points to be statistically correlated. 
-
+%
 \begin{equation}\label{eq:gpcov}
 	K_{\text{NN}} \left( \mathbf{x}, \mathbf{x}' \right) = 
 	\frac{2}{ \pi } \text{sin}^{-1} \left( \frac{2\mathbf{x}\boldsymbol{\cdot}\mathbf{x}'}{
 		\sqrt{ \left( 1+2\mathbf{x}\boldsymbol{\cdot} \mathbf{x} \right)}\sqrt{\left( 1+2\mathbf{x}'\boldsymbol{\cdot}\mathbf{x}' \right)}
 		} \right)
 \end{equation}
+
 
 Kernels often introduce assumptions about the continuity of the functions that will be 
 represented by the resulting GP regression model. \citet[ch.~4]{Rasmussen:2005:GPM:1162254} gives an 
@@ -394,7 +389,6 @@ of the hybrid GPNN model consisting of an LSTM and GP components.
 	\mathcal{GP}\left(m^{p}_{\text{NN}}(\mathbf{x}_t), K_{NN}(\mathbf{x}_{t},\mathbf{x}_{s})\right)\label{eq:gpnnGPForm}
 \end{align}
 	
-
 In \cref{eq:dstgpnn,eq:gpnnNoise,eq:gpnnGPForm}, we give a formal specification of the proposed GPNN model in 
 terms of the notations introduced in section \S~\ref{sec:osaGPmethod}. The ground truth $\mathrm{Dst}\left(t + p\right)$ 
 is assumed to be the result of a Gaussian Process $f_{p}$ corrupted by Gaussian measurement noise $\epsilon$, 
@@ -425,14 +419,13 @@ for testing and $10\%$ for validation. The LSTM model is evaluated using the Roo
 and the Correlation Coefficient (CC) defined by \cref{eq:rmse} and \cref{eq:cc} respectively. Based 
 on the performance calculated on the validation data, an LSTM network of depth $d = 20$ cells was chosen as 
 the mean function of the GPNN model.
-
-
+%
 \begin{equation}\label{eq:rmse}
  \mathrm{RMSE} = \sqrt[]{\sum_{t=1}^{n}\left( 
 	 \mathrm{Dst} \left( t \right) - \mathrm{\hat{D}st}\left(t\right)
  \right) ^{2}/n}
 \end{equation}
-
+%
 \begin{equation}\label{eq:cc}
  \mathrm{CC} = \frac{\Cov(
 	 \mathrm{Dst},\mathrm{\hat{D}st})}{
@@ -441,8 +434,7 @@ the mean function of the GPNN model.
 		 }
 	} 
 \end{equation}
-
-
+%
 In order to give context for the performance of our LSTM model, we compare the following models for Dst predictions 
 for the time horizon $t+1 \cdots t+6$, summarised in table \ref{table:competingmodels}.
 
@@ -476,19 +468,18 @@ Our models LSTM-Dst \& LSTM-Dst-GPS provide performance which is competitive to 
 LSTM-Dst \& LSTM-Dst-GPS provide better global performance. As an example, when considering a six hour 
 ahead forecast, LSTM-Dst-GPS provides a CC of $0.873$ and a RMSE of $\SI{9.86}{\nano\tesla}$, while \citet{Lazzus} 
 obtained a CC of $0.826$ and a RMSE of $\SI{13.09}{\nano\tesla}$. The model presented in \citet{Lazzus} uses only 
-time history of Dst, this emphasises the performance benefits of using exogenous data when predicting geomagnetic activity 
-with a time horizon greater than one hour. 
+time history of Dst, this emphasises the performance benefits of using exogenous data when predicting 
+geomagnetic activity with a time horizon greater than one hour. 
 
 \citet{Bala2012} used the Boyle index as an input function, and obtained competitive RMSE performance to LSTM for 
 six hour ahead predictions, their model presents a\ CC of $0.77$ and a RMSE of $\SI{11.09}{\nano\tesla}$.
-
+%
 \begin{figure}
 	\includegraphics[width=\textwidth]{image5.png}
 	\caption{$\mathrm{Dst}$ predictions made by the LSTM-Dst and LSTM-Dst-GPS models for the 2003 Halloween storm.}
     \label{fig:lstmhalloween}
 \end{figure}
-
-
+%
 The Elman RNN proposed in \citet{wu1997geomagnetic} is an important benchmark for the GPNN model because the 
 LSTM architecture is a more sophisticated form of the RNN structure. \citet{wu1997geomagnetic} provided for a 
 six ahead forecast, a CC of $0.82$ and a RMSE of $\SI{20.8}{\nano\tesla}$. The LSTM architecture thus offers 
@@ -540,20 +531,21 @@ reliability diagrams.
 
 The ROC curve is based on a contingency table which maps how often a model correctly classifies outcomes when 
 working in a binary classification setting i.e. occurrence or non occurrence of a predefined event, denoted by labels 
-$1$ and $0$ respectively. From table \ref{table:stormclass}, we constructed three binary classification problems for each 
-storm class.
+$1$ and $0$ respectively. From table \ref{table:stormclass}, we constructed three binary classification problems 
+for each storm class.
 
 In the case of the GPNN model, we can analytically compute the probability that Dst lies within a particular storm class 
 or outside it (e.g. $\mathbb{P}[\SI{-250}{\nano\tesla} \leq \mathrm{Dst} \leq \SI{-50}{\nano\tesla}]$ is the probability 
-of occurrence of an intense storm). For any storm class, by choosing a threshold probability, we can assign a classification 
-of $1$ (belonging to that storm class) if the probability predicted by the GPNN model is greater than the chosen threshold, 
-and $0$ if otherwise. 
+of occurrence of an intense storm). For any storm class, by choosing a threshold probability, we can assign a 
+classification of $1$ (belonging to that storm class) if the probability predicted by the GPNN model is greater 
+than the chosen threshold, and $0$ if otherwise. 
 
-The ROC contingency table is then constructed by tabulating the relationship between the \emph{true positive ratio} (TPR) and 
-\emph{false positive ratio}, for varying threshold probabilities. A \emph{true positive} is when an occurrence of the event in 
-question is correctly classified by the model as such. A \emph{false positive} is when a non occurrence is classified as an 
-occurrence. The TPR is then the ratio of true positives to the total number of event occurrences, while the FPR is the ratio of 
-false positives to the number of non occurrences. For perfect classification, $\mathrm{FPR} = 0$ and $\mathrm{TPR} = 1$, thus 
+The ROC contingency table is then constructed by tabulating the relationship between the 
+\emph{true positive ratio} (TPR) and \emph{false positive ratio}, for varying threshold probabilities. 
+A \emph{true positive} is when an occurrence of the event in question is correctly classified by the model as such. 
+A \emph{false positive} is when a non occurrence is classified as an occurrence. The TPR is then the ratio of 
+true positives to the total number of event occurrences, while the FPR is the ratio of false positives to the 
+number of non occurrences. For perfect classification, $\mathrm{FPR} = 0$ and $\mathrm{TPR} = 1$, thus 
 the value of the threshold that produces the point closest to these values is optimal.  
 
 In \cref{table:rocgpnn1h,table:rocgpnn2h,table:rocgpnn3h,table:rocgpnn4h,table:rocgpnn5h,table:rocgpnn6h} we 
@@ -575,8 +567,8 @@ thresholds, from one to six ahead.
 
 
 The ROC tables discussed in the previous section give information about the ability of the forecasting system to 
-detect the occurrence of geomagnetic storms event based a chosen decision threshold, in terms of false and true positives. 
-Reliability diagrams measure how closely the forecast probabilities of an event correspond to the actual 
+detect the occurrence of geomagnetic storms event based a chosen decision threshold, in terms of false and 
+true positives. Reliability diagrams measure how closely the forecast probabilities of an event correspond to the actual 
 frequency with which an event is observed. A perfectly reliable forecast is one in which an event predicted 
 with probability $p$ is observed, on average, with frequency $p$. The reliability diagram bins the forecasts into 
 groups according to the predicted probability, shown on the horizontal axis. The frequency with which an event was 
@@ -585,8 +577,8 @@ than the perfect diagonal slope, the resulting forecasts are under/over confiden
 smaller/higher probabilities for a specific outcome than observed. 
 
 Figure \ref{fig:gpnnreliability} presents reliability diagrams obtained from one to six hour ahead forecasts made 
-by the GPNN. It shows that the one hour ahead forecast slightly underestimates the likelihood of storm events, when their 
-occurrence probability is $35\%$. For example, when there is $80\%$ predicted chance of a storm, 
+by the GPNN. It shows that the one hour ahead forecast slightly underestimates the likelihood of storm events, 
+when their occurrence probability is $35\%$. For example, when there is $80\%$ predicted chance of a storm, 
 the real observed frequency of it is $90\%$. The GPNN provides reliable forecast for two hour ahead prediction, 
 as the observed frequency of storm regarding the predicted probability lies almost perfectly on the diagonal. 
 For predictions further than three hours ahead, GPNN tends to overestimate the probability of storms. 
@@ -647,20 +639,22 @@ In this paper, we have presented a hybrid model for Dst forecasting, the GPNN, b
 
 First, we developed a LSTM network, to provide Dst predictions one to six hours ahead. A separate LSTM was 
 developed for each time step of the forecast horizon, then global performance of LSTM was compared to previously 
-proposed neural network based Dst forecast models. We observed that the LSTM provides competitive performance in comparison 
-to the state of the art in Dst forecasting. When focusing on extreme events like the well known 2003 Halloween storm, we noted that 
-even though our model's global performance metrics are excellent, the six hour ahead forecast fails to anticipate the storm peak. 
+proposed neural network based Dst forecast models. We observed that the LSTM provides competitive performance 
+in comparison to the state of the art in Dst forecasting. When focusing on extreme events like the well known 
+$2003$ Halloween storm, we noted that even though our model's global performance metrics are excellent, 
+the six hour ahead forecast fails to anticipate the storm peak. 
 
-Second, to obtain probabilistic forecasts, we developed a GP which encapsulates the LSTM model as the mean function. Thanks to this 
-combination, we observed that the GPNN model managed to give accurate predictions for the 2003 Halloween storm for a one to five hour 
-ahead time horizon. For the six ahead prediction, the GPNN's predictive variance managed to encompass the storm peak. 
+Second, to obtain probabilistic forecasts, we developed a GP which encapsulates the LSTM model as the mean function. 
+Thanks to this combination, we observed that the GPNN model managed to give accurate predictions for the $2003$ 
+Halloween storm for a one to five hour time horizon. For the six ahead prediction, the GPNN's predictive variance managed to encompass the storm peak. 
 
 To evaluate this probabilistic forecast, we used ROC curves and reliability diagrams. The ROC curves demonstrated that, 
-for each forecast horizon, storm category and acceptance threshold, the FPR is low. The TPR, values are excellent for moderate 
-and intense storms, but for six hour ahead prediction of superstorms, misjudgment is possible when the acceptance threshold increased. 
-For six hour ahead prediction, the optimal acceptance threshold is around $10\%$, which evidenced room for further improvement. The 
-reliability diagram showed that the GPNN provides great performance for predictions from one to three ahead, but for four to six hours 
-ahead, an overestimation of storm likelihoods is possible.
+for each forecast horizon, storm category and acceptance threshold, the FPR is low. The TPR, values are excellent 
+for moderate and intense storms, but for six hour ahead prediction of superstorms, misjudgment is possible when 
+the acceptance threshold increased. For six hour ahead prediction, the optimal acceptance threshold is around 
+$10\%$, which evidenced room for further improvement. The reliability diagram showed that the GPNN provides 
+great performance for predictions from one to three ahead, but for four to six hours ahead, an overestimation of 
+storm likelihoods is possible.
 
 
 \begin{table}[ht]

@@ -70,11 +70,11 @@ In the proceeding sections, we give a short introduction to the radial
 diffusion equation used in magnetospheric physics. After an overview of 
 the parameterizations of the radial diffusion unknowns used by the research community, 
 we give a detailed formulation of our proposed method and demonstrate 
-how one may use it for performing inference over said diffusion parameters.
+how it can be used for performing inference over said diffusion parameters.
 
 \subsection{Plasma Diffusion}
 
-The radial diffusion system is a simplified one-dimensional version of
+The radial diffusion system is a simplified one dimensional version of
 the \emph{Fokker-Planck} equation. It tracks the time evolution of the
 \emph{phase space density} of particles, $f$ which is governed by 
 \cref{eq:raddiffusion} known as \emph{radial diffusion equation} in the 
@@ -233,7 +233,7 @@ $\hat{Q}(x) = w^{T}\psi(x)$ where $\psi_{\theta}(x) =
 \mathcal{L}_{\theta}[\varphi(x)]$. Calculating $w \in \mathbb{R}^d$
 can now be cast as the following constrained $L_2$ regularised 
 least squares problem.
-
+%
 \begin{align}\label{eq:surrogate}
    & min_{w,e,\epsilon} \ \mathcal{J}(w,e,\epsilon;\theta) = \\
    & \frac{1}{2} w^{T}w + \frac{1}{2\gamma_{o}} \sum_{k = 1}^{n_{o}}{e^{2}_{k}} + \frac{1}{2\gamma_{c}} \sum_{k = 1}^{n_{c}}{u_{k} \epsilon^{2}_{k}} \\
@@ -241,21 +241,20 @@ least squares problem.
   & y_{i}  = w^{T}\varphi(x^{o}_{i}) + b + e_{i}, \ \ i = 1 \cdots n_{o} \\
   & q_{i} = w^{T}\psi_{\theta}(x^{c}_{i}) + \epsilon_{i}, \ \ i = 1 \cdots n_{c}
 \end{align}
-
+%
 It can be seen that system in \cref{eq:surrogate} is similar to the
 formulation of the LSSVM model, while incorporating the dynamics of
 linear PDE systems into its loss function. 
 
 The quantities $\gamma_{o}$ and $\gamma_{c}$ are weights attached to
 the errors on observations and colocation points respectively, thus
-by smoothly varying them one may assign higher or lower importance for
+by smoothly varying them we can assign higher or lower importance for
 the surrogate model to fit the observational data and the dynamics of
 the physical system. The quantities $u_i$ enable us to weigh each colocation
 point differently.
-
-In order to solve this system one must construct its
-\emph{Lagrangian}.
-
+%
+In order to solve the system in \cref{eq:surrogate} we must construct its \emph{Lagrangian}.
+%
 \begin{align*}\label{eq:lag}
       & \mathfrak{L}(w,e,\epsilon, \alpha_{1 \cdots k}, \beta_{1 \cdots k}; \theta; \gamma_{o}; \gamma_{c}) = \\ 
       & \frac{1}{2} w^{T}w + \frac{1}{2\gamma_{o}} \sum_{k = 1}^{n_{o}}{e^{2}_{k}} +
@@ -263,7 +262,7 @@ In order to solve this system one must construct its
       & + \sum_{k = 1}^{n_{o}}{\alpha_{k}(y_{k} - w^{T}\varphi(x^{o}_{k}) - b - e_{k})} \\
       & + \sum_{k = 1}^{n_{c}}{\beta_{k} (q_{j} - w^{T}\psi_{\theta}(x^{c}_{j}) - \epsilon_{j})} 
 \end{align*}
-
+%
 Given fixed values for $\gamma_{o}$, $\gamma_{c}$ and PDE parameters
 $\theta$, the equation above expresses the Lagrangian of the system in 
 \cref{eq:surrogate}. The quantities $\alpha_{1}, \cdots, \alpha_{n_{o}}$ and
@@ -273,7 +272,7 @@ introduced for equality constraints of the system. Applying the
 optimization problem in \cref{eq:surrogate} can be expressed in terms of
 the Lagrange multipliers $\alpha = (\alpha_{1}, \cdots, \alpha_{n_{o}})$
 $\beta = (\beta_{1}, \cdots, \beta_{n_{c}})$.
-
+%
 \begin{equation}\label{eq:solution}
   \begin{bmatrix}
     0 & \mathbf{1}^{T} & \mathbf{0} \\ 
@@ -289,7 +288,7 @@ $\beta = (\beta_{1}, \cdots, \beta_{n_{c}})$.
     q
   \end{bmatrix}
 \end{equation}
-
+%
 The components of the symmetric block matrix system on the left hand side of 
 \cref{eq:solution} are 
 \begin{enumerate}
@@ -302,10 +301,10 @@ The components of the symmetric block matrix system on the left hand side of
     0 & \cdots  & u_{n_{c}} 
   \end{bmatrix}$
 \end{enumerate}
-
+%
 The surrogate model can now be used to estimate the phase space density 
 at a point $x = (l,t)$.
-
+%
 \begin{equation}\label{eq:model}
 \hat{f}(x;\theta) = \sum_{k = 1}^{n_{o}}{\alpha_{k}\varphi(x)^{T}\varphi(x^{o}_{k}) + \sum_{k = 1}^{n_{c}}}{\beta_{k} \varphi(x)^{T} \psi_{\theta}(x^{c}_{k})} + b
 \end{equation}
@@ -316,11 +315,11 @@ There exist several choices regarding the basis $\varphi(.)$, they are but not l
 orthogonal polynomials, Fourier series, radial basis functions etc. 
 
 For our problem we choose a basis which is a product of a Chebyshev basis of maximum degree 10 in space and a Laguerre basis of maximum degree 4, in time.
-
+%
 \begin{equation}\label{eq:basis}
 \varphi_{i,j}(l,t) = C_{i}(l) L_{j}(t)
 \end{equation}
-
+%
 
 
 \subsubsection*{Role of $\gamma_o$, $\gamma_c$ and $u_i$}
@@ -330,7 +329,7 @@ of errors made on the observations and colocation points respectively. Varying t
 gives the modeler the ability to vary the behavior of the surrogate model. In the 
 limiting case of $\gamma_c$ tending to zero, the model behaves as if the PDE dynamics
 is enforced as a hard constraint. This case is equivalent to the following formulation.
-
+%
 \begin{align}\label{eq:surrogate2}
    min_{w,e} \ \mathcal{J}(w,e,\epsilon;\theta) &= 
    \frac{1}{2} w^{T}w + \frac{1}{2\gamma_{o}} \sum_{k = 1}^{n_{o}}{e^{2}_{k}} \\
@@ -338,13 +337,12 @@ is enforced as a hard constraint. This case is equivalent to the following formu
   y_{i} & = w^{T}\varphi(x^{o}_{i}) + b + e_{i}, \ \ i = 1 \cdots n_{o} \\
   q_{i} & = w^{T}\psi_{\theta}(x^{c}_{i}), \ \ i = 1 \cdots n_{c}
 \end{align}
-
-Although choosing $\gamma_c = 0$ is an appropriate choice if one wishes
-to enforce the physical dynamics as a constraint, it can possibly lead to numerical
+%
+Although choosing $\gamma_c = 0$ is an appropriate choice if the physical dynamics need to be 
+enforced as a constraint, it can possibly lead to numerical
 instabilities in inverting system in \cref{eq:solution} and hence choosing a non zero value 
-for $\gamma_c$ works better in practice.
-
-For the experiment outlined in \ref{sec:exp}, we choose $\gamma_o = \gamma_c = 10$.
+for $\gamma_c$ works better in practice. For the experiment outlined in \ref{sec:exp}, 
+we choose $\gamma_o = \gamma_c = 10$.
 
 The weights $u_i$ have a special interpretation in a particular context. It is possible to
 interpret the term $\sum_{k = 1}^{n_{c}}{u_{k} \epsilon^{2}_{k}}$ as a quadrature approximation
@@ -357,10 +355,8 @@ In section \ref{sec:exp}, we use eight point \emph{Gauss Legendre} quadrature in
 \subsection{Quantifying Observation Likelihood}
 
 We assume a multivariate Gaussian distribution for calculating the likelihood of 
-the observations conditioned on the system parameters $\theta$. 
-
-The surrogate model (\cref{eq:model}) gives a baseline or mean value for the phase space density, we use a
-hybrid RBF covariance function 
+the observations conditioned on the system parameters $\theta$. The surrogate model (\cref{eq:model}) 
+gives a baseline or mean value for the phase space density, we use a hybrid RBF covariance function 
 $C(x_{i}, x_{j}) = \sigma^2 exp(-\frac{1}{2} (\frac{|l_i - l_j|^2}{s} + \frac{|t_i - t_j|}{r}))$ to quantify 
 the covariance of the phase space density $f$ over two points $x_i = (l_i, t_i)$ and $x_j = (l_j, t_j)$ in the domain. 
 %

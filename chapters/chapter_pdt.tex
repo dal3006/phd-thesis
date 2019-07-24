@@ -73,11 +73,11 @@ proof of consistency (section \ref{sec-theory}). The algorithm is detailed in se
 The experimental setting used to validate the approach is presented in section \ref{sec:pdtExp}, and 
 the proofs of concept of the approach are discussed in section \ref{sec:proofconcept}
 
-\paragraph{Notations.}
+\paragraph{Notations}
 Given two time series, the cause series $x(t)$ and the observed effect series $y(t)$, the sought model 
 consists of a mapping $f(.)$ which maps each input pattern $x(t)$ to an output $y(t')$, and a 
 mapping $g(.)$ which maps $x(t)$ onto the time delay $t'-t$ between the input and output patterns:
-
+%
 \begin{align}
 y(t + \tau(t)) & = f[x(t)]\label{eq:pb1}\\
 \tau(t) & = g[x(t)]\label{eq:pb2} 
@@ -103,10 +103,10 @@ the space weather context.
 
 For the sake of the model identifiability and computational stability, the delay function 
 $\phi(t) = t + \tau(t)$ is assumed to be sufficiently regular w.r.t. $t$. Formally, $\phi(.)$ is assumed 
-to be continuous. % and \emph{bijective}. I remove this, which is not consistent with the model
+to be continuous.
 
 For some authors  \citep{ZHOU2006195} the monotonicity of $\phi(.)$ is additionally required and enforced 
-using constraints:   $$\phi(t_1) \leq \phi(t_2), \forall t_1 \leq t_2$$. However, this assumption will not 
+using constraints: $\phi(t_1) \leq \phi(t_2), \forall t_1 \leq t_2$. However, this assumption will not 
 be retained in the following as it does not hold in the space weather domain (e.g. fast moving solar wind 
 can reach the Earth before slow moving solar wind which departed before it). 
 
@@ -150,7 +150,6 @@ influence due to the auto-correlation of the $y$ series. This influence comes wi
 making $\alpha_{ij}$ a decreasing function of $\vert i-j\vert$. More generally, a large value of $\alpha_{ii}$ 
 compared to $\alpha_{ij}$ for $i\ne j$ corresponds to a small auto-correlation time of the effect series. 
 
-
 \subsection{Learning criterion}
 The joint distribution is classically learned by maximizing the log likelihood of the data, that can be computed 
 in closed form as (please see supplementary material appendix \ref{app:LL} for the details of the calculation): 
@@ -182,10 +181,12 @@ In addition the optimal $\hat {\bf y}$ and $\hp$ reads:%(see appendix~\ref{app:L
 \end{align}
 where the above conditional empirical averaging operates as an averaging over samples close to $x$.
 
-These are implicit equations, since $q_i(x,{\bf y})$ depends on the parameters $\sigma^2$ and $\alpha_{ij}$, $\hat {\bf y}$ and $\hp$.
-The proposed algorithm detailed in section \ref{sec:model} implements the saddle point method defined from \cref{eq:var,eq:hatpi,eq:hyopt,eq:tildep}: 
-alternatively, hyper-parameters $\sigma$ and $\alpha_{ij}$ are updated from \cref{eq:var} based on the current $\hat y_i$ and $\hat p_i$; 
-and predictors $\hat y_i$ and mixture weights  $\hat p_i$ are accordingly updated from \cref{eq:hyopt} and \cref{eq:tildep} respectively. 
+These are implicit equations, since $q_i(x,{\bf y})$ depends on the parameters $\sigma^2$ and $\alpha_{ij}$, 
+$\hat {\bf y}$ and $\hp$.
+The proposed algorithm detailed in section \ref{sec:model} implements the saddle point method defined from 
+\cref{eq:var,eq:hatpi,eq:hyopt,eq:tildep}: alternatively, hyper-parameters $\sigma$ and $\alpha_{ij}$ are 
+updated from \cref{eq:var} based on the current $\hat y_i$ and $\hat p_i$; and predictors $\hat y_i$ and 
+mixture weights $\hat p_i$ are accordingly updated from \cref{eq:hyopt} and \cref{eq:tildep} respectively. 
 
 \section{Theoretical analysis}\label{sec-theory}
 The proposed \XX\ approach is shown to be consistent and analysed in the simple case  where $\alpha$ is a diagonal matrix ($\alpha_{ij} = \alpha\delta_{ij}$).
@@ -198,9 +199,9 @@ predicted value. The associated $L_2$ loss is:
 \begin{equation}\label{eq:orloss}
 {\cal L}_2(\hat y,\hat I) = {\mathbb E}_{data}\Bigl[\bigl(y_{\hat I(x)}-\hat y(x)\bigr)^2\Bigr]. 
 \end{equation}
-Then it comes:
+Then it follows:
 \begin{prop}\label{prop:opred}
-With same notations as in \cref{eq:py}, with $\alpha_{ij} = \alpha\delta_{ij},\ \alpha>0$, the optimal composite predictor 
+with same notations as in \cref{eq:py}, with $\alpha_{ij} = \alpha\delta_{ij},\ \alpha>0$, the optimal composite predictor 
 $(y^\star,I^\star)$ is given by
 \[
 y^\star(x) = \hat y_{I^\star(x)}(x)\qquad\text{with}\qquad I^\star(x) = \argmax_{i} \bigl(\hat p_i(x)\bigr), 
@@ -237,10 +238,12 @@ where ${\bf u}(x)$ is a $\vert T\vert$-vector of components
 C_{2+i}[x,\p] = \frac{1}{\sigma_0^2}{\mathbb E}_{data}
 \Bigl[ q_i(x,{\bf y})\bigl(\Delta y_i^2(x)-\sum_{j \in T} q_j(x,{\bf y})\Delta y_j^2(x)\bigr)\Big\vert x \Bigr].
 \]
-Up to a constant, $C_1$ represents the covariance between the latent variables $\{\tau_i\}$ and the normalised predictor errors. $C_1$ smaller than one 
-indicates a positive correlation between the latent variables and small errors; the smaller the better. For the degenerate solution, i.e. $\p=\p_{0}$ uniform, $C_1[\p_{0}]=1$ and $C_2[\p_{0}]$
-represents the default variability among the prediction errors. $C_{2+i}[x,\p]$ informally measures the quality of predictor $\hat y_i$ relatively to the other ones.
-More precisely, a negative value of  $C_{2+i}[x,\p]$ indicates that $\hat y_i$ is doing better than average in the neighborhood of $x$.  
+Up to a constant, $C_1$ represents the covariance between the latent variables $\{\tau_i\}$ and the normalised 
+predictor errors. $C_1$ smaller than one indicates a positive correlation between the latent variables and small 
+errors; the smaller the better. For the degenerate solution, i.e. $\p=\p_{0}$ uniform, $C_1[\p_{0}]=1$ and $C_2[\p_{0}]$
+represents the default variability among the prediction errors. $C_{2+i}[x,\p]$ informally measures the quality of 
+predictor $\hat y_i$ relatively to the other ones. More precisely, a negative value of  $C_{2+i}[x,\p]$ indicates 
+that $\hat y_i$ is doing better than average in the neighborhood of $x$.  
 
 At a saddle point the parameters are given by:
 \[
@@ -260,14 +263,16 @@ Note that for $\Delta y_i(x)$ iid centered with variance $\sigma_0^2$ and relati
 one has $C_2 = (2+\kappa)(1-1/\vert T\vert)$. Therefore, whenever $\Delta y_i^2(x)$ fluctuates and the relative kurtosis is non-negative, % with non-negative relative kurtosis ($\kappa=0$ for a normal variable)
 the  degenerate solution is unstable and will thus be avoided.
 
-\paragraph{If $\hat {\bf p}$ is allowed to evolve} (after \cref{eq:tildep}) the degenerate trivial solution becomes unstable as soon as $\vert {\bf u}(x)\vert^2$ is non-zero, due to the fact that the gradient is inversely proportional to ${\bf u}(x)$ (with $d\hp(x)\propto -\vert {\bf u}(x)\vert^2 {\bf u}(x)$), thus rewarding the predictors with lowest errors by increasing their weights. \\
+\paragraph{If $\hat {\bf p}$ is allowed to evolve} (after \cref{eq:tildep}) the degenerate trivial solution 
+becomes unstable as soon as $\vert {\bf u}(x)\vert^2$ is non-zero, due to the fact that the gradient is 
+inversely proportional to ${\bf u}(x)$ (with $d\hp(x)\propto -\vert {\bf u}(x)\vert^2 {\bf u}(x)$), thus 
+rewarding the predictors with lowest errors by increasing their weights. \\
 
 The system is then driven toward other solutions, among which the localised solutions of the form: 
 \[
 \hat p_i(x) = \delta_{iI(x)},
 \]
 with an input dependent index $I(x)\in T$. As shown (supplementary material, Appendix \ref{app:Hessian}) the solution of highest likelihood of this type is also optimal with respect to the loss function~(\cref{eq:orloss}). The stability of such localised solutions and the existence of other (non-localised) solutions is left for further work.  
-
 
 
 \section{Overview of the \XX\ algorithm}\label{sec:model}
@@ -289,7 +294,7 @@ with an input dependent index $I(x)\in T$. As shown (supplementary material, App
 \end{algorithm}
  The \XX\ algorithm learns both regression models $\hat {\bf y}(x)$ and $\hat {\bf p}(x)$ from series $x_m$ and $y_m$, using alternate optimization of the model parameters and the model hyper-parameters ${\bf \alpha}$ and $\sigma^2$, after \cref{eq:var,eq:hatpi,eq:hyopt,eq:tildep}. The model search space is that of neural nets, parametrized by their weight vector $\theta$. The inner optimization loop updates $\theta$ using mini-batch based stochastic gradient descent. At the end of each epoch, after all mini-batches have been considered, the outer optimization loop computes hyper-parameters ${\bf \alpha}$ and $\sigma^2$ on the whole data. 
  
- The algorithm code is available in supplementary material and will be made public after the reviewing period.
+The algorithm code is available in supplementary material and will be made public after the reviewing period.
 The initialization of hyper-parameters $\alpha$ and $\sigma$ is settled using preliminary experiments (same setting for all considered problems: $\alpha \sim U(0.75, 2)$; $\sigma^2 \sim U(10^{-5}, 5)$).
 
 The neural architecture implements predictors $\hat {\bf y}(x)$ and weights $\hat {\bf p}(x)$ on the top of a same feature extractor from input $x$. % (Fig. \ref{fig:NN} in su). 
