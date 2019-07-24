@@ -8,7 +8,8 @@ For any input space $\mathcal{X}$, a real valued scalar GP (\cref{eq:gpformulati
 
 \begin{enumerate}
     \item A mean function $m: \mathcal{X} \longrightarrow \mathbb{R}$.
-    \item A symmetric positive definite covariance function $K: \mathcal{X} \times \mathcal{X} \longrightarrow \mathbb{R}^{+}$ \citep[ch.~1\&2]{Berlinet2004}.
+    \item A symmetric positive definite covariance function (kernel) 
+    $K: \mathcal{X} \times \mathcal{X} \longrightarrow \mathbb{R}^{+}$ \citep[ch.~1\&2]{Berlinet2004}.
 \end{enumerate}    
 
 \begin{equation}\label{eq:gpformulationapp}
@@ -26,9 +27,9 @@ are two ways in which GP models can be applied to time series data: \begin{enume
 
 \section*{Explicit vs Implicit Representation}
 
-Depending on whether or not time appears directly in the inputs space of a GP, we can classify a GP time series model as explicit or 
-implicit respectively. Notationally, explicit and implicit time GP formulations are shown in \cref{eq:gpExplicit} 
-and \cref{eq:gpImplicit} respectively.
+Depending on whether or not time appears directly in the inputs space of a GP, we can classify a GP time series 
+model as explicit or implicit respectively. Notationally, explicit and implicit time GP formulations are shown 
+in \cref{eq:gpExplicit} and \cref{eq:gpImplicit} respectively.
 
 \begin{align}
     y(t) &\sim \mathcal{GP}(m(t), K(t, s)) \label{eq:gpExplicit}\\
@@ -158,27 +159,53 @@ between the input features $\mathbf{x}_t$ and each row of the $\mathbf{X}_{t-1}$
 
 \subsection*{Relationship with Time Series Models : $\mathrm{AR}(p)$}
 
-Due to the abstract nature of GPs, they actually generalize some popular time series models. Consider 
-$\mathrm{AR}(p)$, the family of discrete auto-regressive time series models shown in \cref{eq:ARp}. At each 
-time step, the systems state $y_t$ is determined by a linear combination of $p$ previous system states 
-$y_{t-1}, \cdots, y_{t-p}$ added to Gaussian noise.  
-
+Due to the abstract nature of GPs, they generalize common time series models. For example, consider 
+$\mathrm{AR}(p)$, the family of discrete auto-regressive time series models shown in \cref{eq:ARp,eq:ARpNoise}. 
+At each time step, the systems state $y_t$ is determined by a linear combination of $p$ previous system states 
+$y_{t-1}, \cdots, y_{t-p}$ plus Gaussian noise.  
+%
 \begin{align}
     y_t &= \sum^{p}_{k = 1}{\beta_{k}y_{t-k}} + z_t \label{eq:ARp} \\
-    z_t &\sim \mathcal{N}(0, \sigma^{2}_{\varepsilon})
+    z_t &\sim \mathcal{N}(0, \sigma^{2}_{\varepsilon})\label{eq:ARpNoise}
 \end{align}
-
-We can write \cref{eq:ARp} in probabilistic form as: 
+%
+We can write \cref{eq:ARp,eq:ARpNoise} in probabilistic form as: 
 \begin{equation*}
     y_t \rvert y_{t-1}, \cdots, y_{t-p} \sim \mathcal{N}(\sum^{p}_{k = 1}{\beta_{k}y_{t-k}}, \sigma^{2}_{\varepsilon})
 \end{equation*}
-
-
-In fact the the GP-AR model family contains the $\mathrm{AR}(p)$ model in \cref{eq:ARp} as a special case; by 
-setting $m(\mathbf{x}_t) = \sum^{p}_{k = 1}{\beta_{k}Y_{t-k}}$ and 
+%
+We can see that the GP-AR model family contains the $\mathrm{AR}(p)$ model in \cref{eq:ARp} as a special case. 
+By setting $m(\mathbf{x}_t) = \sum^{p}_{k = 1}{\beta_{k}Y_{t-k}}$ and 
 $K(\mathbf{x}_t, \mathbf{x}_s) = \sigma^2_{\varepsilon}\delta(\mathbf{x}_t, \mathbf{x}_s)$, where $\delta(.,.)$ 
-is the Dirac delta function, we obtain the conditional probability of $y_t \rvert y_{t-1}, \cdots, y_{t-p}$ as 
-described above.
+is the Dirac delta function, we obtain the conditional probability density of the random variable 
+$y_t \rvert y_{t-1}, \cdots, y_{t-p}$ described above.
+
+\cite{roberts2013gaussian} note that the $\mathrm{AR}(p)$ process is also equivalent to an explicit time GP model 
+having $m(t) = \mathbb{E}[y(0)]$ and a Mat\'{e}rn covariance function
+%
+\begin{equation*}
+    K(t, s)=\sigma ^{2}{\frac {2^{1-\nu }}{\Gamma (\nu )}}
+    {\Bigg (}
+        {\sqrt {2\nu }}{\frac {\rvert t - s \rvert}{\rho }}
+    {\Bigg )}^{\nu }\mathcal{K}_{\nu }{\Bigg (}{\sqrt {2\nu }}{\frac {\rvert t - s \rvert}{\rho }}{\Bigg )}
+\end{equation*}
+%
+with $\nu = p + \frac{1}{2}$, where $\Gamma(.)$ the gamma function, $\mathcal{K}_{\nu }(.)$ the modified 
+Bessel function of the second kind, $\rho$ being the length scale and $\sigma^2$ the amplitude of the 
+covariance function.
+
+The advantage of the implicit time GP-AR model over the explicit time GP model is that the GP-AR family 
+can also simulate non-linear auto-regressive processes. This is because the kernel creates a Hilbert space 
+$\mathcal{H}(\mathbb{C})$ spanned by a basis of non-linear orthogonal basis functions 
+$\phi \in \mathcal{H}(\mathbb{C})$, such that the kernel can be decomposed  
+%
+\begin{equation*}
+    K(\mathbf{x}_t, \mathbf{x}_s) = \sum^{\infty}_{i = 1}{\lambda_{i}\phi(\mathbf{x}_t) \bar{\phi(\mathbf{x}_s)}}
+\end{equation*}
+%
+as noted in \citet[sec.~4.3]{Rasmussen:2005:GPM:1162254}.
+
+
 
 \section*{Example: System Identification}
 

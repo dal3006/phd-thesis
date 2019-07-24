@@ -18,7 +18,7 @@ various scientific ideas relevant to space weather research.
         \ref{chapter:pdt} & Forecasting of near Earth solar wind speed using solar data. & \S~\ref{sec:hmfsolarwind}, \S~\ref{sec:sunspots}, \S~\ref{sec:solar}\textsuperscript{*}\\
         \hline
     \end{tabular}
-    \caption{Dissertation Guide. {\small Asterik\textsuperscript{*} denotes optional material.}}
+    \caption{Dissertation Guide. {\small Asterisk\textsuperscript{*} denotes optional material.}}
     \label{table:chapterguide}
 \end{table}
 
@@ -41,7 +41,7 @@ Plasma is ubiquitous throughout the visible Universe, also known as the fourth s
 due to its properties which differentiate it from the conventional gaseous state. Plasma is a 
 gas which is composed of roughly equal number of positive and negatively charged particles, this
 property is known as charge \emph{quasi-neutrality}. The term quasi-neutral is used because although
-the gas has almost equal amount of positive and negative charges, the mixture is electricomagnetically 
+the gas has almost equal amount of positive and negative charges, the mixture is electromagnetically 
 active. Due to incomplete charge shielding, long range electromagnetic fields play a big role in the 
 dynamics of plasma.
 
@@ -51,28 +51,30 @@ dynamics of plasma.
 %    \phi(r) = \frac{q}{4\pi\epsilon_0 ||r||_2}
 %\end{equation}
 
-%where $r$ is the position in space with respect to the charge and $\epsilon_0$ is the \emph{permitivity} of vacuum.
+%where $r$ is the position in space with respect to the charge and $\epsilon_0$ is the \emph{permittivity} of vacuum.
 
 \subsection*{Debye Length}
 
-In a quasi-neutral plasma, due to the prescence of partial electric shielding the potential due to the charges
+In a quasi-neutral plasma, due to the presence of partial electric shielding the potential due to the charges
 now takes the well known Debye form.
+%
 \begin{equation}
     \phi(r) = \frac{q}{4\pi\epsilon_0 r} e^{-\frac{r}{\lambda_d}}
 \end{equation}
-where $r$ is the spatial distance with respect to the charge and $\epsilon_0$ is the \emph{permitivity} of vacuum.
+%
+where $r$ is the spatial distance with respect to the charge and $\epsilon_0$ is the \emph{permittivity} of vacuum.
 
 
 The electric potential decays with the Debye length scale $\lambda_d$ at which a balance between thermal vibrations 
 which can disturb quasi-neutrality and electrostatic forces due to charge separation. The Debye length scale depends
 on the electron temperature and plasma density.
-
+%
 \begin{equation}\label{eq:debye}
     \lambda_d = \sqrt{\frac{\epsilon_0 k_b T_e}{n_e e^2}}
 \end{equation}
-
+%
 In \cref{eq:debye}, the Debye length scale is expressed in terms of the \emph{Boltzmann constant} $k_b$, 
-the electron temperature $T_e$, free space permitivity $\epsilon_0$ and electron charge $e$. One can visualise the 
+the electron temperature $T_e$, free space permittivity $\epsilon_0$ and electron charge $e$. One can visualise the 
 positively charged ions having a cloud of electrons shielding them at the distance of $\lambda_d$. 
 
 It is also possible to take into account the shielding effect of the ions. The effective Debye length is now 
@@ -83,16 +85,16 @@ $T_e$ for the ion temperature $T_i$ ($n_i \approx n_e$).
 
 Consider a Debye sphere of radius $\lambda_d$, this sphere contains $N_e = \frac{4}{3}\pi \lambda^3_d n_e$ electrons. 
 The plasma parameter $g$ is defined as $N_{e}^{-1}$. Rewriting this, we can say:
-
+%
 \begin{equation}
     g \sim \sqrt{\frac{n_e}{T_e}}
 \end{equation}
-
-~The description of plasma used in many applications in Space is applicable when $g \ll 1$, in this situation 
-the Debye shielding is significant and the quasi-neutral plasma obeys collective statistical behaviour. 
+%
+The description of plasma used in many applications in Space is applicable when $g \ll 1$, in this situation 
+the Debye shielding is significant and the quasi-neutral plasma obeys collective statistical behavior. 
 The plasma parameter $g$ also correlates with the collision frequency. As the collisions in plasma increase 
 with increasing density and decreasing temperature, if $g \longrightarrow 0$ the plasma becomes nearly collisionless. 
-The collisionless property helps in making simplfying assumptions about plasma dynamics and is the starting point 
+The collisionless property helps in making simplifying assumptions about plasma dynamics and is the starting point 
 for the \emph{adiabatic} theory of plasma motions in the Earth's magnetosphere which will be discussed in section 
 \S~\ref{sec:plasmadiff}.
 
@@ -146,7 +148,7 @@ be thousands of times stronger than the on the Earth.
 
 
 \textbf{Chromosphere}: Extending for a distance of almost $5000$ kilometers after the photosphere. The chromosphere is 
-known for the existense of features called \emph{spicules} and prominences. The chromosphere has a red colour which 
+known for the existence of features called \emph{spicules} and prominences. The chromosphere has a red colour which 
 is generally not visible due to the intense light given off by the photosphere, but can be observed through 
 a filter centered on the Hydrogen $H\alpha$ spectral line. %(see figure \ref{fig:chromosphere}). 
 
@@ -157,7 +159,7 @@ Below the transition region, the dynamics is dictated by gas pressure, fluid dyn
 above the region the dynamics is dictated more by magnetic forces.
 
 \textbf{Corona}: An aura of plasma around the Sun that extends millions of kilometers into space, the corona can be 
-observed during a total solar eclipse or with a coronograph. The temperature of the corona is dramatically higher 
+observed during a total solar eclipse or with a coronagraph. The temperature of the corona is dramatically higher 
 than the photosphere and chromosphere. The average temperature can range between 
 $1 \times 10^6 \ \text{to} \ 2 \times 10^6 \text{K}$ while in the hottest regions it can be as high as 
 $2 \times 10^7 \text{K}$ \citep{SolarCorona}. Although the reason for this dramatic increase is still 
@@ -167,14 +169,14 @@ not well understood, there various explanations using concepts of magnetic recon
 
 \subsection{Heliospheric Magnetic Field \& Solar Wind}\label{sec:hmfsolarwind}
 
-The existence of the solar wind was first postulated via observations of Halley's coment in 
+The existence of the solar wind was first postulated via observations of Halley's comet in 
 \citet{Bierman1,Bierman2,Bierman3} and subsequently models of the \emph{Heliospheric Magnetic Field} (HMF) 
 were introduced in \citet{parker1958dynamics}. These models were further evidenced by their ability 
 to explain the effect of the HMF on the modulation of galactic cosmic rays and their measured intensities 
 close to the Earth \citep{ParkerSolarWind}. The structure of the HMF is central to explaining 
 the formation and propagation of the solar wind. 
 
-The HMF in steady state points radially outward and rotates with the Sun, producing an \emph{Archimedian spiral} 
+The HMF in steady state points radially outward and rotates with the Sun, producing an \emph{Archimedean spiral} 
 structure as postulated in \cite{parker1958dynamics} and shown schematically in figure \ref{fig:parkerspiral}. 
 Photospheric observations of the magnetic field (see Global Oscillation Network Group \url{https://gong.nso.edu}) 
 are often extrapolated to compute approximations to the HMF. There exist a number of models used to perform such 
@@ -192,7 +194,7 @@ in-depth review on the phenomena that drive the HMF.
 \begin{figure}
     \noindent\includegraphics[width=0.8\textwidth]{parker-spiral.jpg}
     \caption{{\small An illustration of the Heliospheric Magnetic Field in the \emph{ecliptic plane}. 
-    In the heliosphere, rotation of the HMF footpoints within a radial solar wind flow generates an azimuthal 
+    In the heliosphere, rotation of the HMF foot points within a radial solar wind flow generates an azimuthal 
     component of the HMF, $B_{\phi}$, leading to a spiral geometry. Red and blue lines, 
     showing regions of opposite polarity, are separated by the heliospheric current sheet (HCS), 
     shown as the green dashed line.
@@ -220,14 +222,14 @@ $\sim 700 \text{km}/\text{s}$ (figure \ref{fig:solarwinddist}).
 The solar wind has the heliospheric magnetic field \emph{frozen in} and as it propagates in the interplanetary medium 
 it carries the solar magnetic field with it. Important solar wind quantities such as 
 \begin{enumerate*} \item solar wind speed \item proton density \item magnetic field strength \end{enumerate*} 
-are recorded at the well known $L1$ \emph{Langrangian point} where the gravitational fields of the Earth and the Sun 
+are recorded at the well known $L1$ \emph{Lagrangian point} where the gravitational fields of the Earth and the Sun 
 approximately balance out.
 
 
 
 \subsection{Sunspots \& Solar Cycle}\label{sec:sunspots}
 
-Sunspots are temporarily occuring regions on the Sun's photosphere which appear as dark spots. They are areas 
+Sunspots are temporarily occurring regions on the Sun's photosphere which appear as dark spots. They are areas 
 of magnetic field concentration where the field lines often 'puncture' the solar surface inhibiting convection 
 and producing regions with lower temperature than the surroundings. Sunspots generally last anywhere between a 
 few days to a few months, they can occur in pairs or groups and can accompany other phenomena such as 
@@ -235,7 +237,7 @@ few days to a few months, they can occur in pairs or groups and can accompany ot
 
 Since the $19^{\text{th}}$ century the number of sunspots on the Sun's surface have been recorded as the 
 \emph{sunspot number} (SSN). Sunspots populations increase and decrease behaving as markers for solar activity levels, 
-this cyclical behaviour is called the \emph{sunspot cycle} or \emph{solar cycle} (figure \ref{fig:SolarCycle}). 
+this cyclical behavior is called the \emph{sunspot cycle} or \emph{solar cycle} (figure \ref{fig:SolarCycle}). 
 
 \begin{figure}
     \noindent\includegraphics[width=\textwidth]{sunspot-cycle.jpeg}
@@ -248,10 +250,10 @@ this cyclical behaviour is called the \emph{sunspot cycle} or \emph{solar cycle}
 In figure \ref{fig:SolarCycle} we can see how the area occupied by sunspots changes with solar latitude and time. 
 During the start of a solar cycle (solar minimum) sunspots start appearing at higher latitudes, over the course 
 of the cycle they move towards the equatorial regions and their number increases to some maximum (solar maximum), 
-towards the end the number of sunspots diminishes and the entire cycle starts over. This repetitive behaviour 
+towards the end the number of sunspots diminishes and the entire cycle starts over. This repetitive behavior 
 happens over approximately $11$ years.
 
-Because sunspots are magnetic phenomena, the solar cycle represents cyclical behaviour of the HMF. During solar 
+Because sunspots are magnetic phenomena, the solar cycle represents cyclical behavior of the HMF. During solar 
 minimum the poloidal component of the solar magnetic field is at its strongest and it is closest it can get to 
 a magnetic dipole configuration. Towards solar maximum energy is transferred from the poloidal component to the 
 toroidal component resulting in complex field configurations which are evidenced by larger numbers of sunspot 
@@ -318,7 +320,7 @@ Earth's magnetic shielding is not perfect and some particles manage to get trapp
 radiation belts}. Particles trapped in the radiation belts execute complex motions which can be approximately 
 modelled using ideas from adiabatic theory and diffusion described in section \S~\ref{sec:plasmadiff} below. 
 
-The portion of the magnetosphere facing away from the Sun (called the \emph{nightside}) is streched out in  
+The portion of the magnetosphere facing away from the Sun (called the \emph{nightside}) is stretched out in  
 a tail like shape by the deflected solar wind, hence it is referred to as the \emph{magnetotail}. The 
 \emph{magnetotail} has an approximate extent of up to $1000R_E$.
 
@@ -326,7 +328,7 @@ a tail like shape by the deflected solar wind, hence it is referred to as the \e
 \subsection{Particle Motions \& Adiabatic Theory} \label{sec:plasmadiff}
 
 This section gives a quick introduction to the theory of charged particle motions in the magnetosphere, the reader 
-may refer to \citet{roederer2012dynamics} for an indepth treatment of this subject.
+may refer to \citet{roederer2012dynamics} for an in depth treatment of this subject.
 
 To understand the motions of charged particles in the \emph{magnetosphere}, the role of electric and magnetic 
 forces must be understood.
@@ -334,12 +336,11 @@ forces must be understood.
 It is well known from classical electromagnetism that the force exerted on a particle with charge $q$ by a 
 magnetic field $\mathbf{B}$ and an electric field $\mathbf{E}$ is given by the well known \emph{Lorentz force} 
 (\cref{eq:lorentzforce}).
-
+%
 \begin{equation}\label{eq:lorentzforce}
     \mathbf{F} = m\frac{d\mathbf{v}}{dt} = q\mathbf{E} + q\mathbf{v} \times \mathbf{B}
 \end{equation}
-
-
+%
 The first component of \cref{eq:lorentzforce} ($q\mathbf{E}$) is either parallel or opposite to the local electric 
 field depending on the charge of the particle. The second component $q\mathbf{v} \times \mathbf{B}$ involves a vector 
 cross product so it is always perpendicular to the plane spanned by vectors $\mathbf{v}$ and $\mathbf{B}$. In order to 
@@ -347,11 +348,11 @@ understand its effects, we can decompose the particle velocity in two components
 $v_{\perp}$ perpendicular to $\mathbf{B}$. If $\mathbf{E} = \mathbf{0}$, then the particle executes a circular motion 
 whose properties are shown in \cref{eq:larmor}, $\rho$ is the gyroradius and $\omega$ is the gyrofrequency or 
 cyclotron frequency. In case $v_{\parallel} \neq 0$ then the trajectory is helical.
-
+%
 \begin{equation}\label{eq:larmor}
     \frac{v^{2}_{\perp}}{\rho} = \frac{qBv_{\perp}}{m} = \omega v_{\perp}
 \end{equation}
-
+%
 Apart from the gyro motion, there are some important drift forces which significantly influence particle motions.
 
 \begin{itemize}
@@ -377,7 +378,7 @@ to be resolved.
 The \emph{guiding center} approximation helps us to decompose particle motions into three periodic components, 
 each with its own time scale (figure \ref{fig:particlemotions}).
 \begin{enumerate*}
-    \item Gyromotion around magnetic field lines.
+    \item Gyration around magnetic field lines.
     \item Bounce motions between magnetic north and south poles.
     \item Equatorial drift of electrons and protons.
 \end{enumerate*}
@@ -386,15 +387,15 @@ each with its own time scale (figure \ref{fig:particlemotions}).
 
 When a physical system with periodic motion is varied slowly as compared to the its time period, this 
 transformation is can be characterized as \emph{adiabatic}. Formally speaking, for systems which are described by 
-Hamiltonian dynamics, we can write the equations of motion in terms of the \emph{cannonical position} $q$, 
-the \emph{cannonical momentum} $p$, external parameters $\theta$ and the system's \emph{Hamiltonian} 
+Hamiltonian dynamics, we can write the equations of motion in terms of the \emph{canonical position} $q$, 
+the \emph{canonical momentum} $p$, external parameters $\theta$ and the system's \emph{Hamiltonian} 
 $\mathcal{H}(q,p|\theta)$. 
-
+%
 \begin{align}\label{eq:hamilton}
     \dot q &= \frac{\partial \mathcal{H}}{\partial p}\\
     \dot p &= - \frac{\partial \mathcal{H}}{\partial q}
 \end{align}
-
+%
 If the hamiltonian system shown in \cref{eq:hamilton} executes a periodic motion in the $q,p$ phase space, 
 then it admits an \emph{adiabatic invariant} $A$ given in \cref{eq:adiabatic_invariant}.
 
@@ -408,14 +409,13 @@ that is if changes in $\theta$ happen over a time period much greater than the p
 Applying this idea to charged particle motion in the \emph{magnetosphere}, it is possible to associate one 
 adiabatic invariant with each periodic motion i.e. gyromotion $\mathcal{M}$, bounce $J$ and drift 
 $\Phi$ (\cref{eq:plasmainv}). 
-
+%
 \begin{align}\label{eq:plasmainv}
     \mathcal{M} &= \frac{1}{2}\frac{mv^{2}_{\perp}}{B} \\
     J &= \oint{m_0 v_{\parallel}ds} \\
     \Phi &= \oint{v_{\text{drift}} \cdot r d\phi} = \int{\mathbf{B} d\mathbf{S}}
 \end{align}
-
-
+%
 The first invariant $\mathcal{M}$ is associated with the Larmor gyration, it is the magnetic moment of the 
 current generated by the circular motion of the particle around the field line. 
 
@@ -437,7 +437,7 @@ The main quantity of interest in this case is the \emph{phase space density} $f(
 is a function of time and three invariants. The \emph{phase space density} tells us the number of particles in 
 a particular region of the phase space, at a particular point of time.
 
-Diffusion behaviour arises when one or more of the invariants are violated, which can happen due to a number of 
+Diffusion behavior arises when one or more of the invariants are violated, which can happen due to a number of 
 reasons such as: 
 \begin{enumerate*}
     \item non-adiabatic variations of the magnetic field 
@@ -445,10 +445,10 @@ reasons such as:
     \item interaction with electromagnetic waves
     \item collisions with atmosphere/ionosphere. 
 \end{enumerate*}
-
+%
 The plasma diffusion system \citep{schulz2012particle} can be written as a generalized Fokker-Planck system as shown 
 in \cref{eq:fokker}.
-
+%
 \begin{align}\label{eq:fokker}
     \frac{\partial{f}}{\partial{t}} &= \sum^{3}_{p,q = 1}
     \frac{\partial}{\partial{J_{p}}} \left( \kappa_{pq}
@@ -457,7 +457,7 @@ in \cref{eq:fokker}.
     J_2 &= J \\
     J_{3} &= \Phi
 \end{align}
-
+%
 It is possible to simplify this system by considering the two main categories of diffusion, radial diffusion and 
 pitch angle diffusion. Radial diffusion allowing particles to move farther or closer to the Earth and pitch angle 
 \footnote{pitch angle being the angle between particle velocity $\mathbf{v}$ and the magnetic field $\mathbf{B}$} 
@@ -468,13 +468,13 @@ Rewriting $\Phi \propto \frac{1}{\ell}$, the third invariant can be expressed in
 can be obtained from \cref{eq:fokker} by keeping $\mathcal{M}, J$ fixed, considering diffusion in $\ell$ 
 (violation of $\Phi$ invariance) and by approximating pitch angle diffusion as a loss process 
 \citep{roederer2012dynamics,Walt1970}.  
-
+%
 \begin{equation}\label{eq:radialDiff}
     \frac{\partial{f}}{\partial{t}} = \ell^2 \frac{\partial}{\partial{\ell}} \left( \frac{\kappa(\ell,
         t)}{\ell^{2}} \frac{\partial{f}}{\partial{\ell}}
     \right)_{\mathcal{M}, J} - \lambda(\ell,t) f
 \end{equation}
-
+%
 The resulting system is shown in \cref{eq:radialDiff}, the term 
 $\ell^2 \frac{\partial}{\partial{\ell}} \left( \frac{\kappa(\ell,t)}{\ell^{2}} \frac{\partial{f}}{\partial{\ell}}
 \right)_{\mathcal{M}, J}$ models diffusive phenomena in $\Phi$ but it is expressed in the drift shell coordinate $\ell$. 

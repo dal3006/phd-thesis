@@ -360,14 +360,14 @@ We assume a multivariate Gaussian distribution for calculating the likelihood of
 the observations conditioned on the system parameters $\theta$. 
 
 The surrogate model (\cref{eq:model}) gives a baseline or mean value for the phase space density, we use a
-hybrid RBF covariance function $C(x_{i}, x_{j}) = \sigma^2 exp(-\frac{1}{2} (\frac{|l_i - l_j|^2}{s} + \frac{|t_i - t_j|}{r}))$
-to quantify the covariance of the phase space density $f$ over two points 
-$x_i = (l_i, t_i)$ and $x_j = (l_j, t_j)$ in the domain. 
-
+hybrid RBF covariance function 
+$C(x_{i}, x_{j}) = \sigma^2 exp(-\frac{1}{2} (\frac{|l_i - l_j|^2}{s} + \frac{|t_i - t_j|}{r}))$ to quantify 
+the covariance of the phase space density $f$ over two points $x_i = (l_i, t_i)$ and $x_j = (l_j, t_j)$ in the domain. 
+%
 \begin{equation}
 \mathbf{y} | x_1, \cdots, x_{n_o}, \theta \sim \mathcal{N} \left(\mathbf{\mu}_f, \Sigma \right )
 \end{equation}
-
+%
 \begin{equation}
 \mathbf{y} = \begin{bmatrix}
 y_1\\ 
@@ -375,7 +375,7 @@ y_1\\
 y_{n_o}
 \end{bmatrix}
 \end{equation}
-
+%
 \begin{equation}
   \mathbf{\mu}_f = \begin{bmatrix}
 \hat{f}(x_1)\\ 
@@ -383,7 +383,7 @@ y_{n_o}
 \hat{f}(x_{n_o})
 \end{bmatrix}
 \end{equation}
-
+%
 \begin{equation}
     \Sigma = \begin{bmatrix}
 C(x_1, x_1) & \cdots  & C(x_1, x_{n_o})\\ 
@@ -391,7 +391,7 @@ C(x_1, x_1) & \cdots  & C(x_1, x_{n_o})\\
 C(x_{n_o}, x_{n_{1}}) & \cdots  & C(x_{n_o}, x_{n_{o}})
 \end{bmatrix}
 \end{equation}
-
+%
 The values of $s$ and $r$, the length scales of the covariance function, 
 can be fixed to the size of the space-time grid of the radial basis functions, 
 alternatively they can also be treated as system parameters which can be sampled 
@@ -437,14 +437,14 @@ The technique presented is applied on synthetic data generated using a radial di
 the ground truth values of the radial diffusion parameters are listed in table \ref{tab:ground-truth}.
 
 A slightly modified parameterization is adopted for the particle injection $Q$ as shown in \cref{eq:q} below. The particle injection has a strictly time varying component due to presence of a constant $\gamma$.
-
+%
 \begin{equation}\label{eq:q}
 Q(l,t)  \sim (\alpha l^{\beta} + \gamma) 10^{b Kp(t)}
 \end{equation}
-
+%
 The initial phase space density $f(t = 0)$ and the time trajectory 
 of the Kp index are assumed to be set as follows.
-
+%
 \begin{align}
 f(t = 0) &= 4000 + 1000(C_{3}(l_*) - C_{5}(l_*)) \\
 l_* &= 2\frac{l - l_{min}}{l_{max} - l_{min}} - 1 \\
@@ -455,10 +455,9 @@ Kp(t) &= \left\{\begin{matrix}
 2.5 & 5 < t\\ 
 \end{matrix}\right.
 \end{align}
-
+%
 Where $C_n(.)$ is the is the Chebyshev polynomial of degree n. 
 The evolution of the Kp index \citet{BartelsKp} is assumed such that it mimics a geomagnetic storm event. 
-
 The radial diffusion solver is run for domain limits $l \in [1, 7], t \in [0, 5]$ with
 200 bins in the spatial and 50 bins in the temporal domains respectively.
 
