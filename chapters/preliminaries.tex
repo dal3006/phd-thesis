@@ -189,11 +189,13 @@ The structure of the HMF is central to explaining the formation and propagation 
 state points radially outward and rotates with the Sun, producing an \emph{Archimedean spiral} 
 structure as postulated in \cite{parker1958dynamics} and shown schematically in figure \ref{fig:parkerspiral}. 
 Photospheric observations of the magnetic field (see Global Oscillation Network Group \url{https://gong.nso.edu}) 
-are often extrapolated to compute approximations to the HMF. There exist a number of models used to perform such 
-extrapolations, such as the \emph{Potential-Field Source Surface} model (PFSS) 
-\citep{schatten1969model,altschuler1969magnetic}, the \emph{Current-Sheet Source Surface} model (CSSS) 
-\citep{csss} and the \emph{Magnetohydrodynamics Around a Sphere} model (MAS) 
-\citep{linker1999magnetohydrodynamic}. 
+are often extrapolated to compute approximations to the coronal HMF topology. There exist a number of techniques used 
+to perform such extrapolations: potential field based methods such as \emph{Potential-Field Source Surface} (PFSS) 
+\citep{schatten1969model,altschuler1969magnetic}, PFSS variants such as \emph{Potential-Field Current Sheet} (PFCS) 
+\citep{schatten1971current}, \emph{Current-Sheet Source Surface} (CSSS) \citep{csss} and several others, apart from potential based 
+models, there exist more involved techniques based on Magnetohydrodynamics (MHD) such as 
+\emph{Magnetohydrodynamics Around a Sphere} (MAS) \citep{linker1999magnetohydrodynamic}, 
+ENLIL \citep{ODSTRCIL1996,ODSTRCIL1999a,ODSTRCIL1999b,ODSTRCIL2003,ODSTRCIL2004} and EUHFORIA \citep{pomoell2018euhforia}. 
 
 The HMF can be seen as a combination of two components: the poloidal magnetic field and the toroidal magnetic field.
 The two fields often exchange energy between themselves over the course of several years in a cyclical phenomenon
@@ -217,13 +219,14 @@ The expansion of the coronal magnetic field leads to an eventual opening of fiel
 (see figure \ref{fig:parkerspiral}) and the ejection of the solar wind. This hot plasma consists mostly of protons, 
 electrons and a small number of helium and heavy ions. The solar wind spirals outwards in all directions, carrying 
 with it the magnetic field. Close to the Earth's magnetosphere, this wind has a nominal speed of about 
-$400 \text{km}/\text{s}$ while its high speed component has an average velocity of $\sim 700 \text{km}/\text{s}$ 
-(figure \ref{fig:solarwinddist}).
+$\SI{400}{\kilo\metre\per\second}$ while its high speed component has an average velocity of 
+$\sim \SI{700}{\kilo\metre\per\second}$ (figure \ref{fig:solarwinddist}).
 
 \begin{figure}
     \noindent\centering\includegraphics[width=0.75\textwidth]{solarwinddist.pdf}
     \caption{
-        {\small Distribution of solar wind speed recorded at 1 AU for the time period $2008 - 2018$, Data Source: OMNI data \url{https://omniweb.gsfc.nasa.gov/ow.html}}}
+        {\small Distribution of solar wind speed recorded at 1 AU for the time period $2008 - 2018$, 
+        Data Source: OMNI data \url{https://omniweb.gsfc.nasa.gov/ow.html}}}
     \label{fig:solarwinddist}
 \end{figure}
 
@@ -275,11 +278,11 @@ than average temperatures in Europe, which was called the \emph{little ice age}.
 years have been reconstructed using Carbon-$14$ based analysis of tree rings. Apart from the \emph{Maunder minimum},
 other periods of very low sunspot activity have been matched with corresponding \emph{little ice ages}.
 
-In chapter \ref{chapter:pdt}, the \emph{sunspot number} data as well as the \emph{flux tube expansion} factor 
-computed by the CSSS model will be used to create a input data set for building the \emph{dynamic time lag regression} 
-model proposed therein. Using the input parameters, the DTLR model provides an estimate for the near Earth solar wind speed as 
-well as the propagation time. Measurements of the solar wind speed will be used in chapters \ref{chapter:dst_osa}, 
-\ref{chapter:dst_msa} as inputs to the forecasting models applied therein.
+In chapter \ref{chapter:pdt}, the \emph{sunspot number} data as well as the \emph{flux tube expansion} factor ($f_S$ or FTE) 
+and the magnetic field strength computed by the CSSS model will be used to create a input data set for building the 
+\emph{dynamic time lag regression} model proposed therein. Using the input parameters, the \XX model provides an estimate 
+for the near Earth solar wind speed as well as the propagation time. Measurements of the solar wind speed will also be used in 
+chapters \ref{chapter:dst_osa}, \ref{chapter:dst_msa} as inputs to the Dst forecasting models applied therein.
 
 
 \section{Magnetosphere}\label{sec:mag}
@@ -314,7 +317,7 @@ solar wind is supersonic when it arrives and slows down to subsonic levels, a sh
 process (\emph{bow shock}). Much of the solar wind kinetic energy is converted to thermal energy when it crosses 
 the \emph{bow shock} into the \emph{magnetosheath}. The \emph{magnetosheath} spans from the \emph{bow shock} to 
 the \emph{magnetopause}. The \emph{magnetopause} is the outer boundary of the Earth's magnetic shield, its location 
-is $\sim 10R_E$ ($R_E = 6372 \text{km}$, the radius of the Earth). 
+is $\sim 10R_E$ ($R_E = \SI{6372}{\kilo\metre}$, the radius of the Earth). 
 
 \begin{wrapfigure}{r}{0.4\textwidth}
     \centering\includegraphics[width=0.35\textwidth]{adiabatic_motions.jpeg}

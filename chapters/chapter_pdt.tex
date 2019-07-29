@@ -1,13 +1,13 @@
-\chapter{Dynamic Time Lag Regression: Predicting What \& When}\label{chapter:pdt}
+\chapter{Forecasting Near-Earth Solar Wind Speed: The \XX \ Model}\label{chapter:pdt}
 
 {\small
-  We the joint regression problem where a signal drives another signal with an unknown time delay, with the modelling 
-  of the solar wind speed based on the sun's magnetic flux, as motivating application. This problem, called 
+  We model the joint regression problem where one signal drives another signal with an unknown time delay, with the 
+  forecasting of the solar wind speed based on the Sun's magnetic flux, as the motivating application. This problem, called 
   \emph{dynamic time lag regression} (\XX) is formalised using a probabilistic setting, modelling the non-stationary 
   time delay between the causes and the effects on the one hand, and the cause-effect relationship on the other hand. 
   A Bayesian approach is presented to tackle the \XX\ problem together with theoretical justifications based on 
-  linear stability analysis. The approach is empirically validated with proofs of concept on synthetic and 
-  real-world problems. 
+  linear stability analysis. The approach is empirically validated with proofs of concept on synthetic problems and 
+  real-world application of near-Earth solar wind speed prediction. 
 }
 
 
@@ -27,32 +27,111 @@
 \section{Introduction}\label{sec:intro}
 A significant body of work in machine learning concerns the modeling of spatiotemporal phenomena 
 \citep{SurveyST,NIPSForecasting18}, ranging from markets \citep{Pedreschi} to weather forecasting 
-\citep{Horvitz}. This work focuses on the problem of modeling the temporal dependency between two time series, 
-where the latter one is {\em caused} by the former one \citep{Granger} with a non-stationary time delay. 
+\citep{Horvitz} and space weather prediction \citep{EnricoLorentz,camporeale2018machine,EnricoArxiv}. 
+This work focuses on the problem of modeling the temporal dependency between two time series, where the 
+latter one is {\em caused} by the former one \citep{Granger} with a non-stationary time delay. 
 
-The motivating application domain is that of space weather. The sun, a perennial source of charged energetic particles, 
-is at the origin of geomagnetic phenomena within the sun-earth system. Specifically, the sun ejects 
-charged particles into the surrounding space in all directions and some of these particle clouds, a.k.a. solar wind, 
-reach the earth vicinity. High speed solar wind is a major threat for the modern world, causing severe damages to 
-e.g., satellites, telecommunication infrastructures, under sea pipelines, among others.
-\footnote{The adverse impact of space weather is estimated to cost 200 to 400 millions per year, 
-but can sporadically lead to much larger losses.} 
 
-A key prediction task thus is to forecast the speed of the \emph{solar wind} in the vicinity of the Earth 
-\citep{doi:10.1002/jgra.50429,doi:10.1029/2009SW000542}, sufficiently early to emit an alarm and be able to prevent 
-the damages to the best possible extent. Formally the goal is to model the dependency between heliospheric 
-observations (available at light speed), referred to as {\em cause series}, and the solar wind speed series 
-recorded at the Lagrangian point $L_1$ (distant from the Earth by 1.5 million kilometers), referred to as 
-{\em effect series}. The key difficulty is that the time lag between an input and its effect, the solar wind 
-recorded at $L_1$, varies from circa 2 to 5 days depending on, among many factors, the initial direction of 
-emitted particles and their energy. Would the lag be constant, the solar wind prediction problem would boil 
-down to a mainstream regression problem. The challenge here is to predict, from the solar image $x(t)$ at 
-time $t$ the value $y(t+\tau)$ of the solar wind speed reaching the earth at time $t+\tau$ where both the 
-value $y(t+\tau)$ and the time lag $\tau$ depend on $x(t)$.
+\subsection{Motivation: Forecasting Near-Earth Solar Wind Speed}\label{sec:motivationsolarwind}
+The Sun, a perennial source of charged energetic particles, drives all geomagnetic phenomena within the Sun-earth system. 
+Specifically, the Sun ejects charged particles into the surrounding space in all directions (solar wind). High speed solar wind 
+is a major threat for the modern world, causing severe damage to satellites, telecommunication infrastructure, under sea 
+pipelines, among others. \footnote{The adverse impact of space weather is estimated to cost $200$ to $400$ million per year, 
+but can sporadically lead to much larger losses.} Interested readers can refer to section \S~\ref{sec:hmfsolarwind} for some 
+historical background to the modern models of the solar wind and the structure Heliospheric Magnetic Field (HMF). 
+
+Forecasting near-Earth solar wind speed (at the $L_1$ point) based on near-Sun data is a problem of particular 
+importance in space weather prediction due to its large lead time \citep{doi:10.1002/jgra.50429,doi:10.1029/2009SW000542}. 
+The challenge of ambient solar wind prediction is two fold. Firstly, although the coronal magnetic field determines the 
+outflow of the solar wind, there are no direct measurements of the coronal magnetic field strength. Secondly the 
+propagation of the solar wind through the inter-planetary medium introduces a non-stationary time delay which currently cannot 
+be directly measured. 
+
+\subsection{State Of The Art}
+Research in solar wind forecasting has generally divided the problem into the following components.
+%
+\begin{enumerate} 
+  \item Using a coronal magnetic field model to extrapolate line of sight photospheric magnetic field measurements, 
+        giving an estimation of the coronal magnetic field topology and solar wind flow.
+  \item Propagation of the coronal solar wind to $\SI{1}{\astronomicalunit}$ ($\SI{1}{\astronomicalunit}$ is 
+        approximately the distance between the Sun and the Earth).
+\end{enumerate} 
+%
+\citet{Reiss_2019} provide an in-depth survey of the state of the art in solar wind prediction, they survey the 
+important coronal magnetic field extrapolation models as well as solar wind propagation procedures. We provide 
+a quick recap for continuity.
+
+The most commonly used coronal magnetic field extrapolation technique is the Potential Field Source Surface model (PFSS) 
+\citep{altschuler1969magnetic,schatten1969model}. The PFSS model assumes a current free (potential) magnetic field 
+structure above the photosphere and expresses the magnetic field $\mathbf{B}$ as the gradient of a scalar magnetic 
+potential $\mathbf{B} = -\nabla \Psi$ which can be solved by constraining the magnetic field to be divergence free 
+($\nabla^{2}\Psi = 0$). Since potential fields give closed magnetic fields, a spherical source surface, where the 
+magnetic field is assumed to be radially outwards, is kept as an outer boundary condition. The radius of the spherical 
+source surface is generally set to a height of $2.5 R_{\odot}$, where $R_{\odot} = \SI{6.957d5}{\kilo\metre}$ is the 
+solar radius. The effects of currents have been incorporated in PFSS variants such as the 
+\emph{Potential-Field Current Sheet} (PFCS) \citep{schatten1971current} and \emph{Current-Sheet Source Surface} (CSSS) 
+\citep{csss} models. 
+
+It is possible to compute from the solutions of PFSS like models, not only the coronal source surface magnetic field strength, 
+but also the expansion of the magnetic flux tubes of the HMF; the well known \emph{flux-tube expansion} factor ($f_S$ or FTE). 
+The Wang-Sheeley (WS) model \citep{WSAModel} and the improved Wang-Sheeley-Arge (WSA) model \citep{arge2000improvement,arge2004stream} 
+both derive empirical relationships between $f_S$ computed from the PFSS technique and the source surface solar wind speed $v_S$.  
+
+After computing the coronal magnetic field topology and the source surface solar wind speed, solar wind streams must be propagated 
+to a distance of around $\SI{1}{\astronomicalunit}$ to estimate near-Earth solar wind speeds. \citet{Riley2011} provide a survey of 
+various solar wind propagation models, in order of increasing computational complexity. 
+
+The simplest propagation technique, known as the \emph{ballistic mapping}, assumes constant velocity propagation from the upper 
+corona ($30R_{\odot}$) to the Earth, requiring only a longitudinal shift due to solar rotation. \citet{arge2000improvement} 
+proposed the Arge-Pizzo kinematic evolution scheme meant to be a middle ground between the ballistic mapping and the more 
+complex Magnetohydrodynamics (MHD) models discussed below.
+
+\citet{Riley2011} also propose a solar wind propagation technique known as the $1\textrm{-}\text{D}$ Upwind model 
+which uses the inviscid Burger's equation as a simplified model of solar wind flow. The source surface solar wind 
+speed $v_S$ can be mapped using the $1\textrm{-}\text{D}$ Upwind finite difference scheme to $\SI{1}{\astronomicalunit}$.
+
+The effect of currents is to distort the coronal magnetic field from a current free topology, in order to account for 
+the complex dynamics of solar wind flow, PFSS solutions are often used as boundary conditions for MHD based simulations 
+of the inner heliosphere ($20-30 R_{\odot} \ \mathrm{to} \ \SI{1}{\astronomicalunit}$). Common MHD based models include 
+\emph{Magnetohydrodynamics Around a Sphere} (MAS) \citep{linker1999magnetohydrodynamic}, ENLIL 
+\citep{ODSTRCIL1996,ODSTRCIL1999a,ODSTRCIL1999b,ODSTRCIL2003,ODSTRCIL2004} and EUHFORIA \citep{pomoell2018euhforia}. 
+
+The most prominent operational solar wind forecasting technique is the hybrid WSA-ENLIL model 
+(\url{https://www.swpc.noaa.gov/products/wsa-enlil-solar-wind-prediction}) which consists of the Wang-Sheeley-Arge (WSA) 
+coronal model coupled with the global heliospheric ENLIL model. 
+
+\citet{Owens2017} used the solutions of MAS model simulated until $30R_{\odot}$ to construct an ensemble of near-Sun 
+solar wind conditions and forward propagated these conditions to $\SI{1}{\astronomicalunit}$ to give probabilistic 
+forecasts of the near-Earth solar wind speed. \citet{Owens2019} proposed a variational data assimilation scheme which 
+used the $1\textrm{-}\text{D}$ Upwind model and solar wind speed measurements from $L_1$ to improve inner boundary 
+conditions at $30R_{\odot}$.
+
+Although the current crop of solar wind propagation techniques provide several options for modelers, they pose 
+one or two key issues: 
+\begin{enumerate*} 
+  \item they are computationally intensive 
+  \item they fail to assimilate and learn from data 
+\end{enumerate*}. 
+
+In this chapter we propose a novel machine learning technique for forecasting near-Earth solar wind speed from the 
+source surface magnetic field strength and $f_S$ computed by the CSSS model as well as the sunspot number and 
+the $\mathrm{F}10.7$ radio flux. Our proposed model works by constructing a probability distribution over possible 
+time delays between near-Sun quantities and near-Earth solar wind observations and then uses the aforementioned 
+probability distribution to formulate a weighted regression problem. The forecasts are assumed to be the output of a 
+neural network architecture. Below we setup the background of our method in the machine learning context.
+
+\subsection{Predicting What \& When}\label{sec:dtlrintro}
+Formally the goal is to model the dependency between heliospheric observations, referred to as {\em cause series}, 
+and the solar wind speed series recorded at $L_1$, referred to as {\em effect series}. The key difficulty is that 
+the time lag between an input and its effect, the solar wind speed recorded at $L_1$, varies from circa 2 to 5 days 
+depending on, among many factors, the initial speed of the solar wind and its interplay with the HMF. Would the 
+lag be constant, the solar wind prediction problem would boil down to a mainstream regression problem. The challenge 
+here is to predict, from solar data $x(t)$ at time $t$ the value $y(t+\tau)$ of the solar wind speed reaching the 
+Earth at time $t+\tau$ where both the value $y(t+\tau)$ and the time lag $\tau$ depend on $x(t)$.
 
 To our knowledge the regression problem of predicting both {\em what} the effect is and {\em when} the effect 
-is observed constitutes a new ML problem, that we called {\em Dynamic TimeLag Regression} (\XX). Indeed, the 
-modeling of dependencies among financial time series has been intensively tackled (see e.g. \citet{ZHOU2006195}). 
+is observed constitutes a new machine learning problem, that we called {\em Dynamic Time-Lag Regression} (\XX). 
+Indeed, the modeling of dependencies among financial time series has been intensively tackled \citep{ZHOU2006195}. 
 When considering varying time lag, many approaches rely on dynamic time warping (DTW) \citep{SakoeShiba1978}. 
 For instance, DTW is used in \citet{SignalDiffusion}, taking a Bayesian approach to achieve the temporal alignment 
 of both series under some restricting assumptions (considering slowly varying time lags and linear relationships 
@@ -60,7 +139,7 @@ between the cause and effect time series). More generally, the use of DTW in tim
 simplifying assumptions on the cause and effect series (same dimensionality and structure) and build upon 
 available cost matrices for the temporal alignment. 
 
-This paper focuses on the \XX\ regression problem and the identification of varying time-lag phenomena involving 
+This study focuses on the \XX\ regression problem and the identification of varying time-lag phenomena involving 
 stochastic dependencies of arbitrary complexity. The originality of the proposed approach compared to the state of 
 the art in DTW series alignment is threefold. Firstly, the cause and effect series are of different dimensionality. 
 While the effect series is scalar, the cause series can be high-dimensional (e.g. images, vectors, etc). 
@@ -68,8 +147,8 @@ Secondly, the relationship between the cause and the effect series can be non-li
 Thirdly, the time lag phenomenon (the {\em when} model) can be non smooth (as opposed to e.g. \citet{ZHOU2006195}).
 
 The Bayesian approach proposed to tackle the \XX\ regression problem and the associated learning 
-equations are described in section \ref{sec-formulation}, followed by a stability analysis and a 
-proof of consistency (section \ref{sec-theory}). The algorithm is detailed in section \ref{sec:model}. 
+equations are described in section \ref{sec:dtlrformulation}, followed by a stability analysis and a 
+proof of consistency (section \ref{sec:dtlrtheory}). The algorithm is detailed in section \ref{sec:model}. 
 The experimental setting used to validate the approach is presented in section \ref{sec:pdtExp}, and 
 the proofs of concept of the approach are discussed in section \ref{sec:proofconcept}
 
@@ -93,7 +172,7 @@ the effect $y(t)\in\mathbb{R}$ which is considered as a scalar in this paper.
 $\tau(t)\in \mathbb{R}^+$ represents the time delay between inputs and outputs.
 Vectors are written using bold fonts.
 
-\section{Probabilistic Dynamically Delayed Regression}\label{sec-formulation}
+\section{Probabilistic Dynamically Delayed Regression}\label{sec:dtlrformulation}
 As said, \cref{eq:pb1,eq:pb2} define a regression problem that differs from standard regression 
 along two lines. Firstly, the time lag $\tau(t)$ is non-stationary as it depends on $x(t)$.  Secondly, 
 $\tau(t)$ is unknown, i.e. it is not recorded explicitly in the training data as is typically the case in 
@@ -110,7 +189,7 @@ using constraints: $\phi(t_1) \leq \phi(t_2), \forall t_1 \leq t_2$. However, th
 be retained in the following as it does not hold in the space weather domain (e.g. fast moving solar wind 
 can reach the Earth before slow moving solar wind which departed before it). 
 
-\subsection{Probabilistic Dynamic Time-Lag regression}
+\subsection{Probabilistic Dynamic Time-Lag Regression}
 
 For practical reasons, cause and effect series are sampled with a constant rate $\delta t$, and respectively 
 noted ${x_m}$ and ${y_m}$ in the following. Accordingly, mapping $g$ might be sought as a discrete time lag, 
@@ -188,7 +267,7 @@ The proposed algorithm detailed in section \ref{sec:model} implements the saddle
 updated from \cref{eq:var} based on the current $\hat y_i$ and $\hat p_i$; and predictors $\hat y_i$ and 
 mixture weights $\hat p_i$ are accordingly updated from \cref{eq:hyopt} and \cref{eq:tildep} respectively. 
 
-\section{Theoretical analysis}\label{sec-theory}
+\section{Theoretical analysis}\label{sec:dtlrtheory}
 The proposed \XX\ approach is shown to be consistent and analysed in the simple case  where $\alpha$ is a diagonal matrix ($\alpha_{ij} = \alpha\delta_{ij}$).
 
 \subsection{Loss function and related optimal predictor}\label{sec:prop}
@@ -283,7 +362,7 @@ with an input dependent index $I(x)\in T$. As shown (supplementary material, App
    %$\sigma^2 \longleftarrow U(10^{-5}, 5)$ \;
    Initialization of $\alpha$ and $\sigma$\\
    $it \longleftarrow 0$ \;
-   \While{it < max}{
+   \While{it $<$ max}{
     \While{epoch}{
       $\theta \longleftarrow Optimise(\mathcal{L}(\theta, \alpha, \sigma^2))$ \;
     }
