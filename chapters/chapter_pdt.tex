@@ -406,39 +406,60 @@ $(n^v,n_1^h,n_2^h,2\vert T\vert)$ in each layer.}
 \section{Experimental Setting}\label{sec:pdtExp}
 
 %Proofs of concept for the  \XX\ algorithm are obtained using synthetic problems as well as our real-world %motivating application, the prediction of the solar wind (section \ref{sec:intro}). 
-The goal of the experiments is twofold. Firstly, the \XX\ predictive performance is assessed by considering i) the MSE of the predicted effect series $\hat y_m$, computed from Eq. (\ref{prop:opred}); 
-ii) the accuracy of the time lag prediction. The latter performance indicator is measured and compared to the ground truth using synthetic problems, detailed below: although time lag relationships do exist in real world data sets \citep{doi:10.1002/jgra.50429,ZHOU2006195}, we are not aware of datasets with time lag relationships explicitly annotated. The former performance indicator is comparatively assessed using the naive baseline, the regression model computed by assuming a fixed time lag set to $\frac{\tau_{min}+\tau_{max}}{2}$. The Pearson correlation of the true $y_m$ and predicted $\hat y_m$ series is also considered as overall performance indicator of the prediction.\\
-The second goal of experiments is to determine how informative are the key statistical quantities $\sigma_0$ and $C_1$ (section \ref{sec:stability}), and whether they can effectively be used as measures of confidence about the prediction results. 
+The goal of the experiments is twofold. Firstly, the \XX\ predictive performance is assessed by considering 
+\begin{enumerate*} \item the MSE of the predicted effect series $\hat y_m$, computed from Eq. (\ref{prop:opred})  
+\item the accuracy of the time lag prediction \end{enumerate*}. The latter performance indicator is measured and 
+compared to the ground truth using synthetic problems, detailed below: although time lag relationships do exist in 
+real world data sets \citep{doi:10.1002/jgra.50429,ZHOU2006195}, we are not aware of datasets with time lag 
+relationships explicitly annotated. The former performance indicator is comparatively assessed using the naive 
+baseline, the regression model computed by assuming a fixed time lag set to $\frac{\tau_{min}+\tau_{max}}{2}$. 
+The Pearson correlation of the true $y_m$ and predicted $\hat y_m$ series is also considered as overall 
+performance indicator of the prediction.\\
+The second goal of experiments is to determine how informative are the key statistical quantities 
+$\sigma_0$ and $C_1$ (section \ref{sec:stability}), and whether they can effectively be used as measures 
+of confidence about the prediction results. 
 
 %said at the end
 %The dimensions of the synthetic and real problems used for validation are summarised in Table \ref{tab:exp}.
 
-\paragraph{In synthetic problems,} the driving force $x_m$ of the artificial system is generated in $\mathbb{R}^{10}$ using \emph{Stochastic Langevin Dynamics} (with $\eta = 0.02, s^2 = 0.7$); the time series $y_m$ is generated using the norm of $x_m$: 
+\paragraph{In synthetic problems,} the driving force $x_m$ of the artificial system is generated in $\mathbb{R}^{10}$ using \emph{Stochastic Langevin Dynamics} (with $\eta = 0.02, s^2 = 0.7$); the time series $y_m$ is generated using the norm of $x_m$:
+% 
 \begin{align}
  x_{m+1} &= (1 - \eta) x_m + \mathcal{N}(0, s^2) \label{eq:data}\\
  y_{m+\tau(x_m)} &= k ||x_m||^2 + c \label{eq:outputs}
 \end{align}
-Four models of increasing complexity have been used for the time lag relationship $\tau(x_m)$; the width of the time lag interval $|T|$ is set to 20 except for Problem I where it is set to 15.\\
-
-{\bf Problem I}: Constant time lag $\tau(x_m) = 5$
-
-In all other problems, the time lag $\tau(x_m)$ depends on the system velocity $v_m = k ||x_m||^2 + c$: 
-
-{\bf Problem II}: Constant velocity $\tau(x_m) = 100/v_m,\ k = 1,\ c = 10$
-
+%
+Four models of increasing complexity have been used for the time lag relationship $\tau(x_m)$; the width of 
+the time lag interval $|T|$ is set to $20$ except for Problem I where it is set to $15$.\\\\
+%
+{\bf Problem I}: Constant time lag $\tau(x_m) = 5$\\
+%
+In all other problems, the time lag $\tau(x_m)$ depends on the velocity $v_m = k ||x_m||^2 + c$\\
+%
+{\bf Problem II}: Constant velocity $\tau(x_m) = 100/v_m,\ k = 1,\ c = 10$\\
+%
 {\bf Problem III}: Constant acceleration $\tau(x_m) = (\sqrt{v_m^2 + 2ad} - v)/a,\ k = 5,\ a = 5,\ d = 1000, \ c = 100$
-
-{\bf Problem IV}: Softplus $\tau(x_m) = \exp\left(v_m\right)/\left(1 + \exp(v_m/20)\right), \ k = 10, c = 40$
+\\
+%
+{\bf Problem IV}: Softplus $\tau(x_m) = \exp\left(v_m\right)/\left(1 + \exp(v_m/20)\right), \ k = 10, c = 40$\\
 
 \paragraph{Solar Wind Speed Prediction}\label{sec:solarwind}
-As said in section \ref{sec:intro}, the task of predicting solar wind speed from heliospheric data not only 
-has huge economic impacts; it is also challenging due to the distance between the Sun and the Earth and the non-stationary propagation time of the solar plasma through the interplanetary medium. 
+As said in section \ref{sec:motivationsolarwind}, the task of predicting solar wind speed from heliospheric 
+data not only has huge economic impacts; it is also challenging due to the distance between the Sun and the 
+Earth and the non-stationary propagation time of the solar plasma through the interplanetary medium. 
 
-The $x_m$ series is the solar magnetic \emph{flux tube expansion} (FTE) data produced by the {current sheet source surface} \citep{csss} model, exploiting the hourly magnetogram data recorded by the \emph{Global Oscillation Network Group} from 2008 to 2016.
-Solar wind data is extracted from the OMNI data base from the \emph{Space Physics Data Facility}\footnote{\url{https://omniweb.gsfc.nasa.gov}.}. The actual time lag ranges between 2 to 5 days. For computational convenience, the data is pre-processed, retaining for $x_m$ and $y_m$ the median value on a six-hour time window. Accordingly, the number $|T|$ of time lag candidates is 12.  
+The $x_m$ series is the solar magnetic FTE data produced by the CSSS model, exploiting the hourly magnetogram 
+data recorded by the \emph{Global Oscillation Network Group} (GONG) from $2008$ to $2016$.
+Solar wind data is extracted from the OMNI data base from the \emph{Space Physics Data Facility}
+(\url{https://omniweb.gsfc.nasa.gov}). The actual time lag ranges between $2$ to $5$ days. For 
+computational convenience, the data is pre-processed, retaining for $x_m$ and $y_m$ the median value on a 
+six-hour time window. Accordingly, the number $|T|$ of time lag candidates is $12$.  
 %For each input pattern, time lagged solar wind data is extracted corresponding to minimum and maximum time delays of two and 5 days respectively. Each three day time window is pre-processed by computing sliding six hour medians yielding $|T| = 12$ time slots.
 
-\XX\ is validated using a 4 fold CV, where the test data consists of one (continuous) month from October 2016 to January 2016. The performance is assessed comparatively to the best state of the art method \citep{Poduval_2014,neuralnetsw}, using  the FTE data and assuming a constant propagation time when combining FTE data with solar wind speed measurements close to the Earth. 
+\XX\ is validated using a $8$ fold cross-validation, where the test data consists of one (continuous) month 
+from October $2016$ to January $2016$. The performance is assessed comparatively to the best state of the art 
+method \citep{Poduval_2014,neuralnetsw}, using  the FTE data and assuming a constant propagation time when 
+combining FTE data with solar wind speed measurements close to the Earth. 
 
 Table \ref{tab:exp_data_info} summarises the dimensions of the synthetic and real problems used as proofs of concept for the \XX\ validation.
 \begin{table}[htbp]
