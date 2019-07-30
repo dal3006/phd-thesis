@@ -524,6 +524,25 @@ $(n^v,n_1^h,n_2^h,2\vert T\vert)$ in each layer.}
 
 \section{Experimental Setting}\label{sec:pdtExp}
 
+\begin{table}[ht]
+  \caption{
+    Synthetic and Real-World Problems. 
+    For the solar wind problem, training and test data sizes represent one cross validation fold}
+  \label{tab:exp_data_info}
+  \centering
+  \begin{tabular}{ r c c c c}
+  \hline
+  Problem &  \# train & \# test & $d$ & $|T|$ \\
+  \hline
+  \textbf{I} & $10,000$ & $2,000$  & $10$ & $15$\\
+  \textbf{II} & $10,000$ & $2,000$ & $10$ & $20$\\
+  \textbf{III} & $10,000$ & $2,000$ & $10$ & $20$\\
+  \textbf{IV} & $10,000$ & $2,000$ & $10$ & $20$\\
+  \textbf{Solar Wind} & $77,367$ & $648$ & $374$ & $12$\\
+  \hline
+  \end{tabular}
+\end{table}
+
 %Proofs of concept for the  \XX\ algorithm are obtained using synthetic problems as well as our real-world %motivating application, the prediction of the solar wind (section \ref{sec:intro}). 
 The goal of the experiments is twofold. Firstly, the \XX\ predictive performance is assessed by 
 considering 
@@ -623,7 +642,7 @@ slots.
 comparatively to the best state of the art method \citep{Poduval_2014,neuralnetsw}, using the FTE 
 data and assuming a constant propagation time when combining FTE data with solar wind speed 
 measurements close to the Earth. 
-
+%
 \begin{table}[ht]
   \centering
   \caption{Cross validation splits used to evaluate \ \XX \ on the solar wind forecasting task}
@@ -643,24 +662,9 @@ measurements close to the Earth.
   \hline
   \end{tabular}
   \end{table}
-
+%
 Table \ref{tab:exp_data_info} summarises the dimensions of the synthetic and real problems used as 
 proofs of concept for the \XX\ validation.
-\begin{table}[htbp]
-  \caption{Synthetic and Real-World Problems}\label{tab:exp_data_info}
-  \centering
-  \begin{tabular}{ r c c c c}
-  \hline
-  Problem &  \# train & \# test & $d$ & $|T|$ \\
-  \hline
-  \textbf{I} & $10,000$ & $2,000$  & $10$ & $15$\\
-  \textbf{II} & $10,000$ & $2,000$ & $10$ & $20$\\
-  \textbf{III} & $10,000$ & $2,000$ & $10$ & $20$\\
-  \textbf{IV} & $10,000$ & $2,000$ & $10$ & $20$\\
-  \textbf{Solar Wind} & $77,367$ & $600$ & $374$ & $12$\\
-  \hline
-  \end{tabular}
-\end{table}
 
 \section{Empirical validation}\label{sec:proofconcept}
 
