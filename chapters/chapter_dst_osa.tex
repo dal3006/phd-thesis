@@ -1,14 +1,17 @@
 \chapter{Forecasting the Disturbance Storm Time Index: Gaussian Process Models}\label{chapter:dst_osa}
 
 {\small
-    We present a methodology for generating probabilistic predictions for the \emph{Disturbance Storm Time} 
-    ($\mathrm{Dst}$) geomagnetic activity index. We focus on the \emph{One Step Ahead} (OSA) prediction task and 
-    use the OMNI hourly resolution data to build our models. Our proposed methodology is based on the technique of 
+    We present a methodology for generating probabilistic predictions for the 
+    \emph{Disturbance Storm Time} ($\mathrm{Dst}$) geomagnetic activity index. We focus on the 
+    \emph{One Step Ahead} (OSA) prediction task and use the OMNI hourly resolution data to build 
+    our models. Our proposed methodology is based on the technique of 
     \emph{Gaussian Process Regression} (GPR). Within this framework we develop two models; 
-    \emph{Gaussian Process Auto-Regressive} (GP-AR) and \emph{Gaussian Process Auto-Regressive with eXogenous inputs} 
-    (GP-ARX). We also propose a criterion to aid model selection with respect to the order of auto-regressive inputs. 
-    Finally we test the performance of the GP-AR and GP-ARX models on a set of 63 geomagnetic storms between 1998 
-    and 2006 and illustrate sample predictions with error bars for some of these events.
+    \emph{Gaussian Process Auto-Regressive} (GP-AR) and 
+    \emph{Gaussian Process Auto-Regressive with eXogenous inputs} (GP-ARX). We also propose a 
+    criterion to aid model selection with respect to the order of auto-regressive inputs. 
+    Finally we test the performance of the GP-AR and GP-ARX models on a set of $63$ geomagnetic 
+    storms between $1998$ and $2006$ and illustrate sample predictions with error bars for some of 
+    these events.
 }
         
 \vfill
@@ -31,62 +34,151 @@
 \section{Introduction}
 
 
-The magnetosphere's dynamics and its associated solar wind driver form a complex dynamical system. It is therefore instructive and greatly simplifying to use representative indices to quantify the state of geomagnetic activity.
+The magnetosphere's dynamics and its associated solar wind driver form a complex dynamical system. 
+It is therefore instructive and greatly simplifying to use representative indices to quantify the 
+state of geomagnetic activity.
 
-Geomagnetic indices come in various forms, they may take continuous or discrete values and may be defined with varying time resolutions. Their values are often calculated by averaging or combining a number of readings taken by instruments, usually magnetometers, around the Earth. Each geomagnetic index is a proxy for a particular kind of phenomenon. Some popular indices are the $\mathrm{Kp}$, $\mathrm{Dst}$ and the $\mathrm{AE}$ index.
+Geomagnetic indices come in various forms, they may take continuous or discrete values and may be 
+defined with varying time resolutions. Their values are often calculated by averaging or combining 
+a number of readings taken by instruments, usually magnetometers, around the Earth. Each 
+geomagnetic index is a proxy for a particular kind of phenomenon. Some popular indices are the 
+$\mathrm{Kp}$, $\mathrm{Dst}$ and the $\mathrm{AE}$ index.
 
 
 \begin{enumerate}
-    \item $\mathrm{Kp}$: The Kp-index is a discrete valued global geomagnetic activity index and is based on 3 hour measurements of the K-indices \citep{Bartels}. The K-index itself is a three hour long quasi-logarithmic local index of the geomagnetic activity, relative to a calm day curve for the given location.
+    \item $\mathrm{Kp}$: The Kp-index is a discrete valued global geomagnetic activity index and is 
+    based on 3 hour measurements of the K-indices \citep{Bartels}. The K-index itself is a three 
+    hour long quasi-logarithmic local index of the geomagnetic activity, relative to a calm day 
+    curve for the given location.
     
-    \item $\mathrm{AE}$: The Auroral Electrojet Index, $\mathrm{AE}$, is designed to provide a global, quantitative measure of auroral zone magnetic activity produced by enhanced Ionospheric currents flowing below and within the auroral oval \citep{AEIndex}. It is a continuous index which is calculated every hour.
+    \item $\mathrm{AE}$: The Auroral Electrojet Index, $\mathrm{AE}$, is designed to provide a 
+    global, quantitative measure of auroral zone magnetic activity produced by enhanced ionospheric 
+    currents flowing below and within the auroral oval \citep{AEIndex}. It is a continuous index 
+    which is calculated every hour.
     
-    \item $\mathrm{Dst}$: A continuous hourly index which gives a measure of the weakening or strengthening of the Earth's equatorial magnetic field due to particle injection in the magnetosphere. Particle injection has a number of sources such as, weakening or strengthening of the ring currents and the geomagnetic storms \citep{DesslerAndParker}, near Earth cross tail current \citep{ganushkina2004long,angeo-28-123-2010}, partial ring current \citep{JGRA:JGRA15878}, substorm current wedge \citep{JGRA:JGRA15211}, magnetopause current, etc . 
+    \item $\mathrm{Dst}$: A continuous hourly index which gives a measure of the weakening or 
+    strengthening of the Earth's equatorial magnetic field due to particle injection in the 
+    magnetosphere. Particle injection has a number of sources such as, weakening or strengthening 
+    of the ring currents and the geomagnetic storms \citep{DesslerAndParker}, near Earth cross tail 
+    current \citep{ganushkina2004long,angeo-28-123-2010}, partial ring current 
+    \citep{JGRA:JGRA15878}, substorm current wedge \citep{JGRA:JGRA15211}, magnetopause current, 
+    etc. 
 \end{enumerate}
 
 %Talk about Burton and friends
-For the present study, we focus on prediction of the hourly $\mathrm{Dst}$ index which is a straightforward indicator of geomagnetic storms. More specifically, we focus on the \emph{one step ahead} (OSA) (in this case one hour ahead) prediction of $\mathrm{Dst}$ because it is the simplest model towards building long term predictions of geomagnetic response of the Earth to changing space weather conditions. 
+For the present study, we focus on prediction of the hourly $\mathrm{Dst}$ index which is a 
+straightforward indicator of geomagnetic storms. More specifically, we focus on the 
+\emph{one step ahead} (OSA) (in this case one hour ahead) prediction of $\mathrm{Dst}$ because it 
+is the simplest model towards building long term predictions of geomagnetic response of the Earth 
+to changing space weather conditions. 
 
-The $\mathrm{Dst}$ OSA prediction problem has been the subject of several modeling efforts in the literature. One of the earliest models has been presented by \citet{JGR:JGR10260} who calculated $\mathrm{Dst}(t)$ as the solution of an \emph{Ordinary Differential Equation} (ODE) which expressed the rate of change of $\mathrm{Dst}(t)$ as a combination of two terms: decay and injection $\frac{d}{dt} \mathrm{Dst}(t) = Q(t) - \frac{\mathrm{Dst}(t)}{\tau}$, where $Q(t)$ relates 
-to the particle injection from the plasma sheet into the inner magnetosphere. 
+The $\mathrm{Dst}$ OSA prediction problem has been the subject of several modeling efforts in the 
+literature. One of the earliest models has been presented by \citet{JGR:JGR10260} who calculated 
+$\mathrm{Dst}(t)$ as the solution of an \emph{Ordinary Differential Equation} (ODE) which expressed 
+the rate of change of $\mathrm{Dst}(t)$ as a combination of two terms: decay and injection 
+$\frac{d}{dt} \mathrm{Dst}(t) = Q(t) - \frac{\mathrm{Dst}(t)}{\tau}$, where $Q(t)$ relates to the 
+particle injection from the plasma sheet into the inner magnetosphere. 
 
-The \citet{JGR:JGR10260} model has proven to be very influential particularly due to its simplicity. Many subsequent works have modified the proposed ODE by proposing alternative expressions for the injection term $Q(t)$ 
-\citep{Wang:Dst,JGRA:JGRA14856}. More recently \citet{Ballatore2014} have tried to generate empirical estimates 
-for the injection and decay terms in Burton's equation.
+The \citet{JGR:JGR10260} model has proven to be very influential particularly due to its 
+simplicity. Many subsequent works have modified the proposed ODE by proposing alternative 
+expressions for the injection term $Q(t)$ \citep{Wang:Dst,JGRA:JGRA14856}. More recently 
+\citet{Ballatore2014} have tried to generate empirical estimates for the injection and decay terms 
+in Burton's equation.
 
 %Talk about NARMAX Dst
-Another important empirical model used to predict $ \mathrm{Dst}$ is the \emph{Nonlinear Auto-Regressive Moving Average with eXogenous inputs} (NARMAX) methodology developed in \citet{doi:10.1080/00207178908559767,GRL:GRL13494,GRL:GRL20944,JGRA:JGRA18657,balikhin:narmax,JGRA:JGRA20661,JGRA:JGRA50192}. The NARMAX methodology builds models by constructing polynomial expansions of inputs and determines the best combinations of monomials to include in the refined model by using a criterion called the \emph{error reduction ratio} (ERR). The parameters of the so called NARMAX OLS-ERR model are calculated by solving the \emph{ordinary least squares} (OLS) problem arising from a quadratic objective function. It must be noted that the NARMAX methodology is not limited to polynomial functions, rather any set of basis function expansions can be used with it, such as radial basis functions, wavelets etc \citep{doi:10.1080/00207720600903011,JGRA:JGRA17327}. The reader may refer to \citet{billings2013nonlinear} for a detailed exposition of the NARMAX methodology.
+Another important empirical model used to predict $\mathrm{Dst}$ is the 
+\emph{Nonlinear Auto-Regressive Moving Average with eXogenous inputs} (NARMAX) methodology 
+\citep{doi:10.1080/00207178908559767,GRL:GRL13494,GRL:GRL20944,JGRA:JGRA18657,balikhin:narmax,JGRA:JGRA20661,JGRA:JGRA50192}. The NARMAX methodology builds models by constructing polynomial expansions of 
+inputs and determines the best combinations of monomials to include in the refined model by using a 
+criterion called the \emph{error reduction ratio} (ERR). The parameters of the well known NARMAX 
+OLS-ERR model are calculated by solving the \emph{ordinary least squares} (OLS) problem arising 
+from a quadratic objective function. It must be noted that the NARMAX methodology is not limited to 
+polynomial functions, rather any set of basis function expansions can be used with it, such as 
+radial basis functions, wavelets etc \citep{doi:10.1080/00207720600903011,JGRA:JGRA17327}. The 
+reader may refer to \citet{billings2013nonlinear} for a detailed exposition of the NARMAX 
+methodology.
 
 %Talk about neural networks
-Yet another family of forecasting methods is based on \emph{Artificial Neural Networks} (ANN) that have been a popular choice for building predictive models. Researchers have employed both the standard \emph{feed forward} and the more specialised \emph{recurrent} architectures. \citet{Lund} proposed an \emph{Elman} recurrent network architecture called Lund $\mathrm{Dst}$, which used the solar wind velocity, \emph{interplanetary magnetic field} (IMF) and historical $\mathrm{Dst}$ data as inputs. \citet{JGRA:JGRA17461} used recurrent neural networks to predict $\mathrm{Kp}$. 
-\citet{SWE:SWE286} originally proposed a \emph{feed forward} network for predicting the $\mathrm{Kp}$ index which used the \emph{Boyle coupling function} \citet{boyle1997empirical}. The same architecture is adapted for prediction of $\mathrm{Dst}$ in \citet{SWE:SWE286}, popularly known as the Rice $\mathrm{Dst}$ model. \citet{pallocchia:hal-00318011} proposed a \emph{neural network} model called EDDA to predict $\mathrm{Dst}$ using only the IMF data.
+Yet another family of forecasting methods is based on \emph{Artificial Neural Networks} (ANN) that 
+have been a popular choice for building predictive models. Researchers have employed both the 
+standard \emph{feed forward} and the more specialised \emph{recurrent} architectures. \citet{Lund} 
+proposed an \emph{Elman} recurrent network architecture called Lund $\mathrm{Dst}$, which used the 
+solar wind velocity, \emph{interplanetary magnetic field} (IMF) and historical $\mathrm{Dst}$ data 
+as inputs. \citet{JGRA:JGRA17461} used recurrent neural networks to predict $\mathrm{Kp}$. 
+\citet{SWE:SWE286} originally proposed a \emph{feed forward} network for predicting the 
+$\mathrm{Kp}$ index which used the \emph{Boyle coupling function} \citet{boyle1997empirical}. The 
+same architecture is adapted for prediction of $\mathrm{Dst}$ in \citet{SWE:SWE286}, popularly 
+known as the Rice $\mathrm{Dst}$ model. \citet{pallocchia:hal-00318011} proposed a 
+\emph{neural network} model called EDDA to predict $\mathrm{Dst}$ using only the IMF data.
 
 %Local neurofuzzy modelling and singular spectrum analysis.
-Apart from the NARMAX and neural network approaches, fuzzy methods have also been applied for $\mathrm{Dst}$ prediction, \citet{SWE:SWE146,Sharifi2006} outline the application of \emph{local neurofuzzy} models for one hour and two hour predictions of $\mathrm{Dst}$ respectively. Local neurofuzzy models reduce the input space into a number of regions each with its own expert predictor. The combined model predicts $\mathrm{Dst}$ for a new point as a linear combinations of the predictions from each expert weighted by a fuzzy score signifying the importance of each model for the provided input. For improving predictive performance of two hour 
-$\mathrm{Dst}$ forecasts in \citet{Sharifi2006}, the authors use \emph{singular spectrum analysis} (SSA). Singular spectrum analysis consists of extracting orthogonal components from a lagged time series, it is equivalent to \emph{principal component analysis} (PCA) which is quite extensively used in the machine learning community. \citet{loskutov2001testing,loskutov2001study} provide a good background to the theory and application of SSA to geomagnetic time series.
+Apart from the NARMAX and neural network approaches, fuzzy methods have also been applied for 
+$\mathrm{Dst}$ prediction, \citet{SWE:SWE146,Sharifi2006} outline the application of 
+\emph{local neurofuzzy} models for one hour and two hour predictions of $\mathrm{Dst}$ 
+respectively. Local neurofuzzy models reduce the input space into a number of regions each with its 
+own expert predictor. The combined model predicts $\mathrm{Dst}$ for a new point as a linear 
+combinations of the predictions from each expert weighted by a fuzzy score signifying the 
+importance of each model for the provided input. For improving predictive performance of two hour 
+$\mathrm{Dst}$ forecasts in \citet{Sharifi2006}, the authors use \emph{singular spectrum analysis} 
+(SSA). Singular spectrum analysis consists of extracting orthogonal components from a lagged time 
+series, it is equivalent to \emph{principal component analysis} (PCA) which is quite extensively 
+used in the machine learning community. \citet{loskutov2001testing,loskutov2001study} provide a 
+good background to the theory and application of SSA to geomagnetic time series.
 
 %Talk about need for probabilistic forecasts.
-Although much research has been done on prediction of the $\mathrm{Dst}$ index, much less has been done on probabilistic forecasting of $\mathrm{Dst}$. One such work described in \citet{McPherron:2013} involves identification of high speed solar wind streams using the WSA model \citep{WSAModel}, using predictions of high speed streams to construct ensembles of $\mathrm{Dst}$ trajectories which yield the quartiles of 
-$\mathrm{Dst}$ time series. 
+Although much research has been done on prediction of the $\mathrm{Dst}$ index, much less has been 
+done on probabilistic forecasting of $\mathrm{Dst}$. One such work described in 
+\citet{McPherron:2013} involves identification of high speed solar wind streams using the WSA model 
+\citep{WSAModel}, using predictions of high speed streams to construct ensembles of $\mathrm{Dst}$ 
+trajectories which yield the quartiles of $\mathrm{Dst}$ time series. 
 
-A simple way to construct error bars on the predictions of forecasting models is by using the so called \textit{past cast} performance i.e. by calculating the standard deviations of the predictions generated by the model on a hold out data set. One limitation of such an approach is that the variance of the model predictions is computed once and for all. It does not adapt according to the inputs provided to the model. This may lead to overestimation or underestimation of the uncertainty around a given prediction, depending on the prevalent geo-magnetic conditions and the data set used to calculate the \textit{past cast} model performance.
+A simple way to construct error bars on the predictions of forecasting models is by using the well 
+known \textit{past cast} performance i.e. by calculating the standard deviations of the predictions 
+generated by the model on a hold out data set. One limitation of such an approach is that the 
+variance of the model predictions is computed once and for all. It does not adapt according to the 
+inputs provided to the model. This may lead to overestimation or underestimation of the uncertainty 
+around a given prediction, depending on the prevalent geo-magnetic conditions and the data set used 
+to calculate the \textit{past cast} model performance.
 
-In this work we propose a technique for probabilistic forecasting of $\mathrm{Dst}$, which yields a predictive distribution as a closed form expression. Our models take as input past values of $\mathrm{Dst}$, solar wind speed and the \textit{z} component of the \emph{Interplanetary Magnetic Field} (IMF) and output a Gaussian distribution with a specific mean and variance as the OSA prediction of the $\mathrm{Dst}$. 
+In this work we propose a technique for probabilistic forecasting of $\mathrm{Dst}$, which yields a 
+predictive distribution as a closed form expression. Our models take as input past values of 
+$\mathrm{Dst}$, solar wind speed and the \textit{z} component of the 
+\emph{Interplanetary Magnetic Field} (IMF) and output a Gaussian distribution with a specific mean 
+and variance as the OSA prediction of the $\mathrm{Dst}$. 
 
-We use the \emph{Gaussian Process Regression} methodology to construct auto-regressive models for $ \mathrm{Dst}$ and show how to perform exact inference in this framework. We further outline a methodology to perform model selection with respect to its free parameters and time histories.
+We use the \emph{Gaussian Process Regression} methodology to construct auto-regressive models for 
+$\mathrm{Dst}$ and show how to perform exact inference in this framework. We further outline a 
+methodology to perform model selection with respect to its free parameters and time histories.
 
-The remainder of this chapter is organised as follows: Section \S~\ref{sec:osaGPmethod} gives the reader an overview of the history of \emph{Gaussian Process} models as well as how they are formulated and how to perform inference with them. Sections \S~\ref{sec:osa}, \S~\ref{sec:gpar}, \S~\ref{sec:gparx} \& \S~\ref{sec:modeltraining} describe the GP-AR 
-and GP-ARX models for OSA prediction of $\mathrm{Dst}$ and how to choose their free parameters for better performance. Sections \S~\ref{sec:gpOSAEval} \& \S~\ref{sec:res} evaluate the performance of the proposed GP-AR and GP-ARX models.
+The remainder of this chapter is organised as follows: Section \S~\ref{sec:osaGPmethod} gives the 
+reader an overview of the history of \emph{Gaussian Process} models as well as how they are 
+formulated and how to perform inference with them. Sections \S~\ref{sec:osa}, \S~\ref{sec:gpar}, 
+\S~\ref{sec:gparx} \& \S~\ref{sec:modeltraining} describe the GP-AR and GP-ARX models for OSA 
+prediction of $\mathrm{Dst}$ and how to choose their free parameters for better performance. 
+Sections \S~\ref{sec:gpOSAEval} \& \S~\ref{sec:res} evaluate the performance of the proposed 
+GP-AR and GP-ARX models.
 
 \section{Methodology: Gaussian Process} \label{sec:osaGPmethod}
 
-\emph{Gaussian Processes} first appeared in machine learning research in \citet{Neal:1996:BLN:525544}, as the limiting case of Bayesian inference performed on neural networks with infinitely many neurons in the hidden layers. Although their inception in the machine learning community is recent, their origins can be traced back to the geo-statistics research community where they are known as \emph{Kriging} methods 
-\citep{krige1951statistical}. In pure mathematics area \emph{Gaussian Processes} have been studied extensively and their existence was first proven by Kolmogorov's extension theorem \citep{tao2011introduction}. 
-The reader is referred to \citet{Rasmussen:2005:GPM:1162254} for an in depth treatment of Gaussian Processes in machine learning.
+\emph{Gaussian Processes} first appeared in machine learning research in 
+\citet{Neal:1996:BLN:525544}, as the limiting case of Bayesian inference performed on neural 
+networks with infinitely many neurons in the hidden layers. Although their inception in the machine 
+learning community is recent, their origins can be traced back to the geo-statistics research 
+community where they are known as \emph{Kriging} methods \citep{krige1951statistical}. In pure 
+mathematics area \emph{Gaussian Processes} have been studied extensively and their existence was 
+first proven by Kolmogorov's extension theorem \citep{tao2011introduction}. The reader is referred 
+to \citet{Rasmussen:2005:GPM:1162254} for an in-depth treatment of Gaussian Processes in 
+machine learning.
 
-Let us assume that we want to model a process in which a scalar quantity $y$ is specified as $y = f(\mathbf{x}) + \epsilon$ where   $f(.): \mathbb{R}^d \rightarrow \mathbb{R}$ is an unknown scalar function of a multidimensional input vector $\mathbf{x} \in \mathbb{R}^d$, $d$ is the dimensionality of the input space, and $\epsilon \sim \mathcal{N}(0, \sigma^2)$ is zero mean Gaussian noise with variance $\sigma^2$.
+Let us assume that we want to model a process in which a scalar quantity $y$ is specified as 
+$y = f(\mathbf{x}) + \epsilon$ where   $f(.): \mathbb{R}^d \rightarrow \mathbb{R}$ is an unknown 
+scalar function of a multidimensional input vector $\mathbf{x} \in \mathbb{R}^d$, $d$ is the 
+dimensionality of the input space, and $\epsilon \sim \mathcal{N}(0, \sigma^2)$ is zero mean 
+Gaussian noise with variance $\sigma^2$.
 
-A set of labeled data points ${(\mathbf{x}_i, y_i); i = 1 \cdots N}$ can be conveniently expressed by a $N \times d$ data matrix $\mathbf{X}$ and a $N \times 1$ response vector $\mathbf{y}$, as shown in \cref{eq:feat,eq:labels}.
+A set of labeled data points ${(\mathbf{x}_i, y_i); i = 1 \cdots N}$ can be conveniently expressed 
+by a $N \times d$ data matrix $\mathbf{X}$ and a $N \times 1$ response vector $\mathbf{y}$, as 
+shown in \cref{eq:feat,eq:labels}.
 %
 \begin{align}
   \mathbf{X}  = & \left( \begin{array}{c} \mathbf{x}^{T}_1 \\ \mathbf{x}^{T}_2 \\ \vdots \\ \mathbf{x}^{T}_N \end{array} \right)_{N \times d} \label{eq:feat} \\
@@ -94,7 +186,10 @@ A set of labeled data points ${(\mathbf{x}_i, y_i); i = 1 \cdots N}$ can be conv
   \mathbf{y}  = & \left( \begin{array}{c} y_1 \\ y_2 \\ \vdots \\ y_N \end{array} \right) _{N \times 1} \label{eq:labels}
 \end{align}
 %
-Our task is to infer the values of the unknown function $f(.)$ based on the inputs $\mathbf{X}$ and the noisy observations $\mathbf{y}$. We now assume that the joint distribution of $f(\mathbf{x}_i), i = 1 \cdots N$ is a multivariate Gaussian as shown in \cref{eq:fvalues,eq:normal,eq:sto}.
+Our task is to infer the values of the unknown function $f(.)$ based on the inputs $\mathbf{X}$ and 
+the noisy observations $\mathbf{y}$. We now assume that the joint distribution of 
+$f(\mathbf{x}_i), i = 1 \cdots N$ is a multivariate Gaussian as shown in 
+\cref{eq:fvalues,eq:normal,eq:sto}.
 %
 \begin{align}
  \mathbf{f} = & \left( \begin{array}{c} f(\mathbf{x}_1) \\ f(\mathbf{x}_2) \\ \vdots \\ f(\mathbf{x}_N) \end{array} \right) \label{eq:fvalues}\\
@@ -104,24 +199,44 @@ Our task is to infer the values of the unknown function $f(.)$ based on the inpu
  p( \mathbf{f} \ | \ \mathbf{x}_1, \cdots, \mathbf{x}_N) = & \frac{1}{(2\pi)^{n/2} \det(\mathbf{\Lambda})^{1/2}} \exp \left(-\frac{1}{2} (\mathbf{f} - \mathbf{\mu})^T \mathbf{\Lambda}^{-1} (\mathbf{f} - \mathbf{\mu}) \right) \label{eq:sto}
 \end{align}
 %
-Here $\mathbf{f}$ is a $N\times 1$ vector consisting of the values $f(\mathbf{x}_i), i = 1 \cdots N$. In \cref{eq:normal}, $\mathbf{f}|\mathbf{x}_1, \cdots, \mathbf{x}_N$ denotes the conditional distribution of $\mathbf{f}$ with respect to the input data (i.e., $\mathbf{X}$) and $\mathcal{N}\left( \mathbf{\mu}, \mathbf{\Lambda} \right)$ represents a multivariate Gaussian distribution with mean vector $\mathbf{\mu}$ and covariance matrix $\mathbf{\Lambda}$. The probability density function of this distribution $p( \mathbf{f} \ | \ \mathbf{x}_1, \cdots, \mathbf{x}_N)$ is therefore given by \cref{eq:sto}.
+Here $\mathbf{f}$ is a $N\times 1$ vector consisting of the values 
+$f(\mathbf{x}_i), i = 1 \cdots N$. In \cref{eq:normal}, 
+$\mathbf{f}|\mathbf{x}_1, \cdots, \mathbf{x}_N$ denotes the conditional distribution of 
+$\mathbf{f}$ with respect to the input data (i.e., $\mathbf{X}$) and 
+$\mathcal{N}\left(\mathbf{\mu}, \mathbf{\Lambda} \right)$ represents a multivariate Gaussian 
+distribution with mean vector $\mathbf{\mu}$ and covariance matrix $\mathbf{\Lambda}$. The 
+probability density function of this distribution 
+$p( \mathbf{f} \ | \ \mathbf{x}_1, \cdots, \mathbf{x}_N)$ is therefore given by \cref{eq:sto}.
 
-From \cref{eq:sto}, one can observe that in order to uniquely define the distribution of the process, it is required to specify $\mathbf{\mu}$ and $\mathbf{\Lambda}$. For this probability density to be valid, there are further requirements imposed on $\mathbf{\Lambda}$: 
+From \cref{eq:sto}, one can observe that in order to uniquely define the distribution of the 
+process, it is required to specify $\mathbf{\mu}$ and $\mathbf{\Lambda}$. For this probability 
+density to be valid, there are further requirements imposed on $\mathbf{\Lambda}$: 
 
 
 \begin{enumerate}
-      \item Symmetry: $\mathbf{\Lambda}_{ij} = \mathbf{\Lambda}_{ji} \ \forall i,j \in {1, \cdots, N} $ 
-      \item Positive Semi-definiteness: $\mathbf{z}^T \mathbf{\Lambda} \mathbf{z} \geq 0 \ \forall \mathbf{z} \in \mathbb{R}^N$  
+      \item Symmetry: 
+            $\mathbf{\Lambda}_{ij} = \mathbf{\Lambda}_{ji} \ \forall i,j \in {1, \cdots, N} $ 
+      \item Positive Semi-definiteness: 
+            $\mathbf{z}^T \mathbf{\Lambda} \mathbf{z} \geq 0 \ \forall \mathbf{z} \in \mathbb{R}^N$  
 \end{enumerate}
 
-Inspecting the individual elements of $\mathbf{\mu}$ and $\mathbf{\Lambda}$, we realise that they take the following form.
+Inspecting the individual elements of $\mathbf{\mu}$ and $\mathbf{\Lambda}$, we realise that they 
+take the following form.
 %
 \begin{align}
       \mu_i = & \mathbb{E}[f(\mathbf{x}_i)] := m(\mathbf{x}_i) \\
       \Lambda_{ij} = & \mathbb{E}[(f(\mathbf{x}_i) - \mu_i)(f(\mathbf{x}_j) - \mu_j)] := K(\mathbf{x}_i, \mathbf{x}_j)
 \end{align}
 %
-Here $\mathbb{E}$ denotes the expectation (average). The elements of $\mathbf{\mu}$ and $\mathbf{\Lambda}$ are expressed as functions $m(\mathbf{x}_i)$ and $K(\mathbf{x}_i, \mathbf{x}_j)$ of the inputs $\mathbf{x}_i,\ \mathbf{x}_j$. Specifying the functions $m(\mathbf{x})$ and $K(\mathbf{x}, \mathbf{x}')$ completely specifies each element of $\mathbf{\mu}$ and $\mathbf{\Lambda}$ and subsequently the finite dimensional distribution of $\mathbf{f} | \mathbf{x}_1, \cdots, \mathbf{x}_N $. In most practical applications of \emph{Gaussian Processes} the mean function is often defined as $m(\mathbf{x}) = 0$, which is not unreasonable if the data is standardised to have zero mean. \emph{Gaussian Processes} are represented in machine learning literature using the following notation:
+Here $\mathbb{E}$ denotes the expectation (average). The elements of $\mathbf{\mu}$ and 
+$\mathbf{\Lambda}$ are expressed as functions $m(\mathbf{x}_i)$ and $K(\mathbf{x}_i, \mathbf{x}_j)$ 
+of the inputs $\mathbf{x}_i,\ \mathbf{x}_j$. Specifying the functions $m(\mathbf{x})$ and 
+$K(\mathbf{x}, \mathbf{x}')$ completely specifies each element of 
+$\mathbf{\mu}$ and $\mathbf{\Lambda}$ and subsequently the finite dimensional distribution of 
+$\mathbf{f} | \mathbf{x}_1, \cdots, \mathbf{x}_N $. In most practical applications of 
+\emph{Gaussian Processes} the mean function is often defined as $m(\mathbf{x}) = 0$, which is not 
+unreasonable if the data is standardised to have zero mean. \emph{Gaussian Processes} are 
+represented in machine learning literature using the following notation:
 %
 \begin{equation}\label{eq:gpformulation}
     f(\mathbf{x}) \sim \mathcal{GP}(m(\mathbf{x}), K(\mathbf{x}, \mathbf{x}'))
@@ -129,13 +244,20 @@ Here $\mathbb{E}$ denotes the expectation (average). The elements of $\mathbf{\m
 
 \subsection{Inference and Predictions} \label{sec:inference}
 
-Our aim is to infer the function $f(\mathbf{x})$ from the noisy training data and generate predictions $f(\mathbf{x}^{*}_i)$ for a set of test points $ {\mathbf{x}^{*}_i : \forall i \in 1, \cdots, M} $. We define $\mathbf{X}^*$ as the test data matrix whose rows are formed by $\mathbf{x}^{*}_i$ as shown in \cref{eq:testfeat}. 
+Our aim is to infer the function $f(\mathbf{x})$ from the noisy training data and generate 
+predictions $f(\mathbf{x}^{*}_i)$ for a set of test points 
+${\mathbf{x}^{*}_i : \forall i \in 1, \cdots, M}$. We define $\mathbf{X}^*$ as the test data 
+matrix whose rows are formed by $\mathbf{x}^{*}_i$ as shown in \cref{eq:testfeat}. 
 %
 \begin{equation}
     \mathbf{X}_* = \left( \begin{array}{c} (\mathbf{x}^{*}_1)^T \\ (\mathbf{x}^{*}_2)^T \\ \vdots \\ (\mathbf{x}^{*}_M)^T \end{array} \right)_{M \times d} \label{eq:testfeat} 
 \end{equation}
 %
-Using the multivariate Gaussian distribution in \cref{eq:sto} we can construct the joint distribution of $f(\mathbf{x})$ over the training and test points. The vector of training and test outputs $\left( \begin{array}{c} \mathbf{y} \\ \mathbf{f_*} \end{array} \right)$ is of dimension $(N+M) \times 1$ and is constructed by appending the test set predictions $\mathbf{f}_*$ to the observed noisy measurements $\mathbf{y}$.
+Using the multivariate Gaussian distribution in \cref{eq:sto} we can construct the joint 
+distribution of $f(\mathbf{x})$ over the training and test points. The vector of training and test 
+outputs $\left( \begin{array}{c} \mathbf{y} \\ \mathbf{f_*} \end{array} \right)$ is of dimension 
+$(N+M) \times 1$ and is constructed by appending the test set predictions $\mathbf{f}_*$ to the 
+observed noisy measurements $\mathbf{y}$.
 %
 \begin{align}
     \mathbf{f}_* = & \left( \begin{array}{c} f(\mathbf{x^{*}_1}) \\ f(\mathbf{x^{*}_2}) \\ \vdots \\ f(\mathbf{x^{*}_M}) \end{array} \right)_{M \times 1} \\
@@ -144,16 +266,27 @@ Using the multivariate Gaussian distribution in \cref{eq:sto} we can construct t
     \mathcal{N}\left(\mathbf{0}, \left[ \begin{array}{cc} \mathbf{K} + \sigma^{2} \mathbf{I} & \mathbf{K}_{*} \\ \mathbf{K}_{*}^T & \mathbf{K}_{**} \end{array} \right ] \right) \label{eq:dist}
 \end{align}
 %
-Since we have noisy measurements of $f$ over the training data, we add the noise variance $\sigma^2$ to the variance of $f$ as shown in \cref{eq:dist}. The block matrix components of the $(N+M) \times (N+M)$ covariance matrix have the following structure.
+Since we have noisy measurements of $f$ over the training data, we add the noise variance 
+$\sigma^2$ to the variance of $f$ as shown in \cref{eq:dist}. The block matrix components of the 
+$(N+M) \times (N+M)$ covariance matrix have the following structure.
 
 \begin{enumerate}
       \item $\mathbf{I}$: The $N \times N$ identity matrix.
-      \item $\mathbf{K} = [K(\mathbf{x}_i, \mathbf{x}_j)], \ i,j \in 1,\cdots,N$ : Kernel matrix constructed from all couples obtained from the training data.
-      \item $\mathbf{K}_{*} = [K(\mathbf{x}_i, \mathbf{x}^{*}_j)], \ i \in 1,\cdots,N ; j \in 1,\cdots,M$ : Cross kernel matrix constructed from all couples between training and test data points.
-      \item $\mathbf{K}_{**} = [K(\mathbf{x}^{*}_i, \mathbf{x}^{*}_j)], \ i,j \in 1,\cdots,M$: Kernel matrix constructed from all couples obtained from the test data.
+      \item $\mathbf{K} = [K(\mathbf{x}_i, \mathbf{x}_j)], \ i,j \in 1,\cdots,N$: 
+            Kernel matrix constructed from all couples obtained from the training data.
+      \item $\mathbf{K}_{*} = [K(\mathbf{x}_i, \mathbf{x}^{*}_j)], \ i \in 1,\cdots,N ; j \in 1,\cdots,M$: 
+            Cross kernel matrix constructed from all couples between training and test data points.
+      \item $\mathbf{K}_{**} = [K(\mathbf{x}^{*}_i, \mathbf{x}^{*}_j)], \ i,j \in 1,\cdots,M$: 
+            Kernel matrix constructed from all couples obtained from the test data.
 \end{enumerate}
 
-With the multivariate normal distribution defined in \cref{eq:dist}, probabilistic predictions $f_*$ can be generated by constructing the conditional distribution $\mathbf{f_*}|\mathbf{X},\mathbf{y},\mathbf{X_*}$. Since the original distribution of $\left( \begin{array}{c} \mathbf{y} \\ \mathbf{f_*} \end{array} \right) | \ \ \mathbf{X}, \mathbf{X}_*$ is a multivariate Gaussian, conditioning on a subset of elements $\mathbf{y}$ yields another Gaussian distribution whose mean and covariance can be calculated exactly, as in \cref{eq:posterior} \citep{Rasmussen:2005:GPM:1162254}.
+With the multivariate normal distribution defined in \cref{eq:dist}, probabilistic predictions 
+$f_*$ can be generated by constructing the conditional distribution 
+$\mathbf{f_*}|\mathbf{X},\mathbf{y},\mathbf{X_*}$. Since the original distribution of 
+$\left( \begin{array}{c} \mathbf{y} \\ \mathbf{f_*} \end{array} \right) | \ \ \mathbf{X}, \mathbf{X}_*$ 
+is a multivariate Gaussian, conditioning on a subset of elements $\mathbf{y}$ yields another 
+Gaussian distribution whose mean and covariance can be calculated exactly, as in 
+\cref{eq:posterior} \citep{Rasmussen:2005:GPM:1162254}.
 %
 \begin{equation}
     \mathbf{f_*}|\mathbf{X},\mathbf{y},\mathbf{X_*} \sim \mathcal{N}(\mathbf{\bar{f}_*}, \Sigma_*)  \label{eq:posterior},
@@ -164,18 +297,28 @@ where
     \Sigma_* = & \mathbf{K}_{**} - \mathbf{K}^T_{*} \left(\mathbf{K} + \sigma^{2} \mathbf{I}\right)^{-1} \mathbf{K}_{*} \label{eq:posteriorcov}
 \end{align}
 
-The practical implementation of \emph{Gaussian Process} models requires the inversion of the training data kernel matrix $[\mathbf{K} + \sigma^{2} \mathbf{I}]^{-1}$ to calculate the parameters of the predictive distribution $\mathbf{f_*}|\mathbf{X},\mathbf{y},\mathbf{X_*}$. The computational complexity of this inference is dominated by the linear problem in \cref{eq:posteriormean}, which can be solved via Cholesky decomposition, with a time complexity of $O(N^3)$, where $N$ is the number of data points.
+The practical implementation of \emph{Gaussian Process} models requires the inversion of the 
+training data kernel matrix $[\mathbf{K} + \sigma^{2} \mathbf{I}]^{-1}$ to calculate the parameters 
+of the predictive distribution $\mathbf{f_*}|\mathbf{X},\mathbf{y},\mathbf{X_*}$. The computational 
+complexity of this inference is dominated by the linear problem in \cref{eq:posteriormean}, which 
+can be solved via Cholesky decomposition, with a time complexity of $O(N^3)$, where $N$ is the 
+number of data points.
 
-The distribution of $\mathbf{f_*}| \mathbf{X},\mathbf{y},\mathbf{X_*}$ is known in Bayesian analysis as the \emph{Posterior Predictive Distribution}. This illustrates a key difference between 
-\emph{Gaussian Processes} and other regression models such as \emph{Neural Networks}, \emph{Linear Models} and \emph{Support Vector Machines}: a \emph{Gaussian Process} model does not generate 
-point predictions for new data but outputs a predictive distribution for the quantity sought, thus allowing to construct error bars on the predictions. This property of Bayesian models such as 
-\emph{Gaussian Processes} makes them very appealing for Space Weather forecasting applications. 
+The distribution of $\mathbf{f_*}| \mathbf{X},\mathbf{y},\mathbf{X_*}$ is known in Bayesian 
+analysis as the \emph{Posterior Predictive Distribution}. This illustrates a key difference between 
+\emph{Gaussian Processes} and other regression models such as \emph{Neural Networks}, 
+\emph{Linear Models} and \emph{Support Vector Machines}: a \emph{Gaussian Process} model does not 
+generate point predictions for new data but outputs a predictive distribution for the quantity 
+sought, thus allowing to construct error bars on the predictions. This property of Bayesian models 
+such as \emph{Gaussian Processes} makes them very appealing for Space Weather forecasting 
+applications. 
 
 The central design issue in applying \emph{Gaussian Process} models is the choice of the function 
-$K(\mathbf{x}, \mathbf{x}')$. The same constraints that apply to $\mathbf{\Lambda}$ also apply to the 
-function $K$. In machine learning, these symmetric positive definite functions of two variables are known as 
-covariance functions or \emph{kernels}. Kernel based methods are applied extensively in data analysis 
-i.e. regression, clustering, classification, density estimation \citep{Scholkopf:2001:LKS:559923,hofmann2008}.
+$K(\mathbf{x}, \mathbf{x}')$. The same constraints that apply to $\mathbf{\Lambda}$ also apply to 
+the function $K$. In machine learning, these symmetric positive definite functions of two variables 
+are known as covariance functions or \emph{kernels}. Kernel based methods are applied extensively 
+in data analysis \citep{Scholkopf:2001:LKS:559923,hofmann2008} i.e. regression, clustering, 
+classification, density estimation \citep{Girolami:2002:OSD:638929.638938}.
 
 \begin{table}[ht]
     \caption{Popular Kernel functions used in GPR models}
@@ -200,13 +343,31 @@ i.e. regression, clustering, classification, density estimation \citep{Scholkopf
     
 \subsection{Kernel Functions}
 
-For the success of a \emph{Gaussian Process} model an appropriate choice of kernel function is paramount. The symmetry and positive semi-definiteness of \emph{Gaussian Process} kernels implies that they represent inner-products between some basis function representation of the data. The interested reader is suggested to refer to \citet{Berlinet2004,Scholkopf:2001:LKS:559923,hofmann2008} for a thorough treatment of kernel functions and the rich theory behind them. Some common kernel functions used in machine learning are listed in Table \ref{table:kernel}. 
+For the success of a \emph{Gaussian Process} model an appropriate choice of kernel function is 
+paramount. The symmetry and positive semi-definiteness of \emph{Gaussian Process} kernels implies 
+that they represent inner-products between some basis function representation of the data. The 
+interested reader is suggested to refer to 
+\citet{Berlinet2004,Scholkopf:2001:LKS:559923,hofmann2008} for a thorough treatment of kernel 
+functions and the rich theory behind them. Some common kernel functions used in machine learning 
+are listed in Table \ref{table:kernel}. 
 
-The quantities $l$ in the RBF, and $b$ and $d$ in the polynomial kernel are known as \emph{hyper-parameters}. Hyper-parameters give flexibility to a particular kernel structure, for example $d = 1, 2, 3, \cdots$ in the polynomial kernel represents linear, quadratic, cubic and higher order polynomials respectively. The process of assigning values to the \emph{hyper-parameters} is crucial in the model building process and is known as \emph{model selection}. 
+The quantities $l$ in the RBF, and $b$ and $d$ in the polynomial kernel are known as 
+\emph{hyper-parameters}. Hyper-parameters give flexibility to a particular kernel structure, for 
+example $d = 1, 2, 3, \cdots$ in the polynomial kernel represents linear, quadratic, cubic and 
+higher order polynomials respectively. The process of assigning values to the 
+\emph{hyper-parameters} is crucial in the model building process and is known as 
+\emph{model selection}. 
 
 \subsection{Model Selection}\label{sec:gpModelSelection}
 
-Given a GP model with a kernel function $K_\theta$, the problem of model selection consists of finding appropriate values for the kernel hyper-parameters $\theta = \left(\theta_1, \theta_2, \cdots, \theta_i\right)$. In order to assign a value to $\theta$, we must define an objective function which represents our confidence that the GP model built from a particular value of $\theta$ is the best performing model. Since GP models encode assumptions about the probability distribution of the output data $\mathbf{y}$ given inputs $\mathbf{X}$, it is natural to use the negative log-likelihood of the training data as a model selection criterion. 
+Given a GP model with a kernel function $K_\theta$, the problem of model selection consists of 
+finding appropriate values for the kernel hyper-parameters 
+$\theta = \left(\theta_1, \theta_2, \cdots, \theta_i\right)$. In order to assign a value to 
+$\theta$, we must define an objective function which represents our confidence that the GP model 
+built from a particular value of $\theta$ is the best performing model. Since GP models encode 
+assumptions about the probability distribution of the output data $\mathbf{y}$ given inputs 
+$\mathbf{X}$, it is natural to use the negative log-likelihood of the training data as a model 
+selection criterion. 
 %
 \begin{align*}
   Q(\theta) & = - \text{log}(p(\mathbf{y}|\mathbf{X}, K_\theta)) \\
@@ -220,15 +381,31 @@ The model selection problem can now be expressed as the minimization problem sho
 \theta^* = arg\min_{\theta} \ Q(\theta)
 \end{align*}
 
-The objective function $Q(\theta)$ in the general case can have multiple local minima, and evaluating the value of $Q(.)$ at any given $\theta$ requires inversion of the matrix $\mathbf{K}_\theta + \sigma^{2} \mathbf{I}$ which has a time complexity $O(N^3)$ as noted above. In the interest of saving computational cost, one cannot use exhaustive search through the domain of the hyper-parameters to inform our choice for $\theta$. Some of the techniques used for model selection in the context of GPR include.
+The objective function $Q(\theta)$ in the general case can have multiple local minima, and 
+evaluating the value of $Q(.)$ at any given $\theta$ requires inversion of the matrix 
+$\mathbf{K}_\theta + \sigma^{2} \mathbf{I}$ which has a time complexity $O(N^3)$ as noted above. 
+In the interest of saving computational cost, one cannot use exhaustive search through the domain 
+of the hyper-parameters to inform our choice for $\theta$. Some of the techniques used for model 
+selection in the context of GPR include.
 
 \begin{enumerate}
-\item Grid Search: Construct a grid of values for $\theta$ as the cartesian product of one dimensional grids for each $\theta_i$, evaluate $Q(.)$ at each such grid point and choose the configuration which yields minimum value of $Q(.)$.
+\item Grid Search: Construct a grid of values for $\theta$ as the cartesian product of one 
+      dimensional grids for each $\theta_i$, evaluate $Q(.)$ at each such grid point and choose the 
+      configuration which yields minimum value of $Q(.)$.
 
-\item Coupled Simulated Annealing: Introduced in \citet{Xavier-De-Souza2010}, it follows the same procedure as \emph{grid search}, but after evaluation of the objective $Q(.)$ on the grid, each grid point is iteratively mutated in a random walk fashion. This mutation is accepted or rejected according to the new value of $Q(.)$ as well as its value on the other grid points. This procedure is iterated until some stop criterion is reached.
+\item Coupled Simulated Annealing: Introduced in \citet{Xavier-De-Souza2010}, it follows the same 
+      procedure as \emph{grid search}, but after evaluation of the objective $Q(.)$ on the grid, 
+      each grid point is iteratively mutated in a random walk fashion. This mutation is accepted or 
+      rejected according to the new value of $Q(.)$ as well as its value on the other grid points. 
+      This procedure is iterated until some stop criterion is reached.
 
-\item Maximum Likelihood: This technique as outlined in \citet{Rasmussen:2005:GPM:1162254} is a form of \emph{gradient descent}. It involves starting with an initial guess for $\theta$ and iteratively improving it by calculating the gradient of $Q(.)$ with respect to $\theta$. Although this method seems intuitive, it introduces an extra computational cost of calculating the gradient of $Q(\theta)$ with respect to each $\theta_i$ in every iteration and applying this method can sometimes lead to overfitting of the GPR model to the training data \citet{Rasmussen:2005:GPM:1162254}.
-
+\item Maximum Likelihood: This technique as outlined in \citet{Rasmussen:2005:GPM:1162254} is a 
+      form of \emph{gradient descent}. It involves starting with an initial guess for $\theta$ and 
+      iteratively improving it by calculating the gradient of $Q(.)$ with respect to $\theta$. 
+      Although this method seems intuitive, it introduces an extra computational cost of 
+      calculating the gradient of $Q(\theta)$ with respect to each $\theta_i$ in every iteration 
+      and applying this method can sometimes lead to overfitting of the GPR model to the training 
+      data \citet{Rasmussen:2005:GPM:1162254}.
 \end{enumerate}
 
 \section{One Step Ahead Prediction} \label{sec:osa}
