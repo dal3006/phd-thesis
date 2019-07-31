@@ -2,17 +2,20 @@
 
 {\small
 	We present a method that combines a \emph{long short-term memory} (LSTM) network with a 
-	Gaussian process (GP) model to provide up to 6-hr-ahead probabilistic forecasts of the Dst geomagnetic index. 
-	The proposed approach brings together the sequence modeling capabilities of a recurrent neural network with 
-	the error bars and confidence bounds provided by a GP. Our model is trained using the hourly OMNI and 
-	Global Positioning System (GPS) databases, both of which are publicly available. We first develop a LSTM network 
-	to get a single-point prediction of Dst. This model yields great accuracy in forecasting the Dst index from 
-	one to six hours ahead, with a correlation coefficient always higher than $0.873$ and a root mean square error 
-	lower than $\SI{9.86}{\nano\tesla}$. However, even if global metrics show excellent performance, it remains 
-	poor in predicting superstorms ($\mathrm{Dst} < \SI{-250}{\nano\tesla}$) six hours in advance. To improve it 
-	and to obtain probabilistic forecasts, we combine the LSTM model obtained with a GP and evaluate the hybrid 
-	predictor using the receiver operating characteristic curve and the reliability diagram. We conclude that 
-	this hybrid methodology provides improvements in the forecast of geomagnetic storms.
+	Gaussian process (GP) model to provide up to 6-hr-ahead probabilistic forecasts of the Dst 
+	geomagnetic index. The proposed approach brings together the sequence modeling capabilities of 
+	a recurrent neural network with the error bars and confidence bounds provided by a GP. Our 
+	model is trained using the hourly OMNI and Global Positioning System (GPS) databases, both of 
+	which are publicly available. We first develop a LSTM network to get a single-point prediction 
+	of Dst. This model yields great accuracy in forecasting the Dst index from one to six hours 
+	ahead, with a correlation coefficient always higher than $0.873$ and a root mean square error 
+	lower than $\SI{9.86}{\nano\tesla}$. However, even if global metrics show excellent 
+	performance, it remains poor in predicting superstorms 
+	($\mathrm{Dst} < \SI{-250}{\nano\tesla}$) six hours in advance. To improve it and to obtain 
+	probabilistic forecasts, we combine the LSTM model obtained with a GP and evaluate the hybrid 
+	predictor using the receiver operating characteristic curve and the reliability diagram. We 
+	conclude that this hybrid methodology provides improvements in the forecast of geomagnetic 
+	storms.
 
 }
 	
@@ -33,18 +36,20 @@
 
 \section{Introduction}
 
-It is widely accepted that solar wind magnetosphere coupling plays a key role in determining the Earth’s 
-geomagnetic state. Under appropriate conditions, this coupling can lead to injection of energetic particles 
-into the Earth’s auroral and equatorial plasma currents, leading to geomagnetic storms. The solar wind conditions 
-that are effective for creating geomagnetic storms are sustained periods of high-speed solar wind and a southward 
-directed solar wind magnetic field \citep{JGR:JGR10260}. When \citet{1981AkasofuE} studied the coupling function 
-between the solar wind and geomagnetic disturbances, they observed that during these extreme events, the key process 
-is magnetic reconnection \citep{magneticreconnection}. Magnetic reconnection produces an enhancement of particle flux 
-which creates a depression of the horizontal component of the Earth’s magnetic field and an intensification of the 
-westward ring current circulating the Earth \citep{JGRA:JGRA11775}. When there is a geomagnetic storm, the energy 
-content of the ring current increases. This increase is inversely proportional to the strength of the surface magnetic 
-field at low latitudes. To assess the severity of geomagnetic storms, the Disturbance Storm Time index (Dst index) is 
-often used. 
+It is widely accepted that solar wind magnetosphere coupling plays a key role in determining the 
+Earth’s geomagnetic state. Under appropriate conditions, this coupling can lead to injection of 
+energetic particles into the Earth’s auroral and equatorial plasma currents, leading to geomagnetic 
+storms. The solar wind conditions that are effective for creating geomagnetic storms are sustained 
+periods of high-speed solar wind and a southward directed solar wind magnetic field 
+\citep{JGR:JGR10260}. When \citet{1981AkasofuE} studied the coupling function between the solar 
+wind and geomagnetic disturbances, they observed that during these extreme events, the key process 
+is magnetic reconnection \citep{magneticreconnection}. Magnetic reconnection produces an 
+enhancement of particle flux which creates a depression of the horizontal component of the Earth’s 
+magnetic field and an intensification of the westward ring current circulating the Earth 
+\citep{JGRA:JGRA11775}. When there is a geomagnetic storm, the energy content of the ring current 
+increases. This increase is inversely proportional to the strength of the surface magnetic field at 
+low latitudes. To assess the severity of geomagnetic storms, the Disturbance Storm Time index 
+($Dst$) is often used. 
 
 The Dst index \citep{Sugiura1964} is based on measurements from four low latitude stations and 
 represents the axis-symmetric magnetic signature of magnetosphere currents (such as the ring current, 
@@ -107,7 +112,8 @@ It is widely known that when there is a geomagnetic storm, the quality of the GP
 \citep{astafyeva2014geomagnetic}. The magnetic field measured onboard GPS satellites might be key information 
 when an important storm occurs \citep{morley2017energetic}. Recently, GPS data has been publicly released under 
 the terms of the \emph{executive order for coordinating efforts to prepare the nation for space weather events} 
-(\url{https://obamawhitehouse.archives.gov/the-press-office/2016/10/13/executive-order-coordinating-efforts-prepare-nation-space-weather-events}). 
+\citep{obamasw}.
+%\footnote{\url{https://obamawhitehouse.archives.gov/the-press-office/2016/10/13/executive-order-coordinating-efforts-prepare-nation-space-weather-events}}. 
 
 In this work, we propose a technique which combines the predictive capabilities of an ANN with the advantage of the 
 probabilistic forecast provided by a GP. We use the so called \emph{long short-term memory network} (LSTM) 
@@ -136,13 +142,13 @@ by the GPNN model.
 \end{figure}
 
 
-Solar wind parameters and the geomagnetic Dst index are taken from the OMNI database 
-(\url{https://omniweb.gsfc.nasa.gov/ow.html}) maintained by the National Space Science Data Center (NSSDC) 
+Solar wind parameters and the geomagnetic Dst index are taken from the OMNI data set 
+\footnote{\url{https://omniweb.gsfc.nasa.gov/ow.html}} maintained by the National Space Science Data Center (NSSDC) 
 of National Aeronautics and Space Administration (NASA).
 
 We also consider GPS data which are provided by the National Oceanic and Atmospheric Administration (NOAA). 
 This dataset was provided by the team working on the Combined X-ray dosimeter or CXD at the 
-Los Alamos National Laboratory (\url{https://www.ngdc.noaa.gov/stp/space-weather/satellite-data/satellite-system/gps/}). 
+Los Alamos National Laboratory \footnote{\url{https://www.ngdc.noaa.gov/stp/space-weather/satellite-data/satellite-system/gps/}}. 
 In this study, we decided to use data recorded by the GPS satellite ns41, which has the widest temporal coverage 
 \citep{morley2017energetic}. 
 
@@ -156,7 +162,7 @@ This includes 49 storm events, listed in Table \ref{table:teststormsgpnn}. Some 
 Studies done in the past to predict the geomagnetic index Dst have shown that various solar wind parameters 
 are of interest when improving performance of Dst models. In the present study, we focused on the use 
 of the solar wind density $n$ , velocity  $V_{\text{sw}}$, the interplanetary magnetic field 
-strength $\|\mathbf{B}|$ and its north-south component $B_{z}$. Concerning parameters provided by 
+strength $\rvert\rvert\mathbf{B}\rvert\rvert$ and its north-south component $B_{z}$. Concerning parameters provided by 
 the GPS satellite ns41, we use its magnetic field measurement, $B_{\text{gps}}$.
 
 \section{Methodology}\label{sec:methodgpnn}
@@ -293,7 +299,7 @@ the best performing LSTM network was chosen as the mean function for the Gaussia
 section \S~\ref{sec:gpcomponent}.
 
 The LSTM component of the GPNN model was implemented using the Lasagne library in Python 
-(\url{http://lasagne.readthedocs.io/en/latest/index.html}). 
+\citep{lasagne,theanoshort}. 
 
 \subsection{LSTM Model Training}
 

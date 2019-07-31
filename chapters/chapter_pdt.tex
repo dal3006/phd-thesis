@@ -112,8 +112,8 @@ boundary conditions for MHD based simulations of the inner heliosphere
 \citep{pomoell2018euhforia}. 
 
 The most prominent operational solar wind forecasting technique is the hybrid WSA-ENLIL model 
-(\url{https://www.swpc.noaa.gov/products/wsa-enlil-solar-wind-prediction}) which consists of the 
-Wang-Sheeley-Arge (WSA) coronal model coupled with the global heliospheric ENLIL model. 
+\footnote{\url{https://www.swpc.noaa.gov/products/wsa-enlil-solar-wind-prediction}} which consists 
+of the Wang-Sheeley-Arge (WSA) coronal model coupled with the global heliospheric ENLIL model. 
 
 \citet{Owens2017} used the solutions of MAS model simulated until $30R_{\odot}$ to construct an 
 ensemble of near-Sun solar wind conditions and forward propagated these conditions to 
@@ -378,7 +378,7 @@ Hessian of the log-likelihood and its eigenvalues. Under the simplifying assumpt
 \]
 the model involves $2\vert T\vert+2$ parameters: $\alpha$, $r = \sigma^2/\sigma_0^2$, 
 $\hat {\bf y}$ and $\hp$. After the computation of the Hessian (supplementary material, 
-Appendix \ref{app:opred}) the system involves three key statistical quantities, two global ones:
+Appendix \ref{app:opred}) the system involves three key statistical quantities, two global:
 %
 \begin{align}
   C_1[\p] &= \frac{1}{\sigma_0^2}{
@@ -394,9 +394,10 @@ Appendix \ref{app:opred}) the system involves three key statistical quantities, 
     \Bigr],\label{def:C2}
 \end{align}
 %
-\[
-  \text{and a local one:}\qquad \vert {\bf u}(x)\vert^2 = \sum_{i\in T} C_{2+i}[x,\p]^2,
-\]
+and a one local:
+\begin{equation}
+  \vert {\bf u}(x)\vert^2 = \sum_{i\in T} C_{2+i}[x,\p]^2,
+\end{equation}
 %
 where ${\bf u}(x)$ is a $\vert T\vert$-vector of components 
 %
@@ -416,7 +417,7 @@ $\p=\p_{0}$ uniform, $C_1[\p_{0}]=1$ and $C_2[\p_{0}]$ represents the default va
 prediction errors. $C_{2+i}[x,\p]$ informally measures the quality of predictor $\hat y_i$ 
 relatively to the other ones. More precisely, a negative value of  $C_{2+i}[x,\p]$ indicates 
 that $\hat y_i$ is doing better than average in the neighborhood of $x$.  
-
+%
 At a saddle point the parameters are given by:
 %
 \[
@@ -548,7 +549,7 @@ The goal of the experiments is twofold. Firstly, the \XX\ predictive performance
 considering 
 %
 \begin{enumerate*} 
-  \item the MSE of the predicted effect series $\hat y_m$, computed from Eq. (\ref{prop:opred})  
+  \item the RMSE of the predicted effect series $\hat y_m$, computed from Eq. (\ref{prop:opred})  
   \item the accuracy of the time lag prediction 
 \end{enumerate*}. 
 %
@@ -558,14 +559,17 @@ problems, detailed below: although time lag relationships do exist in real world
 relationships explicitly annotated. The former performance indicator is comparatively assessed 
 using the naive baseline, the regression model computed by assuming a fixed time lag set to 
 $\frac{\tau_{min}+\tau_{max}}{2}$. The Pearson correlation of the true $y_m$ and predicted 
-$\hat y_m$ series is also considered as overall performance indicator of the prediction.\\
+$\hat y_m$ series is also considered as overall performance indicator of the prediction.
+
 The second goal of experiments is to determine how informative are the key statistical quantities 
 $\sigma_0$ and $C_1$ (section \ref{sec:stability}), and whether they can effectively be used as 
-measures of confidence about the prediction results. 
+measures of confidence about the prediction results. Table \ref{tab:exp_data_info} summarises the 
+dimensions of the synthetic and real problems used as proofs of concept for the \XX\ validation. 
 
-\paragraph{In synthetic problems,} the driving force $x_m$ of the artificial system is generated in 
-$\mathbb{R}^{10}$ using \emph{Stochastic Langevin Dynamics} (with $\eta = 0.02, s^2 = 0.7$); the 
-time series $y_m$ is generated using the norm of $x_m$:
+\paragraph{Synthetic Problems} 
+The driving force $x_m$, of the artificial system is generated in $\mathbb{R}^{10}$ using 
+\emph{Stochastic Langevin Dynamics} (with $\eta = 0.02, s^2 = 0.7$); the time series $y_m$ is 
+generated using the norm of $x_m$:
 % 
 \begin{align}
  x_{m+1} &= (1 - \eta) x_m + \mathcal{N}(0, s^2) \label{eq:data}\\
@@ -591,15 +595,14 @@ $\tau(x_m) = \exp\left(v_m\right)/\left(1 + \exp(v_m/20)\right), \ k = 10, c = 4
 
 \paragraph{Solar Wind Speed Prediction}\label{sec:solarwind}
 As said in section \ref{sec:motivationsolarwind}, the task of predicting solar wind speed from 
-heliospheric data not only has huge economic impacts; it is also challenging due to the distance 
+heliospheric data not only has scientific significance; it is also challenging due to the distance 
 between the Sun and the Earth and the non-stationary propagation time of the solar plasma through 
 the interplanetary medium. 
 
 The inputs $x_m$ are compiled from two sources, synoptic Carrington maps of the photospheric 
 magnetic field taken from the \emph{Global Oscillation Network Group} (GONG) and solar activity 
-proxies taken from the OMNI data base available at the \emph{Space Physics Data Facility} 
-(\url{https://omniweb.gsfc.nasa.gov}). Specifically, $x_m$ is a vector consisting of the 
-components outlined in \cref{table:dtlrInputs}.
+proxies taken from the OMNI data set \footnote{\url{https://omniweb.gsfc.nasa.gov}}. Specifically, 
+$x_m$ is a vector consisting of the components outlined in \cref{table:dtlrInputs}.
 
 For each input pattern, time lagged solar wind data is extracted corresponding to minimum and 
 maximum time delays of two and five days respectively. For computational convenience, each three 
@@ -638,10 +641,12 @@ slots.
 \end{table}
 %
 \XX\ is validated using a $9$ fold cross-validation, where the test data consists of one 
-(continuous) Carrington rotation (see \cref{table:dtlrsplits}). The performance is assessed 
-comparatively to the best state of the art method \citep{Poduval_2014,neuralnetsw}, using the FTE 
-data and assuming a constant propagation time when combining FTE data with solar wind speed 
-measurements close to the Earth. 
+(continuous) Carrington rotation (see \cref{table:dtlrsplits}). The performance on Carrington 
+rotation $2077$ (first fold in \cref{table:dtlrsplits}) is compared with the state of the art 
+\citep{Riley2011} in \cref{tab:results_riley}, while the overall cross-validation performance 
+is compared with a fixed time lag baseline which uses the same inputs as the DTLR model 
+(\cref{table:dtlrInputs}) and has the same architecture until the penultimate layer 
+(\cref{fig:archi}). 
 %
 \begin{table}[ht]
   \centering
@@ -663,8 +668,6 @@ measurements close to the Earth.
   \end{tabular}
   \end{table}
 %
-Table \ref{tab:exp_data_info} summarises the dimensions of the synthetic and real problems used as 
-proofs of concept for the \XX\ validation.
 
 \section{Empirical validation}\label{sec:proofconcept}
 
@@ -833,7 +836,7 @@ to the auto-correlation of the series, it allows to compare different predictors
   \textbf{Pb II} & $10.15$ / $27.40$ / $0.4$ & $13.70$ / $35.11$ / $0.67$ & $0.95$ / $0.73$ / $0.70$ & $26.83$ & $0.16$\\
   \textbf{Pb III} & $3.17$ / $11.01$ / $0.17$ & $4.63$ / $14.99$ / $0.42$ & $0.98$ / $0.79$ / $0.84$ & $11.84$ & $0.09$\\
   \textbf{Pb IV} & $3.88$ / $12.28$ / $0.34$ & $5.33$ / $15.89$ / $0.64$ & $0.98$ /$0.79$/ $0.81$ & $12.18$ & $0.13$\\
-  \textbf{Solar Wind} & $77.61$ / $81.31$ / -- & $100.3$ / $94.13$ / -- & $0.30$ / $0.37$ / -- & $126.9$ & $0.79$\\
+  \textbf{Solar Wind} & $56.35$ / $N.A$ / -- & $74.20$ / $N.A$ / -- & $0.6$ / $N.A$ / -- & $N.A$ & $N.A$\\
   \hline
   \end{tabular}
 \end{table}
@@ -872,6 +875,29 @@ results thus consists of gathering data from at least one entire solar cycle.
 The \XX\ results, as displayed on Fig. \ref{fig:sw_preds}, nevertheless shows an encouraging 
 correlation between the predicted and the observed solar wind
 
+\begin{table}
+  \caption{
+    Performance Comparison on CR $2077$: \XX  \ , Fixed Lag Base Line vs \citet{Riley2011}
+  }
+  \label{tab:results_riley}
+  \centering
+  \begin{tabular}{ l l l }
+  \hline
+  Model &  M.A.E & R.M.S.E \\
+  \hline
+  \XX & $54.41$ & $66.22$ \\
+  Fixed Lag Baseline & $67.33$ & $80.39$ \\
+  WS & $74.09$ & $85.27$ \\
+  DCHB & $83.83$ & $103.43$ \\
+  WSA & $68.54$ & $82.62$ \\
+  Ensemble Median (WS)   & $71.52$ & $83.36$ \\
+  Ensemble Median (DCHB) & $78.27$ & $100.04$ \\
+  Ensemble Median (WSA)  & $62.24$ & $74.86$ \\
+  Persistence (4 days)   & $130.48$ & $161.99$ \\
+  Persistence (27 days)  & $66.54$ & $78.86$ \\
+  \hline
+  \end{tabular}
+\end{table}
 
 \section{Discussion and perspectives}
 The contribution of the paper is twofold. Firstly, we define a new ML setting, motivated by an 
