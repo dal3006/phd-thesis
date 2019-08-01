@@ -406,7 +406,7 @@ to the running sample statistics of the Markov Chain procedure.
 
 For the purposes of the experiment, the parameters of $\kappa$ and $\lambda$ fixed while MCMC inference 
 is performed on the parameters of $Q$. The prior distributions chosen for the parameters 
-are shown in table \ref{tab:prior}. The posterior distribution over the parameters of $\lambda$ is 
+are shown in \cref{tab:prior}. The posterior distribution over the parameters of $\lambda$ is 
 sampled via adaptive Metropolis, the first 5000 samples are kept aside as the \emph{burn in} period
 of the Markov Chain.
 
@@ -430,7 +430,7 @@ of the Markov Chain.
 \subsection*{Data Generation}
 
 The technique presented is applied on synthetic data generated using a radial diffusion solver, 
-the ground truth values of the radial diffusion parameters are listed in table \ref{tab:ground-truth}.
+the ground truth values of the radial diffusion parameters are listed in \cref{tab:ground-truth}.
 
 A slightly modified parameterization is adopted for the particle injection $Q$ as shown in \cref{eq:q} below. The particle injection has a strictly time varying component due to presence of a constant $\gamma$.
 %
@@ -463,8 +463,7 @@ the final observation set $\mathcal{D}$ which is fed, as training data to the su
 
 \subsection*{Results}
 
-The posterior inferred for parameters of the particle injection rate $Q$ \ref{fig:alpha}, 
-\ref{fig:beta}, \ref{fig:gamma} and \ref{fig:b} respectively and the samples from each prior distribution are shown in \ref{fig:alphaprior}, \ref{fig:betaprior}, \ref{fig:gammaprior} and \ref{fig:bprior} respectively.
+The posterior inferred for parameters of the particle injection rate $Q$ \cref{fig:alpha,fig:beta,fig:gamma,fig:b} respectively and the samples from each prior distribution are shown in \cref{fig:alphaprior,fig:betaprior,fig:gammaprior,fig:bprior}.
 
 We see that the marginal posterior distributions of each parameter have high probability 
 density near the ground truth, and that they are heavy tailed because there are often large 

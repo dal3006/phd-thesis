@@ -152,12 +152,13 @@ Los Alamos National Laboratory \footnote{\url{https://www.ngdc.noaa.gov/stp/spac
 In this study, we decided to use data recorded by the GPS satellite ns41, which has the widest temporal coverage 
 \citep{morley2017energetic}. 
 
-Figure \ref{fig:datacoverage} shows the temporal coverage of the database used in this study, compared to 
+\Cref{fig:datacoverage} shows the temporal coverage of the database used in this study, compared to 
 previous studies. The temporal coverage of our study is represented by the green line. As GPS ns41 data 
 starts at 00:00 14 January 2001, we consider a set of 134,398 hourly data points consisting of 
 solar wind parameters, geomagnetic Dst index and GPS data between this starting date and 23:00 31 December 2016. 
-This includes 49 storm events, listed in Table \ref{table:teststormsgpnn}. Some of these events in table 
-\ref{table:teststormsgpnn} also overlap with events included in \citet{Ji2012} and \citet{ChandorkarDst}. 
+This includes 49 storm events, listed in \cref{table:teststormsgpnn}. Some of these events in 
+\cref{table:teststormsgpnn} also overlap with events included in \citet{Ji2012} and 
+\citet{ChandorkarDst}. 
 
 Studies done in the past to predict the geomagnetic index Dst have shown that various solar wind parameters 
 are of interest when improving performance of Dst models. In the present study, we focused on the use 
@@ -183,8 +184,8 @@ LSTM networks are designed to overcome the vanishing gradient problem by retaini
 temporal dependencies in time series data. LSTMs have a chain-like structure like RNNs, but the repeating module 
 known as the LSTM cell has specific characteristics.
 
-Figure \ref{fig:lstmcell} shows the computational graph of the LSTM cell. The two elements 
-fundamental to this cell are the cell state and gates. The cell state $\mathbf{c}_{t}$ in figure \ref{fig:lstmcell} 
+\Cref{fig:lstmcell} shows the computational graph of the LSTM cell. The two elements 
+fundamental to this cell are the cell state and gates. The cell state $\mathbf{c}_{t}$ in \cref{fig:lstmcell} 
 is like a conveyor belt which is connected to various gates. Gates can add or remove information from the cell 
 state depending on the information required by the LSTM unit. The important pieces of this architecture are: 
 \begin{enumerate*} 
@@ -215,8 +216,8 @@ and bias vector of the gate respectively. This notation is kept for subsequent e
 the information coming from the previous cell $\mathbf{h}_{t-1}$ and the incoming information $\mathbf{x}_{t}$ 
 and outputs a number between zero and one, zero if the information is entirely discarded, one if it is 
 altogether retained.
-
-Correspondingly the input gate (\cref{eq:inputgate}) decides what information is retained, depending 
+%
+Correspondingly, the input gate in \cref{eq:inputgate} decides what information is retained, depending 
 on past hidden cell state $\mathbf{h}_{t-1}$ and exogenous inputs $\mathbf{x}_t$. $\mathbf{W}_{i} $ and  
 $\mathbf{b}_{i}$ are the weight matrix and bias vector of the input gate respectively.
 %
@@ -249,7 +250,7 @@ is shown in \cref{eq:newstate}, where $\circ$ denotes the element wise (Hadamard
 The output of the LSTM cell is calculated using \cref{eq:outputgate}. First, the 
 sigmoid transformation helps to define the output $\mathbf{o}_t$. Second, the hidden state $\mathbf{h}_t$ 
 is computed by multiplying $\mathbf{o}_{t}$ with a hyperbolic tangent transformation of the cell state 
-$\mathbf{c}_{t}$. $\mathbf{h}_{t}$ (seen in figure \ref{fig:lstmcell}) becomes the final prediction computed 
+$\mathbf{c}_{t}$. $\mathbf{h}_{t}$ (seen in \cref{fig:lstmcell}) becomes the final prediction computed 
 LSTM cell for input $\mathbf{x}_t$.
 %
 \begin{align} \label{eq:outputgate}
@@ -442,7 +443,7 @@ the mean function of the GPNN model.
 \end{equation}
 %
 In order to give context for the performance of our LSTM model, we compare the following models for Dst predictions 
-for the time horizon $t+1 \cdots t+6$, summarised in table \ref{table:competingmodels}.
+for the time horizon $t+1 \cdots t+6$, summarised in \cref{table:competingmodels}.
 
 \begin{table}[ht]
 	\centering
@@ -466,8 +467,8 @@ for the time horizon $t+1 \cdots t+6$, summarised in table \ref{table:competingm
 	\end{tabular}
 \end{table}
 
-Figures \cref{fig:lstmCC,fig:lstmCC} present a comparison of $\mathrm{CC}$ and $\mathrm{RMSE}$ performance of the 
-$\mathrm{Dst}$ prediction models listed in table \ref{table:competingmodels}. 
+\Cref{fig:lstmCC,fig:lstmCC} present a comparison of $\mathrm{CC}$ and $\mathrm{RMSE}$ performance of the 
+$\mathrm{Dst}$ prediction models listed in \cref{table:competingmodels}. 
 
 Our models LSTM-Dst \& LSTM-Dst-GPS provide performance which is competitive to that obtained by 
 \citet{Lazzus} from one to three hours ahead. When the forecast horizon goes from four to six hours ahead, 
@@ -492,7 +493,7 @@ six ahead forecast, a CC of $0.82$ and a RMSE of $\SI{20.8}{\nano\tesla}$. The L
 performance benefits over standard RNNs when making geomagnetic activity.
  
 We observed that using GPS data generally results in an improved forecasts of important geomagnetic storm events. 
-Figure \ref{fig:lstmhalloween} presents forecasts produced the LSTM-Dst in blue and LSTM-Dst-GPS in red, 
+\Cref{fig:lstmhalloween} presents forecasts produced the LSTM-Dst in blue and LSTM-Dst-GPS in red, 
 for the $2003$ Halloween storm event (maximum strength of $\SI{-422}{\nano\tesla}$). Predictions for one to two hours 
 ahead are very similar, but when we consider the forecasts made three hours ahead, LSTM-Dst predicts a storm peak 
 of $\SI{-348}{\nano\tesla}$ while LSTM-Dst-GPS provides a prediction of $\SI{-405}{\nano\tesla}$. 
@@ -526,7 +527,7 @@ For example, a decision made by an operator to turn off a system before an inten
 when the forecast probability of this kind of event exceeds a predetermined trigger threshold.
 
 Storm activity is often classified by thresholding Dst values. In line with most common classification schemes, 
-we distinguished three levels of geomagnetic activity summarised in table \ref{table:stormclass}. It is ideal to 
+we distinguished three levels of geomagnetic activity summarised in \cref{table:stormclass}. It is ideal to 
 use metrics which will be able to evaluate how well the GPNN model manages to correctly classify geomagnetic 
 storms one to six hours prior. To do so, we used receiver operating characteristic (ROC) curves and 
 reliability diagrams.
@@ -537,7 +538,7 @@ reliability diagrams.
 
 The ROC curve is based on a contingency table which maps how often a model correctly classifies outcomes when 
 working in a binary classification setting i.e. occurrence or non occurrence of a predefined event, denoted by labels 
-$1$ and $0$ respectively. From table \ref{table:stormclass}, we constructed three binary classification problems 
+$1$ and $0$ respectively. From \cref{table:stormclass}, we constructed three binary classification problems 
 for each storm class.
 
 In the case of the GPNN model, we can analytically compute the probability that Dst lies within a particular storm class 
@@ -554,7 +555,7 @@ true positives to the total number of event occurrences, while the FPR is the ra
 number of non occurrences. For perfect classification, $\mathrm{FPR} = 0$ and $\mathrm{TPR} = 1$, thus 
 the value of the threshold that produces the point closest to these values is optimal.  
 
-In \cref{table:rocgpnn1h,table:rocgpnn2h,table:rocgpnn3h,table:rocgpnn4h,table:rocgpnn5h,table:rocgpnn6h} we 
+In \cref{table:rocgpnn1h,table:rocgpnn2h,table:rocgpnn3h,table:rocgpnn4h,table:rocgpnn5h,table:rocgpnn6h}, we 
 present ROC curves obtained from one to six hour ahead forecasts, organised by storm category. 
 The ROC is usually shown graphically, but numerical values are more relevant for the reader to analyse 
 variations depending on the chosen threshold probability. The optimal TPR and FPR values are in bold, computed to 
@@ -582,7 +583,7 @@ observed to occur for each bin is then plotted on the vertical axis. If the reli
 than the perfect diagonal slope, the resulting forecasts are under/over confident, i.e. they yield  
 smaller/higher probabilities for a specific outcome than observed. 
 
-Figure \ref{fig:gpnnreliability} presents reliability diagrams obtained from one to six hour ahead forecasts made 
+\Cref{fig:gpnnreliability} presents reliability diagrams obtained from one to six hour ahead forecasts made 
 by the GPNN. It shows that the one hour ahead forecast slightly underestimates the likelihood of storm events, 
 when their occurrence probability is $35\%$. For example, when there is $80\%$ predicted chance of a storm, 
 the real observed frequency of it is $90\%$. The GPNN provides reliable forecast for two hour ahead prediction, 
@@ -594,9 +595,9 @@ real frequency is of $65\%$. GPNN $t+6$ model is thus overconfident.
 
 % Once the reliability diagram is obtained, 
 % it is of interest to seek simple corrections to the forecast probabilities (re-calibration). This issue will be 
-% investigated elsewhere in greater detail. Here, we just show Figure \ref{fig:gpnnreliabilitysigma} that by multiplying 
+% investigated elsewhere in greater detail. Here, we just show \cref{fig:gpnnreliabilitysigma} that by multiplying 
 % the standard deviation by a\ factor of 2 or 3, it it possible to improve the reliability for predicted probability 
-% higher than $50\%$ (Figure \ref{fig:gpnnreliability}). For example, if the predicted probability is $90\%$, 
+% higher than $50\%$ (\cref{fig:gpnnreliability}). For example, if the predicted probability is $90\%$, 
 % by multiplying sigma by 2, the corresponding real frequency is $72\%$ and if we multiply by 3 we get $80\%$. 
 % This way, we managed to get closer to the diagonal, when the probability of events increase. Conversely, 
 % a simple rescaling of the obtained standard deviation yields worse reliability for probabilities smaller 
@@ -617,13 +618,12 @@ real frequency is of $65\%$. GPNN $t+6$ model is thus overconfident.
 % \end{figure}
 
 
-Figure \ref{fig:gpnnhalloween} presents predictions provided by the GPNN model for the 2003 Halloween storm. 
+\Cref{fig:gpnnhalloween} presents predictions provided by the GPNN model for the 2003 Halloween storm. 
 For predictions from one to five hour ahead, GPNN provides accurate predictions with plausible error bars. 
 For example, for the five hours ahead forecast, the storm peak of \SI{-422}{\nano\tesla} is forecasted as 
 \SI{-391}{\nano\tesla}. 
 
-The main benefit of the GP component in GPNN can be appreciated when comparing figures \ref{fig:lstmhalloween} 
-and \ref{fig:gpnnhalloween} which show that the GPNN model gave more accurate six hour ahead forecasts for the 
+The main benefit of the GP component in GPNN can be appreciated when comparing \cref{fig:lstmhalloween,fig:gpnnhalloween} which show that the GPNN model gave more accurate six hour ahead forecasts for the 
 2003 Halloween storm. The error bars calculated by the GPNN model include the storm peak for one to six hour 
 ahead forecasts.
 

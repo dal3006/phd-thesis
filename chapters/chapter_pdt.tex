@@ -669,6 +669,7 @@ is compared with a fixed time lag baseline which uses the same inputs as the DTL
   \end{table}
 %
 
+
 \section{Empirical validation}\label{sec:proofconcept}
 
 \begin{figure*}
@@ -818,7 +819,7 @@ art for the real-world solar wind problem (please see supplementary material for
 plots of the results and time lag error histogram). 
 
 The values of the $\sigma_0$ and $C_1$ quantities involved in the stability analysis 
-(section \ref{sec:stability}) are also reported. As said, $C_1 < 1$ indicates a specialization 
+(section \S~\ref{sec:stability}) are also reported. As said, $C_1 < 1$ indicates a specialization 
 among predictors found by the solution. The comparison of $\sigma_0$ and the RMSE indicates how 
 better the learned model is compared to the trivial degenerate solution (uniform $\hat {\bf p}$, 
 assigning an equal weight to all $\hat y_i$). Finally, the Pearson correlation between 
@@ -840,6 +841,7 @@ to the auto-correlation of the series, it allows to compare different predictors
   \hline
   \end{tabular}
 \end{table}
+\todo{Update $\sigma_0$ and $C_1$ numbers for \XX in \cref{tab:results_syn}}
 
 On the easy Problem I, the model predicts the correct time lag for $97.93\%$ of the samples. The 
 higher value of $\sigma_0$ in problems I and II compared to the other problems is explained from 
@@ -855,29 +857,24 @@ the high time lag regions and conversely to over-estimate it in the low time lag
 \begin{figure}
   \centering
   \includegraphics[width=0.4\textwidth]{figures/test_scatter_v}
-  \caption{Predicted vs Actual Solar Wind Speed} 
+  \caption{
+    Predicted vs Actual Solar Wind Speed, 
+    red diagonal represents a perfect prediction and blue lines are contours.} 
   \label{fig:sw_preds}
 \end{figure}
 
-Concerning the solar wind problem, \XX\ finds an operational time lag relationship, with a 
-significantly improved RMSE compared to the vanilla approach (uniform time lag distribution). 
-It is however outperformed by the median time lag based predictor, except for the MAE. This fact 
-is interpreted as the \XX\ model is penalised by large rare errors, associated to high speed solar 
-wind (which corresponds to rare events). As usual in real world problems, these experiments raise 
-the question of the quality and representativity of the selected data. Specifically, the 
-geomagnetic phenomenon under consideration is known to be non-stationary 
-\citep{nonstationarysolarwind}, following a 12 year cycle. A first perspective for improving the 
-results thus consists of gathering data from at least one entire solar cycle. 
-%The statistic of the time lag is stationary with respect to m (only the norm of $x$ is involved); 
-%not all the solar cycle; 12 years; more side information; 
-%noise is not Gaussian;
-%On the real-world problem of the solar wind prediction, \XX\ is dominated by the current best state of the art, intensively using domain theory XXXXXXXXXXXXX. 
-The \XX\ results, as displayed on Fig. \ref{fig:sw_preds}, nevertheless shows an encouraging 
-correlation between the predicted and the observed solar wind
+Concerning the solar wind problem, \XX\ shows encouraging results on the cross-validation 
+experiments as can be seen in \cref{tab:results_syn} and visualised in \cref{fig:sw_preds}. 
+
+In \cref{tab:results_riley}, we compare the performance of the \XX \ model and the fixed time lag 
+baseline with the state of the art from \citet{Riley2011}, on the solar wind data from Carrington 
+rotation $2077$ (see \cref{table:dtlrsplits}). The \XX model gives improvements in predictive 
+performance.
 
 \begin{table}
   \caption{
-    Performance Comparison on CR $2077$: \XX  \ , Fixed Lag Base Line vs \citet{Riley2011}
+    Performance Comparison on CR $2077$: \XX  \ , 
+    Fixed Lag Base Line vs \citet{Riley2011}
   }
   \label{tab:results_riley}
   \centering

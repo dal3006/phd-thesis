@@ -349,7 +349,7 @@ that they represent inner-products between some basis function representation of
 interested reader is suggested to refer to 
 \citet{Berlinet2004,Scholkopf:2001:LKS:559923,hofmann2008} for a thorough treatment of kernel 
 functions and the rich theory behind them. Some common kernel functions used in machine learning 
-are listed in Table \ref{table:kernel}. 
+are listed in \cref{table:kernel}. 
 
 The quantities $l$ in the RBF, and $b$ and $d$ in the polynomial kernel are known as 
 \emph{hyper-parameters}. Hyper-parameters give flexibility to a particular kernel structure, for 
@@ -497,19 +497,19 @@ In this study, we construct Gaussian Process regression models with a combinatio
 
 We selected OMNI data sections 00:00 January 3 2010 to 23:00 January 23 2010 and 20:00 August 5 2011 to 22:00 August 6 2011 for training the GP-AR and GP-ARX models. The first training data section consists of ambient fluctuations of $ \mathrm{Dst}$ while the second contains a geomagnetic storm.
 
-The computational complexity of calculation of the predictive distribution is $O(N^3)$, as discussed in section \ref{sec:inference}. This can limit the size of the covariance matrix constructed from the training data. Note that this computation overhead is paid for every unique assignment to the model hyper-parameters. However, our chosen training set has a size of 243 which is still very much below the computational limits of the method and in our case solving \cref{eq:posteriormean} on a laptop computer takes less than a second for the training set considered in our analysis. 
+The computational complexity of calculation of the predictive distribution is $O(N^3)$, as discussed in section \S~\ref{sec:inference}. This can limit the size of the covariance matrix constructed from the training data. Note that this computation overhead is paid for every unique assignment to the model hyper-parameters. However, our chosen training set has a size of 243 which is still very much below the computational limits of the method and in our case solving \cref{eq:posteriormean} on a laptop computer takes less than a second for the training set considered in our analysis. 
 
 \subsection*{Selection}
 
 In order to find appropriate values of the hyper-parameters of the chosen kernel $K_{\text{osa}}$, we apply 
 \emph{grid search}, \emph{coupled simulated annealing} and \emph{maximum likelihood} methods. We fix the parameters 
 $d$ and $\sigma^2$ of $K_{\text{st}}$ and model noise to values $0.01$ and $0.2$ respectively, the remaining 
-parameters $w$ and $b$ are kept free to be calculated by model selection. Table \ref{table:modelselection} 
+parameters $w$ and $b$ are kept free to be calculated by model selection. \Cref{table:modelselection} 
 summarises the settings used to run each model selection procedure.
 
 \subsection*{Validation}
 
-Apart from selecting the kernel parameters, one also needs to choose appropriate values for the auto-regressive orders $p$ in the case of GP-AR and $p, p_v, p_b$ in the case of GP-ARX. For this purpose we use a set of 24 storm events listed in Table \ref{table:validationstorms} and for every assignment of values to the model order, we perform model selection with the routines in Table \ref{table:modelselection} and record the performance on this validation set.
+Apart from selecting the kernel parameters, one also needs to choose appropriate values for the auto-regressive orders $p$ in the case of GP-AR and $p, p_v, p_b$ in the case of GP-ARX. For this purpose we use a set of 24 storm events listed in \cref{table:validationstorms} and for every assignment of values to the model order, we perform model selection with the routines in \cref{table:modelselection} and record the performance on this validation set.
 
 For measuring performance of model instances on the validation set storm events, the following metrics are calculated.
 
@@ -534,12 +534,12 @@ In the case of GP-AR we let the model order $p$ vary from $5$ to $12$ while for 
 \subsection*{Evaluation}\label{sec:gpOSAEval}
 
 After selecting the best performing GP-AR and GP-ARX models in the validation phase, we test and compare the performance of these models with the predictions generated from the \emph{persistence model} 
-$\mathrm{\hat{D}st}(t) = \mathrm{Dst}(t-1)$, on a set of 63 storm events occurring between 1998 and 2006 as given in Table \ref{table:teststorms}, which is the same list of storm events as used in 
+$\mathrm{\hat{D}st}(t) = \mathrm{Dst}(t-1)$, on a set of 63 storm events occurring between $1998$ and $2006$ as given in \cref{table:teststorms}, which is the same list of storm events as used in 
 \citet{Ji2012}.
 
 \begin{table}[ht]
     \centering
-    \caption{Evaluation results for models on storm events listed in table \ref{table:teststorms}}
+    \caption{Evaluation results for models on storm events listed in \cref{table:teststorms}}
     \label{table:results}
     \begin{tabular}{l c c c}
     \hline
@@ -579,15 +579,15 @@ $\mathrm{\hat{D}st}(t) = \mathrm{Dst}(t-1)$, on a set of 63 storm events occurri
 \end{figure}
     
 
-Figures \ref{fig:CompareMae} and \ref{fig:CompareCC} show how the mean absolute error and coefficient of correlation as calculated on the validation set storm events of Table \ref{table:validationstorms}, vary with increasing model order for GP-AR and GP-ARX. The results are represented as box and whisker plots, in which a rectangle is drawn to represent the first and third quartiles, with a horizontal line inside to indicate the median value, outlying points are shown as dots while the whiskers indicate the smallest and largest non-outliers. In both cases, the predictive performance first improves and then stagnates or worsens with increasing model order. 
+\Cref{fig:CompareMae,fig:CompareCC} show how the mean absolute error and coefficient of correlation calculated on the validation set storm events from \cref{table:validationstorms}, vary with increasing model order for GP-AR and GP-ARX. The results are represented as box and whisker plots, in which a rectangle is drawn to represent the first and third quartiles, with a horizontal line inside to indicate the median value, outlying points are shown as dots while the whiskers indicate the smallest and largest non-outliers. In both cases, the predictive performance first improves and then stagnates or worsens with increasing model order. 
 
-Figures \ref{fig:CompareMaeARX} and \ref{fig:CompareCCARX} break down the results for GP-ARX by the model selection routine used. Apart from the general trend observed in \ref{fig:CompareMae} and \ref{fig:CompareCC}, we also observe that \emph{grid search} and \emph{coupled simulated annealing} give superior performance as compared to gradient based \emph{maximum likelihood}.
+\Cref{fig:CompareMaeARX,fig:CompareCCARX} break down the results for GP-ARX by the model selection routine used. Apart from the general trend observed in \cref{fig:CompareMae,fig:CompareCC}, we also observe that \emph{grid search} and \emph{coupled simulated annealing} give superior performance as compared to gradient based \emph{maximum likelihood}.
 
 From the validation results, we choose the model order which yields the best RMSE performance, for GP-AR it is $p_t = 6$ while for GP-ARX it is $p = 6, p_v = 1, p_b = 3$.
 
-After choosing the best performing GP-AR and GP-ARX models, we calculate their performance on the test set of Table \ref{table:teststorms}. The results of these model evaluations are summarised in Table \ref{table:results}, the GP-AR and GP-ARX models improve upon the performance of the \emph{persistence model}.
+After choosing the best performing GP-AR and GP-ARX models, we calculate their performance on the test set of \cref{table:teststorms}. The results of these model evaluations are summarised in \cref{table:results}, the GP-AR and GP-ARX models improve upon the performance of the \emph{persistence model}.
 
-Figures \ref{fig:ComparePred1}, \ref{fig:ComparePred2} and \ref{fig:ComparePred3} show OSA predictions of the GP-ARX model with $\pm \sigma$ error bars for three storm events in the time period between 1998 and 2003. The GP-ARX model gives accurate predictions along with plausible error bars around its mean predictions.
+\Cref{fig:ComparePred1,fig:ComparePred2,fig:ComparePred3} show OSA predictions of the GP-ARX model with $\pm \sigma$ error bars for three storm events in the time period between 1998 and 2003. The GP-ARX model gives accurate predictions along with plausible error bars around its mean predictions.
 
 \section{Conclusions}
 
