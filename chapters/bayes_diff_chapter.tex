@@ -263,15 +263,13 @@ In order to solve the system in \cref{eq:surrogate} we must construct its \emph{
       & + \sum_{k = 1}^{n_{c}}{\beta_{k} (q_{j} - w^{T}\psi_{\theta}(x^{c}_{j}) - \epsilon_{j})} 
 \end{align*}
 %
-Given fixed values for $\gamma_{o}$, $\gamma_{c}$ and PDE parameters
-$\theta$, the equation above expresses the Lagrangian of the system in 
-\cref{eq:surrogate}. The quantities $\alpha_{1}, \cdots, \alpha_{n_{o}}$ and
-$\beta_{1}, \cdots, \beta_{n_{c}}$ are the \emph{Lagrange multipliers}
-introduced for equality constraints of the system. Applying the
-\emph{Karush-Kuhn-Tucker}(KKT) conditions, the solution of the
-optimization problem in \cref{eq:surrogate} can be expressed in terms of
-the Lagrange multipliers $\alpha = (\alpha_{1}, \cdots, \alpha_{n_{o}})$
-$\beta = (\beta_{1}, \cdots, \beta_{n_{c}})$.
+Given fixed values for $\gamma_{o}$, $\gamma_{c}$ and PDE parameters $\theta$, the equation above 
+expresses the Lagrangian of the system in \cref{eq:surrogate}. The quantities 
+$\alpha_{1}, \cdots, \alpha_{n_{o}}$ and $\beta_{1}, \cdots, \beta_{n_{c}}$ are the 
+\emph{Lagrange multipliers} introduced for equality constraints of the system. Applying the 
+\emph{Karush-Kuhn-Tucker}(KKT) conditions, the solution of the optimization problem in 
+\cref{eq:surrogate} can be expressed in terms of the Lagrange multipliers 
+$\alpha = (\alpha_{1}, \cdots, \alpha_{n_{o}})$ and $\beta = (\beta_{1}, \cdots, \beta_{n_{c}})$.
 %
 \begin{equation}\label{eq:solution}
   \begin{bmatrix}
@@ -289,8 +287,7 @@ $\beta = (\beta_{1}, \cdots, \beta_{n_{c}})$.
   \end{bmatrix}
 \end{equation}
 %
-The components of the symmetric block matrix system on the left hand side of 
-\cref{eq:solution} are 
+The components of the symmetric block matrix system on the left hand side of \cref{eq:solution} are: 
 \begin{enumerate}
 \item $\Omega \in \mathbb{R}^{n_{o} \times n_{o}}: \omega_{ij} = \varphi(x^{o}_{i})^{T} \varphi(x^{o}_{j})$
 \item $\Omega_{**} \in \mathbb{R}^{n_{c} \times n_{c}}: \omega^{**}_{ij} = \psi(x^{c}_{i})^{T} \psi(x^{c}_{j})$
@@ -302,8 +299,7 @@ The components of the symmetric block matrix system on the left hand side of
   \end{bmatrix}$
 \end{enumerate}
 %
-The surrogate model can now be used to estimate the phase space density 
-at a point $x = (l,t)$.
+The surrogate model can now be used to estimate the phase space density at a point $x = (l,t)$.
 %
 \begin{equation}\label{eq:model}
 \hat{f}(x;\theta) = \sum_{k = 1}^{n_{o}}{\alpha_{k}\varphi(x)^{T}\varphi(x^{o}_{k}) + \sum_{k = 1}^{n_{c}}}{\beta_{k} \varphi(x)^{T} \psi_{\theta}(x^{c}_{k})} + b
@@ -313,8 +309,9 @@ at a point $x = (l,t)$.
 
 There exist several choices regarding the basis $\varphi(.)$, they are but not limited to 
 orthogonal polynomials, Fourier series, radial basis functions etc. 
-
-For our problem we choose a basis which is a product of a Chebyshev basis of maximum degree 10 in space and a Laguerre basis of maximum degree 4, in time.
+%
+For our problem we choose a basis which is a product of a Chebyshev basis of maximum degree $10$ in 
+space and a Laguerre basis of maximum degree 4, in time.
 %
 \begin{equation}\label{eq:basis}
 \varphi_{i,j}(l,t) = C_{i}(l) L_{j}(t)
@@ -341,30 +338,32 @@ is enforced as a hard constraint. This case is equivalent to the following formu
 Although choosing $\gamma_c = 0$ is an appropriate choice if the physical dynamics need to be 
 enforced as a constraint, it can possibly lead to numerical
 instabilities in inverting system in \cref{eq:solution} and hence choosing a non zero value 
-for $\gamma_c$ works better in practice. For the experiment outlined in \ref{sec:exp}, 
+for $\gamma_c$ works better in practice. For the experiment outlined in section \S~\ref{sec:exp}, 
 we choose $\gamma_o = \gamma_c = 10$.
 
 The weights $u_i$ have a special interpretation in a particular context. It is possible to
 interpret the term $\sum_{k = 1}^{n_{c}}{u_{k} \epsilon^{2}_{k}}$ as a quadrature approximation
-to the integrated error of the surrogate model with respect to the governing dynamics $\int_{x \in \mathcal{D}}{||\mathcal{L}_{\theta} [\hat{f}(x)] - Q(x)||^2}$. When
-$u_i = \frac{1}{n_c}$, this corresponds to the \emph{Monte Carlo} quadrature of 
-the integrated error, but it is possible to improve the quadrature accuracy by using \emph{Gauss-Legendre} quadrature.
+to the integrated error of the surrogate model with respect to the governing dynamics 
+$\int_{x \in \mathcal{D}}{||\mathcal{L}_{\theta} [\hat{f}(x)] - Q(x)||^2}$. When 
+$u_i = \frac{1}{n_c}$, this corresponds to the \emph{Monte Carlo} quadrature of the integrated 
+error, but it is possible to improve the quadrature accuracy by using \emph{Gauss-Legendre} 
+quadrature.
 
-In section \ref{sec:exp}, we use eight point \emph{Gauss Legendre} quadrature in space and time dimension each, thereby setting $n_c = 64$ and weights $u_i$ to appropriate values as dictated by the quadrature rule (\citet{_abramowitzm}).
+In section \S~\ref{sec:exp}, we use eight point \emph{Gauss Legendre} quadrature in space and time 
+dimension each, thereby setting $n_c = 64$ and weights $u_i$ to appropriate values as dictated by 
+the quadrature rule \citep{_abramowitzm}.
 
 \subsection{Quantifying Observation Likelihood}
 
-We assume a multivariate Gaussian distribution for calculating the likelihood of 
-the observations conditioned on the system parameters $\theta$. The surrogate model (\cref{eq:model}) 
-gives a baseline or mean value for the phase space density, we use a hybrid RBF covariance function 
-$C(x_{i}, x_{j}) = \sigma^2 exp(-\frac{1}{2} (\frac{|l_i - l_j|^2}{s} + \frac{|t_i - t_j|}{r}))$ to quantify 
-the covariance of the phase space density $f$ over two points $x_i = (l_i, t_i)$ and $x_j = (l_j, t_j)$ in the domain. 
+We assume a multivariate Gaussian distribution 
+(\cref{eq:likelihood1,eq:likelihood2,eq:likelihood3,eq:likelihood4}) for calculating the 
+likelihood of the observations conditioned on the system parameters $\theta$.  
 %
-\begin{equation}
+\begin{equation}\label{eq:likelihood1}
 \mathbf{y} | x_1, \cdots, x_{n_o}, \theta \sim \mathcal{N} \left(\mathbf{\mu}_f, \Sigma \right )
 \end{equation}
 %
-\begin{equation}
+\begin{equation}\label{eq:likelihood2}
 \mathbf{y} = \begin{bmatrix}
 y_1\\ 
 \vdots\\ 
@@ -372,7 +371,7 @@ y_{n_o}
 \end{bmatrix}
 \end{equation}
 %
-\begin{equation}
+\begin{equation}\label{eq:likelihood3}
   \mathbf{\mu}_f = \begin{bmatrix}
 \hat{f}(x_1)\\ 
 \vdots\\ 
@@ -380,20 +379,25 @@ y_{n_o}
 \end{bmatrix}
 \end{equation}
 %
-\begin{equation}
+\begin{equation}\label{eq:likelihood4}
     \Sigma = \begin{bmatrix}
-C(x_1, x_1) & \cdots  & C(x_1, x_{n_o})\\ 
+K(x_1, x_1) & \cdots  & K(x_1, x_{n_o})\\ 
 \vdots & \ddots & \vdots\\ 
-C(x_{n_o}, x_{n_{1}}) & \cdots  & C(x_{n_o}, x_{n_{o}})
+K(x_{n_o}, x_{n_{1}}) & \cdots  & K(x_{n_o}, x_{n_{o}})
 \end{bmatrix}
 \end{equation}
 %
-The values of $s$ and $r$, the length scales of the covariance function, 
-can be fixed to the size of the space-time grid of the radial basis functions, 
-alternatively they can also be treated as system parameters which can be sampled 
-by the inference procedure. Since the core aims of this research was the quantification
-of the uncertainty over the parameters of the radial diffusion system, 
-we treat the covariance function parameters as fixed.
+The surrogate model (\cref{eq:model}) gives the mean value for the phase space density, we use a 
+hybrid RBF covariance function 
+\[
+  K(x_{i}, x_{j}) = \sigma^2 \exp(-\frac{1}{2} (\frac{|l_i - l_j|^2}{s} + \frac{|t_i - t_j|}{r}))  
+\] 
+to quantify the covariance of the phase space density $f$ over two points $x_i = (l_i, t_i)$ and 
+$x_j = (l_j, t_j)$ in the domain. The values of $s$ and $r$, the length scales of the covariance 
+function, can be fixed to the size of the space-time grid of the radial basis functions, 
+alternatively they can also be treated as system parameters which can be sampled by the inference 
+procedure. Since the core aims of this research was the quantification of the uncertainty over the 
+parameters of the radial diffusion system, we treat the covariance function parameters as fixed.
 
 \subsection{Inference}
 
@@ -404,8 +408,8 @@ to the running sample statistics of the Markov Chain procedure.
 
 \section{Experiment}\label{sec:exp}
 
-For the purposes of the experiment, the parameters of $\kappa$ and $\lambda$ fixed while MCMC inference 
-is performed on the parameters of $Q$. The prior distributions chosen for the parameters 
+For the purposes of the experiment, the parameters of $\kappa$ and $\lambda$ fixed while MCMC 
+inference is performed on the parameters of $Q$. The prior distributions chosen for the parameters 
 are shown in \cref{tab:prior}. The posterior distribution over the parameters of $\lambda$ is 
 sampled via adaptive Metropolis, the first 5000 samples are kept aside as the \emph{burn in} period
 of the Markov Chain.
@@ -431,8 +435,9 @@ of the Markov Chain.
 
 The technique presented is applied on synthetic data generated using a radial diffusion solver, 
 the ground truth values of the radial diffusion parameters are listed in \cref{tab:ground-truth}.
-
-A slightly modified parameterization is adopted for the particle injection $Q$ as shown in \cref{eq:q} below. The particle injection has a strictly time varying component due to presence of a constant $\gamma$.
+A slightly modified parameterization is adopted for the particle injection $Q$ as shown in 
+\cref{eq:q} below. The particle injection has a strictly time varying component due to presence of 
+a constant $\gamma$.
 %
 \begin{equation}\label{eq:q}
 Q(l,t)  \sim (\alpha l^{\beta} + \gamma) 10^{b Kp(t)}
@@ -452,26 +457,33 @@ Kp(t) &= \left\{\begin{matrix}
 \end{matrix}\right.
 \end{align}
 %
-Where $C_n(.)$ is the is the Chebyshev polynomial of degree n. 
+Where $C_n(.)$ is the is the Chebyshev polynomial of degree $n$. 
 The evolution of the Kp index \citet{BartelsKp} is assumed such that it mimics a geomagnetic storm event. 
 The radial diffusion solver is run for domain limits $l \in [1, 7], t \in [0, 5]$ with
 200 bins in the spatial and 50 bins in the temporal domains respectively.
 
-After the approximate solution profiles of $f$ are generated, the points are sub-sampled
-uniformly such that 100 points lie in the interior of the domain and 30 points at the initial time step (t = 0) are selected. These observations are then perturbed by Gaussian noise to yield
-the final observation set $\mathcal{D}$ which is fed, as training data to the surrogate model $\hat{f}(x)$.
+After the approximate solution profiles of $f$ are generated, the points are sub-sampled uniformly 
+such that 100 points lie in the interior of the domain and $30$ points at the initial time step 
+($t = 0$) are selected. These observations are then perturbed by Gaussian noise to yield the final 
+observation set $\mathcal{D}$ which is fed, as training data to the surrogate model $\hat{f}(x)$.
 
 \subsection*{Results}
 
-The posterior inferred for parameters of the particle injection rate $Q$ \cref{fig:alpha,fig:beta,fig:gamma,fig:b} respectively and the samples from each prior distribution are shown in \cref{fig:alphaprior,fig:betaprior,fig:gammaprior,fig:bprior}.
+The posterior inferred for parameters of the particle injection rate $Q$ in 
+\cref{fig:alpha,fig:beta,fig:gamma,fig:b} while the samples from each prior distribution are shown 
+in \cref{fig:alphaprior,fig:betaprior,fig:gammaprior,fig:bprior}.
 
-We see that the marginal posterior distributions of each parameter have high probability 
-density near the ground truth, and that they are heavy tailed because there are often large 
-regions of the parameter space which produce similar solutions for the phase space density $f$. 
-Apart from identifying of parameters, the model also helps in significant reduction of uncertainty
-from prior to posterior for the parameters $\beta$, $\gamma$ and $b$.
+We see that the marginal posterior distributions of each parameter have high probability density 
+near the ground truth, and that they are heavy tailed because there are often large regions of the 
+parameter space which produce similar solutions for the phase space density $f$. Apart from 
+identifying of parameters, the model also helps in significant reduction of uncertainty from prior 
+to posterior for the parameters $\beta$, $\gamma$ and $b$.
 
-The strength of the proposed method is the ability to quantify the uncertainty in diffusion parameters from a sparse set of observations. Due to the formulation of the surrogate as a dual optimization problem, it allows the inference to scale well with respect to high dimensional basis function expansions. The method shows promise for parameter inference of physical systems and warrants further research in its improvement.
+The strength of the proposed method is the ability to quantify the uncertainty in diffusion 
+parameters from a sparse set of observations. Due to the formulation of the surrogate as a dual 
+optimization problem, it allows the inference to scale well with respect to high dimensional basis 
+function expansions. The method shows promise for parameter inference of physical systems and 
+warrants further research in its improvement.
 
 
 \begin{table}[t]
