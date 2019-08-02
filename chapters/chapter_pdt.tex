@@ -104,7 +104,7 @@ of solar wind flow. The source surface solar wind speed $v_S$ can be mapped usin
 $1\textrm{-}\text{D}$ Upwind finite difference scheme to $\SI{1}{\astronomicalunit}$.
 
 The effect of currents is to distort the coronal magnetic field from a current free topology, 
-in order to account for the complex dynamics of solar wind flow, PFSS solutions are often used as 
+in order to account for the complex dynamics of solar wind flow. PFSS solutions are often used as 
 boundary conditions for MHD based simulations of the inner heliosphere 
 ($20-30 R_{\odot} \ \mathrm{to} \ \SI{1}{\astronomicalunit}$). Common MHD based models include 
 \emph{Magnetohydrodynamics Around a Sphere} (MAS) \citep{linker1999magnetohydrodynamic}, ENLIL 
@@ -115,6 +115,10 @@ The most prominent operational solar wind forecasting technique is the hybrid WS
 \footnote{\url{https://www.swpc.noaa.gov/products/wsa-enlil-solar-wind-prediction}} which consists 
 of the Wang-Sheeley-Arge (WSA) coronal model coupled with the global heliospheric ENLIL model. 
 
+\citet{wintoft1997prediction} used coronal magnetic field solutions computed by the PFSS model 
+to train a \emph{radial basis function} (RBF) network for predicting the average daily solar wind 
+speed $3$ days ahead.  
+
 \citet{Owens2017} used the solutions of MAS model simulated until $30R_{\odot}$ to construct an 
 ensemble of near-Sun solar wind conditions and forward propagated these conditions to 
 $\SI{1}{\astronomicalunit}$ to give probabilistic forecasts of the near-Earth solar wind speed. 
@@ -122,8 +126,8 @@ $\SI{1}{\astronomicalunit}$ to give probabilistic forecasts of the near-Earth so
 $1\textrm{-}\text{D}$ Upwind model and solar wind speed measurements from $L_1$ to improve inner 
 boundary conditions at $30R_{\odot}$.
 
-Although the current crop of solar wind propagation techniques provide several options for 
-modelers, they pose one or two key issues: 
+The current crop of solar wind propagation techniques provide several options for 
+modelers, but they pose one or two key issues: 
 %
 \begin{enumerate*} 
   \item they are computationally intensive 
@@ -143,12 +147,12 @@ learning context.
 Formally the goal is to model the dependency between heliospheric observations, referred to as 
 {\em cause series}, and the solar wind speed series recorded at $L_1$, referred to as 
 {\em effect series}. The key difficulty is that the time lag between an input and its effect, the 
-solar wind speed recorded at $L_1$, varies from circa 2 to 5 days depending on, among many factors, 
-the initial speed of the solar wind and its interplay with the HMF. Would the lag be constant, 
-the solar wind prediction problem would boil down to a mainstream regression problem. The challenge 
-here is to predict, from solar data $x(t)$ at time $t$ the value $y(t+\tau)$ of the solar wind 
-speed reaching the Earth at time $t+\tau$ where both the value $y(t+\tau)$ and the time lag $\tau$ 
-depend on $x(t)$.
+solar wind speed recorded at $L_1$, varies from about $2$ to $5$ days depending on, among many 
+factors, the initial speed of the solar wind and its interplay with the HMF. Would the lag be 
+constant, the solar wind prediction problem would boil down to a mainstream regression problem. The 
+challenge here is to predict, from solar data $x(t)$ at time $t$ the value $y(t+\tau)$ of the solar 
+wind speed reaching the Earth at time $t+\tau$ where both the value $y(t+\tau)$ and the time lag 
+$\tau$ depend on $x(t)$.
 
 To our knowledge the regression problem of predicting both {\em what} the effect is and {\em when} 
 the effect is observed constitutes a new machine learning problem, that we called 
@@ -193,7 +197,7 @@ g: \mathcal{X}  \rightarrow \mathbb{R}^{+},
 \]
 where $t \in \mathbb{R}^{+}$ represents the continuous temporal domain. The input signal 
 $x(t)\in \mathcal{X}$ is possibly high dimensional and contains the hidden cause to 
-the effect $y(t)\in\mathbb{R}$ which is considered as a scalar in this paper. 
+the effect $y(t)\in\mathbb{R}$ which is considered as a scalar in this chapter. 
 $\tau(t)\in \mathbb{R}^+$ represents the time delay between inputs and outputs.
 Vectors are written using bold fonts.
 
@@ -225,11 +229,11 @@ from prior knowledge, e.g. space weather theory.
 
 The unavoidable error due to the discretization of the continuous time lag is mitigated along a 
 probabilistic model, associating to each cause $x$, a set of independent predictors 
-$\{\hat y_i(x),i=$ in $T\}$ and a probability distribution $\hat p(x)$ on $T$ estimating the 
+$\{\hat y_i(x),\ i \in T\}$ and a probability distribution $\hat p(x)$ on $T$ estimating the 
 probability of delay of the effects of $x$. Overall, the \XX\ solution is sought as a probability 
 distribution conditioned on cause $x$, mixture of Gaussians centered on the predictors 
 $\hat y_i(x)$, where the mixture weights are defined from $\hat p(x)$. More formally, letting 
-${\bf y}_m$ denote the vector of random variables $y_{m+i}, i$ in $T$, 
+${\bf y}_m$ denote the vector of random variables $y_{m+i},\ i \in T$, 
 %
 \begin{equation}\label{eq:py}
   P\bigl[{\bf y}_{m}\vert x_m=x\bigr] = 
@@ -238,7 +242,7 @@ ${\bf y}_m$ denote the vector of random variables $y_{m+i}, i$ in $T$,
 \end{equation}
 %
 Two simplifications are made for the sake of the analysis. Firstly, the stochastic time lag is 
-modelled as the set $\{\tau_i, i$ in $ T\}$ of binary latent variables, where $\tau_i$ indicates 
+modelled as the set $\{\tau_i, i \in T\}$ of binary latent variables, where $\tau_i$ indicates 
 whether $x$ drives $y_i$ ($\tau_i=1$) or not ($\tau_i=0$). The assumption that every cause has a 
 single effect is modelled by imposing: \footnote{Note however that the cause-effect correspondence 
 might be many-to-one, with an effect depending on several causes.}
@@ -249,7 +253,8 @@ might be many-to-one, with an effect depending on several causes.}
 %
 From constraint~\cref{eq:cs1}, probability distribution $\hat p(x)$ thus is sought as a set of 
 $\hat p_i(x)$ for $i$ in $T$, summing to 1, such that $\hat p_i(x)$ stands for the probability of 
-the effect of $x_m=x$ to occur with delay $i$ in $T$. \\
+the effect of $x_m=x$ to occur with delay $i$ in $T$.
+
 The second simplifying assumption is that the variance $\sigma_i^2({\bf \tau})$ of predictor 
 $\hat h_i$ does not depend on $x$, by setting:
 \[
@@ -262,10 +267,9 @@ higher variance, enforced by making $\alpha_{ij}$ a decreasing function of $\ver
 generally, a large value of $\alpha_{ii}$ compared to $\alpha_{ij}$ for $i\ne j$ corresponds to a 
 small auto-correlation time of the effect series. 
 
-\subsection{Learning criterion}
+\subsection{Learning Criterion}
 The joint distribution is classically learned by maximizing the log likelihood of the data, that 
-can be computed in closed form as (please see supplementary material appendix \ref{app:LL} for the 
-details of the calculation): 
+can be computed in closed form as (please see \cref{app:LL} for the details of the derivation): 
 %
 \begin{equation}\label{eq:LL}
   {\cal L}\bigl[ {\bf x, y};\hat {\bf y},\hp,\sigma,{\bf \alpha}] = 
@@ -328,11 +332,11 @@ alternatively, hyper-parameters $\sigma$ and $\alpha_{ij}$ are updated from \cre
 the current $\hat y_i$ and $\hat p_i$; and predictors $\hat y_i$ and mixture weights $\hat p_i$ are 
 accordingly updated from \cref{eq:hyopt} and \cref{eq:tildep} respectively. 
 
-\section{Theoretical analysis}\label{sec:dtlrtheory}
+\section{Theoretical Analysis}\label{sec:dtlrtheory}
 The proposed \XX\ approach is shown to be consistent and analysed in the simple case where $\alpha$ 
 is a diagonal matrix ($\alpha_{ij} = \alpha\delta_{ij}$).
 
-\subsection{Loss function and related optimal predictor}\label{sec:prop}
+\subsection{Loss Function \& Optimal Predictor}\label{sec:prop}
 Let us assume that the hyper-parameters of the model have been identified together with predictors 
 $\hat y_i(x)$ and weights $\hat p_i(x)$. These are leveraged to achieve the prediction of the 
 effect series. For any given input $x$, the sought eventual predictor is expressed as 
@@ -355,14 +359,15 @@ the optimal composite predictor $(y^\star,I^\star)$ is given by
 \end{prop}
 %
 \begin{proof}
-In supplementary material, Appendix \ref{app:Hessian}.
+In \cref{app:Hessian}.
 \end{proof}
 
-\subsection{Linear stability analysis}\label{sec:stability}
+\subsection{Linear Stability Analysis}\label{sec:stability}
 The saddle point \cref{eq:var,eq:hatpi,eq:hyopt,eq:tildep} admit among others a degenerate 
-solution, corresponding to $\hat p_i(x) = 1/\vert T\vert$, $\alpha_{ij}=0$ for all pairs $(i,j)$, 
-with $\sigma^2 = \sigma_0^2$. Informally the model converges toward this degenerate trivial 
-solution when there is not enough information to build specialised predictors $\hat y_i$. 
+solution $\mathbf{p}_0$ corresponding to $\hat p_i(x) = 1/\vert T\vert$, 
+$\alpha_{ij}=0, \forall i,j \in T$, with $\sigma^2 = \sigma_0^2$. Informally the model converges 
+toward this degenerate trivial solution when there is not enough information to build specialised 
+predictors $\hat y_i$. 
 
 Let us denote $\Delta y_i^2(x)= \bigl(y_i-\hat y_i(x)\bigr)^2$ the square error made by predictor 
 $\hat y_i$ for $x$, and 
@@ -377,8 +382,8 @@ Hessian of the log-likelihood and its eigenvalues. Under the simplifying assumpt
   \alpha_{ij} = \alpha \delta_{ij},
 \]
 the model involves $2\vert T\vert+2$ parameters: $\alpha$, $r = \sigma^2/\sigma_0^2$, 
-$\hat {\bf y}$ and $\hp$. After the computation of the Hessian (supplementary material, 
-Appendix \ref{app:opred}) the system involves three key statistical quantities, two global:
+$\hat {\bf y}$ and $\hp$. After the computation of the Hessian (\cref{app:opred}) the system 
+involves three key statistical quantities, two global:
 %
 \begin{align}
   C_1[\p] &= \frac{1}{\sigma_0^2}{
@@ -410,9 +415,9 @@ where ${\bf u}(x)$ is a $\vert T\vert$-vector of components
     \Bigr].
 \]
 %
-Up to a constant, $C_1$ represents the covariance between the latent variables $\{\tau_i\}$ and the 
-normalised predictor errors. $C_1$ smaller than one indicates a positive correlation between the 
-latent variables and small errors; the smaller the better. For the degenerate solution, i.e. 
+$C_1$ represents the covariance between the latent variables $\{\tau_i\}$ and the normalised 
+predictor errors, up to a constant. $C_1 < 1$ indicates a positive correlation between the latent 
+variables and small errors; the smaller the better. For the degenerate solution, i.e. 
 $\p=\p_{0}$ uniform, $C_1[\p_{0}]=1$ and $C_2[\p_{0}]$ represents the default variability among the 
 prediction errors. $C_{2+i}[x,\p]$ informally measures the quality of predictor $\hat y_i$ 
 relatively to the other ones. More precisely, a negative value of  $C_{2+i}[x,\p]$ indicates 
@@ -427,9 +432,8 @@ At a saddle point the parameters are given by:
     \alpha = \frac{\vert T\vert}{\vert T\vert-1}\frac{1-C_1[\p]}{C_1[\p]}.
 \]
 %
-The predictors $\hat {\bf y}$ are decoupled from  the rest whenever they are centered, which we 
-assume. So the analysis can focus on the other parameters. 
-\paragraph{If $\hat {\bf p}$ is fixed} a saddle point is stable iff
+The predictors $\hat {\bf y}$ are decoupled from the rest whenever they are centered, which we 
+assume. If $\hat {\bf p}$ is fixed, a saddle point is stable if and only if
 %
 \[
   C_2[\p] < 2C_1^2[\p]+{\cal O}\bigl(\frac{1}{\vert T\vert}\bigr).
@@ -441,35 +445,32 @@ In particular, the degenerate solution is unstable if
   C_2[\p_0] > 2\bigl(1-\frac{1}{\vert T\vert}\bigr).
 \]
 %
-Note that for $\Delta y_i(x)$ iid centered with variance $\sigma_0^2$ and relative kurtosis 
-$\kappa$ (conditionally to $x$) one has $C_2 = (2+\kappa)(1-1/\vert T\vert)$. Therefore, 
+Note that when $\Delta y_i(x)$ is i.i.d and centered, with variance $\sigma_0^2$ and relative 
+kurtosis $\kappa$ (conditionally to $x$) one has $C_2 = (2+\kappa)(1-1/\vert T\vert)$. Therefore, 
 whenever $\Delta y_i^2(x)$ fluctuates and the relative kurtosis is non-negative,
 the degenerate solution is unstable and will thus be avoided.
 
-\paragraph{If $\hat {\bf p}$ is allowed to evolve} (after \cref{eq:tildep}) the degenerate trivial 
+If $\hat {\bf p}$ is allowed to evolve (after \cref{eq:tildep}), the degenerate trivial 
 solution becomes unstable as soon as $\vert {\bf u}(x)\vert^2$ is non-zero, due to the fact that 
 the gradient is inversely proportional to ${\bf u}(x)$ (with 
 $d\hp(x)\propto -\vert {\bf u}(x)\vert^2 {\bf u}(x)$), thus rewarding the predictors with lowest 
-errors by increasing their weights. \\
-
-The system is then driven toward other solutions, among which the localised solutions of the form:
+errors by increasing their weights. The system is then driven toward other solutions, among which 
+the localised solutions of the form:
 % 
 \[
   \hat p_i(x) = \delta_{iI(x)},
 \]
 %
-with an input dependent index $I(x)\in T$. As shown (supplementary material, Appendix 
-\ref{app:Hessian}) the solution of highest likelihood of this type is also optimal with respect to 
-the loss function~(\cref{eq:orloss}). The stability of such localised solutions and the existence 
-of other (non-localised) solutions is left for further work.  
+with an input dependent index $I(x)\in T$. As shown in \cref{app:Hessian}, the solution of highest 
+likelihood of this type is also optimal with respect to the loss function~(\cref{eq:orloss}). The 
+stability of such localised solutions and the existence of other (non-localised) solutions is left 
+for further work.  
 
 
-\section{Overview of the \XX\ algorithm}\label{sec:model}
+\section{Overview Of The \XX\ Algorithm}\label{sec:model}
 \begin{algorithm}[H]
   \SetAlgoLined
    \caption{\XX\ algorithm}
-   %$\alpha \longleftarrow U(0.75, 2)$ \;
-   %$\sigma^2 \longleftarrow U(10^{-5}, 5)$ \;
    Initialization of $\alpha$ and $\sigma$\\
    $it \longleftarrow 0$ \;
    \While{it $<$ max}{
@@ -815,8 +816,7 @@ is compared with a fixed time lag baseline which uses the same inputs as the DTL
 
 Table \ref{tab:results_syn} summarises the \XX\ performance on the synthetic and real-world 
 problems, respectively compared to the naive baseline (constant time lag) and to the state of the 
-art for the real-world solar wind problem (please see supplementary material for more detail, 
-plots of the results and time lag error histogram). 
+art for the real-world solar wind problem. 
 
 The values of the $\sigma_0$ and $C_1$ quantities involved in the stability analysis 
 (section \S~\ref{sec:stability}) are also reported. As said, $C_1 < 1$ indicates a specialization 
@@ -896,8 +896,8 @@ performance.
   \end{tabular}
 \end{table}
 
-\section{Discussion and perspectives}
-The contribution of the paper is twofold. Firstly, we define a new ML setting, motivated by an 
+\section{Discussion And Perspectives}
+The contribution of the work is twofold. Firstly, we define a new ML setting, motivated by an 
 important scientific and practical problem from the domain of space weather, emphasizing that this 
 real-world problem is open for over two decades. This ML setting, called 
 Dynamic Time Lag Regression, is concerned with the inference of lagged causal relationships between 
