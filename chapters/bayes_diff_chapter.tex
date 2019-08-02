@@ -58,7 +58,7 @@ account prior knowledge of the system dynamics in the form of a linear partial d
 equation. The method replaces a standard finite difference solver with a surrogate model which 
 tries to fit the observations and the system dynamics. The surrogate is expressed as a basis 
 function expansion whose coefficients are computed by formulating a 
-\emph{Least Squares Support Vector Machine}(LSSVM) like optimization objective.
+\emph{Least Squares Support Vector Machine} (LSSVM) like optimization objective.
 
 In the proceeding sections, we give a short introduction to the radial diffusion equation used in 
 magnetospheric physics. After an overview of the parameterizations of the radial diffusion unknowns 
@@ -74,11 +74,11 @@ community \citep{JGRA:JGRA9345}.
 %
 \begin{equation}\label{eq:raddiffusion}
   \frac{\partial{f}}{\partial{t}} = \ell^2 \frac{\partial}{\partial{\ell}} \left( 
-    \frac{\kappa(\ell,t)}{\ell^{2}} \frac{\partial{f}}{\partial{\ell}}
-  \right)_{\mathcal{M}, J} - \lambda(\ell,t) f + Q(\ell, t)
+    \frac{\kappa(\ell, t)}{\ell^{2}} \frac{\partial{f}}{\partial{\ell}}
+  \right)_{\mathcal{M}, J} - \lambda(\ell, t) f + Q(\ell, t)
 \end{equation}
 %
-The \emph{phase space density} $f$ is a function of the spatial coordinate $l$ which denotes the 
+The \emph{phase space density} $f$ is a function of the spatial coordinate $\ell$ which denotes the 
 \emph{Roederer} $L^*$ or \emph{L-shell}, and time $t$. The key quantities in the system above are 
 as follows.
 %
@@ -137,7 +137,7 @@ expressions for $\kappa(\ell, t), \ \lambda(\ell,t) \ \text{and} \ Q(\ell,t)$, s
 
 \subsubsection*{Mesh-free PDE solutions}
 
-\paragraph{Least Squares Support Vector Machines} (LSSVM) have been applied to calculating 
+\paragraph{Least Squares Support Vector Machines} have been applied to calculating 
 approximate solutions to PDEs \citep{MEHRKANOON2015105,MEHRKANOON20122502} as well as parameter 
 estimation of delay differential equations \citep{MEHRKANOON2014830}, the approach taken in the 
 aforementioned research \citep{MEHRKANOON2014830} was expressing the parameter estimation of time 
