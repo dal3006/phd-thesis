@@ -1,13 +1,14 @@
 \chapter{Bayesian Inference of Plasma Diffusion Parameters}\label{chapter:bayes_diff_chapter}
 
 {\small
-  We present a novel method which combines sparse irregular observations of a field with its governing 
-  physical dynamics, for performing Bayesian inference over latent system parameters. Our method uses 
-  a basis function approach coupled with a least squares support vector machine objective function which 
-  weighs differently errors arising due to data fitting and satisfaction of physical constraints. The method 
-  is applicable to linear PDE systems, it incorporates physical models into classical least squares techniques 
-  for the purpose of data assimilation and uncertainty quantification of latent parameters. We apply this method 
-  to the inverse problem of inferring uncertainty estimates of plasma diffusion parameters from sparse observations.
+  We present a novel method which combines sparse irregular observations of a field with its 
+  governing physical dynamics, for performing Bayesian inference over latent system parameters. Our 
+  method uses a basis function approach coupled with a least squares support vector machine 
+  objective function which weighs differently errors arising due to data fitting and satisfaction 
+  of physical constraints. The method is applicable to linear PDE systems, it incorporates physical 
+  models into classical least squares techniques for the purpose of data assimilation and 
+  uncertainty quantification of latent parameters. We apply this method to the inverse problem of 
+  inferring uncertainty estimates of plasma diffusion parameters from sparse observations.
 }
 
 \vfill
@@ -25,247 +26,228 @@
 
 \section{Introduction}
 
-The Earth's radiation belts are the regions of space near 
-the Earth that extend between 2 and 8 Earth's radii, where the terrestrial magnetic field traps 
-electrons and ions in complex electromagnetic orbits  \citep{vanAllen}. Since their discovery,
-the belts have been the subject of intensive research due to their complex behavior
-and damaging effects on spacecraft \citep{GUBBY20021723, WellingSatellite, baker2002}.
+The Earth's radiation belts are the regions of space near the Earth that extend between $2R_E$ 
+and $8R_E$ ($R_E = \SI{6372}{\kilo\metre}$, the radius of the Earth), where the terrestrial 
+magnetic field traps electrons and ions in complex electromagnetic orbits  \citep{vanAllen}. Since 
+their discovery, the belts have been the subject of intensive research due to their complex 
+behavior and damaging effects on spacecraft \citep{GUBBY20021723, WellingSatellite, baker2002}.
 
-Radiation belt particles generally execute three types of periodic motion, 
-each with its own corresponding adiabatic invariant: 
-gyration about magnetic field lines, bounce along field lines, 
-and drift around the Earth. During active times, when conditions 
-change on time scales shorter than the periods of motion, 
-adiabaticity can be broken and particle motion can not be
-simply decomposed into the aforementioned components. Particle motion 
-can then be represented diffusively along each component via the 
-\emph{Fokker-Planck} equation yielding a powerful picture of 
-radiation belt dynamics \citep{schulz2012particle}.
+Radiation belt particles generally execute three types of periodic motion, each with its own 
+corresponding adiabatic invariant: gyration around magnetic field lines, bounce along field lines, 
+and drift around the Earth. During active times, when conditions change on time scales shorter than 
+the periods of motion, adiabaticity can be broken and particle motion can not be simply decomposed 
+into the aforementioned components. Particle motion can then be represented diffusively along each 
+component via the \emph{Fokker-Planck} equation yielding a useful model of radiation belt dynamics 
+\citep{schulz2012particle}.
 
-The third invariant represents the total magnetic flux enclosed within 
-a full particle orbit. It is common to use a normalised form of this, the 
-so called Roederer $L^{*}$ \citep{Roederer1970}. It is analogous to radial 
-distance from the center of the Earth (in Earth radii) to the equatorial 
-crossing point of the bouncing particle. Diffusion in $L^{*}$ alone 
-(the other invariants shall be considered conserved) accounts for the
-capture and inward radial transport of radiation belt particles 
-\citep{Roederer1970,JGR:JGR4463}.
+The third invariant represents the total magnetic flux enclosed within a full particle orbit. It is 
+common to use a normalised form of this, the so called Roederer $L^{*}$ \citep{Roederer1970}. It is 
+analogous to radial distance from the center of the Earth (in Earth radii) to the equatorial 
+crossing point of the bouncing particle. Diffusion in $L^{*}$ alone (the other invariants shall be 
+considered conserved) accounts for the capture and inward radial transport of radiation belt 
+particles \citep{Roederer1970,JGR:JGR4463}.
 
-One of the main difficulties of using a physics-based model for studying and 
-forecasting energetic electrons in the radiation belt is that the parameters 
-that characterise the Fokker-Planck equation, namely diffusion tensor and loss term,
-are not directly observable. Hence, their determination represents an inverse problem,
-which is generally difficult to solve and can often become ill-posed.
+One of the main difficulties of using a physics-based model for studying and forecasting energetic 
+electrons in the radiation belt is that the parameters that characterise the Fokker-Planck 
+equation, namely diffusion tensor and loss term, are not directly observable. Hence, their 
+determination is an \emph{inverse problem}, which is generally difficult to solve and can often 
+become ill-posed.
 
-In this paper we propose an inference model which can learn from sparse
-data while taking into account prior knowledge of the system dynamics
-in the form of a linear partial differential equation. The method replaces
-the finite difference solver with a surrogate model which tries to fit
-the observations and the system dynamics. The surrogate is expressed as
-a basis function expansion whose coefficients are computed by formulating
-a \emph{Least Squares Support Vector Machine}(LSSVM) like optimization
-objective.
+In this chapter we propose an inference model which can learn from sparse data while taking into 
+account prior knowledge of the system dynamics in the form of a linear partial differential 
+equation. The method replaces a standard finite difference solver with a surrogate model which 
+tries to fit the observations and the system dynamics. The surrogate is expressed as a basis 
+function expansion whose coefficients are computed by formulating a 
+\emph{Least Squares Support Vector Machine}(LSSVM) like optimization objective.
 
-In the proceeding sections, we give a short introduction to the radial 
-diffusion equation used in magnetospheric physics. After an overview of 
-the parameterizations of the radial diffusion unknowns used by the research community, 
-we give a detailed formulation of our proposed method and demonstrate 
-how it can be used for performing inference over said diffusion parameters.
+In the proceeding sections, we give a short introduction to the radial diffusion equation used in 
+magnetospheric physics. After an overview of the parameterizations of the radial diffusion unknowns 
+used by the research community, we give a detailed formulation of our proposed method and 
+demonstrate how it can be used for performing inference over said diffusion parameters.
 
 \subsection{Plasma Diffusion}
 
-The radial diffusion system is a simplified one dimensional version of
-the \emph{Fokker-Planck} equation. It tracks the time evolution of the
-\emph{phase space density} of particles, $f$ which is governed by 
-\cref{eq:raddiffusion} known as \emph{radial diffusion equation} in the 
-radiation belt community \citep{JGRA:JGRA9345}.
-
+The radial diffusion system is a simplified one dimensional version of the \emph{Fokker-Planck} 
+equation. It tracks the time evolution of the \emph{phase space density} of particles, $f$ which is 
+governed by \cref{eq:raddiffusion} known as \emph{radial diffusion equation} in the radiation belt 
+community \citep{JGRA:JGRA9345}.
+%
 \begin{equation}\label{eq:raddiffusion}
-  \frac{\partial{f}}{\partial{t}} = l^2 \frac{\partial}{\partial{l}}\left( \frac{\kappa(l,
-      t)}{l^{2}} \frac{\partial{f}}{\partial{l}} \right) - \lambda(l,
-  t) f +  Q(l, t)
+  \frac{\partial{f}}{\partial{t}} = \ell^2 \frac{\partial}{\partial{\ell}} \left( 
+    \frac{\kappa(\ell,t)}{\ell^{2}} \frac{\partial{f}}{\partial{\ell}}
+  \right)_{\mathcal{M}, J} - \lambda(\ell,t) f + Q(\ell, t)
 \end{equation}
-
-The \emph{phase space density} $f$ is a function of the spatial
-coordinate $l$ which denotes the \emph{Roederer} $L^*$ or
-\emph{L-shell}, and time $t$.
-
-The key quantities in the system above are.
-
+%
+The \emph{phase space density} $f$ is a function of the spatial coordinate $l$ which denotes the 
+\emph{Roederer} $L^*$ or \emph{L-shell}, and time $t$. The key quantities in the system above are 
+as follows.
+%
 \begin{enumerate}
-\item $f$: The density of particles as a function of space $l$ and
-  time $t$.
-\item $\kappa(l, t)$: Diffusion field.
-\item $\lambda(l, t)$: Loss rate, this is a non-negative
-  quantity which indicates how quickly particles are lost from the
-  radiation belts.
-\item $Q(l, t)$: Particle injection rate.
+\item $f$: The particle density, for a given value of the first and second adiabatic invariants, 
+as a function of space $l$ and time $t$.
+\item $\kappa(\ell, t)$: Diffusion field.
+\item $\lambda(\ell, t)$: Loss rate, this is a non-negative quantity which indicates how quickly 
+particles are lost from the radiation belts, due to mechanisms other than radial diffusion.
+\item $Q(\ell, t)$: Particle injection rate.
 \end{enumerate}
+%
+Interested readers can go to section \S~\ref{sec:plasmadiff} for a more detailed explanation on 
+plasma diffusion, adiabatic invariants and plasma motion in the Earth's radiation belts. 
 
 \subsubsection*{Diffusion Parameters}
 
-To solve the radial diffusion system (\cref{eq:raddiffusion}), the
-quantities $\kappa(l, t)$, $\lambda(l, t)$ and $Q(l, t)$ need to be
-specified. It is a common practice \citetext{see \citealp{GRL:GRL10762},
-\citealp{JGRA:JGRA15067}, \citealp{JGRA:JGRA18021} and
-\citealp{GRL:GRL22815}} to parametrize the diffusion field
-$\kappa$ and loss rate $\lambda$ in the following manner.
-
-\begin{align}
-  \kappa(l,t), \lambda(l, t) \sim \alpha l^{\beta} 10^{b Kp(t)} \\
-\end{align}
-
-The quantities $\alpha$, $\beta$ and $b$ are parameters which define
-the diffusion field and loss rate while the quantity $Kp(t)$ is known
-as the Kp index, a measured quantity which stands as a proxy for the
-global geomagnetic activity \citep{BartelsKp}.
+To solve the radial diffusion system (\cref{eq:raddiffusion}), the quantities $\kappa(\ell, t)$, 
+$\lambda(\ell, t)$ and $Q(\ell, t)$ need to be specified. It is a common practice 
+\citetext{see \citealp{GRL:GRL10762}, \citealp{JGRA:JGRA15067}, \citealp{JGRA:JGRA18021} and
+\citealp{GRL:GRL22815}} to parametrize the diffusion field $\kappa$ and loss rate $\lambda$ as 
+%
+\begin{equation}\label{eq:paramExp}
+  \kappa(\ell, t), \lambda(\ell, t) \sim \alpha \ell^{\beta} 10^{b Kp(t)}.
+\end{equation}
+%
+The quantities $\alpha$, $\beta$ and $b$ above are parameters which define the diffusion field and 
+loss rate while the quantity $Kp(t)$ is known as the Kp index, a measured quantity which stands as 
+a proxy for the global geomagnetic activity \citep{BartelsKp}.
 
 
 \section{Inverse Problems}\label{sec:inv}
 
-The \emph{inverse problem} can be stated as follows: given a set of
-noisy observations $y$ scattered in the space time domain, of a
-physical quantity $f$ governed by the dynamical system
-$\mathcal{L}_{\theta} f = Q_{\theta}$, estimate the parameters $\theta$ of the
-dynamical system $(\mathcal{L}_{\theta}, Q_{\theta})$.
-
-In this formalism $\mathcal{L}_{\theta}$ is a differential operator,
-$Q_{\theta}$ is a \emph{source term} and $\theta$ is a collection of parameters
-which specify the operator and the source term.
-
-In the radial diffusion system (\cref{eq:raddiffusion}), $\mathcal{L}_{\theta} =
-\frac{\partial}{\partial{t}} - l^2 \frac{\partial}{\partial{l}}\left( \frac{\kappa(l,
-      t)}{l^{2}} \frac{\partial}{\partial{l}} \right) + \lambda(l,
-  t)$. In this case $\theta$ would be a collection of parameters which
-  would specify the analytic expressions for $\kappa(l,t)$,
-  $\lambda(l,t)$ and $Q(l,t)$.
+The inverse problem can be stated as follows: given a set of noisy observations $y$ scattered in 
+the space-time domain, of a physical quantity $f$ governed by the dynamical system 
+$\mathcal{L}_{\theta} f = Q_{\theta}$, estimate the parameters $\theta$ of the dynamical system 
+$(\mathcal{L}_{\theta}, Q_{\theta})$, where $\mathcal{L}_{\theta}$ is a differential operator, 
+$Q_{\theta}$ is a \emph{source term} and $\theta$ is a collection of parameters which specify the 
+operator and the source term. In the radial diffusion system shown in \cref{eq:raddiffusion}, 
+$\mathcal{L}$ takes the form  
+%
+\[
+  \mathcal{L}_{\theta} =
+    \frac{\partial}{\partial{t}} - 
+    \ell^2 \frac{\partial}{\partial{l}}\left( 
+      \frac{\kappa(\ell, t)}{l^{2}} \frac{\partial}{\partial{l}} 
+    \right) + 
+    \lambda(\ell,t).  
+\] 
+%
+In this case $\theta$ would be a collection of parameters which would specify the analytic 
+expressions for $\kappa(\ell, t), \ \lambda(\ell,t) \ \text{and} \ Q(\ell,t)$, such as 
+\cref{eq:paramExp}.
 
 \subsection{Related Work}
 
 \subsubsection*{Mesh-free PDE solutions}
 
-\paragraph{Least Squares Support Vector Machines}
+\paragraph{Least Squares Support Vector Machines} (LSSVM) have been applied to calculating 
+approximate solutions to PDEs \citep{MEHRKANOON2015105,MEHRKANOON20122502} as well as parameter 
+estimation of delay differential equations \citep{MEHRKANOON2014830}, the approach taken in the 
+aforementioned research \citep{MEHRKANOON2014830} was expressing the parameter estimation of time 
+delay as an algebraic optimization problem resulting in closed-form approximation for the time 
+varying parameters while avoiding iterative simulation of the dynamical system (governed by the 
+delay differential equations) in the parameter estimation process.
 
-(LSSVM) have been applied to calculating approximate solutions to PDEs
-\citep{MEHRKANOON2015105,MEHRKANOON20122502} as well as
-parameter estimation of delay differential equations
-\citep{MEHRKANOON2014830}, the approach taken in the aforementioned
-research \citep{MEHRKANOON2014830} was expressing the parameter
-estimation of time delay as an algebraic optimization problem
-resulting in closed-form approximation for the time varying parameters
-while avoiding iterative simulation of the dynamical system (governed
-by the delay differential equations) in the parameter estimation process.
-
-\paragraph{Radial Basis Functions}
-
-(RBF) were first applied for solution of PDE problems in \citet{KANSA1990147}, 
-the authors used colocation with \emph{multi-quadric} basis functions for approximating solutions
-of boundary value problems.
+\paragraph{Radial Basis Functions} (RBF) were first applied for solution of PDE problems in 
+\citet{KANSA1990147}, the authors used colocation with \emph{multi-quadric} basis functions for 
+approximating solutions of boundary value problems.
 
 Radial basis functions have been applied for the mesh-free solutions of Poisson PDE systems 
 \citep{AMINATAEI20082887,DUAN200866,DUAN2006394,CNM:CNM419}, as well as the Poisson control problem 
-\citep{Pearson2013}. Further applications of RBFs include atmospheric flow \citep{Tillenius2015406}, 
-convection-diffusion \citep{Safdari-Vaighani2015}, and Schrödinger's equation \citep{doi:10.1137/120893975}. 
-Refer to \citet{fornberg2015} for a recent textbook with geoscience applications.
+\citep{Pearson2013}. Further applications of RBFs include atmospheric flow 
+\citep{Tillenius2015406}, convection-diffusion \citep{Safdari-Vaighani2015} and Schr\"{o}dinger's 
+equation \citep{doi:10.1137/120893975}. Refer to \citet{fornberg2015} for a recent textbook with 
+geoscience applications.
 
 \paragraph{Gaussian Processes}
 
-Gaussian Process (GP) models \citep{Rasmussen:2005:GPM:1162254} have a rich theory which has much overlapping 
-with linear systems and deterministic and stochastic differential equations. 
+Gaussian Process (GP) models \citep{Rasmussen:2005:GPM:1162254} have a rich theory which has much 
+overlapping with linear systems and deterministic and stochastic differential equations. 
+\citet{Skilling1992} presented one of the earliest works which focused on calculating solutions of 
+ordinary differential equations (ODE) systems with Gaussian Process methodology, \citet{Graepel} 
+applied it for solving linear partial differential equations with Dirichlet and Von Neumann 
+boundary conditions.
 
-\citet{Skilling1992} presented one of the earliest works which focused on calculating solutions of ordinary 
-differential equations (ODE) systems with Gaussian Process methodology, \citet{Graepel} applied it for solving 
-linear partial differential equations with Dirichlet and Von Neumann boundary conditions.
+Interplay between linear operators and GP models applied to Bayesian filtering was investigated by 
+\citet{Sarkka2011}. \citet{pmlr-v31-dondelinger13a} proposed an adaptive gradient matching 
+technique to used Gaussian Process models for inferring parameters of coupled ODE systems.
 
-Interplay between linear operators and GP models applied to Bayesian filtering was investigated by \citet{Sarkka2011}. 
-\citet{pmlr-v31-dondelinger13a} proposed an adaptive gradient matching technique to used Gaussian Process models for 
-inferring parameters of coupled ODE systems.
-
-\paragraph{Neural Networks} were also employed for solutions of boundary value problems in the works such as 
-\citet{Lagaris,Aarts2001,TSOULOS20092385,Baymani2011} which used Feedforward networks for 
-calculating solutions to the Stokes problem. These approaches generally revolved around decomposing the solution 
-into two components, i.e. the first one satisfying the boundary conditions and the second one represented by the 
-feedforward network.
+\paragraph{Neural Networks} were also employed for solutions of boundary value problems in the 
+works such as \citet{Lagaris,Aarts2001,TSOULOS20092385,Baymani2011} which used feedforward networks 
+for calculating solutions to the Stokes problem. These approaches generally revolved around 
+decomposing the solution into two components, i.e. the first one satisfying the boundary conditions 
+and the second one represented by the feedforward network.
 
 
 \section{Methodology}
 
-Performing Bayesian inference over parameters of physical systems,
-involves synthesizing preexisting knowledge of the physical system in
-question i.e. the \emph{partial differential equation} (PDE), with
-statistical techniques. The aim of such an exercise is often the
-quantification of uncertainty over system parameters from an often
-sparse set of observations which are quantities of interest in the
-physical system. 
+Performing Bayesian inference over parameters of physical systems, involves synthesizing 
+preexisting knowledge of the physical system in question i.e. the 
+\emph{partial differential equation} (PDE), with statistical techniques. The aim of such an 
+exercise is often to obtain a probabilistic estimation of the system parameters, from a 
+sparse set of observations of quantities of interest (phase space density in this study). 
 
 
 \subsection{Model Formulation}
 
-We approach the radial diffusion inference problem by formulating a
-modified version of the \emph{least squares support vector machine}
-predictor for obtaining a closed form approximation to the phase space
-density $f$ which tries to satisfy the radial diffusion PDE
-(\cref{eq:raddiffusion}) on a fixed set of \emph{colocation} points while
-minimizing error on a set of sparse noisy observations. 
-Using the surrogate phase space density estimator as a baseline, we
-specify the likelihood of the observations.
+We approach the radial diffusion inference problem by formulating a modified version of the 
+\emph{least squares support vector machine} predictor for obtaining a closed form approximation to 
+the phase space density $f$ which tries to satisfy the radial diffusion PDE 
+(\cref{eq:raddiffusion}) on a fixed set of \emph{colocation} points while minimizing error on a set 
+of sparse noisy observations. Using the surrogate phase space density estimator as a baseline, we 
+obtain the likelihood of the observations.
 
 
 \subsubsection*{Surrogate Phase Space Density Model}
 
-Let $\mathcal{D}={(x^{o}_{i}, y_{i}): i = 1 \cdots n_{o}}$ be a set of
-noisy observations of the phase space density $f$, where $x_{i} =
-(l_{i}, t_{i})$ are points in the space time domain. We seek a linear
-estimator for $f$ of the form $\hat{f}(x) = w^{T}\varphi(x) + b$,
-where $\varphi(.): \mathbb{R}^{2} \rightarrow \mathbb{R}^{d}$ is a $d$
-dimensional feature map and $b$ is a scalar intercept.
+Let $\mathcal{D}={(x^{o}_{i}, y_{i}): i = 1 \cdots n_{o}}$ be a set of noisy observations of the 
+phase space density $f$, where $x_{i} = (\ell_{i}, t_{i})$ are points in the space-time domain. We 
+seek a linear estimator for $f$ of the form $\hat{f}(x) = w^{T}\varphi(x) + b$, where 
+$\varphi(.): \mathbb{R}^{2} \rightarrow \mathbb{R}^{d}$ is a $d$ dimensional feature map and $b$ is 
+a scalar intercept.
 
-Further let $\mathcal{C} ={(x^{c}_{i}, q_{i}): i = 1 \cdots n_{c}}$ be 
-a set of colocation points on which we aim to enforce radial diffusion
-dynamics. The values $q_{i}$ represent the particle injection rate $Q$ at $x^c$ and 
-are calculated each time the parameters of Q are sampled, by evaluating the expression 
-$Q(l,t) = (\alpha_{Q}l^{\beta_{Q}} + \gamma_{Q})10^{b_{Q}Kp(t)}$.
+Further let $\mathcal{C} ={(x^{c}_{i}, q_{i}): i = 1 \cdots n_{c}}$ be a set of colocation points 
+on which we aim to enforce radial diffusion dynamics. The values $q_{i}$ represent the particle 
+injection rate $Q$ at $x^c$ and are calculated each time the parameters of $Q$ are sampled, by 
+evaluating the expression $Q(\ell,t) = (\alpha_{Q}l^{\beta_{Q}} + \gamma_{Q})10^{b_{Q}Kp(t)}$.
 
-We exploit the linearity of the differential operator
-$\mathcal{L}_{\theta}$ and note that $\mathcal{L}_{\theta} [\hat{f}(x)]
-= w^{T} \mathcal{L}_{\theta}[\varphi(x)]$, yielding an estimator
-$\hat{Q}(x) = w^{T}\psi(x)$ where $\psi_{\theta}(x) =
-\mathcal{L}_{\theta}[\varphi(x)]$. Calculating $w \in \mathbb{R}^d$
-can now be cast as the following constrained $L_2$ regularised 
+We exploit the linearity of the differential operator $\mathcal{L}_{\theta}$ and note that 
+$\mathcal{L}_{\theta} [\hat{f}(x)] = w^{T} \mathcal{L}_{\theta}[\varphi(x)]$, yielding an estimator 
+$\hat{Q}(x) = w^{T}\psi(x)$ where $\psi_{\theta}(x) = \mathcal{L}_{\theta}[\varphi(x)]$. 
+Calculating $w \in \mathbb{R}^d$ can now be cast as the following constrained $L_2$ regularised 
 least squares problem.
 %
-\begin{align}\label{eq:surrogate}
-   & min_{w,e,\epsilon} \ \mathcal{J}(w,e,\epsilon;\theta) = \\
-   & \frac{1}{2} w^{T}w + \frac{1}{2\gamma_{o}} \sum_{k = 1}^{n_{o}}{e^{2}_{k}} + \frac{1}{2\gamma_{c}} \sum_{k = 1}^{n_{c}}{u_{k} \epsilon^{2}_{k}} \\
-  s.t &\nonumber \\
-  & y_{i}  = w^{T}\varphi(x^{o}_{i}) + b + e_{i}, \ \ i = 1 \cdots n_{o} \\
-  & q_{i} = w^{T}\psi_{\theta}(x^{c}_{i}) + \epsilon_{i}, \ \ i = 1 \cdots n_{c}
-\end{align}
-%
-It can be seen that system in \cref{eq:surrogate} is similar to the
-formulation of the LSSVM model, while incorporating the dynamics of
-linear PDE systems into its loss function. 
-
-The quantities $\gamma_{o}$ and $\gamma_{c}$ are weights attached to
-the errors on observations and colocation points respectively, thus
-by smoothly varying them we can assign higher or lower importance for
-the surrogate model to fit the observational data and the dynamics of
-the physical system. The quantities $u_i$ enable us to weigh each colocation
-point differently.
-%
-In order to solve the system in \cref{eq:surrogate} we must construct its \emph{Lagrangian}.
-%
-\begin{align*}\label{eq:lag}
-      & \mathfrak{L}(w,e,\epsilon, \alpha_{1 \cdots k}, \beta_{1 \cdots k}; \theta; \gamma_{o}; \gamma_{c}) = \\ 
-      & \frac{1}{2} w^{T}w + \frac{1}{2\gamma_{o}} \sum_{k = 1}^{n_{o}}{e^{2}_{k}} +
+\begin{equation}\label{eq:surrogate}
+   \begin{aligned}
+    & \min_{w,e,\epsilon} \ \mathcal{J}(w,e,\epsilon;\theta) = \\
+    & \frac{1}{2} w^{T}w + \frac{1}{2\gamma_{o}} \sum_{k = 1}^{n_{o}}{e^{2}_{k}} + 
       \frac{1}{2\gamma_{c}} \sum_{k = 1}^{n_{c}}{u_{k} \epsilon^{2}_{k}} \\
-      & + \sum_{k = 1}^{n_{o}}{\alpha_{k}(y_{k} - w^{T}\varphi(x^{o}_{k}) - b - e_{k})} \\
-      & + \sum_{k = 1}^{n_{c}}{\beta_{k} (q_{j} - w^{T}\psi_{\theta}(x^{c}_{j}) - \epsilon_{j})} 
-\end{align*}
+    s.t & \\
+    & y_{i}  = w^{T}\varphi(x^{o}_{i}) + b + e_{i}, \ \ i = 1 \cdots n_{o} \\
+    & q_{i} = w^{T}\psi_{\theta}(x^{c}_{i}) + \epsilon_{i}, \ \ i = 1 \cdots n_{c}
+   \end{aligned}
+\end{equation}
 %
-Given fixed values for $\gamma_{o}$, $\gamma_{c}$ and PDE parameters $\theta$, the equation above 
-expresses the Lagrangian of the system in \cref{eq:surrogate}. The quantities 
-$\alpha_{1}, \cdots, \alpha_{n_{o}}$ and $\beta_{1}, \cdots, \beta_{n_{c}}$ are the 
+The quantities $\gamma_{o}$ and $\gamma_{c}$ are weights attached to the errors on observations and 
+colocation points respectively. Thus by smoothly varying them we can assign higher or lower 
+importance to the surrogate model, in order to fit the observational data and the dynamics of the 
+physical system. The quantities $u_i$ enable us to weigh each colocation point differently. 
+
+It can be seen that system in \cref{eq:surrogate} is similar to the formulation of the LSSVM model, 
+while incorporating the dynamics of linear PDE systems into its loss function. In order to solve 
+the system in \cref{eq:surrogate}, we must construct its \emph{Lagrangian}, which is given in 
+\cref{eq:lag}.
+%
+\begin{equation}\label{eq:lag}
+  \begin{aligned}
+    & \mathfrak{L}(
+      w, e,\epsilon, \alpha_{1 \cdots k}, \beta_{1 \cdots k}; \theta; \gamma_{o}; \gamma_{c}
+    ) = \\ 
+    & \frac{1}{2} w^{T}w + \frac{1}{2\gamma_{o}} \sum_{k = 1}^{n_{o}}{e^{2}_{k}} +
+    \frac{1}{2\gamma_{c}} \sum_{k = 1}^{n_{c}}{u_{k} \epsilon^{2}_{k}} \\
+    & + \sum_{k = 1}^{n_{o}}{\alpha_{k}(y_{k} - w^{T}\varphi(x^{o}_{k}) - b - e_{k})} \\
+    & + \sum_{k = 1}^{n_{c}}{\beta_{k} (q_{j} - w^{T}\psi_{\theta}(x^{c}_{j}) - \epsilon_{j})} 
+  \end{aligned}
+\end{equation}
+%
+The quantities $\alpha_{1}, \cdots, \alpha_{n_{o}}$ and $\beta_{1}, \cdots, \beta_{n_{c}}$ are the 
 \emph{Lagrange multipliers} introduced for equality constraints of the system. Applying the 
 \emph{Karush-Kuhn-Tucker}(KKT) conditions, the solution of the optimization problem in 
 \cref{eq:surrogate} can be expressed in terms of the Lagrange multipliers 
@@ -287,59 +269,64 @@ $\alpha = (\alpha_{1}, \cdots, \alpha_{n_{o}})$ and $\beta = (\beta_{1}, \cdots,
   \end{bmatrix}
 \end{equation}
 %
-The components of the symmetric block matrix system on the left hand side of \cref{eq:solution} are: 
-\begin{enumerate}
-\item $\Omega \in \mathbb{R}^{n_{o} \times n_{o}}: \omega_{ij} = \varphi(x^{o}_{i})^{T} \varphi(x^{o}_{j})$
-\item $\Omega_{**} \in \mathbb{R}^{n_{c} \times n_{c}}: \omega^{**}_{ij} = \psi(x^{c}_{i})^{T} \psi(x^{c}_{j})$
-\item $\Omega_{*} \in \mathbb{R}^{n_{o} \times n_{c}}: \omega^{*}_{ij} = \varphi(x^{o}_{i})^{T} \psi(x^{c}_{j})$
+The components of the symmetric block matrix system on the left hand side of \cref{eq:solution} 
+are 
+%
+\begin{itemize}
+\item $\Omega \in \mathbb{R}^{n_{o} \times n_{o}}: \omega_{ij} = \varphi(x^{o}_{i})^{T} \varphi(x^{o}_{j})$,
+\item $\Omega_{**} \in \mathbb{R}^{n_{c} \times n_{c}}: \omega^{**}_{ij} = \psi(x^{c}_{i})^{T} \psi(x^{c}_{j})$,
+\item $\Omega_{*} \in \mathbb{R}^{n_{o} \times n_{c}}: \omega^{*}_{ij} = \varphi(x^{o}_{i})^{T} \psi(x^{c}_{j})$ and 
 \item $U \in \mathbb{R}^{n_{c} \times n_{c}} = \begin{bmatrix}
     u_1 & \cdots & 0 \\ 
     \vdots & \ddots  & 0\\ 
     0 & \cdots  & u_{n_{c}} 
-  \end{bmatrix}$
-\end{enumerate}
+  \end{bmatrix}$.
+\end{itemize}
 %
-The surrogate model can now be used to estimate the phase space density at a point $x = (l,t)$.
+The surrogate model (\cref{eq:model}) can now be used to estimate the phase space density at a 
+point $x = (\ell,t)$.
 %
 \begin{equation}\label{eq:model}
-\hat{f}(x;\theta) = \sum_{k = 1}^{n_{o}}{\alpha_{k}\varphi(x)^{T}\varphi(x^{o}_{k}) + \sum_{k = 1}^{n_{c}}}{\beta_{k} \varphi(x)^{T} \psi_{\theta}(x^{c}_{k})} + b
+\hat{f}(x;\theta) = 
+  \sum_{k = 1}^{n_{o}}{\alpha_{k}\varphi(x)^{T}\varphi(x^{o}_{k}) + 
+  \sum_{k = 1}^{n_{c}}}{\beta_{k} \varphi(x)^{T} \psi_{\theta}(x^{c}_{k})} + b
 \end{equation}
 
 \subsubsection*{Choice of Basis}
 
 There exist several choices regarding the basis $\varphi(.)$, they are but not limited to 
-orthogonal polynomials, Fourier series, radial basis functions etc. 
-%
-For our problem we choose a basis which is a product of a Chebyshev basis of maximum degree $10$ in 
-space and a Laguerre basis of maximum degree 4, in time.
+orthogonal polynomials, Fourier series, radial basis functions etc. For our problem we choose a 
+basis which is a product of a Chebyshev basis of maximum degree $10$ in space and a Laguerre basis 
+of maximum degree $4$, in time.
 %
 \begin{equation}\label{eq:basis}
-\varphi_{i,j}(l,t) = C_{i}(l) L_{j}(t)
+\varphi_{i,j}(\ell,t) = C_{i}(l) L_{j}(t)
 \end{equation}
 %
 
 
 \subsubsection*{Role of $\gamma_o$, $\gamma_c$ and $u_i$}
 
-The quantities $\gamma_o$ and $\gamma_c$ serve to control the importance assigned to
-of errors made on the observations and colocation points respectively. Varying them 
-gives the modeler the ability to vary the behavior of the surrogate model. In the 
-limiting case of $\gamma_c$ tending to zero, the model behaves as if the PDE dynamics
-is enforced as a hard constraint. This case is equivalent to the following formulation.
+The quantities $\gamma_o$ and $\gamma_c$ serve to control the importance assigned to errors made 
+on the observations and colocation points respectively. Varying them gives the modeler the ability 
+to vary the behavior of the surrogate model. In the limiting case of $\gamma_c$ tending to zero, 
+the model behaves as if the PDE dynamics is enforced as a hard constraint. This case is equivalent 
+to the following formulation.
 %
-\begin{align}\label{eq:surrogate2}
-   min_{w,e} \ \mathcal{J}(w,e,\epsilon;\theta) &= 
-   \frac{1}{2} w^{T}w + \frac{1}{2\gamma_{o}} \sum_{k = 1}^{n_{o}}{e^{2}_{k}} \\
-  & s.t \nonumber \\
-  y_{i} & = w^{T}\varphi(x^{o}_{i}) + b + e_{i}, \ \ i = 1 \cdots n_{o} \\
-  q_{i} & = w^{T}\psi_{\theta}(x^{c}_{i}), \ \ i = 1 \cdots n_{c}
-\end{align}
+\begin{equation}\label{eq:surrogate2}
+   \begin{aligned}
+    \min_{w,e} \ \mathcal{J}(w,e,\epsilon;\theta) &= 
+    \frac{1}{2} w^{T}w + \frac{1}{2\gamma_{o}} \sum_{k = 1}^{n_{o}}{e^{2}_{k}} \\
+    & s.t \\
+    y_{i} & = w^{T}\varphi(x^{o}_{i}) + b + e_{i}, \ \ i = 1 \cdots n_{o} \\
+    q_{i} & = w^{T}\psi_{\theta}(x^{c}_{i}), \ \ i = 1 \cdots n_{c}
+   \end{aligned}
+\end{equation}
 %
 Although choosing $\gamma_c = 0$ is an appropriate choice if the physical dynamics need to be 
-enforced as a constraint, it can possibly lead to numerical
-instabilities in inverting system in \cref{eq:solution} and hence choosing a non zero value 
-for $\gamma_c$ works better in practice. For the experiment outlined in section \S~\ref{sec:exp}, 
-we choose $\gamma_o = \gamma_c = 10$.
+enforced as a constraint, it can possibly lead to numerical instabilities in inverting system in 
+\cref{eq:solution} and hence choosing a non zero value for $\gamma_c$ works better in practice. For 
+the experiment outlined in section \S~\ref{sec:exp}, we chose $\gamma_o = \gamma_c = 10$.
 
 The weights $u_i$ have a special interpretation in a particular context. It is possible to
 interpret the term $\sum_{k = 1}^{n_{c}}{u_{k} \epsilon^{2}_{k}}$ as a quadrature approximation
@@ -387,13 +374,15 @@ K(x_{n_o}, x_{n_{1}}) & \cdots  & K(x_{n_o}, x_{n_{o}})
 \end{bmatrix}
 \end{equation}
 %
-The surrogate model (\cref{eq:model}) gives the mean value for the phase space density, we use a 
-hybrid RBF covariance function 
+The surrogate model (\cref{eq:model}) gives the mean value for the phase space density, and we use 
+a hybrid RBF covariance function 
 \[
-  K(x_{i}, x_{j}) = \sigma^2 \exp(-\frac{1}{2} (\frac{|l_i - l_j|^2}{s} + \frac{|t_i - t_j|}{r}))  
+  K(x_{i}, x_{j}) = \sigma^2 \exp \left(
+    -\frac{1}{2} \frac{|\ell_i - \ell_j|^2}{s} + \frac{|t_i - t_j|}{r}
+  \right)  
 \] 
-to quantify the covariance of the phase space density $f$ over two points $x_i = (l_i, t_i)$ and 
-$x_j = (l_j, t_j)$ in the domain. The values of $s$ and $r$, the length scales of the covariance 
+to quantify the covariance of the phase space density $f$ over two points $x_i = (\ell_i, t_i)$ and 
+$x_j = (\ell_j, t_j)$ in the domain. The values of $s$ and $r$, the length scales of the covariance 
 function, can be fixed to the size of the space-time grid of the radial basis functions, 
 alternatively they can also be treated as system parameters which can be sampled by the inference 
 procedure. Since the core aims of this research was the quantification of the uncertainty over the 
@@ -402,13 +391,13 @@ parameters of the radial diffusion system, we treat the covariance function para
 \subsection{Inference}
 
 We employ the adaptive Metropolis algorithm as proposed by \citet{haario2001}, for sampling
-system parameters. The adaptive Metropolis algorithm adapts the exploration variance according
-to the running sample statistics of the Markov Chain procedure.
+system parameters. The adaptive Metropolis algorithm adapts the exploration variance according to 
+the running sample statistics of the Markov Chain Monte Carlo (MCMC) procedure.
 
 
 \section{Experiment}\label{sec:exp}
 
-For the purposes of the experiment, the parameters of $\kappa$ and $\lambda$ fixed while MCMC 
+For the purposes of the experiment, the parameters of $\kappa$ and $\lambda$ are fixed while MCMC 
 inference is performed on the parameters of $Q$. The prior distributions chosen for the parameters 
 are shown in \cref{tab:prior}. The posterior distribution over the parameters of $\lambda$ is 
 sampled via adaptive Metropolis, the first 5000 samples are kept aside as the \emph{burn in} period
@@ -422,9 +411,9 @@ of the Markov Chain.
     \hline
     \textbf{Parameter} & \textbf{Prior}\\
     \hline
-    $\alpha$ & $Lognormal(0, 1)$ \\
-    $\beta$  & $Lognormal(1, 1)$ \\ 
-    $\gamma$ & $Lognormal(0, 1)$ \\ 
+    $\alpha$ & $\text{Lognormal}(0, 1)$ \\
+    $\beta$  & $\text{Lognormal}(1, 1)$ \\ 
+    $\gamma$ & $\text{Lognormal}(0, 1)$ \\ 
     $b$ & $\mathcal{N}(0, 1)$ \\
     \hline
   \end{tabular}
@@ -440,15 +429,15 @@ A slightly modified parameterization is adopted for the particle injection $Q$ a
 a constant $\gamma$.
 %
 \begin{equation}\label{eq:q}
-Q(l,t)  \sim (\alpha l^{\beta} + \gamma) 10^{b Kp(t)}
+Q(\ell,t)  \sim (\alpha \ell^{\beta} + \gamma) 10^{b Kp(t)}
 \end{equation}
 %
-The initial phase space density $f(t = 0)$ and the time trajectory 
-of the Kp index are assumed to be set as follows.
+The initial phase space density $f(t = 0)$ and the time trajectory of the Kp index are assumed to 
+be set as follows.
 %
 \begin{align}
-f(t = 0) &= 4000 + 1000(C_{3}(l_*) - C_{5}(l_*)) \\
-l_* &= 2\frac{l - l_{min}}{l_{max} - l_{min}} - 1 \\
+f(t = 0) &= 4000 + 1000(C_{3}(\ell_*) - C_{5}(\ell_*)) \\
+\ell_* &= 2\frac{\ell - \ell_{min}}{\ell_{max} - \ell_{min}} - 1 \\
 Kp(t) &= \left\{\begin{matrix}
 2.5 + 4t & 0 \leq t < 1.5\\ 
 8.5 & 1.5 < t \leq 3\\ 
@@ -457,19 +446,19 @@ Kp(t) &= \left\{\begin{matrix}
 \end{matrix}\right.
 \end{align}
 %
-Where $C_n(.)$ is the is the Chebyshev polynomial of degree $n$. 
-The evolution of the Kp index \citet{BartelsKp} is assumed such that it mimics a geomagnetic storm event. 
-The radial diffusion solver is run for domain limits $l \in [1, 7], t \in [0, 5]$ with
-200 bins in the spatial and 50 bins in the temporal domains respectively.
+Where $C_n(.)$ is the is the Chebyshev polynomial of degree $n$. The evolution of the Kp index 
+\citet{BartelsKp} is assumed such that it mimics a geomagnetic storm event. The radial diffusion 
+solver is run for domain limits $\ell \in [1, 7], t \in [0, 5]$ with $200$ bins in the spatial and 
+$50$ bins in the temporal domains respectively.
 
 After the approximate solution profiles of $f$ are generated, the points are sub-sampled uniformly 
-such that 100 points lie in the interior of the domain and $30$ points at the initial time step 
+such that $100$ points lying in the interior of the domain and $30$ points at the initial time step 
 ($t = 0$) are selected. These observations are then perturbed by Gaussian noise to yield the final 
 observation set $\mathcal{D}$ which is fed, as training data to the surrogate model $\hat{f}(x)$.
 
 \subsection*{Results}
 
-The posterior inferred for parameters of the particle injection rate $Q$ in 
+The inferred posterior distribution for parameters of the particle injection rate $Q(\ell, t)$ in 
 \cref{fig:alpha,fig:beta,fig:gamma,fig:b} while the samples from each prior distribution are shown 
 in \cref{fig:alphaprior,fig:betaprior,fig:gammaprior,fig:bprior}.
 
@@ -501,70 +490,97 @@ warrants further research in its improvement.
   \end{tabular}
 \end{table}
 
-\begin{figure}[ht]
-\vspace{.3in}
-\centerline{\includegraphics[width=0.5\textwidth]{histogram_Q_alpha_posterior.png}}
-\vspace{.3in}
-\caption{Posterior samples for $\alpha$ parameter of Q, red dotted line indicates the ground truth}
-\label{fig:alpha}
-\end{figure}
-
-\begin{figure}[ht]
-\vspace{.3in}
-\centerline{\includegraphics[width=0.5\textwidth]{histogram_Q_alpha_prior.png}}
-\vspace{.3in}
-\caption{Prior samples for $\alpha$ parameter of Q, red dotted line indicates the ground truth}
-\label{fig:alphaprior}
-\end{figure}
-
-\begin{figure}[ht]
-\vspace{.3in}
-\centerline{\includegraphics[width=0.5\textwidth]{histogram_Q_beta_posterior.png}}
-\vspace{.3in}
-\caption{Posterior samples for $\beta$ parameter of Q, red dotted line indicates the ground truth}
-\label{fig:beta}
-\end{figure}
-
-\begin{figure}[ht]
-\vspace{.3in}
-\centerline{\includegraphics[width=0.5\textwidth]{histogram_Q_beta_prior.png}}
-\vspace{.3in}
-\caption{Prior samples for $\beta$ parameter of Q, red dotted line indicates the ground truth}
-\label{fig:betaprior}
-\end{figure}
-
-\begin{figure}[ht]
-\vspace{.3in}
-\centerline{\includegraphics[width=0.5\textwidth]{histogram_Q_gamma_posterior.png}}
-\vspace{.3in}
-\caption{Posterior samples for $\gamma$ parameter of Q, red dotted line indicates the ground truth}
-\label{fig:gamma}
-\end{figure}
-
-\begin{figure}[ht]
-\vspace{.3in}
-\centerline{\includegraphics[width=0.5\textwidth]{histogram_Q_gamma_prior.png}}
-\vspace{.3in}
-\caption{Prior samples for $\gamma$ parameter of Q, red dotted line indicates the ground truth}
-\label{fig:gammaprior}
-\end{figure}
+\begin{figure*}[!htb]
+  \centering
+  \begin{subfigure}[b]{0.75\textwidth}
+    \centering
+    \includegraphics[width=0.6\textwidth]{histogram_Q_alpha_prior.png}
+    \caption{ 
+      Prior samples for the parameter $\alpha$, of $Q(\ell, t)$, 
+      red dotted line indicates the ground truth.
+    }
+    \label{fig:alphaprior}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.75\textwidth}
+    \centering
+    \includegraphics[width=0.6\textwidth]{histogram_Q_alpha_posterior.png}
+    \caption{
+      Posterior samples for the parameter $\alpha$, of $Q(\ell, t)$, 
+      red dotted line indicates the ground truth.}
+    \label{fig:alpha}
+  \end{subfigure}
+\end{figure*}
 
 
-\begin{figure}[ht]
-\vspace{.3in}
-\centerline{\includegraphics[width=0.5\textwidth]{histogram_Q_b_posterior.png}}
-\vspace{.3in}
-\caption{Posterior samples for $b$ parameter of Q, red dotted line indicates the ground truth}
-\label{fig:b}
-\end{figure}
+\begin{figure*}[!htb]
+  \centering
+  \begin{subfigure}[b]{0.75\textwidth}
+    \centering
+    \includegraphics[width=0.6\textwidth]{histogram_Q_beta_prior.png}
+    \caption{ 
+      Prior samples for the parameter $\beta$, of $Q(\ell, t)$, 
+      red dotted line indicates the ground truth.
+    }
+    \label{fig:betaprior}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.75\textwidth}
+    \centering
+    \includegraphics[width=0.6\textwidth]{histogram_Q_beta_posterior.png}
+    \caption{
+      Posterior samples for the parameter $\beta$, of $Q(\ell, t)$, 
+      red dotted line indicates the ground truth.
+    }
+    \label{fig:beta}
+  \end{subfigure}
+\end{figure*}
 
-\begin{figure}[ht]
-\vspace{.3in}
-\centerline{\includegraphics[width=0.5\textwidth]{histogram_Q_b_prior.png}}
-\vspace{.3in}
-\caption{Prior samples for $b$ parameter of Q, red dotted line indicates the ground truth}
-\label{fig:bprior}
-\end{figure}
+
+\begin{figure*}[!htb]
+  \centering
+  \begin{subfigure}[b]{0.75\textwidth}
+    \centering
+    \includegraphics[width=0.6\textwidth]{histogram_Q_gamma_prior.png}
+    \caption{ 
+      Prior samples for the parameter $\gamma$, of $Q(\ell, t)$, 
+      red dotted line indicates the ground truth.
+    }
+    \label{fig:gammaprior}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.75\textwidth}
+    \centering
+    \includegraphics[width=0.6\textwidth]{histogram_Q_gamma_posterior.png}
+    \caption{
+      Posterior samples for the parameter $\gamma$, of $Q(\ell, t)$, 
+      red dotted line indicates the ground truth.}
+    \label{fig:gamma}
+  \end{subfigure}
+\end{figure*}
+
+
+\begin{figure*}[!htb]
+  \centering
+  \begin{subfigure}[b]{0.75\textwidth}
+    \centering
+    \includegraphics[width=0.6\textwidth]{histogram_Q_b_prior.png}
+    \caption{ 
+      Prior samples for the parameter $b$, of $Q(\ell, t)$, 
+      red dotted line indicates the ground truth.
+    }
+    \label{fig:bprior}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.75\textwidth}
+    \centering
+    \includegraphics[width=0.6\textwidth]{histogram_Q_b_posterior.png}
+    \caption{
+      Posterior samples for the parameter $b$, of $Q(\ell, t)$, 
+      red dotted line indicates the ground truth.}
+    \label{fig:b}
+  \end{subfigure}
+\end{figure*}
 
 %\bibliographystyle{plainnat}
 %\bibliography{references}
