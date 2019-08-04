@@ -156,14 +156,12 @@ Radial basis functions have been applied for the mesh-free solutions of Poisson 
 equation \citep{doi:10.1137/120893975}. Refer to \citet{fornberg2015} for a recent textbook with 
 geoscience applications.
 
-\paragraph{Gaussian Processes}
-
-Gaussian Process (GP) models \citep{Rasmussen:2005:GPM:1162254} have a rich theory which has much 
-overlapping with linear systems and deterministic and stochastic differential equations. 
-\citet{Skilling1992} presented one of the earliest works which focused on calculating solutions of 
-ordinary differential equations (ODE) systems with Gaussian Process methodology, \citet{Graepel} 
-applied it for solving linear partial differential equations with Dirichlet and Von Neumann 
-boundary conditions.
+\paragraph{Gaussian Processes} (GP) models \citep{Rasmussen:2005:GPM:1162254} have a rich theory 
+which has much overlapping with linear systems and deterministic and stochastic differential 
+equations. \citet{Skilling1992} presented one of the earliest works which focused on calculating 
+solutions of ordinary differential equations (ODE) systems with Gaussian Process methodology, 
+\citet{Graepel} applied it for solving linear partial differential equations with Dirichlet and 
+Von Neumann boundary conditions.
 
 Interplay between linear operators and GP models applied to Bayesian filtering was investigated by 
 \citet{Sarkka2011}. \citet{pmlr-v31-dondelinger13a} proposed an adaptive gradient matching 
@@ -249,8 +247,9 @@ the system in \cref{eq:surrogate}, we must construct its \emph{Lagrangian}, whic
 %
 The quantities $\alpha_{1}, \cdots, \alpha_{n_{o}}$ and $\beta_{1}, \cdots, \beta_{n_{c}}$ are the 
 \emph{Lagrange multipliers} introduced for equality constraints of the system. Applying the 
-\emph{Karush-Kuhn-Tucker}(KKT) conditions, the solution of the optimization problem in 
-\cref{eq:surrogate} can be expressed in terms of the Lagrange multipliers 
+\emph{Karush-Kuhn-Tucker} (KKT) conditions \citep{karush1939minima,kuhn1951nonlinear}, the solution 
+of the optimization problem in \cref{eq:surrogate} can be expressed in terms of the Lagrange 
+multipliers 
 $\alpha = (\alpha_{1}, \cdots, \alpha_{n_{o}})$ and $\beta = (\beta_{1}, \cdots, \beta_{n_{c}})$.
 %
 \begin{equation}\label{eq:solution}
