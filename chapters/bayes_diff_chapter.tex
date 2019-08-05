@@ -207,9 +207,10 @@ injection rate $Q$ at $x^c$ and are calculated each time the parameters of $Q$ a
 evaluating the expression $Q(\ell,t) = (\alpha_{Q}l^{\beta_{Q}} + \gamma_{Q})10^{b_{Q}Kp(t)}$.
 
 We exploit the linearity of the differential operator $\mathcal{L}_{\theta}$ and note that 
-$\mathcal{L}_{\theta} [\hat{f}(x)] = w^{T} \mathcal{L}_{\theta}[\varphi(x)]$, yielding an estimator 
-$\hat{Q}(x) = w^{T}\psi(x)$ where $\psi_{\theta}(x) = \mathcal{L}_{\theta}[\varphi(x)]$. 
-Calculating $w \in \mathbb{R}^d$ can now be cast as the following constrained $L_2$ regularised 
+$\mathcal{L}_{\theta} [\hat{f}(x)] = w^{T} \mathcal{L}_{\theta}[\varphi(x)] + \mathcal{L}_{\theta}[b]$, 
+yielding an estimator 
+$\hat{Q}(x) = w^{T}\psi(x) + \mathcal{L}_{\theta}[b]$ where $\psi_{\theta}(x) = \mathcal{L}_{\theta}[\varphi(x)]$. 
+Determining $w \in \mathbb{R}^d$ can now be cast as the following constrained $L_2$ regularised 
 least squares problem.
 %
 \begin{equation}\label{eq:surrogate}
@@ -219,7 +220,7 @@ least squares problem.
       \frac{1}{2\gamma_{c}} \sum_{k = 1}^{n_{c}}{u_{k} \epsilon^{2}_{k}} \\
     s.t & \\
     & y_{i}  = w^{T}\varphi(x^{o}_{i}) + b + e_{i}, \ \ i = 1 \cdots n_{o} \\
-    & q_{i} = w^{T}\psi_{\theta}(x^{c}_{i}) + \epsilon_{i}, \ \ i = 1 \cdots n_{c}
+    & q_{i} = w^{T}\psi_{\theta}(x^{c}_{i}) + \mathcal{L}_{\theta}(b) + \epsilon_{i}, \ \ i = 1 \cdots n_{c}
    \end{aligned}
 \end{equation}
 %
@@ -241,7 +242,8 @@ the system in \cref{eq:surrogate}, we must construct its \emph{Lagrangian}, whic
     & \frac{1}{2} w^{T}w + \frac{1}{2\gamma_{o}} \sum_{k = 1}^{n_{o}}{e^{2}_{k}} +
     \frac{1}{2\gamma_{c}} \sum_{k = 1}^{n_{c}}{u_{k} \epsilon^{2}_{k}} \\
     & + \sum_{k = 1}^{n_{o}}{\alpha_{k}(y_{k} - w^{T}\varphi(x^{o}_{k}) - b - e_{k})} \\
-    & + \sum_{k = 1}^{n_{c}}{\beta_{k} (q_{j} - w^{T}\psi_{\theta}(x^{c}_{j}) - \epsilon_{j})} 
+    & + \sum_{k = 1}^{n_{c}}{\beta_{k} (q_{j} - w^{T}\psi_{\theta}(x^{c}_{j}) - 
+    \mathcal{L}_{\theta}[b] - \epsilon_{j})} 
   \end{aligned}
 \end{equation}
 %
@@ -254,9 +256,9 @@ $\alpha = (\alpha_{1}, \cdots, \alpha_{n_{o}})$ and $\beta = (\beta_{1}, \cdots,
 %
 \begin{equation}\label{eq:solution}
   \begin{bmatrix}
-    0 & \mathbf{1}^{T} & \mathbf{0} \\ 
+    0 & \mathbf{1}^{T} & \mathbf{\Lambda_{\theta}}^{T} \\ 
     \mathbf{1} & \Omega + \gamma_{o}I  & \Omega_*\\ 
-    \mathbf{0} & \Omega_{*}^{T}  & \Omega_{**} + \gamma_{c}U 
+    \mathbf{\Lambda_{\theta}} & \Omega_{*}^{T}  & \Omega_{**} + \gamma_{c}U 
   \end{bmatrix} \begin{bmatrix}
     b\\ 
     \alpha\\ 
@@ -280,6 +282,7 @@ are
     \vdots & \ddots  & 0\\ 
     0 & \cdots  & u_{n_{c}} 
   \end{bmatrix}$.
+\item $\Lambda_{\theta} \in \mathbb{R}^{n_{c}}: \lambda_{i} = \lambda_{\theta}(x^{c}_{i})$
 \end{itemize}
 %
 The surrogate model (\cref{eq:model}) can now be used to estimate the phase space density at a 
