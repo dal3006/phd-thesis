@@ -4,7 +4,7 @@ The study of variations in the space environment between the Sun and the Earth c
 the core of \textit{space weather} research. Ionised plasma ejected by the Sun couples with 
 the Earth’s magnetic field in complex processes that determine the state of the Earth's 
 magnetosphere. Adverse effects from space weather can impact communication networks, 
-power grids and logistics infrastructure, all crucial pillars of a civilization that 
+power grids, and logistics infrastructure, which are all crucial pillars of a civilization that 
 is reliant on technology.
 
 It is important to leverage data sources, scientific knowledge and machine learning 
@@ -26,8 +26,8 @@ The research questions addressed in this dissertation center around three key th
     
     \item \textit{Dynamic Time Lag Regression}: How can we predict near Earth solar wind speed 
     and its propagation time from solar data? More generally, is it possible to infer using time series 
-    data, \emph{when} the impacts of events will be felt at their downstream destinations? This is different 
-    from standard forecasting which always concerns predictions for a \emph{fixed} time ahead.
+    data \emph{when} the impacts of events will be felt at their downstream destinations? This is different 
+    from standard forecasting which is always concerned with predictions made with a \emph{fixed} time horizon.
 \end{enumerate}
     
 \section{Chapter Outline}
@@ -43,13 +43,13 @@ The dissertation is organised as follows.
     understand the problems considered in this thesis. Section \S~\ref{sec:mag} talks about the magnetosphere and 
     the motions of charged particles trapped within it. This is the starting point for the material in chapters 
     \cref{chapter:dst_osa,chapter:dst_msa,chapter:bayes_diff_chapter}. Section \S~\ref{sec:solar} gives a 
-    quick overview about the structure of the Sun, its magnetic field and the solar wind which is the target 
-    application for the method proposed in chapter \ref{chapter:pdt}.
+    quick overview about the structure of the Sun, its magnetic field, and the solar wind which is the target 
+    application of the method proposed in chapter \ref{chapter:pdt}.
     
     \item Chapter \ref{chapter:dst_osa} applies \emph{Gaussian process} (GP) models for making probabilistic 
     forecasts of Earth based geomagnetic quantities and gives a practical methodology for building and evaluating 
     such models. Chapter \ref{chapter:dst_msa} extends the time horizon of the forecasting models proposed in 
-    chapter \ref{chapter:dst_osa} by proposing a hybrid model based on \emph{long short term memory} (LSTM) networks 
+    chapter \ref{chapter:dst_osa} by proposing a hybrid model based on \emph{long short-term memory} (LSTM) networks 
     and Gaussian processes.
     
     \item Chapter \ref{chapter:bayes_diff_chapter} proposes a model based on the 
@@ -68,6 +68,6 @@ The dissertation is organised as follows.
 \end{itemize}
 
 
-Chapters \ref{chapter:dst_osa} \& \ref{chapter:dst_msa} are based on published journal articles 
-while \ref{chapter:bayes_diff_chapter} \& \ref{chapter:pdt} are based on work which is in peer review or in 
+\Cref{chapter:dst_osa,chapter:dst_msa} are based on published journal articles 
+while \cref{chapter:bayes_diff_chapter,chapter:pdt} are based on work that is in peer review or in 
 preparation for publication.  
