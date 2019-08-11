@@ -290,8 +290,8 @@ point $x = (\ell,t)$.
 %
 \begin{equation}\label{eq:model}
 \hat{f}(x;\theta) = 
-  \sum_{k = 1}^{n_{o}}{\alpha_{k}\varphi(x)^{T}\varphi(x^{o}_{k}) + 
-  \sum_{k = 1}^{n_{c}}}{\beta_{k} \varphi(x)^{T} \psi_{\theta}(x^{c}_{k})} + b
+\sum_{k = 1}^{n_{o}}{\alpha_{k}\varphi(x)^{T}\varphi(x^{o}_{k}) + 
+\sum_{k = 1}^{n_{c}}}{\beta_{k} \varphi(x)^{T} \psi_{\theta}(x^{c}_{k})} + b
 \end{equation}
 
 \subsubsection*{Choice of Basis}
@@ -328,7 +328,8 @@ to the following formulation.
 Although choosing $\gamma_c = 0$ is an appropriate choice if the physical dynamics need to be 
 enforced as a constraint, it can possibly lead to numerical instabilities in inverting system in 
 \cref{eq:solution} and hence choosing a non zero value for $\gamma_c$ works better in practice. For 
-the experiment outlined in section \S~\ref{sec:exp}, we chose $\gamma_o = \gamma_c = 10$.
+the experiment outlined in section \S~\ref{sec:exp}, we chose 
+$\gamma_o = 2 \ \text{and} \ \gamma_c = 10^{-4}$.
 
 The weights $u_i$ have a special interpretation in a particular context. It is possible to
 interpret the term $\sum_{k = 1}^{n_{c}}{u_{k} \epsilon^{2}_{k}}$ as a quadrature approximation
@@ -381,7 +382,7 @@ a hybrid RBF covariance function
 \[
   K(x_{i}, x_{j}) = \sigma^2 \exp \left(
     -\frac{1}{2} \frac{|\ell_i - \ell_j|^2}{s} + \frac{|t_i - t_j|}{r}
-  \right)  
+  \right)  + \mathbf{\varphi}(x_i)^{T}\mathbf{\varphi}(x_j)
 \] 
 to quantify the covariance of the phase space density $f$ over two points $x_i = (\ell_i, t_i)$ and 
 $x_j = (\ell_j, t_j)$ in the domain. The values of $s$ and $r$, the length scales of the covariance 
@@ -396,8 +397,26 @@ We employ the adaptive Metropolis algorithm as proposed by \citet{haario2001}, f
 system parameters. The adaptive Metropolis algorithm adapts the exploration variance according to 
 the running sample statistics of the Markov Chain Monte Carlo (MCMC) procedure.
 
+\begin{table}[t]
+  \caption{Parameters: Prior Distributions}
+  \label{tab:prior}
+  \centering
+  \begin{tabular}{ll}
+    \hline
+    \textbf{Parameter} & \textbf{Prior}\\
+    \hline
+    $\alpha$ & $\text{Uniform}(-5, 5)$ \\
+    $\beta$  & $\text{Uniform}(0, 5)$ \\ 
+    $b$ & $\text{Uniform}(0, 2)$ \\
+    \hline
+  \end{tabular}
+\end{table}
 
-\section{Experiment}\label{sec:exp}
+
+\section{Experiments}\label{sec:exp}
+
+
+\subsection{Synthetic Data}
 
 For the purposes of the experiment, the parameters of $\kappa$ and $\lambda$ are fixed while MCMC 
 inference is performed on the parameters of $Q$. The prior distributions chosen for the parameters 
@@ -405,24 +424,44 @@ are shown in \cref{tab:prior}. The posterior distribution over the parameters of
 sampled via adaptive Metropolis, the first 5000 samples are kept aside as the \emph{burn in} period
 of the Markov Chain.
 
-\begin{table}[t]
-  \caption{Parameters: Prior}
-  \label{tab:prior}
+
+\begin{figure*}[!htb]
   \centering
-  \begin{tabular}{ll}
+  \begin{subfigure}[b]{0.75\textwidth}
+    \centering
+    \includegraphics[width=0.6\textwidth]{initial_psd.png}
+    \caption{ 
+      Initial condition.
+    }
+    \label{fig:initialpsd}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.75\textwidth}
+    \centering
+    \includegraphics[width=0.6\textwidth]{kp_profile.png}
+    \caption{
+      Kp evolution.
+    }
+    \label{fig:kpProfile}
+  \end{subfigure}
+\end{figure*}
+
+\subsubsection*{Data Generation}
+
+\begin{table}[t]
+  \caption{Parameters: Ground Truth}
+  \label{tab:ground-truth}
+  \centering
+  \begin{tabular}{llll}
     \hline
-    \textbf{Parameter} & \textbf{Prior}\\
+    \textbf{Quantity}  & $\alpha$ & $\beta$ & $b$ \\
     \hline
-    $\alpha$ & $\text{Lognormal}(0, 1)$ \\
-    $\beta$  & $\text{Lognormal}(1, 1)$ \\ 
-    $\gamma$ & $\text{Lognormal}(0, 1)$ \\ 
-    $b$ & $\mathcal{N}(0, 1)$ \\
+    $Q$ & $-1$  & $2.5$ & $0.5$  \\
+    $\kappa$  & $\log(4.731 \times 10^{-10})$ & $10$ & $0.506$ \\
+    $\lambda$ & $\log(0.3678)$ & $0.5$ & $-0.2$ \\
     \hline
   \end{tabular}
 \end{table}
-
-
-\subsection*{Data Generation}
 
 The technique presented is applied on synthetic data generated using a radial diffusion solver, 
 the ground truth values of the radial diffusion parameters are listed in \cref{tab:ground-truth}.
@@ -431,7 +470,7 @@ A slightly modified parameterization is adopted for the particle injection $Q$ a
 a constant $\gamma$.
 %
 \begin{equation}\label{eq:q}
-Q(\ell,t)  \sim (\alpha \ell^{\beta} + \gamma) 10^{b Kp(t)}
+Q(\ell,t)  \sim \exp(\alpha - \beta (\ell - \ell_{max})^2) 10^{b Kp(t)}
 \end{equation}
 %
 The initial phase space density $f(t = 0)$ and the time trajectory of the Kp index are assumed to 
@@ -458,39 +497,6 @@ such that $100$ points lying in the interior of the domain and $30$ points at th
 ($t = 0$) are selected. These observations are then perturbed by Gaussian noise to yield the final 
 observation set $\mathcal{D}$ which is fed, as training data to the surrogate model $\hat{f}(x)$.
 
-\subsection*{Results}
-
-The inferred posterior distribution for parameters of the particle injection rate $Q(\ell, t)$ in 
-\cref{fig:alpha,fig:beta,fig:gamma,fig:b} while the samples from each prior distribution are shown 
-in \cref{fig:alphaprior,fig:betaprior,fig:gammaprior,fig:bprior}.
-
-We see that the marginal posterior distributions of each parameter have high probability density 
-near the ground truth, and that they are heavy tailed because there are often large regions of the 
-parameter space which produce similar solutions for the phase space density $f$. Apart from 
-identifying of parameters, the model also helps in significant reduction of uncertainty from prior 
-to posterior for the parameters $\beta$, $\gamma$ and $b$.
-
-The strength of the proposed method is the ability to quantify the uncertainty in diffusion 
-parameters from a sparse set of observations. Due to the formulation of the surrogate as a dual 
-optimization problem, it allows the inference to scale well with respect to high dimensional basis 
-function expansions. The method shows promise for parameter inference of physical systems and 
-warrants further research in its improvement.
-
-
-\begin{table}[t]
-  \caption{Parameters: Ground Truth}
-  \label{tab:ground-truth}
-  \centering
-  \begin{tabular}{lllll}
-    \hline
-    \textbf{Quantity}     & $\alpha$     & $\beta$ & $\gamma$ & $b$ \\
-    \hline
-    $Q$ & $1$  & $0.5$ & $0.05$  & $0.45$     \\
-    $\kappa$  & $4.731 \times 10^{-10}$ & $10$  & $0$ & $0.506$ \\
-    $\lambda$ & $0.3678$ & $0.5$  & $0$ & $-0.2$ \\
-    \hline
-  \end{tabular}
-\end{table}
 
 \begin{figure*}[!htb]
   \centering
@@ -539,27 +545,24 @@ warrants further research in its improvement.
 \end{figure*}
 
 
-\begin{figure*}[!htb]
-  \centering
-  \begin{subfigure}[b]{0.75\textwidth}
-    \centering
-    \includegraphics[width=0.6\textwidth]{histogram_Q_gamma_prior.png}
-    \caption{ 
-      Prior samples for the parameter $\gamma$, of $Q(\ell, t)$, 
-      red dotted line indicates the ground truth.
-    }
-    \label{fig:gammaprior}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}[b]{0.75\textwidth}
-    \centering
-    \includegraphics[width=0.6\textwidth]{histogram_Q_gamma_posterior.png}
-    \caption{
-      Posterior samples for the parameter $\gamma$, of $Q(\ell, t)$, 
-      red dotted line indicates the ground truth.}
-    \label{fig:gamma}
-  \end{subfigure}
-\end{figure*}
+\section{Results}
+
+The inferred posterior distribution for parameters of the particle injection rate $Q(\ell, t)$ in 
+\cref{fig:alpha,fig:beta,fig:b} while the samples from each prior distribution are shown 
+in \cref{fig:alphaprior,fig:betaprior,fig:bprior}.
+
+We see that the marginal posterior distributions of each parameter have high probability density 
+near the ground truth, and that they are heavy tailed because there are often large regions of the 
+parameter space which produce similar solutions for the phase space density $f$. Apart from 
+identifying of parameters, the model also helps in significant reduction of uncertainty from prior 
+to posterior for the parameters $\beta$, $\gamma$ and $b$.
+
+The strength of the proposed method is the ability to quantify the uncertainty in diffusion 
+parameters from a sparse set of observations. Due to the formulation of the surrogate as a dual 
+optimization problem, it allows the inference to scale well with respect to high dimensional basis 
+function expansions. The method shows promise for parameter inference of physical systems and 
+warrants further research in its improvement.
+
 
 
 \begin{figure*}[!htb]
@@ -581,6 +584,29 @@ warrants further research in its improvement.
       Posterior samples for the parameter $b$, of $Q(\ell, t)$, 
       red dotted line indicates the ground truth.}
     \label{fig:b}
+  \end{subfigure}
+\end{figure*}
+
+\begin{figure*}[!htb]
+  \centering
+  \begin{subfigure}[b]{0.75\textwidth}
+    \centering
+    \includegraphics[width=0.6\textwidth]{prior_posterior_scatter_Q_alpha_b.png}
+    \caption{ 
+      Comparing samples drawn from the prior and posterior distributions of 
+      parameters $\alpha$ and $b$  
+    }
+    \label{fig:alphavsb}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.75\textwidth}
+    \centering
+    \includegraphics[width=0.6\textwidth]{prior_posterior_scatter_Q_beta_b.png}
+    \caption{
+      Comparing samples drawn from the prior and posterior distributions of 
+      parameters $\beta$ and $b$  
+    }
+    \label{fig:betavsb}
   \end{subfigure}
 \end{figure*}
 
