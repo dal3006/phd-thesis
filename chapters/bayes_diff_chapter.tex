@@ -65,7 +65,7 @@ magnetospheric physics. After an overview of the parameterizations of the radial
 used by the research community, we give a detailed formulation of our proposed method and 
 demonstrate how it can be used for performing inference over said diffusion parameters.
 
-\subsection{Plasma Diffusion}
+\section{Plasma Diffusion}
 
 The radial diffusion system is a simplified one dimensional version of the \emph{Fokker-Planck} 
 equation. It tracks the time evolution of the \emph{phase space density} of particles, $f$ which is 
@@ -89,14 +89,14 @@ as a function of space $l$ and time $t$.
 \item $\lambda(\ell, t)$: The particle loss rate, a non-negative quantity which indicates how 
 quickly particles are lost from the radiation belts, due to mechanisms other than radial diffusion.
 \item $q(\ell, t)$: An optional particle injection rate (or source term). If this term is omitted 
-      (i.e. $q(\ell, t) = 0$) then boundary conditions $f(\ell_{min}, t)$ and $f(\ell_{max}, t)$ 
-      must be specified to solve \cref{eq:raddiffusion}. 
+      (i.e. $q(\ell, t) = 0$) then the boundary conditions $f(\ell_{min}, t)$ and 
+      $f(\ell_{max}, t)$ must be specified to solve \cref{eq:raddiffusion}. 
 \end{enumerate}
 %
 Interested readers can refer to section \S~\ref{sec:plasmadiff} for a more detailed explanation on 
 plasma diffusion, adiabatic invariants and plasma motion in the Earth's radiation belts. 
 
-\subsubsection*{Diffusion Parameters}
+\subsection{Diffusion Parameters}
 
 To solve the radial diffusion system (\cref{eq:raddiffusion}), the quantities $\kappa(\ell, t)$, 
 $\lambda(\ell, t)$ and $q(\ell, t)$ need to be specified. It is a common practice 
@@ -124,16 +124,25 @@ $\ell_{max}$.
 
 \section{PDE Inverse Problems}\label{sec:inv}
 
+Partial differential equations are usually solved by approximation of the derivatives involved 
+with numerical quadrature on a spatiotemporal grid. Solving of the PDE system is referred to as the 
+\emph{forward problem}, therefore inference of the PDE parameters from observations is naturally 
+called the \emph{inverse problem}.
+
 The PDE constrained inverse problem is defined as follows: given a set of noisy observations 
-$\mathcal{D} = \left[ (x_i, y_i): x \in \mathcal{X} \times [0, \infty), y \in \mathbb{R} \right]$ 
-of a physical quantity $f(x)$ which is governed by the PDE 
-$\mathcal{L}_{\theta} f(x) = q_{\theta}(x)$, estimate the parameters $\theta$ of the PDE 
-$(\mathcal{L}_{\theta}, q_{\theta})$. Here $\mathcal{X} \times [0, \infty)$ is the spatiotemporal 
-domain, $\mathcal{L}_{\theta}$ is a differential operator, $q_{\theta}$ is a \emph{source term}, 
-and $\theta$ is a collection of parameters which specify the operator and the source term.
-%
-For the radial diffusion system shown in \cref{eq:raddiffusion}, $\mathcal{L}_{\theta}$ is defined 
-as   
+$\mathcal{D} = \left\{ (x_i, y_i): x \in \mathcal{X} \times [0, \infty), y \in \mathbb{R} \right\}$ 
+of a physical quantity $f(x)$ which is governed by the differential equation 
+\begin{equation}\label{eq:forwardModel}
+  \mathcal{L}_{\theta} f(x) = q_{\theta}(x),
+\end{equation} 
+estimate the parameters $\theta$ of the forward model 
+$\mathcal{F} = \left( \mathcal{L}_{\theta}, q_{\theta} \right)$, where 
+$\mathcal{X} \times [0, \infty)$ is the spatiotemporal domain, $\mathcal{L}_{\theta}$ is a 
+differential operator, $q_{\theta}$ is a \emph{source term}, and $\theta$ is a collection of 
+parameters which specify the forward model. 
+
+For the radial diffusion system shown in \cref{eq:raddiffusion}, the differential operator 
+$\mathcal{L}_{\theta}$ is defined as   
 %
 \[
   \mathcal{L}_{\theta} =
@@ -145,22 +154,72 @@ as
 \] 
 %
 In this case $\theta$ would be a collection of parameters which would specify closed form 
-expressions for $\kappa(\ell, t), \ \lambda(\ell,t) \ \text{and} \ q(\ell,t)$ such as 
+expressions for $\kappa(\ell, t), \ \lambda(\ell, t) \ \text{and} \ q(\ell, t)$ such as 
 \cref{eq:paramExp,eq:q}.
+
+
+\subsection{Bayesian PDE Inverse Problem}
+
+Bayesian statistics \citep{lee1997bayesian} treats the problem of parameter determination as a 
+problem of probabilistic inference. By specifying: 
+\begin{enumerate*} 
+  \item an apriori probability distribution over the system parameters, and 
+  \item a likelihood distribution which determines the conditional distribution of the observations 
+        given the parameters, 
+\end{enumerate*} 
+the \emph{posterior distribution} or the conditional probability distribution of the parameters 
+given the observations can be computed using Bayes rule.
+
+In PDE constrained inverse problems, the object of interest is the distribution  
+$p(\theta \rvert \mathcal{D}, \mathcal{F})$ which is given by 
+\[
+  p(\theta \rvert \mathcal{D}, \mathcal{F}) = \frac{
+    p(\mathcal{D} \rvert \theta, \mathcal{F}) p(\theta)
+  }{
+    p(\mathcal{D}\rvert\mathcal{F})
+  }, 
+\]
+where $p(\theta)$ is the prior distribution, $p(\mathcal{D} \rvert \theta, \mathcal{F})$ is the 
+likelihood of the data in the forward model (the radial diffusion PDE), and the denominator 
+\[
+  p(\mathcal{D}\rvert\mathcal{F}) = \int{
+    p(\mathcal{D} \rvert \theta, \mathcal{F}) p(\theta) d\theta
+  }  
+\] 
+is a normalisation term known as the \emph{model evidence}.
+
+In PDE constrained Bayesian inverse problems, computation of the likelihood 
+$p(\mathcal{D} \rvert \theta, \mathcal{F})$ requires solving the forward problem specified in 
+\cref{eq:forwardModel}. Real world inverse problems often involve observations which are sparse and 
+irregularly spaced, therefore finite difference based PDE solution methods must be combined with 
+interpolation in order to compute the observation likelihood. Mesh-free PDE solution methods 
+provide are an alternative to finite difference methods where the PDE solution can be computed 
+on sets of arbitrarily spaced domain points.
 
 \subsection{Related Work}
 
-\subsubsection*{Mesh-free PDE solutions}
+A large body of research has been devoted to the development of mesh-free methods for PDEs; they 
+have been applied in both the forward and inverse problems. Below we summarise some prominent 
+themes in mesh-free methods.
 
-\paragraph{Least Squares Support Vector Machines} have been applied to calculating 
-approximate solutions to PDEs \citep{MEHRKANOON2015105,MEHRKANOON20122502} as well as parameter 
-estimation of delay differential equations \citep{MEHRKANOON2014830}, the approach taken in the 
-aforementioned research \citep{MEHRKANOON2014830} was expressing the parameter estimation of time 
-delay as an algebraic optimization problem resulting in closed-form approximation for the time 
-varying parameters while avoiding iterative simulation of the dynamical system (governed by the 
-delay differential equations) in the parameter estimation process.
+\emph{Gaussian Processes} (GP) models \citep{Rasmussen:2005:GPM:1162254} have a rich theory 
+which has much overlap with linear systems and deterministic and stochastic differential equations. 
+\citet{Skilling1992} presented one of the earliest works which focused on calculating solutions of 
+ordinary differential equations (ODE) systems with Gaussian Process methodology, \citet{Graepel} 
+applied it for solving linear partial differential equations with Dirichlet and Von Neumann 
+boundary conditions.
 
-\paragraph{Radial Basis Functions} (RBF) were first applied for solution of PDE problems in 
+Interplay between linear operators and GP models applied to Bayesian filtering was investigated by 
+\citet{Sarkka2011}. \citet{pmlr-v31-dondelinger13a} proposed an adaptive gradient matching 
+technique to used Gaussian Process models for inferring parameters of coupled ODE systems.
+
+\emph{Neural Networks} were also employed for solutions of boundary value problems in the 
+works such as \citet{Lagaris,Aarts2001,TSOULOS20092385,Baymani2011} which used feedforward networks 
+for calculating solutions to the Stokes problem. These approaches generally revolved around 
+decomposing the solution into two components, i.e. the first one satisfying the boundary conditions 
+and the second one represented by the feedforward network.
+
+\emph{Radial Basis Functions} (RBF) were first applied for solution of PDE problems in 
 \citet{KANSA1990147}, the authors used colocation with \emph{multi-quadric} basis functions for 
 approximating solutions of boundary value problems.
 
@@ -171,31 +230,23 @@ Radial basis functions have been applied for the mesh-free solutions of Poisson 
 equation \citep{doi:10.1137/120893975}. Refer to \citet{fornberg2015} for a recent textbook with 
 geoscience applications.
 
-\paragraph{Gaussian Processes} (GP) models \citep{Rasmussen:2005:GPM:1162254} have a rich theory 
-which has much overlapping with linear systems and deterministic and stochastic differential 
-equations. \citet{Skilling1992} presented one of the earliest works which focused on calculating 
-solutions of ordinary differential equations (ODE) systems with Gaussian Process methodology, 
-\citet{Graepel} applied it for solving linear partial differential equations with Dirichlet and 
-Von Neumann boundary conditions.
+\emph{Least Squares Support Vector Machines} have been applied to calculating 
+approximate solutions to PDEs \citep{MEHRKANOON2015105,MEHRKANOON20122502} as well as parameter 
+estimation of delay differential equations \citep{MEHRKANOON2014830}, the approach taken in the 
+aforementioned research \citep{MEHRKANOON2014830} was expressing the parameter estimation of time 
+delay as an algebraic optimization problem resulting in closed-form approximation for the time 
+varying parameters while avoiding iterative simulation of the dynamical system (governed by the 
+delay differential equations) in the parameter estimation process.
 
-Interplay between linear operators and GP models applied to Bayesian filtering was investigated by 
-\citet{Sarkka2011}. \citet{pmlr-v31-dondelinger13a} proposed an adaptive gradient matching 
-technique to used Gaussian Process models for inferring parameters of coupled ODE systems.
-
-\paragraph{Neural Networks} were also employed for solutions of boundary value problems in the 
-works such as \citet{Lagaris,Aarts2001,TSOULOS20092385,Baymani2011} which used feedforward networks 
-for calculating solutions to the Stokes problem. These approaches generally revolved around 
-decomposing the solution into two components, i.e. the first one satisfying the boundary conditions 
-and the second one represented by the feedforward network.
-
-\paragraph{Probabilistic Numeric Methods} (PNM), an area which aims to account for errors and 
-uncertainties in numerical methods, arising from loss of precision due to limitations of time and 
-hardware \citep{hennig2015probabilistic}. Applications of PNM range from Bayesian quadrature, 
-optimization, mesh-free solutions of PDEs, and PDE constrained Bayesian inverse problems. 
+\emph{Probabilistic Numeric Methods} (PNM), an area which concerns with the quantification of 
+errors and uncertainties in numerical methods arising from loss of precision due to limitations of 
+time and hardware \citep{hennig2015probabilistic}. Applications of PNM range from Bayesian 
+quadrature, optimization, mesh-free solutions of PDEs, and PDE constrained Bayesian inverse 
+problems. 
 
 \citet{conrad2017statistical} propose a probabilistic time integrator for quantifying probability 
 measures over solutions of ODE systems. \citet{girolamiSullivanPDE} introduce a probabilistic 
-mesh-less method (PMM) for quantifying uncertainty over the solution space of Linear PDEs, their 
+mesh-free method (PMM) for quantifying uncertainty over the solution space of Linear PDEs, their 
 model consists of a GP prior which is conditioned on a finite set of design points 
 (or colocation points) which constrain the GP based on the PDE dynamics and its boundary 
 conditions. The authors apply the PMM method for quantifying uncertainties in the forward as well 
@@ -203,15 +254,6 @@ as the inverse problem, and also provide theoretical results regarding the rates
 of the posterior distribution in both cases.
 
 \section{Methodology}
-
-Performing Bayesian inference over parameters of physical systems, involves synthesizing 
-preexisting knowledge of the physical system in question i.e. the 
-\emph{partial differential equation} (PDE), with statistical techniques. The aim of such an 
-exercise is often to obtain a probabilistic estimation of the system parameters, from a 
-sparse set of observations of quantities of interest (phase space density in this study). 
-
-
-\subsection{Model Formulation}
 
 We approach the radial diffusion inference problem by formulating a modified version of the 
 \emph{least squares support vector machine} predictor for obtaining a closed form approximation to 
@@ -221,17 +263,17 @@ of sparse noisy observations. Using the surrogate phase space density estimator 
 obtain the likelihood of the observations.
 
 
-\subsubsection*{Surrogate Phase Space Density Model}
+\subsection{Phase Space Density Surrogate}
 
-Let $\mathcal{D}={(x^{o}_{i}, y_{i}): i = 1 \cdots n_{o}}$ be a set of noisy observations of the 
-phase space density $f$, where $x_{i} = (\ell_{i}, t_{i})$ are points in the space-time domain. We 
-seek a linear estimator for $f$ of the form $\hat{f}(x) = w^{T}\varphi(x) + b$, where 
-$\varphi(.): \mathbb{R}^{2} \rightarrow \mathbb{R}^{d}$ is a $d$ dimensional feature map and $b$ is 
-a scalar intercept.
+Let $\mathcal{D}= \left\{(x^{o}_{i}, y_{i}): i = 1 \cdots n_{o} \right\}$ be a set of noisy 
+observations of the phase space density $f$, where $x_{i} = (\ell_{i}, t_{i})$ are points in the 
+space-time domain. We seek a linear estimator for $f$ of the form 
+$\hat{f}(x) = w^{T}\varphi(x) + b$, where $\varphi(.): \mathbb{R}^{2} \rightarrow \mathbb{R}^{d}$ 
+is a $d$ dimensional feature map and $b$ is a scalar intercept.
 
-Further let $\mathcal{C} ={(x^{c}_{i}, q_{i}): i = 1 \cdots n_{c}}$ be a set of colocation points 
-on which we aim to enforce radial diffusion dynamics. The values $q_{i}$ represent the particle 
-injection rate at $x^c$, and are calculated using \cref{eq:q}.
+Further let $\mathcal{C} = \left\{ (x^{c}_{i}, q_{i}): i = 1 \cdots n_{c} \right\}$ be a set of 
+colocation points on which we aim to enforce radial diffusion dynamics. The values $q_{i}$ 
+represent the particle injection rate at $x^c$, and are calculated using \cref{eq:q}.
 
 We exploit the linearity of the differential operator $\mathcal{L}_{\theta}$ and note that 
 $\mathcal{L}_{\theta} [\hat{f}(x)] = w^{T} \mathcal{L}_{\theta}[\varphi(x)] + \mathcal{L}_{\theta}[b]$, 
@@ -257,9 +299,8 @@ importance to the surrogate model, in order to fit the observational data and th
 physical system. The quantities $u_i$ enable us to weigh each colocation point differently. 
 
 It can be seen that system in \cref{eq:surrogate} is similar to the formulation of the LSSVM model, 
-while incorporating the dynamics of linear PDE systems into its loss function. In order to solve 
-the system in \cref{eq:surrogate}, we must construct its \emph{Lagrangian}, which is given in 
-\cref{eq:lag}.
+while incorporating the dynamics of linear PDE systems into its loss function. Solving the system 
+in \cref{eq:surrogate} is achieved by constructing its \emph{Lagrangian} given in \cref{eq:lag}.
 %
 \begin{equation}\label{eq:lag}
   \begin{aligned}
@@ -358,7 +399,7 @@ enforced as a constraint, it can possibly lead to numerical instabilities in inv
 the experiment outlined in section \S~\ref{sec:exp}, we chose 
 $\gamma_o = 2 \ \text{and} \ \gamma_c = 10^{-4}$.
 
-The weights $u_i$ have a special interpretation in a particular context. It is possible to
+The weights $u_i$ have a special interpretation in the context of \cref{eq:lag}. It is possible to
 interpret the term $\sum_{k = 1}^{n_{c}}{u_{k} \epsilon^{2}_{k}}$ as a quadrature approximation
 to the integrated error of the surrogate model with respect to the governing dynamics 
 $\int_{x \in \mathcal{D}}{||\mathcal{L}_{\theta} [\hat{f}(x)] - Q(x)||^2}$. When 
@@ -368,7 +409,7 @@ quadrature.
 
 In section \S~\ref{sec:exp}, we use eight point \emph{Gauss Legendre} quadrature in space and time 
 dimension each, thereby setting $n_c = 64$ and weights $u_i$ to appropriate values as dictated by 
-the quadrature rule \citep{_abramowitzm}.
+the chosen quadrature rule \citep{_abramowitzm}.
 
 \subsection{Quantifying Observation Likelihood}
 
@@ -442,14 +483,28 @@ the running sample statistics of the Markov Chain Monte Carlo (MCMC) procedure.
 
 \section{Experiments}\label{sec:exp}
 
+\begin{table}[t]
+  \caption{Parameters: Ground Truth}
+  \label{tab:ground-truth}
+  \centering
+  \begin{tabular}{llll}
+    \hline
+    \textbf{Quantity}  & $\alpha$ & $\beta$ & $b$ \\
+    \hline
+    $q$ & $-1$  & $2.5$ & $0.75$  \\
+    $\kappa$  & $\log(4.731 \times 10^{-10})$ & $10$ & $0.506$ \\
+    $\lambda$ & $\log(0.3678)$ & $0.5$ & $-0.2$ \\
+    \hline
+  \end{tabular}
+\end{table}
 
 \subsection{Synthetic Data}
 
 For the purposes of the experiment, the parameters of $\kappa$ and $\lambda$ are fixed while MCMC 
 inference is performed on the parameters of $q$. The prior distributions chosen for the parameters 
 are shown in \cref{tab:prior}. The posterior distribution over the parameters of $\lambda$ is 
-sampled via adaptive Metropolis, the first 5000 samples are kept aside as the \emph{burn in} period
-of the Markov Chain.
+sampled via adaptive Metropolis, the first $2000$ samples are kept aside as the \emph{burn in} 
+period of the Markov Chain.
 
 
 \begin{figure*}[!htb]
@@ -471,25 +526,10 @@ of the Markov Chain.
     }
     \label{fig:kpProfile}
   \end{subfigure}
-  \caption{Synthetic data generation for experiments.}
+  \caption{Synthetic data generation.}
 \end{figure*}
 
 \subsubsection*{Data Generation}
-
-\begin{table}[t]
-  \caption{Parameters: Ground Truth}
-  \label{tab:ground-truth}
-  \centering
-  \begin{tabular}{llll}
-    \hline
-    \textbf{Quantity}  & $\alpha$ & $\beta$ & $b$ \\
-    \hline
-    $q$ & $-1$  & $2.5$ & $0.75$  \\
-    $\kappa$  & $\log(4.731 \times 10^{-10})$ & $10$ & $0.506$ \\
-    $\lambda$ & $\log(0.3678)$ & $0.5$ & $-0.2$ \\
-    \hline
-  \end{tabular}
-\end{table}
 
 The technique presented is applied on synthetic data generated using a radial diffusion solver, 
 the ground truth values of the radial diffusion parameters are listed in \cref{tab:ground-truth}.
@@ -544,29 +584,9 @@ observation set $\mathcal{D}$ which is provided to the surrogate model $\hat{f}(
     \caption{Parameter $\alpha$}
     \label{fig:qalpha}
   \end{subfigure}
-  \caption{Comparing prior and posterior densities of the parameters of $q(\ell, t)$, 
-  the black dotted line indicates the ground truth.}  
+  \caption{\textbf{Synthetic Data}: Comparing prior and posterior densities for 
+  parameters of $q(\ell, t)$, the black dotted line indicates the ground truth.}  
 \end{figure*}
-
-
-\section{Results}
-
-The inferred posterior distribution for parameters of the particle injection rate $q(\ell, t)$ in 
-\cref{fig:qalpha,fig:qbeta,fig:qb}. We see that the marginal posterior distributions of each 
-parameter have high probability density near the ground truth, and that they are heavy tailed 
-because there are often large regions of the parameter space which produce similar solutions for 
-the phase space density $f$. Apart from identifying of parameters, the model also helps in 
-significant reduction of uncertainty from prior to posterior for the parameters $\beta$, 
-$\gamma$ and $b$.
-
-The strength of the proposed method is the ability to quantify the uncertainty in diffusion 
-parameters from a sparse set of observations. Due to the formulation of the surrogate as a dual 
-optimization problem, it allows the inference to scale well with respect to high dimensional basis 
-function expansions. The method shows promise for parameter inference of physical systems and 
-warrants further research in its improvement.
-
-
-
 
 \begin{figure*}[!htb]
   \centering
@@ -588,9 +608,82 @@ warrants further research in its improvement.
     \label{fig:betavsb}
   \end{subfigure}
   \caption{
-    Comparing prior and posterior samples drawn from parameters of $q(\ell, t)$.
+    \textbf{Synthetic Data}: Prior and posterior samples drawn from parameters of $q(\ell, t)$.
   }
 \end{figure*}
+
+
+\section{Results}
+
+The inferred posterior distribution for parameters of the particle injection rate $q(\ell, t)$ in 
+\cref{fig:qalpha,fig:qbeta,fig:qb}. We see that the marginal posterior distributions of each 
+parameter have high probability density near the ground truth, and that they are heavy tailed 
+because there are often large regions of the parameter space which produce similar solutions for 
+the phase space density $f$. Apart from identifying of parameters, the model also helps in 
+significant reduction of uncertainty from prior to posterior for the parameters $\beta$, 
+$\gamma$ and $b$.
+
+The strength of the proposed method is the ability to quantify the uncertainty in diffusion 
+parameters from a sparse set of observations. Due to the formulation of the surrogate as a dual 
+optimization problem, it allows the inference to scale well with respect to high dimensional basis 
+function expansions. The method shows promise for parameter inference of physical systems and 
+warrants further research in its improvement.
+
+\begin{figure*}[!htb]
+  \centering
+  \begin{subfigure}[b]{0.5\textwidth}
+    \centering
+    \includegraphics[width=0.6\textwidth]{van_allen_density_Q_b.png}
+    \caption{Parameter $b$}
+    \label{fig:qbvanAllen}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.5\textwidth}
+    \centering
+    \includegraphics[width=0.6\textwidth]{van_allen_density_Q_beta.png}
+    \caption{Parameter $\beta$}
+    \label{fig:qbetavanAllen}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.5\textwidth}
+    \centering
+    \includegraphics[width=0.6\textwidth]{van_allen_density_Q_alpha.png}
+    \caption{Parameter $\alpha$}
+    \label{fig:qalphavanAllen}
+  \end{subfigure}
+  \caption{
+    \textbf{Van Allen Data}: Comparing prior and posterior densities 
+    for the parameters of $q(\ell, t)$}  
+\end{figure*}
+
+\begin{figure*}[!htb]
+  \centering
+  \begin{subfigure}[b]{0.75\textwidth}
+    \centering
+    \includegraphics[width=0.6\textwidth]{van_allen_prior_posterior_scatter_Q_alpha_b.png}
+    \caption{ 
+      Scatter chart: $\alpha$ versus $b$.  
+    }
+    \label{fig:alphavsbvanAllen}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.75\textwidth}
+    \centering
+    \includegraphics[width=0.6\textwidth]{van_allen_prior_posterior_scatter_Q_beta_b.png}
+    \caption{
+      Scatter chart: $\beta$ versus $b$.  
+    }
+    \label{fig:betavsbvanAllen}
+  \end{subfigure}
+  \caption{
+    \textbf{Van Allen Data}: Prior and posterior samples 
+    drawn from parameters of $q(\ell, t)$.
+  }
+\end{figure*}
+
+
+
+
 
 %\bibliographystyle{plainnat}
 %\bibliography{references}
