@@ -75,7 +75,7 @@ community \citep{JGRA:JGRA9345}.
 \begin{equation}\label{eq:raddiffusion}
   \frac{\partial{f}}{\partial{t}} = \ell^2 \frac{\partial}{\partial{\ell}} \left( 
     \frac{\kappa(\ell, t)}{\ell^{2}} \frac{\partial{f}}{\partial{\ell}}
-  \right)_{\mathcal{M}, J} - \lambda(\ell, t) f + Q(\ell, t)
+  \right)_{\mathcal{M}, J} - \lambda(\ell, t) f + q(\ell, t)
 \end{equation}
 %
 The \emph{phase space density} $f$ is a function of the spatial coordinate $\ell$ which denotes the 
@@ -85,19 +85,21 @@ as follows.
 \begin{enumerate}
 \item $f$: The particle density, for a given value of the first and second adiabatic invariants, 
 as a function of space $l$ and time $t$.
-\item $\kappa(\ell, t)$: Diffusion field.
-\item $\lambda(\ell, t)$: Loss rate, this is a non-negative quantity which indicates how quickly 
-particles are lost from the radiation belts, due to mechanisms other than radial diffusion.
-\item $Q(\ell, t)$: Particle injection rate.
+\item $\kappa(\ell, t)$: A space and time varying diffusion field.
+\item $\lambda(\ell, t)$: The particle loss rate, a non-negative quantity which indicates how 
+quickly particles are lost from the radiation belts, due to mechanisms other than radial diffusion.
+\item $q(\ell, t)$: An optional particle injection rate (or source term). If this term is omitted 
+      (i.e. $q(\ell, t) = 0$) then boundary conditions $f(\ell_{min}, t)$ and $f(\ell_{max}, t)$ 
+      must be specified to solve \cref{eq:raddiffusion}. 
 \end{enumerate}
 %
-Interested readers can go to section \S~\ref{sec:plasmadiff} for a more detailed explanation on 
+Interested readers can refer to section \S~\ref{sec:plasmadiff} for a more detailed explanation on 
 plasma diffusion, adiabatic invariants and plasma motion in the Earth's radiation belts. 
 
 \subsubsection*{Diffusion Parameters}
 
 To solve the radial diffusion system (\cref{eq:raddiffusion}), the quantities $\kappa(\ell, t)$, 
-$\lambda(\ell, t)$ and $Q(\ell, t)$ need to be specified. It is a common practice 
+$\lambda(\ell, t)$ and $q(\ell, t)$ need to be specified. It is a common practice 
 \citetext{see \citealp{GRL:GRL10762}, \citealp{JGRA:JGRA15067}, \citealp{JGRA:JGRA18021} and
 \citealp{GRL:GRL22815}} to parametrize the diffusion field $\kappa$ and loss rate $\lambda$ as 
 %
@@ -109,16 +111,29 @@ The quantities $\alpha$, $\beta$ and $b$ above are parameters which define the d
 loss rate while the quantity $Kp(t)$ is known as the Kp index, a measured quantity which stands as 
 a proxy for the global geomagnetic activity \citep{BartelsKp}.
 
+In \cref{eq:q} we propose a parametrization of the source term $q$ which can approximate particle 
+injection through the upper boundary of the radiation belt. 
+%
+\begin{equation}\label{eq:q}
+q(\ell,t)  \sim \exp(\alpha - \beta (\ell - \ell_{max})^2) 10^{b Kp(t)}
+\end{equation}
+%
+The expression above is similar to the formulations of the diffusion and loss terms presented 
+earlier, however it is distinguished by its rapid spatial decay away from the upper boundary 
+$\ell_{max}$.  
 
-\section{Inverse Problems}\label{sec:inv}
+\section{PDE Inverse Problems}\label{sec:inv}
 
-The inverse problem can be stated as follows: given a set of noisy observations $y$ scattered in 
-the space-time domain, of a physical quantity $f$ governed by the dynamical system 
-$\mathcal{L}_{\theta} f = Q_{\theta}$, estimate the parameters $\theta$ of the dynamical system 
-$(\mathcal{L}_{\theta}, Q_{\theta})$, where $\mathcal{L}_{\theta}$ is a differential operator, 
-$Q_{\theta}$ is a \emph{source term} and $\theta$ is a collection of parameters which specify the 
-operator and the source term. In the radial diffusion system shown in \cref{eq:raddiffusion}, 
-$\mathcal{L}$ takes the form  
+The PDE constrained inverse problem is defined as follows: given a set of noisy observations 
+$\mathcal{D} = \left[ (x_i, y_i): x \in \mathcal{X} \times [0, \infty), y \in \mathbb{R} \right]$ 
+of a physical quantity $f(x)$ which is governed by the PDE 
+$\mathcal{L}_{\theta} f(x) = q_{\theta}(x)$, estimate the parameters $\theta$ of the PDE 
+$(\mathcal{L}_{\theta}, q_{\theta})$. Here $\mathcal{X} \times [0, \infty)$ is the spatiotemporal 
+domain, $\mathcal{L}_{\theta}$ is a differential operator, $q_{\theta}$ is a \emph{source term}, 
+and $\theta$ is a collection of parameters which specify the operator and the source term.
+%
+For the radial diffusion system shown in \cref{eq:raddiffusion}, $\mathcal{L}_{\theta}$ is defined 
+as   
 %
 \[
   \mathcal{L}_{\theta} =
@@ -129,9 +144,9 @@ $\mathcal{L}$ takes the form
     \lambda(\ell,t).  
 \] 
 %
-In this case $\theta$ would be a collection of parameters which would specify the analytic 
-expressions for $\kappa(\ell, t), \ \lambda(\ell,t) \ \text{and} \ Q(\ell,t)$, such as 
-\cref{eq:paramExp}.
+In this case $\theta$ would be a collection of parameters which would specify closed form 
+expressions for $\kappa(\ell, t), \ \lambda(\ell,t) \ \text{and} \ q(\ell,t)$ such as 
+\cref{eq:paramExp,eq:q}.
 
 \subsection{Related Work}
 
@@ -173,6 +188,19 @@ for calculating solutions to the Stokes problem. These approaches generally revo
 decomposing the solution into two components, i.e. the first one satisfying the boundary conditions 
 and the second one represented by the feedforward network.
 
+\paragraph{Probabilistic Numeric Methods} (PNM), an area which aims to account for errors and 
+uncertainties in numerical methods, arising from loss of precision due to limitations of time and 
+hardware \citep{hennig2015probabilistic}. Applications of PNM range from Bayesian quadrature, 
+optimization, mesh-free solutions of PDEs, and PDE constrained Bayesian inverse problems. 
+
+\citet{conrad2017statistical} propose a probabilistic time integrator for quantifying probability 
+measures over solutions of ODE systems. \citet{girolamiSullivanPDE} introduce a probabilistic 
+mesh-less method (PMM) for quantifying uncertainty over the solution space of Linear PDEs, their 
+model consists of a GP prior which is conditioned on a finite set of design points 
+(or colocation points) which constrain the GP based on the PDE dynamics and its boundary 
+conditions. The authors apply the PMM method for quantifying uncertainties in the forward as well 
+as the inverse problem, and also provide theoretical results regarding the rates of convergence 
+of the posterior distribution in both cases.
 
 \section{Methodology}
 
@@ -203,13 +231,12 @@ a scalar intercept.
 
 Further let $\mathcal{C} ={(x^{c}_{i}, q_{i}): i = 1 \cdots n_{c}}$ be a set of colocation points 
 on which we aim to enforce radial diffusion dynamics. The values $q_{i}$ represent the particle 
-injection rate $Q$ at $x^c$ and are calculated each time the parameters of $Q$ are sampled, by 
-evaluating the expression $Q(\ell,t) = (\alpha_{Q}l^{\beta_{Q}} + \gamma_{Q})10^{b_{Q}Kp(t)}$.
+injection rate at $x^c$, and are calculated using \cref{eq:q}.
 
 We exploit the linearity of the differential operator $\mathcal{L}_{\theta}$ and note that 
 $\mathcal{L}_{\theta} [\hat{f}(x)] = w^{T} \mathcal{L}_{\theta}[\varphi(x)] + \mathcal{L}_{\theta}[b]$, 
 yielding an estimator 
-$\hat{Q}(x) = w^{T}\psi(x) + \mathcal{L}_{\theta}[b]$ where $\psi_{\theta}(x) = \mathcal{L}_{\theta}[\varphi(x)]$. 
+$\hat{q}(x) = w^{T}\psi(x) + \mathcal{L}_{\theta}[b]$ where $\psi_{\theta}(x) = \mathcal{L}_{\theta}[\varphi(x)]$. 
 Determining $w \in \mathbb{R}^d$ can now be cast as the following constrained $L_2$ regularised 
 least squares problem.
 %
@@ -405,8 +432,8 @@ the running sample statistics of the Markov Chain Monte Carlo (MCMC) procedure.
     \hline
     \textbf{Parameter} & \textbf{Prior}\\
     \hline
-    $\alpha$ & $\text{Uniform}(-5, 5)$ \\
-    $\beta$  & $\text{Uniform}(0, 5)$ \\ 
+    $\alpha$ & $\text{Uniform}(-10, 10)$ \\
+    $\beta$  & $\text{Uniform}(0, 10)$ \\ 
     $b$ & $\text{Uniform}(0, 2)$ \\
     \hline
   \end{tabular}
@@ -419,7 +446,7 @@ the running sample statistics of the Markov Chain Monte Carlo (MCMC) procedure.
 \subsection{Synthetic Data}
 
 For the purposes of the experiment, the parameters of $\kappa$ and $\lambda$ are fixed while MCMC 
-inference is performed on the parameters of $Q$. The prior distributions chosen for the parameters 
+inference is performed on the parameters of $q$. The prior distributions chosen for the parameters 
 are shown in \cref{tab:prior}. The posterior distribution over the parameters of $\lambda$ is 
 sampled via adaptive Metropolis, the first 5000 samples are kept aside as the \emph{burn in} period
 of the Markov Chain.
@@ -444,6 +471,7 @@ of the Markov Chain.
     }
     \label{fig:kpProfile}
   \end{subfigure}
+  \caption{Synthetic data generation for experiments.}
 \end{figure*}
 
 \subsubsection*{Data Generation}
@@ -456,7 +484,7 @@ of the Markov Chain.
     \hline
     \textbf{Quantity}  & $\alpha$ & $\beta$ & $b$ \\
     \hline
-    $Q$ & $-1$  & $2.5$ & $0.5$  \\
+    $q$ & $-1$  & $2.5$ & $0.75$  \\
     $\kappa$  & $\log(4.731 \times 10^{-10})$ & $10$ & $0.506$ \\
     $\lambda$ & $\log(0.3678)$ & $0.5$ & $-0.2$ \\
     \hline
@@ -465,97 +493,71 @@ of the Markov Chain.
 
 The technique presented is applied on synthetic data generated using a radial diffusion solver, 
 the ground truth values of the radial diffusion parameters are listed in \cref{tab:ground-truth}.
-A slightly modified parameterization is adopted for the particle injection $Q$ as shown in 
-\cref{eq:q} below. The particle injection has a strictly time varying component due to presence of 
-a constant $\gamma$.
 %
-\begin{equation}\label{eq:q}
-Q(\ell,t)  \sim \exp(\alpha - \beta (\ell - \ell_{max})^2) 10^{b Kp(t)}
-\end{equation}
+The initial phase space density $f(t = 0)$ is set as follows (see \cref{fig:initialpsd}):
 %
-The initial phase space density $f(t = 0)$ and the time trajectory of the Kp index are assumed to 
-be set as follows.
+\begin{align*}
+f(t = 0) &= 2000 + 500(C_{3}(\ell_*) - C_{5}(\ell_*)) \\
+\ell_* &= 2\frac{\ell - \ell_{min}}{\ell_{max} - \ell_{min}} - 1 ,\\
+\end{align*}
 %
-\begin{align}
-f(t = 0) &= 4000 + 1000(C_{3}(\ell_*) - C_{5}(\ell_*)) \\
-\ell_* &= 2\frac{\ell - \ell_{min}}{\ell_{max} - \ell_{min}} - 1 \\
-Kp(t) &= \left\{\begin{matrix}
-2.5 + 4t & 0 \leq t < 1.5\\ 
-8.5 & 1.5 < t \leq 3\\ 
-17.5-3t & 3 <  t \leq 5 \\ 
-2.5 & 5 < t\\ 
-\end{matrix}\right.
-\end{align}
+where $C_n(.)$ is the is the Chebyshev polynomial of degree $n$. The evolution of the Kp index is 
+assumed to be an idealised version of a geomagnetic storm (see \cref{fig:kpProfile}) and 
+defined as 
+\[
+  Kp(t) = \left\{\begin{matrix}
+    2.5 & 0 \leq t < 2\\ 
+    2.5 + 4(t - 2d) & 2 \leq t < 3.5\\ 
+    8.5 & 3.5 \leq  t < 5 \\ 
+    23.5 - 3t & 5 \leq t < 7\\
+    2.5 & t \geq 7\\ 
+    \end{matrix}\right. \ .
+\] 
 %
-Where $C_n(.)$ is the is the Chebyshev polynomial of degree $n$. The evolution of the Kp index 
-\citet{BartelsKp} is assumed such that it mimics a geomagnetic storm event. The radial diffusion 
-solver is run for domain limits $\ell \in [1, 7], t \in [0, 5]$ with $200$ bins in the spatial and 
-$50$ bins in the temporal domains respectively.
-
-After the approximate solution profiles of $f$ are generated, the points are sub-sampled uniformly 
-such that $100$ points lying in the interior of the domain and $30$ points at the initial time step 
-($t = 0$) are selected. These observations are then perturbed by Gaussian noise to yield the final 
-observation set $\mathcal{D}$ which is fed, as training data to the surrogate model $\hat{f}(x)$.
+The radial diffusion solver is run for domain limits $\ell \in [1, 7], t \in [0, 9]$ with $200$ 
+bins in the spatial and $50$ bins in the temporal domains respectively. After the approximate 
+solution profiles of $f$ are generated, the points are sub-sampled uniformly such that $100$ points 
+lying in the interior of the domain and $30$ points at the initial time step ($t = 0$) are 
+selected. These observations are then perturbed by Gaussian noise to yield the final 
+observation set $\mathcal{D}$ which is provided to the surrogate model $\hat{f}(x)$.
 
 
 \begin{figure*}[!htb]
   \centering
-  \begin{subfigure}[b]{0.75\textwidth}
+  \begin{subfigure}[b]{0.5\textwidth}
     \centering
-    \includegraphics[width=0.6\textwidth]{histogram_Q_alpha_prior.png}
-    \caption{ 
-      Prior samples for the parameter $\alpha$, of $Q(\ell, t)$, 
-      red dotted line indicates the ground truth.
-    }
-    \label{fig:alphaprior}
+    \includegraphics[width=0.6\textwidth]{density_Q_b.png}
+    \caption{ Parameter $b$}
+    \label{fig:qb}
   \end{subfigure}
   \hfill
-  \begin{subfigure}[b]{0.75\textwidth}
+  \begin{subfigure}[b]{0.5\textwidth}
     \centering
-    \includegraphics[width=0.6\textwidth]{histogram_Q_alpha_posterior.png}
-    \caption{
-      Posterior samples for the parameter $\alpha$, of $Q(\ell, t)$, 
-      red dotted line indicates the ground truth.}
-    \label{fig:alpha}
-  \end{subfigure}
-\end{figure*}
-
-
-\begin{figure*}[!htb]
-  \centering
-  \begin{subfigure}[b]{0.75\textwidth}
-    \centering
-    \includegraphics[width=0.6\textwidth]{histogram_Q_beta_prior.png}
-    \caption{ 
-      Prior samples for the parameter $\beta$, of $Q(\ell, t)$, 
-      red dotted line indicates the ground truth.
-    }
-    \label{fig:betaprior}
+    \includegraphics[width=0.6\textwidth]{density_Q_beta.png}
+    \caption{Parameter $\beta$}
+    \label{fig:qbeta}
   \end{subfigure}
   \hfill
-  \begin{subfigure}[b]{0.75\textwidth}
+  \begin{subfigure}[b]{0.5\textwidth}
     \centering
-    \includegraphics[width=0.6\textwidth]{histogram_Q_beta_posterior.png}
-    \caption{
-      Posterior samples for the parameter $\beta$, of $Q(\ell, t)$, 
-      red dotted line indicates the ground truth.
-    }
-    \label{fig:beta}
+    \includegraphics[width=0.6\textwidth]{density_Q_alpha.png}
+    \caption{Parameter $\alpha$}
+    \label{fig:qalpha}
   \end{subfigure}
+  \caption{Comparing prior and posterior densities of the parameters of $q(\ell, t)$, 
+  the black dotted line indicates the ground truth.}  
 \end{figure*}
 
 
 \section{Results}
 
-The inferred posterior distribution for parameters of the particle injection rate $Q(\ell, t)$ in 
-\cref{fig:alpha,fig:beta,fig:b} while the samples from each prior distribution are shown 
-in \cref{fig:alphaprior,fig:betaprior,fig:bprior}.
-
-We see that the marginal posterior distributions of each parameter have high probability density 
-near the ground truth, and that they are heavy tailed because there are often large regions of the 
-parameter space which produce similar solutions for the phase space density $f$. Apart from 
-identifying of parameters, the model also helps in significant reduction of uncertainty from prior 
-to posterior for the parameters $\beta$, $\gamma$ and $b$.
+The inferred posterior distribution for parameters of the particle injection rate $q(\ell, t)$ in 
+\cref{fig:qalpha,fig:qbeta,fig:qb}. We see that the marginal posterior distributions of each 
+parameter have high probability density near the ground truth, and that they are heavy tailed 
+because there are often large regions of the parameter space which produce similar solutions for 
+the phase space density $f$. Apart from identifying of parameters, the model also helps in 
+significant reduction of uncertainty from prior to posterior for the parameters $\beta$, 
+$\gamma$ and $b$.
 
 The strength of the proposed method is the ability to quantify the uncertainty in diffusion 
 parameters from a sparse set of observations. Due to the formulation of the surrogate as a dual 
@@ -565,27 +567,6 @@ warrants further research in its improvement.
 
 
 
-\begin{figure*}[!htb]
-  \centering
-  \begin{subfigure}[b]{0.75\textwidth}
-    \centering
-    \includegraphics[width=0.6\textwidth]{histogram_Q_b_prior.png}
-    \caption{ 
-      Prior samples for the parameter $b$, of $Q(\ell, t)$, 
-      red dotted line indicates the ground truth.
-    }
-    \label{fig:bprior}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}[b]{0.75\textwidth}
-    \centering
-    \includegraphics[width=0.6\textwidth]{histogram_Q_b_posterior.png}
-    \caption{
-      Posterior samples for the parameter $b$, of $Q(\ell, t)$, 
-      red dotted line indicates the ground truth.}
-    \label{fig:b}
-  \end{subfigure}
-\end{figure*}
 
 \begin{figure*}[!htb]
   \centering
@@ -593,8 +574,7 @@ warrants further research in its improvement.
     \centering
     \includegraphics[width=0.6\textwidth]{prior_posterior_scatter_Q_alpha_b.png}
     \caption{ 
-      Comparing samples drawn from the prior and posterior distributions of 
-      parameters $\alpha$ and $b$  
+      Scatter chart: $\alpha$ versus $b$.  
     }
     \label{fig:alphavsb}
   \end{subfigure}
@@ -603,11 +583,13 @@ warrants further research in its improvement.
     \centering
     \includegraphics[width=0.6\textwidth]{prior_posterior_scatter_Q_beta_b.png}
     \caption{
-      Comparing samples drawn from the prior and posterior distributions of 
-      parameters $\beta$ and $b$  
+      Scatter chart: $\beta$ versus $b$.  
     }
     \label{fig:betavsb}
   \end{subfigure}
+  \caption{
+    Comparing prior and posterior samples drawn from parameters of $q(\ell, t)$.
+  }
 \end{figure*}
 
 %\bibliographystyle{plainnat}
