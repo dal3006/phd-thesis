@@ -1,14 +1,14 @@
-\chapter{Bayesian Inference of Plasma Diffusion Parameters}\label{chapter:bayes_diff_chapter}
+\chapter{Identifying Radiation Belt Parameters: A Bayesian Approach}
+\label{chapter:bayes_diff_chapter}
 
 {\small
-  We present a novel method which combines sparse irregular observations of a field with its 
-  governing physical dynamics, for performing Bayesian inference over latent system parameters. Our 
-  method uses a basis function approach coupled with a least squares support vector machine 
-  objective function which weighs differently errors arising due to data fitting and satisfaction 
-  of physical constraints. The method is applicable to linear PDE systems, it incorporates physical 
-  models into classical least squares techniques for the purpose of data assimilation and 
-  uncertainty quantification of latent parameters. We apply this method to the inverse problem of 
-  inferring uncertainty estimates of plasma diffusion parameters from sparse observations.
+  We present a novel method, which assimilates sparse irregular observations of a field with its 
+  governing physical dynamics. Our method uses a basis function approach coupled with a least 
+  squares support vector machine objective function which gives different weights to errors arising 
+  due to data fitting and satisfaction of physical constraints. The method is applicable to linear 
+  PDE systems, it incorporates physical models into classical least squares techniques for the 
+  purpose of data assimilation and uncertainty quantification of latent parameters. We apply this 
+  method to the problem of identifying radiation belt parameters from sparse observations.
 }
 
 \vfill
@@ -24,7 +24,7 @@
 \clearpage
 
 
-\section{Introduction}
+\section{Introduction}\label{sec:diffIntro}
 
 The Earth's radiation belts are the regions of space near the Earth that extend between $2R_E$ 
 and $8R_E$ ($R_E = \SI{6372}{\kilo\metre}$, the radius of the Earth), where the terrestrial 
@@ -36,16 +36,16 @@ Radiation belt particles generally execute three types of periodic motion, each 
 corresponding adiabatic invariant: gyration around magnetic field lines, bounce along field lines, 
 and drift around the Earth. During active times, when conditions change on time scales shorter than 
 the periods of motion, adiabaticity can be broken and particle motion can not be simply decomposed 
-into the aforementioned components. Particle motion can then be represented diffusively along each 
-component via the \emph{Fokker-Planck} equation yielding a useful model of radiation belt dynamics 
-\citep{schulz2012particle}.
+into the aforementioned components. In this case, particle motion can be represented diffusively 
+along each component via the \emph{Fokker-Planck} equation yielding a useful model of radiation 
+belt dynamics \citep{schulz2012particle}.
 
-The third invariant represents the total magnetic flux enclosed within a full particle orbit. It is 
-common to use a normalised form of this, the so called Roederer $L^{*}$ \citep{Roederer1970}. It is 
+The third invariant represents the total magnetic flux enclosed within a full particle orbit. 
+Generally, its normalised inverse, the well known Roederer $L^{*}$ \citep{Roederer1970} which is 
 analogous to radial distance from the center of the Earth (in Earth radii) to the equatorial 
-crossing point of the bouncing particle. Diffusion in $L^{*}$ alone (the other invariants shall be 
-considered conserved) accounts for the capture and inward radial transport of radiation belt 
-particles \citep{Roederer1970,JGR:JGR4463}.
+crossing point of a bouncing particle, is used when modeling radiation belt dynamics. Diffusion in 
+$L^{*}$ alone (the other invariants shall be considered conserved) accounts for the capture and 
+inward radial transport of radiation belt particles \citep{Roederer1970,JGR:JGR4463}.
 
 One of the main difficulties of using a physics-based model for studying and forecasting energetic 
 electrons in the radiation belt is that the parameters that characterise the Fokker-Planck 
@@ -65,12 +65,15 @@ magnetospheric physics. After an overview of the parameterizations of the radial
 used by the research community, we give a detailed formulation of our proposed method and 
 demonstrate how it can be used for performing inference over said diffusion parameters.
 
-\section{Plasma Diffusion}
+\section{Radial Diffusion}
 
-The radial diffusion system is a simplified one dimensional version of the \emph{Fokker-Planck} 
-equation. It tracks the time evolution of the \emph{phase space density} of particles, $f$ which is 
-governed by \cref{eq:raddiffusion} known as \emph{radial diffusion equation} in the radiation belt 
-community \citep{JGRA:JGRA9345}.
+As discussed in section \S~\ref{sec:diffIntro} above, plasma motion in the radiation belt can be 
+modeled as a simplified one dimensional version of the \emph{Fokker-Planck} equation. The resulting 
+system, shown in \cref{eq:raddiffusion}, known as \emph{radial diffusion} in radiation belt 
+physics \citep{JGRA:JGRA9345}. It governs the time evolution of the \emph{phase space density} 
+(PSD) of particles, which is expressed as a function of the Roederer $L^{*}$ 
+(henceforth denoted as $\ell$), and the time coordinate $t$.
+
 %
 \begin{equation}\label{eq:raddiffusion}
   \frac{\partial{f}}{\partial{t}} = \ell^2 \frac{\partial}{\partial{\ell}} \left( 
@@ -78,25 +81,24 @@ community \citep{JGRA:JGRA9345}.
   \right)_{\mathcal{M}, J} - \lambda(\ell, t) f + q(\ell, t)
 \end{equation}
 %
-The \emph{phase space density} $f$ is a function of the spatial coordinate $\ell$ which denotes the 
-\emph{Roederer} $L^*$ or \emph{L-shell}, and time $t$. The key quantities in the system above are 
-as follows.
+The key quantities in the radial diffusion system are summarised below.
 %
 \begin{enumerate}
-\item $f$: The particle density, for a given value of the first and second adiabatic invariants, 
-as a function of space $l$ and time $t$.
+\item $f$: The PSD, for fixed values of the first and second adiabatic invariants $\mathcal{M}$ 
+      and $\mathcal{J}$ respectively, as a function of space ($\ell$) and time ($t$).
 \item $\kappa(\ell, t)$: A space and time varying diffusion field.
 \item $\lambda(\ell, t)$: The particle loss rate, a non-negative quantity which indicates how 
 quickly particles are lost from the radiation belts, due to mechanisms other than radial diffusion.
-\item $q(\ell, t)$: An optional particle injection rate (or source term). If this term is omitted 
-      (i.e. $q(\ell, t) = 0$) then the boundary conditions $f(\ell_{min}, t)$ and 
-      $f(\ell_{max}, t)$ must be specified to solve \cref{eq:raddiffusion}. 
+\item $q(\ell, t)$: An optional particle injection rate or source term. If this term is omitted 
+      (i.e. $q(\ell, t) = 0$), then the boundary conditions $f(\ell_{min}, t)$ and 
+      $f(\ell_{max}, t)$ must be also specified along with the initial condition $f(\ell, 0)$ 
+      to solve \cref{eq:raddiffusion}. 
 \end{enumerate}
 %
-Interested readers can refer to section \S~\ref{sec:plasmadiff} for a more detailed explanation on 
+Interested readers can refer to section \S~\ref{sec:plasmadiff} for a detailed explanation on 
 plasma diffusion, adiabatic invariants and plasma motion in the Earth's radiation belts. 
 
-\subsection{Diffusion Parameters}
+\subsection{Diffusion Parameters}\label{sec:radDiffParams}
 
 To solve the radial diffusion system (\cref{eq:raddiffusion}), the quantities $\kappa(\ell, t)$, 
 $\lambda(\ell, t)$ and $q(\ell, t)$ need to be specified. It is a common practice 
@@ -104,23 +106,31 @@ $\lambda(\ell, t)$ and $q(\ell, t)$ need to be specified. It is a common practic
 \citealp{GRL:GRL22815}} to parametrize the diffusion field $\kappa$ and loss rate $\lambda$ as 
 %
 \begin{equation}\label{eq:paramExp}
-  \kappa(\ell, t), \lambda(\ell, t) \sim \alpha \ell^{\beta} 10^{b Kp(t)}.
+  \kappa(\ell, t), \lambda(\ell, t) \sim \alpha \ell^{\beta} 10^{b \mathrm{Kp}(t)}.
 \end{equation}
 %
-The quantities $\alpha$, $\beta$ and $b$ above are parameters which define the diffusion field and 
-loss rate while the quantity $Kp(t)$ is known as the Kp index, a measured quantity which stands as 
-a proxy for the global geomagnetic activity \citep{BartelsKp}.
-
+The quantities $\alpha$, $\beta$, and $b$ above are parameters which define the diffusion field and 
+loss rate. The quantity $\mathrm{Kp}(t)$ is the well known Kp index, a proxy for the global 
+geomagnetic activity \citep{BartelsKp}.
+%
 In \cref{eq:q} we propose a parametrization of the source term $q$ which can approximate particle 
-injection through the upper boundary of the radiation belt. 
+injection through the upper boundary ($ell_{max}$) of the radiation belt. 
 %
 \begin{equation}\label{eq:q}
-q(\ell,t)  \sim \exp(\alpha - \beta (\ell - \ell_{max})^2) 10^{b Kp(t)}
+q(\ell,t)  \sim \exp(\alpha - \beta (\ell - \ell_{max})^2) 10^{b \mathrm{Kp}(t)}
 \end{equation}
 %
 The expression above is similar to the formulations of the diffusion and loss terms presented 
 earlier, however it is distinguished by its rapid spatial decay away from the upper boundary 
 $\ell_{max}$.  
+
+It is possible to impose reasonable restrictions on the domains of parameters $\alpha$, $\beta$, 
+and $b$ of the source term $q(\ell, t)$. The parameter $\alpha$ can take values on the entire 
+real number line, but since we expect $q(\ell, t)$ to model particle injection from the outer 
+boundary $\ell_{max}$ during active geomagnetic conditions, $\beta$ and $b$ must both positive. We 
+shall see in section \S~\ref{sec:exp} that these constraints dictate the class of prior 
+distributions can be chosen for $\alpha$, $\beta$, and $b$, and alleviate problems of 
+identifiability.
 
 \section{PDE Inverse Problems}\label{sec:inv}
 
@@ -186,7 +196,12 @@ likelihood of the data in the forward model (the radial diffusion PDE), and the 
     p(\mathcal{D} \rvert \theta, \mathcal{F}) p(\theta) d\theta
   }  
 \] 
-is a normalisation term known as the \emph{model evidence}.
+is a normalisation term known as the \emph{model evidence}. For all but a few simple problems, the 
+model evidence term cannot be computed in closed form, therefore, the posterior probability can 
+only be computed up to a normalisation factor. Markov Chain Monte Carlo (MCMC) based methods are 
+used to generate samples from the posterior distribution, as they work with probability density 
+ratios and hence do not require expensive numerical integrations needed to compute 
+$p(\mathcal{D}\rvert\mathcal{F})$. 
 
 In PDE constrained Bayesian inverse problems, computation of the likelihood 
 $p(\mathcal{D} \rvert \theta, \mathcal{F})$ requires solving the forward problem specified in 
@@ -255,21 +270,27 @@ of the posterior distribution in both cases.
 
 \section{Methodology}
 
-We approach the radial diffusion inference problem by formulating a modified version of the 
-\emph{least squares support vector machine} predictor for obtaining a closed form approximation to 
-the phase space density $f$ which tries to satisfy the radial diffusion PDE 
-(\cref{eq:raddiffusion}) on a fixed set of \emph{colocation} points while minimizing error on a set 
-of sparse noisy observations. Using the surrogate phase space density estimator as a baseline, we 
-obtain the likelihood of the observations.
-
+Our approach solving the radial diffusion inverse problem proceeds has two components.
+%
+\begin{enumerate}
+  \item A surrogate PSD model built by formulating a modified version of the 
+        \emph{least squares support vector machine} predictor for obtaining a closed form 
+        approximation to $f$ which tries to satisfy \cref{eq:raddiffusion} on a fixed set of 
+        \emph{colocation} points while minimizing error on a set of sparse noisy observations.
+  \item A multivariate Gaussian likelihood over the noisy observations, the mean and covariance of 
+        which are computed using the surrogate model.
+\end{enumerate}
+%
+Below we describe the formulation of the surrogate model for the PSD in radial diffusion.
 
 \subsection{Phase Space Density Surrogate}
 
 Let $\mathcal{D}= \left\{(x^{o}_{i}, y_{i}): i = 1 \cdots n_{o} \right\}$ be a set of noisy 
 observations of the phase space density $f$, where $x_{i} = (\ell_{i}, t_{i})$ are points in the 
-space-time domain. We seek a linear estimator for $f$ of the form 
-$\hat{f}(x) = w^{T}\varphi(x) + b$, where $\varphi(.): \mathbb{R}^{2} \rightarrow \mathbb{R}^{d}$ 
-is a $d$ dimensional feature map and $b$ is a scalar intercept.
+space-time domain $[\ell_{min}, \ell_{max}] \times [0, \infty)$. We seek a linear estimator for $f$ 
+of the form $\hat{f}(x) = w^{T}\varphi(x) + b$, where 
+$\varphi(.): \mathbb{R}^{2} \rightarrow \mathbb{R}^{d}$ is a $d$ dimensional feature map and $b$ 
+is a scalar intercept.
 
 Further let $\mathcal{C} = \left\{ (x^{c}_{i}, q_{i}): i = 1 \cdots n_{c} \right\}$ be a set of 
 colocation points on which we aim to enforce radial diffusion dynamics. The values $q_{i}$ 
@@ -362,18 +383,26 @@ point $x = (\ell,t)$.
 \sum_{k = 1}^{n_{c}}}{\beta_{k} \varphi(x)^{T} \psi_{\theta}(x^{c}_{k})} + b
 \end{equation}
 
-\subsubsection*{Choice of Basis}
+\subsubsection*{Choice of $\varphi(.)$}\label{sec:basisChoice}
 
-There exist several choices regarding the basis $\varphi(.)$, they are but not limited to 
-orthogonal polynomials, Fourier series, radial basis functions etc. For our problem we choose a 
-basis which is a product of a Chebyshev basis of maximum degree $10$ in space and a Laguerre basis 
-of maximum degree $4$, in time.
-%
-\begin{equation}\label{eq:basis}
-\varphi_{i,j}(\ell,t) = C_{i}(l) L_{j}(t)
-\end{equation}
-%
+The function $\varphi(.)$ maps the spatiotemporal input $x$ to a $d$ dimensional feature space, 
+which is subsequently the input for the family of linear surrogate predictors $\hat{f}$. It is 
+therefore natural to express $\varphi(.)$ as a basis function expansion. The choice of $\varphi(.)$ 
+influences the continuity characteristics and representational capability of the surrogate model 
+class $\hat{f}$.
 
+There exist several options regarding the choice of basis, orthogonal polynomials, Fourier series, 
+radial basis functions, etc. We express $\varphi(.)$ as a product of space and time bases 
+$\phi(.)$ and $\varpi(.)$ respectively, as follows:
+%
+\[
+  \varphi_{i,j}(\ell,t) = 
+    T_{i}\left(2\frac{\ell - \ell_{min}}{\ell_{max} - \ell_{min}} - 1\right) \varpi_{j}(t) \ ,
+\]
+%
+where $T_{i}(.)$ is the Chebyshev polynomial of the first kind, of degree $i$, and 
+$\varpi_{j}(t) = \frac{1}{\sqrt{1 + (t - t_i)^{2}/s_{i}^2}}$ is the inverse multi-quadric RBF 
+centered at $t_i$ and having length scale $s_i$.   
 
 \subsubsection*{Role of $\gamma_o$, $\gamma_c$ and $u_i$}
 
@@ -395,9 +424,7 @@ to the following formulation.
 %
 Although choosing $\gamma_c = 0$ is an appropriate choice if the physical dynamics need to be 
 enforced as a constraint, it can possibly lead to numerical instabilities in inverting system in 
-\cref{eq:solution} and hence choosing a non zero value for $\gamma_c$ works better in practice. For 
-the experiment outlined in section \S~\ref{sec:exp}, we chose 
-$\gamma_o = 2 \ \text{and} \ \gamma_c = 10^{-4}$.
+\cref{eq:solution} and hence choosing a non zero value for $\gamma_c$ works better in practice. 
 
 The weights $u_i$ have a special interpretation in the context of \cref{eq:lag}. It is possible to
 interpret the term $\sum_{k = 1}^{n_{c}}{u_{k} \epsilon^{2}_{k}}$ as a quadrature approximation
@@ -453,19 +480,15 @@ a hybrid RBF covariance function
   \right)  + \mathbf{\varphi}(x_i)^{T}\mathbf{\varphi}(x_j)
 \] 
 to quantify the covariance of the phase space density $f$ over two points $x_i = (\ell_i, t_i)$ and 
-$x_j = (\ell_j, t_j)$ in the domain. The values of $s$ and $r$, the length scales of the covariance 
-function, can be fixed to the size of the space-time grid of the radial basis functions, 
-alternatively they can also be treated as system parameters which can be sampled by the inference 
-procedure. Since the core aims of this research was the quantification of the uncertainty over the 
-parameters of the radial diffusion system, we treat the covariance function parameters as fixed.
+$x_j = (\ell_j, t_j)$ in the domain.
 
 \subsection{Inference}
 
 We employ the adaptive Metropolis algorithm as proposed by \citet{haario2001}, for sampling
 system parameters. The adaptive Metropolis algorithm adapts the exploration variance according to 
-the running sample statistics of the Markov Chain Monte Carlo (MCMC) procedure.
+the running sample statistics of the MCMC procedure.
 
-\begin{table}[t]
+\begin{table}[ht]
   \caption{Parameters: Prior Distributions}
   \label{tab:prior}
   \centering
@@ -483,28 +506,63 @@ the running sample statistics of the Markov Chain Monte Carlo (MCMC) procedure.
 
 \section{Experiments}\label{sec:exp}
 
-\begin{table}[t]
+%Explain the experimental setting and the two problems.
+We tested our proposed model on two experiments discussed below.
+%
+\begin{enumerate}
+  \item \textbf{Synthetic Data}: Using a synthetically generated data set, we evaluate the ability 
+        of our model to identify radial diffusion parameters, when their ground truth value is 
+        known.
+  \item \textbf{Van Allen Probes}: Our model was used to quantify the uncertainties in the 
+        source term parameters from Van Allen probe data. 
+\end{enumerate}
+
+%Outline the choice of gammas, kernel parameters, basis sizes and config.
+In both experiments, we chose $\gamma_o = 2 \ \text{and} \ \gamma_c = 10^{-4}$. The parameters of 
+$\kappa(\ell, t)$ and $\lambda(\ell, t)$ were fixed to the values computed in 
+\citet{JGRA:JGRA15067} and \citet{GRL:GRL22815} respectively (see \cref{tab:ground-truth}) while 
+inference was performed only on the parameters of $q(\ell, t)$. 
+
+In both experiments, the bases were chosen as described in section \S~\ref{sec:basisChoice}. In the 
+synthetic problem we chose $5$ basis functions in space and $20$ basis functions in time 
+respectively; however in the van allen probe problem, we chose $6$ in space and $100$ in time. 
+For the temporal basis, the RBF nodes were placed on equally spaced grid and their length scales 
+were set to the grid cell size. 
+
+The values of $s$ and $r$, the length scales of the covariance function can also be treated as 
+system parameters which can be sampled by the inference procedure. Since the core aims of this 
+research was the quantification of the uncertainty over the parameters of the radial diffusion 
+system, we treated the covariance function parameters as fixed.
+
+%Explain MCMC config, burn in 
+The prior distributions chosen for the parameters are shown in \cref{tab:prior}, they are in 
+accordance with the constraints discussed in section \S~\ref{sec:radDiffParams}. The posterior 
+distribution over the parameters of $q(\ell, t)$ was sampled via the adaptive Metropolis algorithm, 
+the first $2000$ samples were discarded as the \enquote{burn in} of the Markov Chain. A total of 
+$2000$ samples were generated after the burn in period, and used to create the charts shown below.
+
+
+\begin{table}[ht]
   \caption{Parameters: Ground Truth}
   \label{tab:ground-truth}
   \centering
-  \begin{tabular}{llll}
+  \begin{tabular}{lllll}
     \hline
-    \textbf{Quantity}  & $\alpha$ & $\beta$ & $b$ \\
+    \textbf{Quantity}  & $\alpha$ & $\beta$ & $b$ & Reference\\
     \hline
-    $q$ & $-1$  & $2.5$ & $0.75$  \\
-    $\kappa$  & $\log(4.731 \times 10^{-10})$ & $10$ & $0.506$ \\
-    $\lambda$ & $\log(0.3678)$ & $0.5$ & $-0.2$ \\
+    $q$ & $-1$  & $2.5$ & $0.75$ & N.A. \\
+    $\kappa$  & $\log(4.731 \times 10^{-10})$ & $10$ & $0.506$ & \citet{JGRA:JGRA15067} \\
+    $\lambda$ & $\log(0.3678)$ & $0.5$ & $-0.2$ & \citet{GRL:GRL22815} \\
     \hline
   \end{tabular}
 \end{table}
 
 \subsection{Synthetic Data}
 
-For the purposes of the experiment, the parameters of $\kappa$ and $\lambda$ are fixed while MCMC 
-inference is performed on the parameters of $q$. The prior distributions chosen for the parameters 
-are shown in \cref{tab:prior}. The posterior distribution over the parameters of $\lambda$ is 
-sampled via adaptive Metropolis, the first $2000$ samples are kept aside as the \emph{burn in} 
-period of the Markov Chain.
+We generated a noisy synthetic data set by solving the radial diffusion equation using a 
+forward difference algorithm. The task of our model was to use the observations to infer the 
+parameters $\alpha$, $\beta$, and $b$ of the source term $q(\ell, t)$ that were used to generate 
+the observations.
 
 
 \begin{figure*}[!htb]
@@ -529,23 +587,21 @@ period of the Markov Chain.
   \caption{Synthetic data generation.}
 \end{figure*}
 
-\subsubsection*{Data Generation}
-
-The technique presented is applied on synthetic data generated using a radial diffusion solver, 
-the ground truth values of the radial diffusion parameters are listed in \cref{tab:ground-truth}.
+ 
+The ground truth values of the radial diffusion parameters are listed in \cref{tab:ground-truth}.
 %
-The initial phase space density $f(t = 0)$ is set as follows (see \cref{fig:initialpsd}):
+The initial phase space density $f(t = 0)$ was chosen as follows (see \cref{fig:initialpsd}):
 %
 \begin{align*}
-f(t = 0) &= 2000 + 500(C_{3}(\ell_*) - C_{5}(\ell_*)) \\
-\ell_* &= 2\frac{\ell - \ell_{min}}{\ell_{max} - \ell_{min}} - 1 ,\\
+f(t = 0) &= 2000 + 500(T_{3}(\ell_*) - T_{5}(\ell_*)) \\
+\ell_* &= 2\frac{\ell - \ell_{min}}{\ell_{max} - \ell_{min}} - 1 \ ,\\
 \end{align*}
 %
-where $C_n(.)$ is the is the Chebyshev polynomial of degree $n$. The evolution of the Kp index is 
+where $T_n(.)$ is the is the Chebyshev polynomial of degree $n$. The evolution of the Kp index was 
 assumed to be an idealised version of a geomagnetic storm (see \cref{fig:kpProfile}) and 
 defined as 
 \[
-  Kp(t) = \left\{\begin{matrix}
+  \mathrm{Kp}(t) = \left\{\begin{matrix}
     2.5 & 0 \leq t < 2\\ 
     2.5 + 4(t - 2d) & 2 \leq t < 3.5\\ 
     8.5 & 3.5 \leq  t < 5 \\ 
@@ -554,13 +610,12 @@ defined as
     \end{matrix}\right. \ .
 \] 
 %
-The radial diffusion solver is run for domain limits $\ell \in [1, 7], t \in [0, 9]$ with $200$ 
-bins in the spatial and $50$ bins in the temporal domains respectively. After the approximate 
-solution profiles of $f$ are generated, the points are sub-sampled uniformly such that $100$ points 
-lying in the interior of the domain and $30$ points at the initial time step ($t = 0$) are 
-selected. These observations are then perturbed by Gaussian noise to yield the final 
-observation set $\mathcal{D}$ which is provided to the surrogate model $\hat{f}(x)$.
-
+The radial diffusion solver was run for domain limits $\ell \in [1, 7], t \in [0, 9]$ with $200$ 
+bins in the spatial and $50$ bins in the temporal domains respectively. After the solution $f$ was 
+computed, points was sub-sampled uniformly such that $250$ points lying in the interior of the 
+domain, and $50$ points at the initial time step ($t = 0$) were selected. These observations were 
+then perturbed by Gaussian noise to yield the final observation set $\mathcal{D}$ which was 
+provided to the surrogate model $\hat{f}(x)$.
 
 \begin{figure*}[!htb]
   \centering
@@ -611,6 +666,10 @@ observation set $\mathcal{D}$ which is provided to the surrogate model $\hat{f}(
     \textbf{Synthetic Data}: Prior and posterior samples drawn from parameters of $q(\ell, t)$.
   }
 \end{figure*}
+
+\subsection{Van Allen Data}
+
+
 
 
 \section{Results}
