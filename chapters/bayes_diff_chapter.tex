@@ -58,7 +58,7 @@ account prior knowledge of the system dynamics in the form of a linear partial d
 equation. The method replaces a standard finite difference solver with a surrogate model which 
 tries to fit the observations and the system dynamics. The surrogate is expressed as a basis 
 function expansion whose coefficients are computed by formulating a 
-\emph{Least Squares Support Vector Machine} (LSSVM) like optimization objective.
+\emph{least squares support vector machine} (LSSVM) like optimization objective.
 
 In the proceeding sections, we give a short introduction to the radial diffusion equation used in 
 magnetospheric physics. After an overview of the parameterizations of the radial diffusion unknowns 
@@ -68,7 +68,7 @@ demonstrate how it can be used for performing inference over said diffusion para
 \section{Radial Diffusion}
 
 As discussed in section \S~\ref{sec:diffIntro} above, plasma motion in the radiation belt can be 
-modeled as a simplified one dimensional version of the \emph{Fokker-Planck} equation. The resulting 
+modeled as a simplified one dimensional version of the Fokker-Planck equation. The resulting 
 system, shown in \cref{eq:raddiffusion}, known as \emph{radial diffusion} in radiation belt 
 physics \citep{JGRA:JGRA9345}. It governs the time evolution of the \emph{phase space density} 
 (PSD) of particles, which is expressed as a function of the Roederer $L^{*}$ 
@@ -217,7 +217,7 @@ A large body of research has been devoted to the development of mesh-free method
 have been applied in both the forward and inverse problems. Below we summarise some prominent 
 themes in mesh-free methods.
 
-\emph{Gaussian Processes} (GP) models \citep{Rasmussen:2005:GPM:1162254} have a rich theory 
+\emph{Gaussian process} (GP) models \citep{Rasmussen:2005:GPM:1162254} have a rich theory 
 which has much overlap with linear systems and deterministic and stochastic differential equations. 
 \citet{Skilling1992} presented one of the earliest works which focused on calculating solutions of 
 ordinary differential equations (ODE) systems with Gaussian Process methodology, \citet{Graepel} 
@@ -228,13 +228,13 @@ Interplay between linear operators and GP models applied to Bayesian filtering w
 \citet{Sarkka2011}. \citet{pmlr-v31-dondelinger13a} proposed an adaptive gradient matching 
 technique to used Gaussian Process models for inferring parameters of coupled ODE systems.
 
-\emph{Neural Networks} were also employed for solutions of boundary value problems in the 
+\emph{Neural networks} were also employed for solutions of boundary value problems in the 
 works such as \citet{Lagaris,Aarts2001,TSOULOS20092385,Baymani2011} which used feedforward networks 
 for calculating solutions to the Stokes problem. These approaches generally revolved around 
 decomposing the solution into two components, i.e. the first one satisfying the boundary conditions 
 and the second one represented by the feedforward network.
 
-\emph{Radial Basis Functions} (RBF) were first applied for solution of PDE problems in 
+\emph{Radial basis functions} (RBF) were first applied for solution of PDE problems in 
 \citet{KANSA1990147}, the authors used colocation with \emph{multi-quadric} basis functions for 
 approximating solutions of boundary value problems.
 
@@ -245,15 +245,15 @@ Radial basis functions have been applied for the mesh-free solutions of Poisson 
 equation \citep{doi:10.1137/120893975}. Refer to \citet{fornberg2015} for a recent textbook with 
 geoscience applications.
 
-\emph{Least Squares Support Vector Machines} have been applied to calculating 
-approximate solutions to PDEs \citep{MEHRKANOON2015105,MEHRKANOON20122502} as well as parameter 
-estimation of delay differential equations \citep{MEHRKANOON2014830}, the approach taken in the 
-aforementioned research \citep{MEHRKANOON2014830} was expressing the parameter estimation of time 
-delay as an algebraic optimization problem resulting in closed-form approximation for the time 
-varying parameters while avoiding iterative simulation of the dynamical system (governed by the 
-delay differential equations) in the parameter estimation process.
+Least squares support vector machines have also been applied to calculating approximate solutions 
+to PDEs \citep{MEHRKANOON2015105,MEHRKANOON20122502} as well as parameter estimation of delay 
+differential equations \citep{MEHRKANOON2014830}, the approach taken in the aforementioned research 
+\citep{MEHRKANOON2014830} was expressing the parameter estimation of time delay as an algebraic 
+optimization problem resulting in closed-form approximation for the time varying parameters while 
+avoiding iterative simulation of the dynamical system 
+(governed by the delay differential equations) in the parameter estimation process.
 
-\emph{Probabilistic Numeric Methods} (PNM), an area which concerns with the quantification of 
+\emph{Probabilistic numeric methods} (PNM), an area which concerns with the quantification of 
 errors and uncertainties in numerical methods arising from loss of precision due to limitations of 
 time and hardware \citep{hennig2015probabilistic}. Applications of PNM range from Bayesian 
 quadrature, optimization, mesh-free solutions of PDEs, and PDE constrained Bayesian inverse 
@@ -274,7 +274,7 @@ Our approach solving the radial diffusion inverse problem proceeds has two compo
 %
 \begin{enumerate}
   \item A surrogate PSD model built by formulating a modified version of the 
-        \emph{least squares support vector machine} predictor for obtaining a closed form 
+        least squares support vector machine predictor for obtaining a closed form 
         approximation to $f$ which tries to satisfy \cref{eq:raddiffusion} on a fixed set of 
         \emph{colocation} points while minimizing error on a set of sparse noisy observations.
   \item A multivariate Gaussian likelihood over the noisy observations, the mean and covariance of 
@@ -434,7 +434,7 @@ $u_i = \frac{1}{n_c}$, this corresponds to the \emph{Monte Carlo} quadrature of 
 error, but it is possible to improve the quadrature accuracy by using \emph{Gauss-Legendre} 
 quadrature.
 
-In section \S~\ref{sec:exp}, we use eight point \emph{Gauss Legendre} quadrature in space and time 
+In section \S~\ref{sec:exp}, we use eight point Gauss-Legendre quadrature in space and time 
 dimension each, thereby setting $n_c = 64$ and weights $u_i$ to appropriate values as dictated by 
 the chosen quadrature rule \citep{_abramowitzm}.
 

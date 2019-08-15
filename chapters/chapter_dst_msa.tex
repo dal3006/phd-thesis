@@ -53,11 +53,11 @@ low latitudes. To assess the severity of geomagnetic storms, the Disturbance Sto
 
 The Dst index \citep{Sugiura1964} is based on measurements from four low latitude stations and 
 represents the axis-symmetric magnetic signature of magnetosphere currents (such as the ring current, 
-the tail currents and the Chapman-Ferraro current). It is computed using 1-hour average values of the 
+the tail currents and the Chapman-Ferraro current). It is computed using $1$-hour average values of the 
 horizontal component of the Earth’s magnetic field and is expressed in nano Tesla (nT). In the case of a 
 typical magnetic storm, three phases are observed according to Dst variations. First, there is a sudden drop 
 corresponding to the storm commencement. Second, the value of Dst stays in its excited state as the ring current 
-intensifies (the main phase). Finally, once the z-component of the Interplanetary Magnetic Field (IMF) turns 
+intensifies (the main phase). Finally, once the $z$-component of the interplanetary magnetic field (IMF) turns 
 northward, the ring current begins to recover and rises back to its quiet level (recovery phase). 
 
 Geomagnetic indices like Dst, Kp, AE and others are used in space weather to describe effects of the solar wind on 
@@ -119,7 +119,7 @@ In this work, we propose a technique which combines the predictive capabilities 
 probabilistic forecast provided by a GP. We use the so called \emph{long short-term memory network} (LSTM) 
 \citep{hochreiter1997long} to provide a single point prediction of the Dst geomagnetic index from one to six 
 hours ahead. The prediction produced by the LSTM is used as the mean function of a GP, to obtain a 
-probabilistic forecast. We call this hybrid model the \emph{Gaussian Process Neural Network} (GPNN). 
+probabilistic forecast. We call this hybrid model the \emph{Gaussian process neural network} (GPNN). 
 Input parameters of the GPNN are solar wind parameters (density, velocity,  
 $\text{IMF}\vert B \vert$  and $Bz$ ), six hour time history of Dst, and the magnetic field 
 measured onboard GPS satellites. To the best of our knowledge, the LSTM architecture has never 
