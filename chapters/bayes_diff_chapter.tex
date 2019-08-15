@@ -114,7 +114,7 @@ loss rate. The quantity $\mathrm{Kp}(t)$ is the well known Kp index, a proxy for
 geomagnetic activity \citep{BartelsKp}.
 %
 In \cref{eq:q} we propose a parametrization of the source term $q$ which can approximate particle 
-injection through the upper boundary ($ell_{max}$) of the radiation belt. 
+injection through the upper boundary ($\ell_{max}$) of the radiation belt. 
 %
 \begin{equation}\label{eq:q}
 q(\ell,t)  \sim \exp(\alpha - \beta (\ell - \ell_{max})^2) 10^{b \mathrm{Kp}(t)}
@@ -557,7 +557,7 @@ $2000$ samples were generated after the burn in period, and used to create the c
   \end{tabular}
 \end{table}
 
-\subsection{Synthetic Data}
+\subsection{Synthetic Data}\label{sec:syntheticDataQ}
 
 We generated a noisy synthetic data set by solving the radial diffusion equation using a 
 forward difference algorithm. The task of our model was to use the observations to infer the 
@@ -571,7 +571,7 @@ the observations.
     \centering
     \includegraphics[width=0.6\textwidth]{initial_psd.png}
     \caption{ 
-      Initial condition.
+      {\small The initial condition $f(\ell, 0)$.}
     }
     \label{fig:initialpsd}
   \end{subfigure}
@@ -580,7 +580,7 @@ the observations.
     \centering
     \includegraphics[width=0.6\textwidth]{kp_profile.png}
     \caption{
-      Kp evolution.
+      {\small The time evolution of the Kp index.}
     }
     \label{fig:kpProfile}
   \end{subfigure}
@@ -615,28 +615,61 @@ bins in the spatial and $50$ bins in the temporal domains respectively. After th
 computed, points was sub-sampled uniformly such that $250$ points lying in the interior of the 
 domain, and $50$ points at the initial time step ($t = 0$) were selected. These observations were 
 then perturbed by Gaussian noise to yield the final observation set $\mathcal{D}$ which was 
-provided to the surrogate model $\hat{f}(x)$.
+provided to the surrogate model $\hat{f}(x)$. The generated data set is plotted in 
+\cref{fig:trainingDataQ}.
+
+
+\begin{figure*}[!htb]
+  \centering
+  \begin{subfigure}[b]{0.75\textwidth}
+    \centering
+    \includegraphics[width=0.6\textwidth]{data_and_design_points_Q.png}
+    \caption{{\small 
+      Synthetic data used in section \S~\ref{sec:syntheticDataQ}.
+      Red crosses indicate colocation points chosen according to $8$ point Gauss-Legendre 
+      quadrature in space and time. 
+    }}
+  \label{fig:trainingDataQ}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.75\textwidth}
+    \centering
+    \includegraphics[width=0.6\textwidth]{data_and_design_points_van_allen.png}
+    \caption{{\small 
+      Van Allen probe data used in section \S~\ref{sec:vanAllenData}. Time axis is 
+      measured in hours from the starting point $5^{\text{th}}$ October $2012$. Red crosses indicate 
+      colocation points chosen according to $8$ point Gauss-Legendre quadrature in space and time.
+    }}
+    \label{fig:trainingDataVanAllen} 
+  \end{subfigure} 
+  \caption{Data sets used in the experiments.}
+\end{figure*}
+
+\subsection{Van Allen Data}\label{sec:vanAllenData}
+
+
+\section{Results}
 
 \begin{figure*}[!htb]
   \centering
   \begin{subfigure}[b]{0.5\textwidth}
     \centering
     \includegraphics[width=0.6\textwidth]{density_Q_b.png}
-    \caption{ Parameter $b$}
+    \caption{ {\small Parameter $b$}}
     \label{fig:qb}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.5\textwidth}
     \centering
     \includegraphics[width=0.6\textwidth]{density_Q_beta.png}
-    \caption{Parameter $\beta$}
+    \caption{{\small Parameter $\beta$}}
     \label{fig:qbeta}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.5\textwidth}
     \centering
     \includegraphics[width=0.6\textwidth]{density_Q_alpha.png}
-    \caption{Parameter $\alpha$}
+    \caption{{\small Parameter $\alpha$}}
     \label{fig:qalpha}
   \end{subfigure}
   \caption{\textbf{Synthetic Data}: Comparing prior and posterior densities for 
@@ -648,31 +681,20 @@ provided to the surrogate model $\hat{f}(x)$.
   \begin{subfigure}[b]{0.75\textwidth}
     \centering
     \includegraphics[width=0.6\textwidth]{prior_posterior_scatter_Q_alpha_b.png}
-    \caption{ 
-      Scatter chart: $\alpha$ versus $b$.  
-    }
+    \caption{{\small Scatter chart: $\alpha$ versus $b$.}}
     \label{fig:alphavsb}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.75\textwidth}
     \centering
     \includegraphics[width=0.6\textwidth]{prior_posterior_scatter_Q_beta_b.png}
-    \caption{
-      Scatter chart: $\beta$ versus $b$.  
-    }
+    \caption{{\small Scatter chart: $\beta$ versus $b$.}}
     \label{fig:betavsb}
   \end{subfigure}
-  \caption{
-    \textbf{Synthetic Data}: Prior and posterior samples drawn from parameters of $q(\ell, t)$.
-  }
+  \caption{\textbf{Synthetic Data}: Prior and posterior samples drawn 
+  from parameters of $q(\ell, t)$.}
 \end{figure*}
 
-\subsection{Van Allen Data}
-
-
-
-
-\section{Results}
 
 The inferred posterior distribution for parameters of the particle injection rate $q(\ell, t)$ in 
 \cref{fig:qalpha,fig:qbeta,fig:qb}. We see that the marginal posterior distributions of each 
@@ -693,21 +715,21 @@ warrants further research in its improvement.
   \begin{subfigure}[b]{0.5\textwidth}
     \centering
     \includegraphics[width=0.6\textwidth]{van_allen_density_Q_b.png}
-    \caption{Parameter $b$}
+    \caption{{\small Parameter $b$}}
     \label{fig:qbvanAllen}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.5\textwidth}
     \centering
     \includegraphics[width=0.6\textwidth]{van_allen_density_Q_beta.png}
-    \caption{Parameter $\beta$}
+    \caption{{\small Parameter $\beta$}}
     \label{fig:qbetavanAllen}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.5\textwidth}
     \centering
     \includegraphics[width=0.6\textwidth]{van_allen_density_Q_alpha.png}
-    \caption{Parameter $\alpha$}
+    \caption{{\small Parameter $\alpha$}}
     \label{fig:qalphavanAllen}
   \end{subfigure}
   \caption{
@@ -721,7 +743,7 @@ warrants further research in its improvement.
     \centering
     \includegraphics[width=0.6\textwidth]{van_allen_prior_posterior_scatter_Q_alpha_b.png}
     \caption{ 
-      Scatter chart: $\alpha$ versus $b$.  
+      {\small Scatter chart: $\alpha$ versus $b$. } 
     }
     \label{fig:alphavsbvanAllen}
   \end{subfigure}
@@ -730,7 +752,7 @@ warrants further research in its improvement.
     \centering
     \includegraphics[width=0.6\textwidth]{van_allen_prior_posterior_scatter_Q_beta_b.png}
     \caption{
-      Scatter chart: $\beta$ versus $b$.  
+     {\small  Scatter chart: $\beta$ versus $b$.  }
     }
     \label{fig:betavsbvanAllen}
   \end{subfigure}
