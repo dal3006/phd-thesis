@@ -539,7 +539,16 @@ The prior distributions chosen for the parameters are shown in \cref{tab:prior},
 accordance with the constraints discussed in section \S~\ref{sec:radDiffParams}. The posterior 
 distribution over the parameters of $q(\ell, t)$ was sampled via the adaptive Metropolis algorithm, 
 the first $2000$ samples were discarded as the \enquote{burn in} of the Markov Chain. A total of 
-$2000$ samples were generated after the burn in period, and used to create the charts shown below.
+$2000$ samples were generated after the burn in period, and used for the reporting of results.
+
+After sampling from the posterior distributions, the samples obtained are taken together with 
+$2000$ samples drawn from the prior distributions, and visualised in the following charts.
+\begin{enumerate}
+  \item \emph{Density Estimate Charts}: These plots show smoothed kernel density estimates computed 
+        from samples drawn from the prior and posterior distributions.
+  \item \emph{Scatter Charts}: The prior and posterior samples are plotted together along the 
+        parameter pairs $\alpha, b$ and $\beta, b$.
+\end{enumerate}
 
 
 \begin{table}[ht]
@@ -636,8 +645,8 @@ provided to the surrogate model $\hat{f}(x)$. The generated data set is plotted 
     \centering
     \includegraphics[width=0.6\textwidth]{data_and_design_points_van_allen.png}
     \caption{{\small 
-      Van Allen probe data used in section \S~\ref{sec:vanAllenData}. Time axis is 
-      measured in hours from the starting point $5^{\text{th}}$ October $2012$. Red crosses indicate 
+      Van Allen probe data used in section \S~\ref{sec:vanAllenData}. Time is measured in minutes 
+      from the starting point $17^{\text{th}}$ March $2013$. Red crosses indicate 
       colocation points chosen according to $8$ point Gauss-Legendre quadrature in space and time.
     }}
     \label{fig:trainingDataVanAllen} 
@@ -647,6 +656,13 @@ provided to the surrogate model $\hat{f}(x)$. The generated data set is plotted 
 
 \subsection{Van Allen Data}\label{sec:vanAllenData}
 
+Van Allen probe data from the \emph{MagEIS} instrument for the time period ranging from 
+$00:00$ $17^{\text{th}}$ March $2013$ to $12:00$ $18^{\text{th}}$ March $2013$ was extracted and 
+used for performing inference over the parameters of $q(\ell, t)$. This particular period was 
+chosen because active geomagnetic conditions occurred in it. \Cref{fig:trainingDataVanAllen} 
+plots the Van Allen PSD data on a logarithmic scale. To avoid dealing with extremely small values, 
+we use $\log_{10}\left( \frac{f(\ell, t)}{f_{min}} \right)$, the logarithm of the ratio of the PSD 
+to its observed minimum value in the data. 
 
 \section{Results}
 
