@@ -510,11 +510,13 @@ the running sample statistics of the MCMC procedure.
 We tested our proposed model on two experiments discussed below.
 %
 \begin{enumerate}
-  \item \textbf{Synthetic Data}: Using a synthetically generated data set, we evaluate the ability 
-        of our model to identify radial diffusion parameters, when their ground truth value is 
-        known.
-  \item \textbf{Van Allen Probes}: Our model was used to quantify the uncertainties in the 
-        source term parameters from Van Allen probe data. 
+  \item \textbf{Synthetic Problem}: Using a synthetically generated data set, we evaluated the 
+        ability of our model to identify radial diffusion parameters, when their ground truth 
+        values are known.
+  \item \textbf{Radiation Belt Particle Injection}: Our model was used to quantify uncertainties in 
+        the source term parameters from Van Allen probe data. The source term $q(\ell, t)$ 
+        (\cref{eq:raddiffusion,eq:q}) models particle injection in the radiation belts through 
+        their outer boundary. 
 \end{enumerate}
 
 %Outline the choice of gammas, kernel parameters, basis sizes and config.
@@ -524,15 +526,15 @@ $\kappa(\ell, t)$ and $\lambda(\ell, t)$ were fixed to the values computed in
 inference was performed only on the parameters of $q(\ell, t)$. 
 
 In both experiments, the bases were chosen as described in section \S~\ref{sec:basisChoice}. In the 
-synthetic problem we chose $5$ basis functions in space and $20$ basis functions in time 
-respectively; however in the van allen probe problem, we chose $6$ in space and $100$ in time. 
-For the temporal basis, the RBF nodes were placed on equally spaced grid and their length scales 
-were set to the grid cell size. 
+synthetic problem, we chose $5$ basis functions in space and $20$ basis functions in time 
+respectively; however in the van allen probe problem, we chose $6$ basis functions in space and 
+$500$ in time. With regards to the temporal basis, the RBF nodes were placed on equally spaced grid 
+and their length scales were set to the grid cell size. 
 
-The values of $s$ and $r$, the length scales of the covariance function can also be treated as 
-system parameters which can be sampled by the inference procedure. Since the core aims of this 
-research was the quantification of the uncertainty over the parameters of the radial diffusion 
-system, we treated the covariance function parameters as fixed.
+The quantities $s$ and $r$ which are the length scales of the covariance function can also be 
+treated as system parameters which can be sampled by the inference procedure. Since the core aims 
+of this research was the quantification of the uncertainty over the parameters of the radial 
+diffusion system, we treated the covariance function parameters as fixed.
 
 %Explain MCMC config, burn in 
 The prior distributions chosen for the parameters are shown in \cref{tab:prior}, they are in 
@@ -544,9 +546,9 @@ $2000$ samples were generated after the burn in period, and used for the reporti
 After sampling from the posterior distributions, the samples obtained are taken together with 
 $2000$ samples drawn from the prior distributions, and visualised in the following charts.
 \begin{enumerate}
-  \item \emph{Density Estimate Charts}: These plots show smoothed kernel density estimates computed 
+  \item \emph{Density estimate charts}: These plots show smoothed kernel density estimates computed 
         from samples drawn from the prior and posterior distributions.
-  \item \emph{Scatter Charts}: The prior and posterior samples are plotted together along the 
+  \item \emph{Scatter charts}: The prior and posterior samples are plotted together along the 
         parameter pairs $\alpha, b$ and $\beta, b$.
 \end{enumerate}
 
@@ -654,7 +656,7 @@ provided to the surrogate model $\hat{f}(x)$. The generated data set is plotted 
   \caption{Data sets used in the experiments.}
 \end{figure*}
 
-\subsection{Van Allen Data}\label{sec:vanAllenData}
+\subsection{Radiation Belt Data: Van Allen Probes}\label{sec:vanAllenData}
 
 Van Allen probe data from the \emph{MagEIS} instrument for the time period ranging from 
 $00:00$ $17^{\text{th}}$ March $2013$ to $12:00$ $18^{\text{th}}$ March $2013$ was extracted and 
@@ -664,7 +666,14 @@ plots the Van Allen PSD data on a logarithmic scale. To avoid dealing with extre
 we use $\log_{10}\left( \frac{f(\ell, t)}{f_{min}} \right)$, the logarithm of the ratio of the PSD 
 to its observed minimum value in the data. 
 
-\section{Results}
+There are two differences which stand out between the van allen data set and the synthetic data 
+used in section \S~\ref{sec:syntheticDataQ} above. Firstly, the synthetic data is randomly sampled 
+while the Van Allen probe data is sampled along their orbits (there are two probes). Secondly, 
+the synthetic data is has a larger density of observations in the space time domain as compared to 
+the Van Allen data. These factors among others influence the uncertainties in the posterior 
+inference, which is seen in section \S~\ref{sec:diffResults} below.  
+
+\subsection{Results}\label{sec:diffResults}
 
 \begin{figure*}[!htb]
   \centering
@@ -711,20 +720,49 @@ to its observed minimum value in the data.
   from parameters of $q(\ell, t)$.}
 \end{figure*}
 
+\subsubsection*{Synthetic Problem}
 
-The inferred posterior distribution for parameters of the particle injection rate $q(\ell, t)$ in 
-\cref{fig:qalpha,fig:qbeta,fig:qb}. We see that the marginal posterior distributions of each 
-parameter have high probability density near the ground truth, and that they are heavy tailed 
-because there are often large regions of the parameter space which produce similar solutions for 
-the phase space density $f$. Apart from identifying of parameters, the model also helps in 
-significant reduction of uncertainty from prior to posterior for the parameters $\beta$, 
-$\gamma$ and $b$.
+For the synthetic problem, the inferred posterior distribution for parameters of the particle 
+injection rate $q(\ell, t)$ are shown in \cref{fig:qb,fig:qbeta,fig:qalpha}. We see that the 
+marginal posterior distributions of $b$ and $\alpha$ have high probability density near the ground 
+truth. 
 
-The strength of the proposed method is the ability to quantify the uncertainty in diffusion 
-parameters from a sparse set of observations. Due to the formulation of the surrogate as a dual 
-optimization problem, it allows the inference to scale well with respect to high dimensional basis 
-function expansions. The method shows promise for parameter inference of physical systems and 
-warrants further research in its improvement.
+The scatter charts in \cref{fig:alphavsb,fig:betavsb} help us to identify regions in the 
+parameter space to which our model assigns high probability. From the scatter plot in 
+\cref{fig:alphavsb}, we see a clear negative correlation between $\alpha$ and $b$. This negative 
+correlation is a natural consequence of the parametrization of $q(\ell, t)$ in \cref{eq:q}. When 
+$\alpha$ is increased, $b$ must appropriately decreased if one is to explain the PSD observations. 
+Examining the dependence between $\alpha$ and $b$ in \cref{fig:alphavsb}, one can make the 
+interpretation that along the red linear region corresponding to high posterior probability, all 
+values of $\alpha$ and $b$ can explain the PSD observations with similar likelihood. We also 
+observe that the density of posterior samples is greater below the red linear region as compared to 
+above it.
+
+From \cref{fig:qbeta,fig:betavsb}, we observe that the model doesn't identify the parameter 
+$\beta$. Its posterior probability distribution does not have significantly reduced uncertainty 
+compared to its prior. The differences in the inference results between parameters $\alpha, b$, and 
+$\beta$ can be attributed to the vast differences in the sensitivity of the radial diffusion 
+solution to $\alpha$, $b$, and $\beta$.     
+
+\subsubsection*{Radiation Belt Particle Injection}
+
+From \cref{fig:qbvanAllen,fig:qbetavanAllen,fig:qalphavanAllen}, we see that the posterior 
+probabilities for $b$, $\beta$, and $\alpha$ approximately peak at $0.64$, $4.8$, and $-5$ 
+respectively. In \cref{fig:alphavsbvanAllen}, we see a negative correlation between $\alpha$ and 
+$b$ similar to what was observed in \cref{fig:alphavsb}.
+
+Although the posterior distributions are not uninformative like the uniform priors, they have 
+significantly greater uncertainty as compared to the results of the synthetic problem. This is 
+because of two principal causes.
+\begin{enumerate}
+  \item \emph{Data sparsity}: The radiation belt data is sparsely sampled as compared to the 
+        synthetic data.
+  \item \emph{Forward model inadequacy}: The radial diffusion PDE is a simplified model for the 
+        dynamics of the radiation belt. This inadequacy of the forward model can have a strong 
+        influence in parameter uncertainties. 
+\end{enumerate}
+
+
 
 \begin{figure*}[!htb]
   \centering
@@ -779,7 +817,28 @@ warrants further research in its improvement.
 \end{figure*}
 
 
+\section{Conclusions}
 
+In this chapter, we proposed a surrogate model for the phase space density of particles in the 
+radiation belt, and we presented a method for applying it on the Bayesian inverse problem of 
+quantifying uncertainties in parameters of the simplified radial diffusion model for radiation 
+belt dynamics. 
+
+We used our model to perform inference of radial diffusion source term parameters. For this 
+purpose, we tested it on two data sets: 
+\begin{enumerate*}
+  \item synthetically generated phase space density data and 
+  \item in-situ measurements taken by the Van Allen probes. 
+\end{enumerate*}
+
+The model enabled the identification of regions in the parameter space which have a high 
+probability of producing phase space density values which close to the observations.
+
+The strength of the proposed method is the ability to quantify the uncertainty in the parameters of 
+a physical system, from a sparse set of observations. Due to the formulation of the surrogate 
+optimization in its dual form, it allows the inference to scale well with respect to high 
+dimensional basis function expansions. The method can be applied for parameter inference of 
+linear partial differential equations and warrants further research in its improvement.
 
 
 %\bibliographystyle{plainnat}

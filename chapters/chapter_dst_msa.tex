@@ -623,9 +623,10 @@ For predictions from one to five hour ahead, GPNN provides accurate predictions 
 For example, for the five hours ahead forecast, the storm peak of \SI{-422}{\nano\tesla} is forecasted as 
 \SI{-391}{\nano\tesla}. 
 
-The main benefit of the GP component in GPNN can be appreciated when comparing \cref{fig:lstmhalloween,fig:gpnnhalloween} which show that the GPNN model gave more accurate six hour ahead forecasts for the 
-2003 Halloween storm. The error bars calculated by the GPNN model include the storm peak for one to six hour 
-ahead forecasts.
+The main benefit of the GP component in GPNN can be appreciated when comparing 
+\cref{fig:lstmhalloween,fig:gpnnhalloween} which show that the GPNN model gave more accurate six 
+hour ahead forecasts for the $2003$ Halloween storm. The error bars calculated by the GPNN model 
+include the storm peak for one to six hour ahead forecasts.
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{halloween_storm_GPNN.pdf}
@@ -641,7 +642,7 @@ ahead forecasts.
 \section{Conclusion}
 
 
-In this paper, we have presented a hybrid model for Dst forecasting, the GPNN, based on LSTM networks and Gaussian Processes. 
+In this chapter, we have presented a hybrid model for Dst forecasting, the GPNN, based on LSTM networks and Gaussian Processes. 
 
 First, we developed a LSTM network, to provide Dst predictions one to six hours ahead. A separate LSTM was 
 developed for each time step of the forecast horizon, then global performance of LSTM was compared to previously 
