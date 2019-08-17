@@ -119,8 +119,8 @@ Recently, GPS data has been publicly released under the terms of the
 %\footnote{\url{https://obamawhitehouse.archives.gov/the-press-office/2016/10/13/executive-order-coordinating-efforts-prepare-nation-space-weather-events}}. 
 
 In this work, we propose a technique which combines the predictive capabilities of an ANN with the 
-advantages of the probabilistic forecast provided by a GP. We use the so called 
-\emph{long short-term memory network} (LSTM) \citep{hochreiter1997long} to provide a single point 
+advantages of the probabilistic forecast provided by a GP. We use the well known 
+long short-term memory network (LSTM) \citep{hochreiter1997long} to provide a single point 
 prediction of the Dst geomagnetic index from one to six hours ahead. The prediction produced by the 
 LSTM is used as the mean function of a GP, to obtain a probabilistic forecast. We call this hybrid 
 model the \emph{Gaussian process neural network} (GPNN). Input parameters of the GPNN are solar 
@@ -176,19 +176,20 @@ measurement, $B_{\text{gps}}$.
 
 \subsection{Long Short-Term Memory Network}\label{sec:lstmintro}
 
-The \emph{long short-term memory} network (LSTM) belongs to the family of 
+The long short-term memory network (LSTM) belongs to the family of 
 \emph{recurrent neural networks} (RNN). In an RNN, hidden layers are built to allow information 
 persistence. They behave as a loop to allow information to be passed from one cell of the network 
 to the next. When this loop is unrolled, the RNN can then be thought as multiple copies of the same 
 network. The RNN architecture is particularly suited for time series forecasting applications. 
 
-\citet{hochreiter1991untersuchungen,bengio1994learning} underlined a weakness of RNNs. They are supposed to connect 
-past information to the present, but if the information needed is too far in the past, RNNs are unable to to retain it. 
-This failure is due to the so called \emph{vanishing gradient problem} occurring during the training of RNNs. 
+\citet{hochreiter1991untersuchungen,bengio1994learning} underlined a weakness of RNNs. They are 
+supposed to connect past information to the present, but if the information needed is too far in 
+the past, RNNs are unable to to retain it. This failure is due to the well known 
+\emph{vanishing gradient problem} occurring during the training of RNNs. 
 
-LSTM networks are designed to overcome the vanishing gradient problem by retaining information pertaining to long range 
-temporal dependencies in time series data. LSTMs have a chain-like structure like RNNs, but the repeating module 
-known as the LSTM cell has specific characteristics.
+LSTM networks are designed to overcome the vanishing gradient problem by retaining information 
+pertaining to long range temporal dependencies in time series data. LSTMs have a chain-like 
+structure like RNNs, but the repeating module known as the LSTM cell has specific characteristics.
 
 \Cref{fig:lstmcell} shows the computational graph of the LSTM cell. The two elements fundamental to 
 this cell are the cell state and the gates. The cell state $\mathbf{c}_{t}$ in \cref{fig:lstmcell} 
@@ -276,7 +277,7 @@ final prediction computed LSTM cell for input $\mathbf{x}_t$.
 To produce predictions of Dst up to six hours ahead, we trained six LSTM models. Thus for every 
 input, we obtained a vector of outputs 
 $[\mathrm{\hat{D}st}\left(t + p\right)], p\in \{ 1, \cdots, 6 \}$.
-
+%
 For inputs $\mathbf{x}_t$, we use solar wind parameters 
 ($n$, $V_{\text{sw}}$, $|\mathbf{B}|$, $B_{z}$) and the GPS data ($B_{\text{gps}}$) described in 
 section \S~\ref{sec:datagpnn}. We also use the time history of Dst, from one to six hours back.
