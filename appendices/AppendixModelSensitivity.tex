@@ -1,0 +1,98 @@
+\chapter{Sensitivity Analysis of the Radial Diffusion System}\label{app:psdSensitivity}
+
+\section*{Model Sensitivity}
+
+Sensitivity analysis methods originated from the need to quantify the effect that small errors in 
+parameters of a partial differential equation (PDE) have on its solution. A number of methods for 
+computing forward model sensitivity have been proposed. \citet{KODA1979259} compares the three 
+approaches for performing sensitivity analysis of partial differential equations:
+\begin{enumerate}
+    \item the direct method,
+    \item the variational method, and 
+    \item the Fourier amplitude sensitivity test (FAST).
+\end{enumerate}
+They compare these techniques by applying them on the problem of atmospheric diffusion. In this 
+appendix, we apply of the direct method of sensitivity analysis on the radial diffusion system 
+of section \S~\ref{sec:radDiffusionIntroduction} and visualise the sensitivity of the phase 
+space density to the parameters of the diffusion field, the loss rate, and the source term.
+
+
+\subsection*{Sensitivity: The Direct Method}
+
+Consider the partial differential equation given by 
+\begin{equation}\label{eq:forwardModelPDE}
+    \mathcal{L}_{\theta}[f(x)] = q_{\theta}(x) \ ,
+\end{equation}
+where $\theta$ is a vector containing all parameters which define the forward model 
+$\mathcal{F} = (\mathcal{L}_{\theta}, q_{\theta})$. According to the direct method, the sensitivity 
+of the forward model in the region around $\theta = \theta^{\ast}$ is defined as the local 
+gradient of its solution $f(\ell, t; \theta)$ with respect to the model parameters $\theta$, which 
+is given by 
+\[
+    s(\ell, t, \theta) =  
+    \left. \frac{\partial}{\partial \theta}f(\ell, t; \theta) \ 
+    \right\rvert_{\theta = \theta^{\ast}} \ .
+\] 
+%
+The sensitivity $s(\ell, t, \theta)$ is a function of space, time, and forward model parameters. It 
+can be computed from \cref{eq:forwardModelPDE}, by taking differentiating both sides with respect 
+to $\theta$ as follows:  
+\[
+    \frac{\partial}{\partial{\theta}} \mathcal{L}_{\theta}[f(x)] = 
+        \frac{\partial}{\partial{\theta}} q_{\theta}(x) \ .
+\] 
+
+
+
+
+\section*{Sensitivity of the Phase Space Density}
+
+\begin{equation}\label{eq:psdSensitivity}
+    \begin{aligned}
+        \frac{\partial{s_i}}{\partial{t}} &= \ell^2 \frac{\partial}{\partial{\ell}} \left( 
+            \frac{\kappa(\ell, t)}{\ell^{2}} \frac{\partial{s_i}}{\partial{\ell}} +
+            \frac{1}{\ell^{2}} \frac{\partial{\kappa(\ell, t)}}{\partial{\theta_i}} 
+            \frac{\partial{f}}{\partial{\ell}}
+        \right)_{\mathcal{M}, J}
+         - \lambda(\ell, t) s_i - \frac{\partial{\lambda}(\ell, t)}{\partial{\theta_i}} f
+         + \frac{\partial{q}(\ell, t)}{\partial{\theta_i}}
+    \end{aligned}
+\end{equation}
+
+\subsection*{Diffusion Field}
+
+\begin{equation}\label{eq:psdSensitivityDiff}
+    \begin{aligned}
+        \frac{\partial{s_{\kappa}}}{\partial{t}} &= \ell^2 \frac{\partial}{\partial{\ell}} \left( 
+            \frac{\kappa(\ell, t)}{\ell^{2}} \frac{\partial{s_{\kappa}}}{\partial{\ell}} +
+            \frac{1}{\ell^{2}} \frac{\partial{\kappa(\ell, t)}}{\partial{\theta_{\kappa}}} 
+            \frac{\partial{f}}{\partial{\ell}}
+        \right)_{\mathcal{M}, J}
+         - \lambda(\ell, t) s_{\kappa}
+    \end{aligned}
+\end{equation}
+
+\subsection*{Loss Rate}
+
+\begin{equation}\label{eq:psdSensitivityLambda}
+    \begin{aligned}
+        \frac{\partial{s_{\lambda}}}{\partial{t}} &= \ell^2 \frac{\partial}{\partial{\ell}} \left( 
+            \frac{\kappa(\ell, t)}{\ell^{2}} \frac{\partial{s_{\lambda}}}{\partial{\ell}} 
+        \right)_{\mathcal{M}, J}
+         - \lambda(\ell, t) s_{\lambda}
+         - \frac{\partial\lambda(\ell, t)}{\partial{\theta_{\lambda}}} f
+    \end{aligned}
+\end{equation}
+
+
+\subsection*{Source Term}
+
+\begin{equation}\label{eq:psdSensitivityQ}
+    \begin{aligned}
+        \frac{\partial{s_{q}}}{\partial{t}} &= \ell^2 \frac{\partial}{\partial{\ell}} \left( 
+            \frac{\kappa(\ell, t)}{\ell^{2}} \frac{\partial{s_{q}}}{\partial{\ell}} 
+        \right)_{\mathcal{M}, J}
+         - \lambda(\ell, t) s_{q}
+         + \frac{\partial}{\partial{\theta_{q}}}q(\ell, t)
+    \end{aligned}
+\end{equation}
