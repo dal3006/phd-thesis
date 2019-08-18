@@ -128,12 +128,11 @@ wind parameters (density, velocity, $\text{IMF}\vert B \vert$  and $Bz$ ), six h
 of Dst, and the magnetic field measured onboard GPS satellites. To the best of our knowledge, the 
 LSTM architecture has never been used in space weather applications before.
 
-The remainder of this chapter is organised as follows: section \S~\ref{sec:datagpnn} presents the 
-data used in this study, section \S~\ref{sec:methodgpnn} describes the computational method and 
-how the LSTM and its combination with the GP are developed and optimised. Section 
-\S~\ref{sec:resultsgpnn} presents the performance of the LSTM model when producing point 
-predictions for the Dst one to six hours ahead and the evaluation of the probabilistic forecasts 
-provided by the GPNN model. 
+The remainder of this chapter is organised as follows: \cref{sec:datagpnn} presents the 
+data used in this study, \cref{sec:methodgpnn} describes the computational method and 
+how the LSTM and its combination with the GP are developed and optimised. \Cref{sec:resultsgpnn} 
+presents the performance of the LSTM model when producing point predictions for the Dst one to 
+six hours ahead and the evaluation of the probabilistic forecasts provided by the GPNN model. 
 
 \section{Data}\label{sec:datagpnn}
 
@@ -280,7 +279,7 @@ $[\mathrm{\hat{D}st}\left(t + p\right)], p\in \{ 1, \cdots, 6 \}$.
 %
 For inputs $\mathbf{x}_t$, we use solar wind parameters 
 ($n$, $V_{\text{sw}}$, $|\mathbf{B}|$, $B_{z}$) and the GPS data ($B_{\text{gps}}$) described in 
-section \S~\ref{sec:datagpnn}. We also use the time history of Dst, from one to six hours back.
+\cref{sec:datagpnn}. We also use the time history of Dst, from one to six hours back.
 %
 \begin{equation}\label{eq:lstminputs}
 	\begin{aligned}
@@ -312,7 +311,7 @@ $h^{p}_{d} ( h^{p}_{d-1}( \cdots (h^{p}_{1}(\cdot)\cdots))$.
 To find the LSTM structure, which is most suitable for predicting geomagnetic activity, we 
 built networks consisting of varying number of cells. After training and validating each candidate 
 architecture, the best performing LSTM network was chosen as the mean function for the Gaussian 
-process component outlined in section \S~\ref{sec:gpcomponent}.
+process component outlined in \cref{sec:gpcomponent}.
 
 The LSTM component of the GPNN model was implemented using the Lasagne library in Python 
 \citep{lasagne,theanoshort}. 
@@ -371,7 +370,7 @@ theoretical formulation is general. In this study, the GP component is implement
 Matlab software package \citep{rasmussen2010gaussian}. 
 
 We will not give a complete review of the GP methodology here. The interested reader can refer to 
-section \S~\ref{sec:osaGPmethod} for a detailed review of Gaussian process models and their 
+\cref{sec:osaGPmethod} for a detailed review of Gaussian process models and their 
 mathematical formulation.
 
 A GP is completely specified by its mean function  $m \left( \mathbf{x} \right)$ and its covariance 
@@ -416,11 +415,11 @@ of the hybrid GPNN model consisting of an LSTM and GP components.
 \end{align}
 	
 In \cref{eq:dstgpnn,eq:gpnnNoise,eq:gpnnGPForm}, we give a formal specification of the proposed GPNN model in 
-terms of the notations introduced in section \S~\ref{sec:osaGPmethod}. The ground truth $\mathrm{Dst}\left(t + p\right)$ 
+terms of the notations introduced in \cref{sec:osaGPmethod}. The ground truth $\mathrm{Dst}\left(t + p\right)$ 
 is assumed to be the result of a Gaussian Process $f_{p}$ corrupted by Gaussian measurement noise $\epsilon$, 
 with $p = {1,2,3,4,5,6}$ being the forecast horizon going from one to six hours ahead. The mean function of the 
 Gaussian process $f_{p}$ is set to $m^{p}_{\text{NN}} \left( \mathbf{x} \right)$ described in 
-section \S~\ref{sec:lstmDstArch} and the covariance is set to the neural network covariance function 
+\cref{sec:lstmDstArch} and the covariance is set to the neural network covariance function 
 from \cref{eq:gpcov}. 
 
 
@@ -478,8 +477,8 @@ for the time horizon $t+1 \cdots t+6$, summarised in \cref{table:competingmodels
 		\citet{Lazzus} & A feedforward neural network model using only the time history of Dst. Trained using 
 		particle swarm optimization.\\
 		Persistence model & $\mathrm{\hat{D}st}(t + p) = \mathrm{Dst}(t)$, also used for benchmarking in 
-		section \S~\ref{sec:gpOSAEval}.\\
-		LSTM-Dst & Our proposed LSTM model. Inputs are solar wind parameters (section \S~\ref{sec:datagpnn}) 
+		\cref{sec:gpOSAEval}.\\
+		LSTM-Dst & Our proposed LSTM model. Inputs are solar wind parameters (\cref{sec:datagpnn}) 
 		and time history of Dst.\\
 		LSTM-Dst-GPS & The LSTM model but with GPS magnetic field data $B_{\text{gps}}$ also included in the inputs. \\
 		\hline

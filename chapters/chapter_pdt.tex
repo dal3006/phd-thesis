@@ -40,8 +40,8 @@ the Sun-earth system. Specifically, the Sun ejects charged particles into the su
 all directions (solar wind). High speed solar wind is a major threat for the modern world, causing 
 severe damage to satellites, telecommunication infrastructure, under sea pipelines, among others. 
 \footnote{The adverse impact of space weather is estimated to cost $200$ to $400$ million per year, 
-but can sporadically lead to much larger losses.} Interested readers can refer to section 
-\S~\ref{sec:hmfsolarwind} for some historical background to the modern models of the solar wind and 
+but can sporadically lead to much larger losses.} Interested readers can refer to 
+\cref{sec:hmfsolarwind} for some historical background to the modern models of the solar wind and 
 the structure Heliospheric Magnetic Field (HMF). 
 
 Forecasting near-Earth solar wind speed (at the $L_1$ point) based on near-Sun data is a problem of 
@@ -175,8 +175,8 @@ between the cause and the effect series can be non-linear (the {\em what} model)
 lag phenomenon (the {\em when} model) can be non smooth (as opposed to e.g. \citet{ZHOU2006195}).
 
 The Bayesian approach proposed to tackle the \XX\ regression problem and the associated learning 
-equations are described in section \ref{sec:dtlrformulation}, followed by a stability analysis and 
-a proof of consistency (section \ref{sec:dtlrtheory}). The algorithm is detailed in section 
+equations are described in \cref{sec:dtlrformulation}, followed by a stability analysis and 
+a proof of consistency (\cref{sec:dtlrtheory}). The algorithm is detailed in section 
 \ref{sec:model}. The experimental setting used to validate the approach is presented in section 
 \ref{sec:pdtExp}, and the proofs of concept of the approach are discussed in section 
 \ref{sec:proofconcept}
@@ -326,7 +326,7 @@ In addition the optimal $\hat {\bf y}$ and $\hp$ reads:
 where the above conditional empirical averaging operates as an averaging over samples close to $x$.
 
 These are implicit equations, since $q_i(x,{\bf y})$ depends on the parameters $\sigma^2$ and 
-$\alpha_{ij}$, $\hat {\bf y}$ and $\hp$. The proposed algorithm detailed in section \ref{sec:model} 
+$\alpha_{ij}$, $\hat {\bf y}$ and $\hp$. The proposed algorithm detailed in \cref{sec:model} 
 implements the saddle point method defined from \cref{eq:var,eq:hatpi,eq:hyopt,eq:tildep}: 
 alternatively, hyper-parameters $\sigma$ and $\alpha_{ij}$ are updated from \cref{eq:var} based on 
 the current $\hat y_i$ and $\hat p_i$; and predictors $\hat y_i$ and mixture weights $\hat p_i$ are 
@@ -545,7 +545,7 @@ $(n^v,n_1^h,n_2^h,2\vert T\vert)$ in each layer.}
   \end{tabular}
 \end{table}
 
-%Proofs of concept for the  \XX\ algorithm are obtained using synthetic problems as well as our real-world %motivating application, the prediction of the solar wind (section \ref{sec:intro}). 
+%Proofs of concept for the  \XX\ algorithm are obtained using synthetic problems as well as our real-world %motivating application, the prediction of the solar wind (\cref{sec:intro}). 
 The goal of the experiments is twofold. Firstly, the \XX\ predictive performance is assessed by 
 considering 
 %
@@ -563,7 +563,7 @@ $\frac{\tau_{min}+\tau_{max}}{2}$. The Pearson correlation of the true $y_m$ and
 $\hat y_m$ series is also considered as overall performance indicator of the prediction.
 
 The second goal of experiments is to determine how informative are the key statistical quantities 
-$\sigma_0$ and $C_1$ (section \ref{sec:stability}), and whether they can effectively be used as 
+$\sigma_0$ and $C_1$ (\cref{sec:stability}), and whether they can effectively be used as 
 measures of confidence about the prediction results. Table \ref{tab:exp_data_info} summarises the 
 dimensions of the synthetic and real problems used as proofs of concept for the \XX\ validation. 
 
@@ -595,7 +595,7 @@ $\tau(x_m) = (\sqrt{v_m^2 + 2ad} - v)/a,\ k = 5,\ a = 5,\ d = 1000, \ c = 100$
 $\tau(x_m) = \exp\left(v_m\right)/\left(1 + \exp(v_m/20)\right), \ k = 10, c = 40$\\
 
 \paragraph{Solar Wind Speed Prediction}\label{sec:solarwind}
-As said in section \ref{sec:motivationsolarwind}, the task of predicting solar wind speed from 
+As said in \cref{sec:motivationsolarwind}, the task of predicting solar wind speed from 
 heliospheric data not only has scientific significance; it is also challenging due to the distance 
 between the Sun and the Earth and the non-stationary propagation time of the solar plasma through 
 the interplanetary medium. 
@@ -819,7 +819,7 @@ problems, respectively compared to the naive baseline (constant time lag) and to
 art for the real-world solar wind problem. 
 
 The values of the $\sigma_0$ and $C_1$ quantities involved in the stability analysis 
-(section \S~\ref{sec:stability}) are also reported. As said, $C_1 < 1$ indicates a specialization 
+(\cref{sec:stability}) are also reported. As said, $C_1 < 1$ indicates a specialization 
 among predictors found by the solution. The comparison of $\sigma_0$ and the RMSE indicates how 
 better the learned model is compared to the trivial degenerate solution (uniform $\hat {\bf p}$, 
 assigning an equal weight to all $\hat y_i$). Finally, the Pearson correlation between 

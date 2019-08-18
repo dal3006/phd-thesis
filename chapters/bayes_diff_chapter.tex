@@ -67,7 +67,7 @@ demonstrate how it can be used for performing inference over said diffusion para
 
 \section{Radial Diffusion}\label{sec:radDiffusionIntroduction}
 
-As discussed in section \S~\ref{sec:diffIntro} above, plasma motion in the radiation belt can be 
+As discussed in \cref{sec:diffIntro} above, plasma motion in the radiation belt can be 
 modeled as a simplified one dimensional version of the Fokker-Planck equation. The resulting 
 system, shown in \cref{eq:raddiffusion}, known as \emph{radial diffusion} in radiation belt 
 physics \citep{JGRA:JGRA9345}. It governs the time evolution of the \emph{phase space density} 
@@ -95,7 +95,7 @@ quickly particles are lost from the radiation belts, due to mechanisms other tha
       to solve \cref{eq:raddiffusion}. 
 \end{enumerate}
 %
-Interested readers can refer to section \S~\ref{sec:plasmadiff} for a detailed explanation on 
+Interested readers can refer to \cref{sec:plasmadiff} for a detailed explanation on 
 plasma diffusion, adiabatic invariants and plasma motion in the Earth's radiation belts. 
 
 \subsection{Diffusion Parameters}\label{sec:radDiffParams}
@@ -128,7 +128,7 @@ It is possible to impose reasonable restrictions on the domains of parameters $\
 and $b$ of the source term $q(\ell, t)$. The parameter $\alpha$ can take values on the entire 
 real number line, but since we expect $q(\ell, t)$ to model particle injection from the outer 
 boundary $\ell_{max}$ during active geomagnetic conditions, $\beta$ and $b$ must both positive. We 
-shall see in section \S~\ref{sec:exp} that these constraints dictate the class of prior 
+shall see in \cref{sec:exp} that these constraints dictate the class of prior 
 distributions can be chosen for $\alpha$, $\beta$, and $b$, and alleviate problems of 
 identifiability.
 
@@ -148,8 +148,7 @@ of a physical quantity $f(x)$ which is governed by the differential equation
 estimate the parameters $\theta$ of the forward model 
 $\mathcal{F} = \left( \mathcal{L}_{\theta}, q_{\theta} \right)$, where 
 $\mathcal{X} \times [0, \infty)$ is the spatiotemporal domain, $\mathcal{L}_{\theta}$ is a 
-differential operator, $q_{\theta}$ is a \emph{source term}, and $\theta$ is a collection of 
-parameters which specify the forward model. 
+differential operator, and $q_{\theta}$ is a \emph{source term}. 
 
 For the radial diffusion system shown in \cref{eq:raddiffusion}, the differential operator 
 $\mathcal{L}_{\theta}$ is defined as   
@@ -434,7 +433,7 @@ $u_i = \frac{1}{n_c}$, this corresponds to the \emph{Monte Carlo} quadrature of 
 error, but it is possible to improve the quadrature accuracy by using \emph{Gauss-Legendre} 
 quadrature.
 
-In section \S~\ref{sec:exp}, we use eight point Gauss-Legendre quadrature in space and time 
+In \cref{sec:exp}, we use eight point Gauss-Legendre quadrature in space and time 
 dimension each, thereby setting $n_c = 64$ and weights $u_i$ to appropriate values as dictated by 
 the chosen quadrature rule \citep{_abramowitzm}.
 
@@ -525,7 +524,7 @@ $\kappa(\ell, t)$ and $\lambda(\ell, t)$ were fixed to the values computed in
 \citet{JGRA:JGRA15067} and \citet{GRL:GRL22815} respectively (see \cref{tab:ground-truth}) while 
 inference was performed only on the parameters of $q(\ell, t)$. 
 
-In both experiments, the bases were chosen as described in section \S~\ref{sec:basisChoice}. In the 
+In both experiments, the bases were chosen as described in \cref{sec:basisChoice}. In the 
 synthetic problem, we chose $5$ basis functions in space and $20$ basis functions in time 
 respectively; however in the van allen probe problem, we chose $6$ basis functions in space and 
 $500$ in time. With regards to the temporal basis, the RBF nodes were placed on equally spaced grid 
@@ -538,7 +537,7 @@ diffusion system, we treated the covariance function parameters as fixed.
 
 %Explain MCMC config, burn in 
 The prior distributions chosen for the parameters are shown in \cref{tab:prior}, they are in 
-accordance with the constraints discussed in section \S~\ref{sec:radDiffParams}. The posterior 
+accordance with the constraints discussed in \cref{sec:radDiffParams}. The posterior 
 distribution over the parameters of $q(\ell, t)$ was sampled via the adaptive Metropolis algorithm, 
 the first $2000$ samples were discarded as the \enquote{burn in} of the Markov Chain. A total of 
 $2000$ samples were generated after the burn in period, and used for the reporting of results.
@@ -636,7 +635,7 @@ provided to the surrogate model $\hat{f}(x)$. The generated data set is plotted 
     \centering
     \includegraphics[width=0.6\textwidth]{data_and_design_points_Q.png}
     \caption{{\small 
-      Synthetic data used in section \S~\ref{sec:syntheticDataQ}.
+      Synthetic data used in \cref{sec:syntheticDataQ}.
       Red crosses indicate colocation points chosen according to $8$ point Gauss-Legendre 
       quadrature in space and time. 
     }}
@@ -647,7 +646,7 @@ provided to the surrogate model $\hat{f}(x)$. The generated data set is plotted 
     \centering
     \includegraphics[width=0.6\textwidth]{data_and_design_points_van_allen.png}
     \caption{{\small 
-      Van Allen probe data used in section \S~\ref{sec:vanAllenData}. Time is measured in minutes 
+      Van Allen probe data used in \cref{sec:vanAllenData}. Time is measured in minutes 
       from the starting point $6:00$ $17^{\text{th}}$ March $2013$. Red crosses indicate 
       colocation points chosen according to $8$ point Gauss-Legendre quadrature in space and time.
     }}
@@ -667,11 +666,11 @@ we use $\log_{10}\left( \frac{f(\ell, t)}{f_{min}} \right)$, the logarithm of th
 to its observed minimum value in the data. 
 
 There are two differences which stand out between the van allen data set and the synthetic data 
-used in section \S~\ref{sec:syntheticDataQ} above. Firstly, the synthetic data is randomly sampled 
+used in \cref{sec:syntheticDataQ} above. Firstly, the synthetic data is randomly sampled 
 while the Van Allen probe data is sampled along their orbits (there are two probes). Secondly, 
 the synthetic data is has a larger density of observations in the space time domain as compared to 
 the Van Allen data. These factors among others influence the uncertainties in the posterior 
-inference, which is seen in section \S~\ref{sec:diffResults} below.  
+inference, which is seen in \cref{sec:diffResults} below.  
 
 \subsection{Results}\label{sec:diffResults}
 
@@ -742,7 +741,9 @@ From \cref{fig:qbeta,fig:betavsb}, we observe that the model doesn't identify th
 $\beta$. Its posterior probability distribution does not have significantly reduced uncertainty 
 compared to its prior. The differences in the inference results between parameters $\alpha, b$, and 
 $\beta$ can be attributed to the vast differences in the sensitivity of the radial diffusion 
-solution to $\alpha$, $b$, and $\beta$.     
+solution to $\alpha$, $b$, and $\beta$. The interested reader can refer to 
+\cref{app:psdSensitivity} for an introduction to the sensitivity analysis of partial differential 
+equations and its application to the radial diffusion system.     
 
 \subsubsection*{Radiation Belt Particle Injection}
 

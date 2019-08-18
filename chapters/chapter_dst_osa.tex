@@ -151,13 +151,13 @@ We use the Gaussian process regression methodology to construct auto-regressive 
 $\mathrm{Dst}$ and show how to perform exact inference in this framework. We further outline a 
 methodology to perform model selection with respect to its free parameters and time histories.
 
-The remainder of this chapter is organised as follows: Section \S~\ref{sec:osaGPmethod} gives the 
-reader an overview of the history of \emph{Gaussian process} (GP) models as well as how they are 
-formulated and how to perform inference with them. Sections \S~\ref{sec:osa}, \S~\ref{sec:gpar}, 
-\S~\ref{sec:gparx} \& \S~\ref{sec:modeltraining} describe the GP-AR and GP-ARX models for OSA 
-prediction of $\mathrm{Dst}$ and how to choose their free parameters for better performance. 
-Sections \S~\ref{sec:gpOSAEval} \& \S~\ref{sec:res} evaluate the performance of the proposed 
-GP-AR and GP-ARX models.
+The remainder of this chapter is organised as follows: \cref{sec:osaGPmethod} gives the 
+reader an historical overview of \emph{Gaussian process} (GP) models, how they are formulated, and 
+how to perform inference with them. \Cref{sec:osa} defines the OSA prediction setting for the 
+$\mathrm{Dst}$ index. \Cref{sec:gpar,sec:gparx} formulate the GP-AR and GP-ARX models for making 
+probabilistic OSA forecasts, and \cref{sec:modeltraining} describes their training and validation 
+process. \Cref{sec:gpOSAEval} evaluates the performance of the proposed GP-AR and GP-ARX models, 
+and \cref{sec:res} discusses the results and offers concluding remarks.
 
 \section{Methodology: Gaussian Process} \label{sec:osaGPmethod}
 
@@ -556,18 +556,17 @@ of a single hidden layer feed-forward neural network model as demonstrated in
 
 \subsection*{Training}
 
-We selected OMNI data sections $00:00$ January $3$ $2010$ to $23:00$ January $23$ $2010$ and 
+We chose data from the time periods $00:00$ January $3$ $2010$ to $23:00$ January $23$ $2010$ and 
 $20:00$ August $5$ $2011$ to $22:00$ August $6$ $2011$ for training the GP-AR and GP-ARX models. 
-The first training data section consists of ambient fluctuations of $\mathrm{Dst}$ while the second 
+The first training data period consists of ambient fluctuations of $\mathrm{Dst}$ while the second 
 contains a geomagnetic storm.
 
-The computational complexity of calculation of the predictive distribution is $O(N^3)$, as 
-discussed in section \S~\ref{sec:inference}. This can limit the size of the covariance matrix 
-constructed from the training data. Note that this computation overhead is paid for every unique 
-assignment to the model hyper-parameters. However, our chosen training set has a size of $243$ 
-which is still very much below the computational limits of the method and in our case solving 
-\cref{eq:posteriormean} on a laptop computer takes less than a second for the training set 
-considered in our analysis. 
+As discussed in \cref{sec:inference}, the computational complexity of calculating the GP predictive 
+distribution is $O(N^3)$. This can limit the size of the covariance matrix constructed from the 
+training data. Note that this computational overhead is paid for every unique assignment to the 
+model's hyper-parameters. However, our chosen training set has a size of $243$ which is still very 
+much below the computational limits of the method and in our case solving \cref{eq:posteriormean} 
+on a laptop computer takes less than a second for the training set considered in our analysis. 
 
 \subsection*{Selection}
 

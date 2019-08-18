@@ -41,7 +41,7 @@ coordinate $t$. On the other hand in implicit time GP models, the mean and covar
 state space $\mathbf{x}_t$. This key difference has significant implications for the system trajectories and 
 uncertainty characteristics.
 
-In section \S~\ref{sec:osa}, we formulated the $\mathrm{Dst}$ prediction model according to \cref{eq:gpImplicit}. 
+In \cref{sec:osa}, we formulated the $\mathrm{Dst}$ prediction model according to \cref{eq:gpImplicit}. 
 By setting $\mathbf{x}(t)$ to a time history of $\mathrm{Dst}$ and possibly solar wind parameters, we built the 
 GP-AR and GP-ARX prediction models.
 
@@ -266,7 +266,7 @@ $\sigma_{\epsilon}^{2} = 0.5$. In \cref{fig:gparPrior}, we show some samples dra
 \end{figure}
 %
 During the training procedure, the model's hyper-parameters are selected using the CSA procedure described in 
-section \S~\ref{sec:gpModelSelection}. After choosing the model hyper-parameters, the model is tested on the 
+\cref{sec:gpModelSelection}. After choosing the model hyper-parameters, the model is tested on the 
 portion $t > 40$ of the black path in \cref{fig:narpSamples}. 
 
 In \cref{fig:gparPost}, the posterior predictive distribution of the GP-AR model is used to generate one step ahead 
