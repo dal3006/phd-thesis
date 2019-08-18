@@ -55,7 +55,7 @@ $s(\ell, t, \theta)$, the solution $f(\ell, t; \theta)$, and their derivatives, 
 %
 where $\tilde{\mathcal{L}}$ is the differential operator resulting from the differentiation of 
 \cref{eq:forwardModelPDE} by $\theta$.
-
+%
 \Cref{eq:forwardModelPDE,eq:forwardModelSens} form a system of coupled PDEs which can be 
 solved numerically to obtain $f(\ell, t; \theta)$ and $s(\ell, t, \theta)$.
 
@@ -136,26 +136,34 @@ the parameter $b$. In fact within each parameter set $\theta_{\kappa}$, $\theta_
 $\theta_{q}$, the model is more sensitive to parameter $b$ as compared to $\alpha$ and $\beta$. 
 
 
-\begin{figure}[ht]\label{fig:psdTile}
-    \includegraphics[width=0.75\textwidth]{psd.pdf}
+\begin{figure}[ht]
+    \centering
+    \noindent\includegraphics[width=0.75\textwidth]{psd.pdf}
     \caption{The radial diffusion solution.}
+    \label{fig:psdTile}
 \end{figure}
 
-\begin{figure}[ht]\label{fig:sensQTile}
-    \includegraphics[width=0.75\textwidth]{sensitivity_Q.pdf}
+\begin{figure}[ht]
+    \centering
+    \noindent\includegraphics[width=0.75\textwidth]{sensitivity_Q.pdf}
     \caption{Sensitivity of the forward model to the parameters of the source term.}
+    \label{fig:sensQTile}
 \end{figure}
 
-\begin{figure}[ht]\label{fig:sensRestTile}
-    \includegraphics[width=0.75\textwidth]{sensitivity_rest.pdf}
+\begin{figure}[ht]
+    \centering
+    \noindent\includegraphics[width=0.75\textwidth]{sensitivity_rest.pdf}
     \caption{
         Sensitivity of the forward model to the parameters $\alpha$ and $\beta$ of 
         the diffusion field and loss rate.}
+    \label{fig:sensRestTile}
 \end{figure}
 
-\begin{figure}[ht]\label{fig:sensbTile}
-    \includegraphics[width=0.75\textwidth]{sensitivity_b.pdf}
+\begin{figure}[ht]
+    \centering
+    \noindent\includegraphics[width=0.75\textwidth]{sensitivity_b.pdf}
     \caption{
         Sensitivity of the forward model to the parameter $b$ of 
         the diffusion field, loss rate, and the source term.}
+    \label{fig:sensbTile}
 \end{figure}
