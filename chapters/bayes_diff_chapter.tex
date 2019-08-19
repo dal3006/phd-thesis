@@ -226,11 +226,21 @@ Interplay between linear operators and GP models applied to Bayesian filtering w
 \citet{Sarkka2011}. \citet{pmlr-v31-dondelinger13a} proposed an adaptive gradient matching 
 technique to used Gaussian Process models for inferring parameters of coupled ODE systems.
 
+\citet{raissi2018numerical} proposed the \emph{numerical Gaussian process} methodology which placed 
+GP priors on spatial fields and quantified uncertainties in the solutions of time discretised PDE 
+systems.
+
 \emph{Neural networks} were also employed for solutions of boundary value problems in the 
 works such as \citet{Lagaris,Aarts2001,TSOULOS20092385,Baymani2011} which used feedforward networks 
 for calculating solutions to the Stokes problem. These approaches generally revolved around 
 decomposing the solution into two components, i.e. the first one satisfying the boundary conditions 
 and the second one represented by the feedforward network.
+
+\citet{raissi2018deep} used neural networks for the identification of PDE systems from 
+observations of a spatiotemporal field. The proposed method was composed of two neural networks, 
+the first one which proposed a candidate PDE built from a pre-defined dictionary of derivative 
+terms, and the second network which computed an approximate solution of the PDE constructed by the 
+first. 
 
 \emph{Radial basis functions} (RBF) were first applied for solution of PDE problems in 
 \citet{KANSA1990147}, the authors used colocation with \emph{multi-quadric} basis functions for 
