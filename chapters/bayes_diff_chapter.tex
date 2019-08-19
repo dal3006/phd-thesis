@@ -58,7 +58,7 @@ account prior knowledge of the system dynamics in the form of a linear partial d
 equation. The method replaces a standard finite difference solver with a surrogate model which 
 tries to fit the observations and the system dynamics. The surrogate is expressed as a basis 
 function expansion whose coefficients are computed by formulating a 
-\emph{least squares support vector machine} (LSSVM) like optimization objective.
+\emph{least squares support vector machine} (LSSVM) like optimisation objective.
 
 In the proceeding sections, we give a short introduction to the radial diffusion equation used in 
 magnetospheric physics. After an overview of the parameterizations of the radial diffusion unknowns 
@@ -134,7 +134,8 @@ identifiability.
 
 \section{PDE Inverse Problems}\label{sec:inv}
 
-Partial differential equations are usually solved by approximating the derivatives involved on a spatiotemporal grid with numerical quadrature. Solving of a PDE system is referred to as the 
+Partial differential equations are usually solved by approximating the derivatives involved on a 
+spatiotemporal grid with numerical quadrature. Solving of a PDE system is referred to as the 
 \emph{forward problem}, therefore inference of the PDE parameters from observations is naturally 
 called the \emph{inverse problem}.
 
@@ -246,14 +247,14 @@ Least squares support vector machines have also been applied to calculating appr
 to PDEs \citep{MEHRKANOON2015105,MEHRKANOON20122502} as well as parameter estimation of delay 
 differential equations \citep{MEHRKANOON2014830}, the approach taken in the aforementioned research 
 \citep{MEHRKANOON2014830} was expressing the parameter estimation of time delay as an algebraic 
-optimization problem resulting in closed-form approximation for the time varying parameters while 
+optimisation problem resulting in closed-form approximation for the time varying parameters while 
 avoiding iterative simulation of the dynamical system 
 (governed by the delay differential equations) in the parameter estimation process.
 
 \emph{Probabilistic numeric methods} (PNM), an area which concerns with the quantification of 
 errors and uncertainties in numerical methods arising from loss of precision due to limitations of 
 time and hardware \citep{hennig2015probabilistic}. Applications of PNM range from Bayesian 
-quadrature, optimization, mesh-free solutions of PDEs, and PDE constrained Bayesian inverse 
+quadrature, optimisation, mesh-free solutions of PDEs, and PDE constrained Bayesian inverse 
 problems. 
 
 \citet{conrad2017statistical} propose a probabilistic time integrator for quantifying probability 
@@ -336,7 +337,7 @@ in \cref{eq:surrogate} is achieved by constructing its \emph{Lagrangian} given i
 The quantities $\alpha_{1}, \cdots, \alpha_{n_{o}}$ and $\beta_{1}, \cdots, \beta_{n_{c}}$ are the 
 \emph{Lagrange multipliers} introduced for equality constraints of the system. Applying the 
 \emph{Karush-Kuhn-Tucker} (KKT) conditions \citep{karush1939minima,kuhn1951nonlinear}, the solution 
-of the optimization problem in \cref{eq:surrogate} can be expressed in terms of the Lagrange 
+of the optimisation problem in \cref{eq:surrogate} can be expressed in terms of the Lagrange 
 multipliers 
 $\alpha = (\alpha_{1}, \cdots, \alpha_{n_{o}})$ and $\beta = (\beta_{1}, \cdots, \beta_{n_{c}})$.
 %
@@ -762,6 +763,28 @@ because of two principal causes.
 \end{enumerate}
 
 
+\section{Conclusions}
+
+In this chapter, we proposed a surrogate model for the phase space density of particles in the 
+radiation belt, and we presented a method for applying it on the Bayesian inverse problem of 
+quantifying uncertainties in parameters of the simplified radial diffusion model for radiation 
+belt dynamics. 
+
+We used our model to perform inference of radial diffusion source term parameters. For this 
+purpose, we tested it on two data sets: 
+\begin{enumerate}
+  \item synthetically generated phase space density data and 
+  \item in-situ measurements taken by the Van Allen probes. 
+\end{enumerate}
+%
+The model enabled the identification of regions in the parameter space which have a high 
+probability of producing phase space density values which close to the observations.
+
+The strength of the proposed method is the ability to quantify the uncertainty in the parameters of 
+a physical system, from a sparse set of observations. Due to the formulation of the surrogate 
+optimisation in its dual form, it allows the inference to scale well with respect to high 
+dimensional basis function expansions. The method can be applied for parameter inference of 
+linear partial differential equations and warrants further research in its improvement.
 
 \begin{figure*}[!htb]
   \centering
@@ -814,31 +837,5 @@ because of two principal causes.
     drawn from parameters of $q(\ell, t)$.
   }
 \end{figure*}
-
-
-\section{Conclusions}
-
-In this chapter, we proposed a surrogate model for the phase space density of particles in the 
-radiation belt, and we presented a method for applying it on the Bayesian inverse problem of 
-quantifying uncertainties in parameters of the simplified radial diffusion model for radiation 
-belt dynamics. 
-
-We used our model to perform inference of radial diffusion source term parameters. For this 
-purpose, we tested it on two data sets: 
-\begin{enumerate*}
-  \item synthetically generated phase space density data and 
-  \item in-situ measurements taken by the Van Allen probes. 
-\end{enumerate*}
-
-The model enabled the identification of regions in the parameter space which have a high 
-probability of producing phase space density values which close to the observations.
-
-The strength of the proposed method is the ability to quantify the uncertainty in the parameters of 
-a physical system, from a sparse set of observations. Due to the formulation of the surrogate 
-optimization in its dual form, it allows the inference to scale well with respect to high 
-dimensional basis function expansions. The method can be applied for parameter inference of 
-linear partial differential equations and warrants further research in its improvement.
-
-
 %\bibliographystyle{plainnat}
 %\bibliography{references}

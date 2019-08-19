@@ -1,3 +1,78 @@
-\chapter{Conclusions}\label{chapter:conclusions}
+\chapter{Concluding Remarks}\label{chapter:conclusions}
 
-Write your conclusions here.
+This thesis represents an exploration of the possibilities for using machine learning techniques 
+for advancing space weather research. The work presented here was classified into three principal 
+research problems or themes as mentioned in \cref{chapter:Outline}. Below we give a quick summary 
+of the main achievements of this thesis and avenues for further research.
+
+\section{Discussion}
+
+\subsection*{Geomagnetic Time Series Forecasting}
+
+Using Gaussian process auto-regressive methods, it is possible to obtain accurate and reliable 
+probabilistic forecasts for the $\mathrm{Dst}$ index, up to five hours ahead. 
+
+The GP-AR and GP-ARX models give a general framework for modeling non-linear dynamical systems and 
+provide uncertainty estimates on their time evolution. Their main drawback is the $O(N^3)$ time 
+complexity for performing inference which makes applications on large data sets challenging. By 
+using neural network based models as mean functions of GP models, one can create hybrid models 
+which somewhat circumvent this drawbacks while retaining the probabilistic forecasting 
+capabilities.
+
+\subsection*{Radiation Belt Parameter Inference}
+
+Using machine learning models as surrogates for quantities governed by physical laws, one can 
+obtain models with some desirable properties: the ability synthesise observations and prior 
+knowledge of physical dynamics into a coherent methodology for parameter inference and uncertainty 
+quantification. 
+
+When performing inference over the parameters of the radiation belt dynamics, one needs to take 
+into account the sensitivity of the radiation belt model to its parameters. It is advisable to use 
+domain knowledge and sensitivity analysis to constrain the numerical ranges of the parameter 
+prior distributions as this aides identification and obtaining compact uncertainty estimates.
+
+Casting the surrogate optimisation problem (\cref{eq:surrogate}) in its dual form enables the use 
+of potentially infinite dimensional basis function expansions but it introduces the same 
+computational challenges that come with Gaussian process inference. 
+
+\subsection*{Solar Wind Prediction}
+
+The effect of time lag relationships between interacting systems can impact the performance of 
+predictive models which give forecasts for a fixed time lag. We proposed a principled approach for 
+training predictive models on time series data sets which have non-stationary time lag dependencies.
+
+The task of predicting near-Earth solar wind speed from heliospheric data is very challenging and 
+requires astute application of all the tools at our disposal: 
+\begin{enumerate*} 
+    \item models of the heliospheric magnetic field,
+    \item machine learning techniques, and 
+    \item solar and near-Earth data. 
+\end{enumerate*}
+
+
+\section{Further Research}
+
+Although the space weather problem is the central motivation for the work presented here, the 
+techniques presented in this thesis are generally applicable in the modeling and forecasting of 
+physical systems. Some possible questions for further research are listed below.
+
+\begin{enumerate}
+    \item With the existing state of the art, how far we extend the time horizon of geomagnetic 
+          activity forecasts? What kind of data and methods will be important in making 
+          ten-hour-ahead or twelve-hour-ahead forecasts of the $\mathrm{Dst}$ index?
+    \item How do we extend the phase space density surrogate model to higher dimensional 
+          radiation belt dynamics i.e. diffusion across all three adiabatic invariants?
+          How do we deal with the computational challenges that arise from performing inference 
+          over parameters of $3$-d diffusion models and large scale data sets? 
+    \item When working in the context of PDE constrained inverse problems, how do we separate 
+          uncertainties arising from parameter identifiability and forward model inadequacy? How do 
+          we perform inference over the parameters of a non-linear PDE using machine learning based 
+          surrogate models?
+    \item How can we improve the accuracy of solar wind forecasts made by the \XX \ model? How can 
+          we make the combination of the CSSS and \XX \ models into a real time solar wind 
+          forecasting system? Is it beneficial to use a surrogate in place of the CSSS model to 
+          compute the topology of the HMF? 
+\end{enumerate}
+
+All things considered, there are plenty of directions for further research into applications of 
+machine learning methods in space weather and the physical sciences.
