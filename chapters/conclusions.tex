@@ -16,13 +16,12 @@ The GP-AR and GP-ARX models give a general framework for modeling non-linear dyn
 provide uncertainty estimates on their time evolution. Their main drawback is the $O(N^3)$ time 
 complexity for performing inference which makes applications on large data sets challenging. By 
 using neural network based models as mean functions of GP models, one can create hybrid models 
-which somewhat circumvent this drawbacks while retaining the probabilistic forecasting 
-capabilities.
+which somewhat circumvent this drawback while retaining the probabilistic forecasting capabilities.
 
 \subsection*{Radiation Belt Parameter Inference}
 
 Using machine learning models as surrogates for quantities governed by physical laws, one can 
-obtain models with some desirable properties: the ability synthesise observations and prior 
+obtain models with some desirable properties: the ability to synthesise observations and prior 
 knowledge of physical dynamics into a coherent methodology for parameter inference and uncertainty 
 quantification. 
 
@@ -48,6 +47,8 @@ requires astute application of all the tools at our disposal:
     \item machine learning techniques, and 
     \item solar and near-Earth data. 
 \end{enumerate*}
+Using our proposed dynamic time-lag regression (\XX) framework, we were able to achieve 
+encouraging progress in the forecasting of near-Earth solar wind speed.
 
 
 \section{Further Research}
@@ -57,21 +58,21 @@ techniques presented in this thesis are generally applicable in the modeling and
 physical systems. Some possible questions for further research are listed below.
 %
 \begin{enumerate}
-    \item With the existing state of the art, how far we extend the time horizon of geomagnetic 
+    \item With the existing state of the art, how far can we extend the time horizon of geomagnetic 
           activity forecasts? What kind of data and methods will be important in making 
           ten-hour-ahead or twelve-hour-ahead forecasts of the $\mathrm{Dst}$ index?
     \item How do we extend the phase space density surrogate model to higher dimensional 
-          radiation belt dynamics i.e. diffusion across all three adiabatic invariants?
+          radiation belt dynamics, i.e. diffusion across all three adiabatic invariants?
           How do we deal with the computational challenges that arise from performing inference 
           over parameters of $3$-d diffusion models and large scale data sets? 
     \item When working in the context of PDE constrained inverse problems, how do we separate 
           uncertainties arising from parameter identifiability and forward model inadequacy? How do 
           we perform inference over the parameters of a non-linear PDE using machine learning based 
           surrogate models?
-    \item How can we improve the accuracy of solar wind forecasts made by the \XX \ model? How can 
-          we make the combination of the CSSS and \XX \ models into an operational solar wind 
-          forecasting system? Is it beneficial to use a surrogate in place of the CSSS model to 
-          compute the topology of the HMF? 
+    \item How can we improve the accuracy of solar wind forecasts made by the \XX \ model? Can we 
+          combine the current sheet source surface (CSSS) model and \XX \ models into an 
+          operational solar wind forecasting system? Is it beneficial to use a surrogate in place 
+          of the CSSS model to compute the topology of the coronal magnetic field? 
 \end{enumerate}
 %
 All things considered, there are plenty of directions for further research into applications of 

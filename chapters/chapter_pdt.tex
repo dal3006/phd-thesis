@@ -53,6 +53,10 @@ propagation of the solar wind through the inter-planetary medium introduces a no
 delay which currently cannot be directly measured. 
 
 \subsection{State Of The Art}\label{sec:solarwindsota}
+For the sake of continuity, we give a quick recap of the state of the art in solar wind 
+forecasting. The reader mostly interested in the machine learning method that we develop can skip 
+this section and continue with \cref{sec:dtlrintro}.  
+
 Research in solar wind forecasting has generally divided the problem into the following components.
 %
 \begin{enumerate} 
@@ -111,9 +115,10 @@ boundary conditions for MHD based simulations of the inner heliosphere
 \citep{ODSTRCIL1996,ODSTRCIL1999a,ODSTRCIL1999b,ODSTRCIL2003,ODSTRCIL2004} and EUHFORIA 
 \citep{pomoell2018euhforia}. 
 
-The most prominent operational solar wind forecasting technique is the hybrid WSA-ENLIL model 
-\footnote{\url{https://www.swpc.noaa.gov/products/wsa-enlil-solar-wind-prediction}} which consists 
-of the Wang-Sheeley-Arge (WSA) coronal model coupled with the global heliospheric ENLIL model. 
+The most prominent operational solar wind forecasting technique is the hybrid WSA-ENLIL 
+model\footnote{\url{https://www.swpc.noaa.gov/products/wsa-enlil-solar-wind-prediction}} which 
+consists of the Wang-Sheeley-Arge (WSA) coronal model coupled with the global heliospheric ENLIL 
+model. 
 
 \citet{wintoft1997prediction} used coronal magnetic field solutions computed by the PFSS model 
 to train a \emph{radial basis function} (RBF) network for predicting the average daily solar wind 
@@ -203,7 +208,7 @@ Vectors are written using bold fonts.
 
 \section{Probabilistic Dynamically Delayed Regression}\label{sec:dtlrformulation}
 As said, \cref{eq:pb1,eq:pb2} define a regression problem that differs from standard regression 
-along two lines. Firstly, the time lag $\tau(t)$ is non-stationary as it depends on $x(t)$. 
+along two lines. Firstly, the time lag $\tau(t)$ may be non-stationary as it depends on $x(t)$. 
 Secondly, $\tau(t)$ is unknown, i.e. it is not recorded explicitly in the training data as is 
 typically the case in the space weather context. 
 
@@ -606,7 +611,7 @@ the interplanetary medium.
 
 The inputs $x_m$ are compiled from two sources, synoptic Carrington maps of the photospheric 
 magnetic field taken from the \emph{Global Oscillation Network Group} (GONG) and solar activity 
-proxies taken from the OMNI data set \footnote{\url{https://omniweb.gsfc.nasa.gov}}. Specifically, 
+proxies taken from the OMNI data set\footnote{\url{https://omniweb.gsfc.nasa.gov}}. Specifically, 
 $x_m$ is a vector consisting of the components outlined in \cref{table:dtlrInputs}.
 
 For each input pattern, time lagged solar wind data is extracted corresponding to minimum and 
