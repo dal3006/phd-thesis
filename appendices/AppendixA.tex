@@ -12,7 +12,10 @@ q_i(x,{\bf y}) = \frac{1}{N_{x,{\bf y}}}\sum_{m=1}^{N_{x,{\bf y}}} \tau_i^{(m)}
 \qquad\text{satisfying}\qquad 
 \sum_{i\in T} q_i(x,{\bf y}) = 1,
 \]
-the sum over the $\tau_i^{(m)}$ is replaced by a sum over these new variables, with the summand obeying a large deviation principle\footnote{For sake of generality we appeal to the large deviation principle, but the same analysis can be made by direct summation over the latent variable here.} 
+the sum over the $\tau_i^{(m)}$ is replaced by a sum over these new variables, with the summand 
+obeying a large deviation principle\footnote{For sake of generality we appeal to the large 
+deviation principle, but the same analysis can be made by direct summation over the 
+latent variable here.} 
 %(see e.g.~\cite{Touchette})
 \[
 {\cal L}_{x,{\bf y}} \asymp \sum_{\p} 
@@ -25,24 +28,24 @@ where the rate function simply reads from Sanov's theorem
 -\frac{1}{2}q_i\sum_{j\in T}\log(1+\alpha_{ji})+q_i\log\frac{q_i}{\hat p_i}\Bigr].
 \]
 Taking the saddle point for $q_i$ yield as a function of $(x,{\bf y})$~(\cref{eq:hatpi}). 
-Inserting this into ${\cal F}$ and taking the average over the data set yields the log likelihood~(\cref{eq:LL}) 
-with the opposite sign:
+Inserting this into ${\cal F}$ and taking the average over the data set yields the log 
+likelihood~(\cref{eq:LL}) with the opposite sign:
 \[
 {\cal L}({\bf x},{\bf y};\hat {\bf y},\hp,\sigma,\alpha) = -{\mathbb E}_{data}\Bigl[{\cal F}_{x,{\bf y}}\bigl[\p(x,{\bf y})\bigr]\Bigr].
 \]
-The optimization of the predictors $\hat {\bf y}$ yields:
-\[
-\frac{\partial{\cal L}}{\partial \hat y_i(x)} = \frac{1}{\sigma^2}{\mathbb E}_{data}\Bigl[ \bigl(y_i-\hat y_i(x)\bigr)\bigl(1+\sum_{j\in T}\alpha_{ij}q_j(x,{\bf y})\bigr)\Big\vert x\Bigr].
-\]
-The optimization of $\hp$ gives:
-\[
-\frac{\partial{\cal L}}{\partial \hat p_i(x)} = {\mathbb E}_{data}\Bigl[\frac{q_i(x,{\bf y})}{\hat p_i(x)}-\lambda(x)\Big\vert x \Bigr],
-\]
-with $\lambda(x)$ a Lagrange multiplier to insure that $\sum_i\hat p_i(x)=1$ 
-%for any $x$ yielding expression~(\ref{eq:tildep}).
-for any $x$ yielding \cref{eq:tildep}.
-
-Finally the optimization $\alpha$ reads:
+% The optimization of the predictors $\hat {\bf y}$ yields:
+% \[
+% \frac{\partial{\cal L}}{\partial \hat y_i(x)} = \frac{1}{\sigma^2}{\mathbb E}_{data}\Bigl[ \bigl(y_i-\hat y_i(x)\bigr)\bigl(1+\sum_{j\in T}\alpha_{ij}q_j(x,{\bf y})\bigr)\Big\vert x\Bigr].
+% \]
+% The optimization of $\hp$ gives:
+% \[
+% \frac{\partial{\cal L}}{\partial \hat p_i(x)} = {\mathbb E}_{data}\Bigl[\frac{q_i(x,{\bf y})}{\hat p_i(x)}-\lambda(x)\Big\vert x \Bigr],
+% \]
+% with $\lambda(x)$ a Lagrange multiplier to insure that $\sum_i\hat p_i(x)=1$ 
+% %for any $x$ yielding expression~(\ref{eq:tildep}).
+% for any $x$ yielding \cref{eq:tildep}.
+%
+The optimization with respect to $\alpha$ reads:
 \[
 \frac{\partial{\cal L}}{\partial \alpha_{ij}} = \frac{1}{2(1+\alpha_{ij})}{\mathbb E}_{data}\bigl[q_j(x,{\bf y})\bigr]-\frac{1}{2\sigma^2}
 {\mathbb E}_{data}\bigl[\bigl(y_i-\hat y_i(x)\bigr)^2q_j(x,{\bf y})\bigr].

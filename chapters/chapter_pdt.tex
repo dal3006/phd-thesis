@@ -226,46 +226,50 @@ before it).
 
 \subsection{Probabilistic Dynamic Time-Lag Regression}
 
-For practical reasons, the cause and effect series are sampled with a constant rate $\delta t$, and 
+For practical reasons, the cause and effect series are sampled with a constant rate $\delta t$ and 
 denoted as ${x_m}$ and ${y_m}$ respectively. Accordingly, the mapping $g$ now outputs a discrete 
 time lag, where the delay between cause $x_m$ and effect $y_{m+g(x_m)}$ ranges in a finite set 
 $T = [\tau_{min}, \ldots, \tau_{max}]$, with limits $\tau_{min}$ and  $\tau_{max}$, which can 
 be defined from prior knowledge e.g. space weather theory. 
 
-The unavoidable error due to the discretisation of the continuous time lag, and uncertainties 
+The unavoidable error due to the discretisation of the continuous time lag and the uncertainty 
 introduced due to the lack of observations of the mapping $g$ are mitigated by using a 
-probabilistic model. For each cause $x$, we have a set of independent predictors 
-$\{\hat y_i(x),\ i \in T\}$ and a probability distribution $\hat p(x)$ on $T$ estimating the 
-probability of the time delay of the effects of $x$. 
-
-
-Overall, the \XX\ solution is sought as a probability distribution conditioned on cause $x$, 
-mixture of Gaussians centered on the predictors $\hat y_i(x)$, where the mixture weights are 
-defined from $\hat p(x)$. More formally, letting ${\bf y}_m$ denote the vector of random 
-variables $y_{m+i},\ i \in T$, 
-%
-\begin{equation}\label{eq:py}
-  P\bigl[{\bf y}_{m}\vert x_m=x\bigr] = 
-  \sum_{\boldsymbol{\tau}\in \mathcal{T}} \hat p\bigl(\boldsymbol{\tau}\vert x) 
-  \prod_{i\in T} {\cal N}\bigl(\hat y_i(x),\sigma_i(\boldsymbol{\tau})\bigr)
-\end{equation}
-%
-Two simplifications are made for the sake of the analysis. Firstly, the stochastic time lag is 
-modelled as the vector $\boldsymbol{\tau} = [\tau_1, \cdots, \tau_{T}]$ of binary latent variables, 
-where $\tau_i$ indicates whether $x$ drives $y_i$ ($\tau_i=1$) or not ($\tau_i=0$). The assumption 
-that every cause has a single effect is modelled by imposing\footnote{Note however that the 
-cause-effect correspondence might be many-to-one, with an effect depending on several causes.}:
+probabilistic model. The time lag, now a stochastic quantity, is modelled as the vector 
+$\boldsymbol{\tau} = [\tau_1, \dots, \tau_{\rvert T \rvert}]$ of binary latent variables, 
+where $\tau_i$ indicates whether $x$ drives $y_i$ ($\tau_i=1$) or not ($\tau_i=0$). The 
+assumption that every cause has a single effect is modelled by imposing\footnote{Note however 
+that the cause-effect correspondence might be many-to-one, with an effect depending on several 
+causes.}
 %
 \begin{equation}\label{eq:cs1}
 \sum_{i \in T} \tau_i = 1.
 \end{equation}
 %
-From constraint~\cref{eq:cs1}, probability distribution $\hat p(x)$ thus is sought as a set of 
-$\hat p_i(x)$ for $i$ in $T$, summing to 1, such that $\hat p_i(x)$ stands for the probability of 
-the effect of $x_m=x$ to occur with delay $i$ in $T$.
+In the \XX \ framework, the task is to learn two components: 
+\begin{enumerate}
+  \item a set of independent predictors $\{\hat y_i(x),\ i \in T\}$, and
+  \item a conditional probability distribution $\hat p(\boldsymbol{\tau} \rvert x)$ on $T$, 
+        estimating the probability of the time delay of the effects of $x$.
+\end{enumerate} 
+%
+For an input pattern $x_m$, let ${\bf y}_m$ denote the vector of random variables 
+$y_{m+i},\ i \in T$. We express the conditional probability $P\bigl[{\bf y}_{m}\vert x_m=x\bigr]$ 
+as a mixture of Gaussians centered on the predictors $\hat y_i(x)$, 
+%
+\begin{equation}\label{eq:py}
+  P\bigl[{\bf y}_{m}\vert x_m=x\bigr] = 
+  \sum_{\boldsymbol{\tau}\in \{0,1\}^{\rvert T \rvert}} \hat p\bigl(\boldsymbol{\tau}\vert x) 
+  \prod_{i\in T} {\cal N}\bigl(\hat y_i(x),\sigma_i(\boldsymbol{\tau})\bigr) \ ,
+\end{equation}
+%
+where the mixture weights are defined from $p\bigl(\boldsymbol{\tau}\vert x)$. Using the constraint 
+defined in \cref{eq:cs1}, $p\bigl(\boldsymbol{\tau}\vert x)$ can be simplified to a vector 
+$\hat{\mathbf{p}}(x)$ consisting of components $[\hat p_i(x): i \in T]$, such that 
+$\sum_{i \in T}{\hat p_i(x)} = 1,\ \forall x$, where $\hat p_i(x)$ stands for the probability that 
+the effect of $x_m=x$ will occur with delay $i$.
 
-The second simplifying assumption is that the variance $\sigma_i^2({\bf \tau})$ of predictor 
-$\hat y_i$ does not depend on $x$, by setting:
+For further simplifying the analysis, we assume that the variance $\sigma_i^2({\bf \tau})$ of 
+predictor $\hat y_i$ does not depend on $x$, by setting:
 \[
 \sigma_i(\boldsymbol{\tau})^{-2} = \Bigl(1+\sum_j\alpha_{ij} \tau_j\Bigr)\sigma^{-2},
 \]
@@ -276,23 +280,38 @@ higher variance, enforced by making $\alpha_{ij}$ a decreasing function of $\ver
 generally, a large value of $\alpha_{ii}$ compared to $\alpha_{ij}$ for $i\ne j$ corresponds to a 
 small auto-correlation time of the effect series. 
 
+Therefore, for any input $x$ a predictive model that learns according to the \XX \ framework must 
+output both $\hat{\mathbf{y}}(x) \in \mathbb{R}^{\rvert T \rvert}$ and 
+$\hat{\mathbf{p}}(x) \in \mathbb{R}^{\rvert T \rvert}$, with the aim of maximising the probability 
+$P\bigl[{\bf y}_{m}\vert x_m=x\bigr]$ given in \cref{eq:py}. In this chapter, 
+$\hat{\mathbf{y}}(x)$ and $\hat{\mathbf{p}}(x)$ are assumed to be the outputs of a neural network.
+More details on the architecture chosen for this task are given in \cref{sec:model}.
+
 \subsection{Learning Criterion}
-The joint distribution is classically learned by maximizing the log likelihood of the data, that 
-can be computed in closed form as (please see \cref{app:LL} for the details of the derivation): 
+
+A heuristic derivation shows that the log-likelihood based on the model in \cref{eq:py} is 
+approximately given by
 %
 \begin{equation}\label{eq:LL}
-  {\cal L}\bigl[ {\bf x, y};\hat {\bf y},\hp,\sigma,{\bf \alpha}] = 
+  {\cal L}\bigl[ {\bf x, y};\hat {\bf y},\hat {\bf p},\sigma,{\bf \alpha}] = 
   -\vert T\vert\log(\sigma)-\frac{1}{n_m}\sum_m\Bigl[
     \sum_{i \in T}\frac{1}{2\sigma^2}\bigl(y_{m+i}-\hat y_i(x_m)\bigr)^2 - 
-    \log\bigl(Z_m(\hat {\bf y},\hp,\sigma,{\bf \alpha})\bigr)\Bigr],
+    \log\bigl(Z_m(\hat {\bf y},\hat {\bf p},\sigma,{\bf \alpha})\bigr)\Bigr],
 \end{equation}
 %
 with $n_m$ the number of data points and partition term $Z_m$ given as:
 \[
-  Z_m(\hat {\bf y},\hp,\sigma,{\bf \alpha}) = \sum_{i \in T}\hat p_i(x_m)\exp\Bigl(
+  Z_m(\hat {\bf y},\hat {\bf p},\sigma,{\bf \alpha}) = \sum_{i \in T}\hat p_i(x_m)\exp\Bigl(
     - \frac{1}{2\sigma^2}\sum_{j\in T}\alpha_{ji}\bigl(y_{m+j}-\hat y_j(x_m)\bigr)^2 
     + \frac{1}{2}\sum_{j\in T}\log(1+\alpha_{ji})\Bigr).
 \]
+The heuristic derivation is given in \cref{app:LL}. It makes use of a large-sample approximation 
+(assuming infinitely many observations in small volumes $dx d\mathbf{y}$); while we do not have any 
+guarantees that it is accurate for realistic sample sizes (and if $\mathcal{X}$ is 
+high-dimensional, it may very well not be); but based on optimising \cref{eq:LL} we get 
+excellent predictive results, so we have not sought to find a more precise approximation of 
+the likelihood.
+
 For notational simplicity, the data index $m$ is omitted in the following and the empirical 
 averaging on the data is noted ${\mathbb E}_{data}$. The hyper-parameters $\sigma$ and matrix 
 $\alpha$ of the model are obtained by optimizing  ${\cal L}$:
@@ -318,28 +337,31 @@ with the probability $q_i(x,{\bf y}) = P(\tau_i=1\vert x,{\bf y})$ defined as
   \Bigr)
 \end{equation}
 %
-In addition the optimal $\hat {\bf y}$ and $\hp$ reads:
-%
-\begin{align}
-  \hat y_i(x) &= 
-    \frac{
-      {\mathbb E}_{data} \Bigl[
-          y_i\bigl(1+\sum_{j\in T}\alpha_{ij}q_j(x,{\bf y})\bigr)\Big\vert x
-        \Bigr]
-    }{
-      {\mathbb E}_{data}\Bigl[1+\sum_{j\in T}\alpha_{ij}q_j(x,{\bf y})\Big\vert x\Bigr]
-    }\label{eq:hyopt}\\[0.2cm]
-  \hat p_i(x) &= {\mathbb E}_{data}\Bigl[q_i(x,{\bf y})\Big\vert x \Bigr],\label{eq:tildep}
-\end{align}
-%
-where the above conditional empirical averaging operates as an averaging over samples close to $x$.
+% In addition the optimal $\hat {\bf y}$ and $\hp$ reads:
+% %
+% \begin{align}
+%   \hat y_i(x) &= 
+%     \frac{
+%       {\mathbb E}_{data} \Bigl[
+%           y_i\bigl(1+\sum_{j\in T}\alpha_{ij}q_j(x,{\bf y})\bigr)\Big\vert x
+%         \Bigr]
+%     }{
+%       {\mathbb E}_{data}\Bigl[1+\sum_{j\in T}\alpha_{ij}q_j(x,{\bf y})\Big\vert x\Bigr]
+%     }\label{eq:hyopt}\\[0.2cm]
+%   \hat p_i(x) &= {\mathbb E}_{data}\Bigl[q_i(x,{\bf y})\Big\vert x \Bigr],\label{eq:tildep}
+% \end{align}
+% %
+% where the above conditional empirical averaging operates as an averaging over samples close to $x$.
 
-These are implicit equations, since $q_i(x,{\bf y})$ depends on the parameters $\sigma^2$ and 
-$\alpha_{ij}$, $\hat {\bf y}$ and $\hp$. The proposed algorithm detailed in \cref{sec:model} 
-implements the saddle point method defined from \cref{eq:var,eq:hatpi,eq:hyopt,eq:tildep}: 
-alternatively, hyper-parameters $\sigma$ and $\alpha_{ij}$ are updated from \cref{eq:var} based on 
-the current $\hat y_i$ and $\hat p_i$; and predictors $\hat y_i$ and mixture weights $\hat p_i$ are 
-accordingly updated from \cref{eq:hyopt} and \cref{eq:tildep} respectively. 
+These are implicit equations, since $q_i(x,{\bf y})$ depends on $\sigma^2$ and 
+$\alpha_{ij}$, $\hat{\mathbf{y}}(x)$ and $\hat{\mathbf{p}}(x)$. The proposed algorithm detailed 
+in \cref{sec:model} implements the saddle point method defined in \cref{eq:var,eq:hatpi} 
+alternatively. Predictors $\hat y_i$ and mixture weights $\hat p_i$ are updated through 
+gradient descent based weight updates. The saddle point probability $q_i(x,{\bf y})$ is accordingly 
+updated using \cref{eq:hatpi}. The hyper-parameters $\sigma$ and $\alpha_{ij}$ are subsequently 
+updated using \cref{eq:var} based on the current $\hat y_i$, $\hat p_i$, and $q_i$. 
+\Cref{sec:model} gives details about the precise implementation of this procedure.
+
 
 \section{Theoretical Analysis}\label{sec:dtlrtheory}
 The proposed \XX\ approach is shown to be consistent and analysed in the simple case where $\alpha$ 
@@ -368,12 +390,12 @@ the optimal composite predictor $(y^\star,I^\star)$ is given by
 \end{prop}
 %
 \begin{proof}
-In \cref{app:Hessian}.
+In \cref{app:opred}.
 \end{proof}
 
 \subsection{Linear Stability Analysis}\label{sec:stability}
-The saddle point \cref{eq:var,eq:hatpi,eq:hyopt,eq:tildep} admit among others a degenerate 
-solution $\mathbf{p}_0$ corresponding to $\hat p_i(x) = 1/\vert T\vert$, 
+The saddle point \cref{eq:var,eq:hatpi} admit among others a degenerate solution 
+$\mathbf{p}_0$ corresponding to $\hat p_i(x) = 1/\vert T\vert$, 
 $\alpha_{ij}=0, \forall i,j \in T$, with $\sigma^2 = \sigma_0^2$. Informally the model converges 
 toward this degenerate trivial solution when there is not enough information to build specialised 
 predictors $\hat y_i$. 
@@ -391,7 +413,7 @@ Hessian of the log-likelihood and its eigenvalues. Under the simplifying assumpt
   \alpha_{ij} = \alpha \delta_{ij},
 \]
 the model involves $2\vert T\vert+2$ parameters: $\alpha$, $r = \sigma^2/\sigma_0^2$, 
-$\hat {\bf y}$ and $\hp$. After the computation of the Hessian (\cref{app:opred}) the system 
+$\hat {\bf y}$ and $\hp$. After the computation of the Hessian (\cref{app:Hessian}) the system 
 involves three key statistical quantities, two global:
 %
 \begin{align}
@@ -408,7 +430,7 @@ involves three key statistical quantities, two global:
     \Bigr],\label{def:C2}
 \end{align}
 %
-and a one local:
+and one local:
 \begin{equation}
   \vert {\bf u}(x)\vert^2 = \sum_{i\in T} C_{2+i}[x,\p]^2,
 \end{equation}
@@ -459,9 +481,9 @@ kurtosis $\kappa$ (conditionally to $x$) one has $C_2 = (2+\kappa)(1-1/\vert T\v
 whenever $\Delta y_i^2(x)$ fluctuates and the relative kurtosis is non-negative,
 the degenerate solution is unstable and will thus be avoided.
 
-If $\hat {\bf p}$ is allowed to evolve (after \cref{eq:tildep}), the degenerate trivial 
-solution becomes unstable as soon as $\vert {\bf u}(x)\vert^2$ is non-zero, due to the fact that 
-the gradient is inversely proportional to ${\bf u}(x)$ (with 
+When $\hat{\mathbf{p}}(x)$ is iteratively refined by successive weight updates, the degenerate 
+trivial solution becomes unstable as soon as $\vert {\bf u}(x)\vert^2$ is non-zero, due to the fact 
+that the gradient is inversely proportional to ${\bf u}(x)$ (with 
 $d\hp(x)\propto -\vert {\bf u}(x)\vert^2 {\bf u}(x)$), thus rewarding the predictors with lowest 
 errors by increasing their weights. The system is then driven toward other solutions, among which 
 the localised solutions of the form:
@@ -493,7 +515,7 @@ for further work.
 \end{algorithm}
 The \XX\ algorithm learns both regression models $\hat {\bf y}(x)$ and $\hat {\bf p}(x)$ from 
 series $x_m$ and $y_m$, using alternate optimization of the model parameters and the model 
-hyper-parameters ${\bf \alpha}$ and $\sigma^2$, after \cref{eq:var,eq:hatpi,eq:hyopt,eq:tildep}. 
+hyper-parameters ${\bf \alpha}$ and $\sigma^2$, after \cref{eq:var,eq:hatpi}. 
 The model search space is that of neural nets, parametrized by their weight vector $\theta$. 
 The inner optimization loop updates $\theta$ using mini-batch based stochastic gradient descent. 
 At the end of each epoch, after all mini-batches have been considered, the outer optimization loop 
@@ -850,7 +872,7 @@ to the auto-correlation of the series, it allows to compare different predictors
   \hline
   \end{tabular}
 \end{table}
-\todo{Update $\sigma_0$ and $C_1$ numbers for \XX in \cref{tab:results_syn}}
+%\todo{Update $\sigma_0$ and $C_1$ numbers for \XX in \cref{tab:results_syn}}
 
 On the easy Problem I, the model predicts the correct time lag for $97.93\%$ of the samples. The 
 higher value of $\sigma_0$ in problems I and II compared to the other problems is explained from 
