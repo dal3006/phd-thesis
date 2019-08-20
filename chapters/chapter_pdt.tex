@@ -305,9 +305,10 @@ with $n_m$ the number of data points and partition term $Z_m$ given as:
     - \frac{1}{2\sigma^2}\sum_{j\in T}\alpha_{ji}\bigl(y_{m+j}-\hat y_j(x_m)\bigr)^2 
     + \frac{1}{2}\sum_{j\in T}\log(1+\alpha_{ji})\Bigr).
 \]
-The heuristic derivation is given in \cref{app:LL}. It makes use of a large-sample approximation 
-(assuming infinitely many observations in small volumes $dx d\mathbf{y}$); while we do not have any 
-guarantees that it is accurate for realistic sample sizes (and if $\mathcal{X}$ is 
+
+The heuristic derivation of \cref{eq:LL} is given in \cref{app:LL}. It makes use of a large-sample 
+approximation (assuming infinitely many observations in small volumes $dx d\mathbf{y}$); while we 
+do not have any guarantees that it is accurate for realistic sample sizes (and if $\mathcal{X}$ is 
 high-dimensional, it may very well not be); but based on optimising \cref{eq:LL} we get 
 excellent predictive results, so we have not sought to find a more precise approximation of 
 the likelihood.
@@ -352,9 +353,9 @@ with the probability $q_i(x,{\bf y}) = P(\tau_i=1\vert x,{\bf y})$ defined as
 % \end{align}
 % %
 % where the above conditional empirical averaging operates as an averaging over samples close to $x$.
-
-These are implicit equations, since $q_i(x,{\bf y})$ depends on $\sigma^2$ and 
-$\alpha_{ij}$, $\hat{\mathbf{y}}(x)$ and $\hat{\mathbf{p}}(x)$. The proposed algorithm detailed 
+%
+These are implicit equations, since $q_i(x,{\bf y})$ depends on $\sigma^2$, $\alpha_{ij}$, 
+$\hat{\mathbf{y}}(x)$, and $\hat{\mathbf{p}}(x)$. The proposed algorithm detailed 
 in \cref{sec:model} implements the saddle point method defined in \cref{eq:var,eq:hatpi} 
 alternatively. Predictors $\hat y_i$ and mixture weights $\hat p_i$ are updated through 
 gradient descent based weight updates. The saddle point probability $q_i(x,{\bf y})$ is accordingly 
