@@ -38,11 +38,11 @@ the latter one is {\em caused} by the former one \citep{Granger} with a non-stat
 The Sun, a perennial source of charged energetic particles, drives all geomagnetic phenomena within 
 the Sun-earth system. Specifically, the Sun ejects charged particles into the surrounding space in 
 all directions (solar wind). High speed solar wind is a major threat for the modern world, causing 
-severe damage to satellites, telecommunication infrastructure, under sea pipelines, among others. 
-\footnote{The adverse impact of space weather is estimated to cost $200$ to $400$ million per year, 
-but can sporadically lead to much larger losses.} Interested readers can refer to 
-\cref{sec:hmfsolarwind} for some historical background to the modern models of the solar wind and 
-the structure Heliospheric Magnetic Field (HMF). 
+severe damage to satellites, telecommunication infrastructure, under sea pipelines, among 
+others\footnote{The adverse impact of space weather is estimated to cost $200$ to $400$ 
+million per year, but can sporadically lead to much larger losses.}. Interested readers can refer 
+to \cref{sec:hmfsolarwind} for some historical background to the modern models of the solar wind 
+and the structure Heliospheric Magnetic Field (HMF). 
 
 Forecasting near-Earth solar wind speed (at the $L_1$ point) based on near-Sun data is a problem of 
 particular importance in space weather prediction due to its large lead time 
@@ -172,7 +172,7 @@ proposed approach compared to the state of the art in DTW series alignment is th
 the cause and effect series are of different dimensionality. While the effect series is scalar, the 
 cause series can be high-dimensional (e.g. images, vectors, etc). Secondly, the relationship 
 between the cause and the effect series can be non-linear (the {\em what} model). Thirdly, the time 
-lag phenomenon (the {\em when} model) can be non smooth (as opposed to e.g. \citet{ZHOU2006195}).
+lag phenomenon (the {\em when} model) can be non-smooth (as opposed to e.g. \citet{ZHOU2006195}).
 
 The Bayesian approach proposed to tackle the \XX\ regression problem and the associated learning 
 equations are described in \cref{sec:dtlrformulation}, followed by a stability analysis and 
@@ -221,31 +221,35 @@ before it).
 
 \subsection{Probabilistic Dynamic Time-Lag Regression}
 
-For practical reasons, cause and effect series are sampled with a constant rate $\delta t$, and 
-respectively noted ${x_m}$ and ${y_m}$ in the following. Accordingly, mapping $g$ might be sought 
-as a discrete time lag, where the delay between cause $x_m$ and effect $y_{m+g(x_m)}$ ranges in a 
-finite set $T = [\tau_{min}, \ldots, \tau_{max}]$, with  $\tau_{min}$ and  $\tau_{max}$ defined 
-from prior knowledge, e.g. space weather theory. 
+For practical reasons, the cause and effect series are sampled with a constant rate $\delta t$, and 
+denoted as ${x_m}$ and ${y_m}$ respectively. Accordingly, the mapping $g$ now outputs a discrete 
+time lag, where the delay between cause $x_m$ and effect $y_{m+g(x_m)}$ ranges in a finite set 
+$T = [\tau_{min}, \ldots, \tau_{max}]$, with limits $\tau_{min}$ and  $\tau_{max}$, which can 
+be defined from prior knowledge e.g. space weather theory. 
 
-The unavoidable error due to the discretization of the continuous time lag is mitigated along a 
-probabilistic model, associating to each cause $x$, a set of independent predictors 
+The unavoidable error due to the discretisation of the continuous time lag, and uncertainties 
+introduced due to the lack of observations of the mapping $g$ are mitigated by using a 
+probabilistic model. For each cause $x$, we have a set of independent predictors 
 $\{\hat y_i(x),\ i \in T\}$ and a probability distribution $\hat p(x)$ on $T$ estimating the 
-probability of delay of the effects of $x$. Overall, the \XX\ solution is sought as a probability 
-distribution conditioned on cause $x$, mixture of Gaussians centered on the predictors 
-$\hat y_i(x)$, where the mixture weights are defined from $\hat p(x)$. More formally, letting 
-${\bf y}_m$ denote the vector of random variables $y_{m+i},\ i \in T$, 
+probability of the time delay of the effects of $x$. 
+
+
+Overall, the \XX\ solution is sought as a probability distribution conditioned on cause $x$, 
+mixture of Gaussians centered on the predictors $\hat y_i(x)$, where the mixture weights are 
+defined from $\hat p(x)$. More formally, letting ${\bf y}_m$ denote the vector of random 
+variables $y_{m+i},\ i \in T$, 
 %
 \begin{equation}\label{eq:py}
   P\bigl[{\bf y}_{m}\vert x_m=x\bigr] = 
-  \sum_{i \in T, \tau_i\in\{0,1\}} \hat p\bigl(\tau_1,\ldots,\tau_n\vert x) 
-  \prod_{i\in T} {\cal N}\bigl(\hat y_i(x),\sigma_i(\tau)\bigr)
+  \sum_{\boldsymbol{\tau}\in \mathcal{T}} \hat p\bigl(\boldsymbol{\tau}\vert x) 
+  \prod_{i\in T} {\cal N}\bigl(\hat y_i(x),\sigma_i(\boldsymbol{\tau})\bigr)
 \end{equation}
 %
 Two simplifications are made for the sake of the analysis. Firstly, the stochastic time lag is 
-modelled as the set $\{\tau_i, i \in T\}$ of binary latent variables, where $\tau_i$ indicates 
-whether $x$ drives $y_i$ ($\tau_i=1$) or not ($\tau_i=0$). The assumption that every cause has a 
-single effect is modelled by imposing: \footnote{Note however that the cause-effect correspondence 
-might be many-to-one, with an effect depending on several causes.}
+modelled as the vector $\boldsymbol{\tau} = [\tau_1, \cdots, \tau_{T}]$ of binary latent variables, 
+where $\tau_i$ indicates whether $x$ drives $y_i$ ($\tau_i=1$) or not ($\tau_i=0$). The assumption 
+that every cause has a single effect is modelled by imposing\footnote{Note however that the 
+cause-effect correspondence might be many-to-one, with an effect depending on several causes.}:
 %
 \begin{equation}\label{eq:cs1}
 \sum_{i \in T} \tau_i = 1.
@@ -256,9 +260,9 @@ $\hat p_i(x)$ for $i$ in $T$, summing to 1, such that $\hat p_i(x)$ stands for t
 the effect of $x_m=x$ to occur with delay $i$ in $T$.
 
 The second simplifying assumption is that the variance $\sigma_i^2({\bf \tau})$ of predictor 
-$\hat h_i$ does not depend on $x$, by setting:
+$\hat y_i$ does not depend on $x$, by setting:
 \[
-\sigma_i({\bf \tau})^{-2} = \Bigl(1+\sum_j\alpha_{ij} \tau_j\Bigr)\sigma^{-2},
+\sigma_i(\boldsymbol{\tau})^{-2} = \Bigl(1+\sum_j\alpha_{ij} \tau_j\Bigr)\sigma^{-2},
 \]
 with $\sigma^2$ a default variance and $\alpha_{ij}\ge 0$ a matrix of non-negative real parameters. 
 The fact that $x$ can influence $y_i$ through predictor $\hat y_i(x)$ even when $\tau_i=0$ reflects 
