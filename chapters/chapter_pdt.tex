@@ -245,11 +245,13 @@ causes.}
 \sum_{i \in T} \tau_i = 1.
 \end{equation}
 %
-In the \XX \ framework, the task is to learn two components: 
+%$\mathcal{T} = \{\boldsymbol{\tau}: \boldsymbol{\tau} \in \{0,1\}^{\rvert T \rvert}, \ \sum_{i \in T} \tau_i = 1 \}$
+Let $\mathcal{T}$ denote the set of all binary vectors of length $\rvert T \rvert$, which satisfy 
+\cref{eq:cs1}. In the \XX \ framework, the task is to learn two components: 
 \begin{enumerate}
   \item a set of independent predictors $\{\hat y_i(x),\ i \in T\}$, and
-  \item a conditional probability distribution $\hat p(\boldsymbol{\tau} \rvert x)$ on $T$, 
-        estimating the probability of the time delay of the effects of $x$.
+  \item a conditional probability distribution $\hat p(\boldsymbol{\tau} \rvert x)$ on 
+        $\mathcal{T}$, estimating the probability of the time delay of the effects of $x$.
 \end{enumerate} 
 %
 For an input pattern $x_m$, let ${\bf y}_m$ denote the vector of random variables 
@@ -258,7 +260,7 @@ as a mixture of Gaussians centered on the predictors $\hat y_i(x)$,
 %
 \begin{equation}\label{eq:py}
   P\bigl[{\bf y}_{m}\vert x_m=x\bigr] = 
-  \sum_{\boldsymbol{\tau}\in \{0,1\}^{\rvert T \rvert}} \hat p\bigl(\boldsymbol{\tau}\vert x) 
+  \sum_{\boldsymbol{\tau}\in \mathcal{T}} \hat p\bigl(\boldsymbol{\tau}\vert x) 
   \prod_{i\in T} {\cal N}\bigl(\hat y_i(x),\sigma_i(\boldsymbol{\tau})\bigr) \ ,
 \end{equation}
 %
@@ -315,7 +317,8 @@ the likelihood.
 
 For notational simplicity, the data index $m$ is omitted in the following and the empirical 
 averaging on the data is noted ${\mathbb E}_{data}$. The hyper-parameters $\sigma$ and matrix 
-$\alpha$ of the model are obtained by optimizing  ${\cal L}$:
+$\alpha$ of the model are obtained by optimizing ${\cal L}$ which gives, for a fixed 
+$\hat{\mathbf{p}}(x)$:
 %
 \begin{equation}\label{eq:var}
   \frac{\sigma^2}{1+\alpha_{ij}} = 
