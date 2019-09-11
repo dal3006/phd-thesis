@@ -679,7 +679,7 @@ slots.
 \XX\ is validated using a $9$ fold cross-validation, where the test data consists of one 
 (continuous) Carrington rotation (see \cref{table:dtlrsplits}). The performance on Carrington 
 rotation $2077$ (first fold in \cref{table:dtlrsplits}) is compared with the state of the art 
-\citep{Riley2011} in \cref{tab:results_riley}, while the overall cross-validation performance 
+\citep{Riley2011} in \cref{tab:results_reiss}, while the overall cross-validation performance 
 is compared with a fixed time lag baseline which uses the same inputs as the DTLR model 
 (\cref{table:dtlrInputs}) and has the same architecture until the penultimate layer 
 (\cref{fig:archi}). 
@@ -901,17 +901,17 @@ the high time lag regions and conversely to over-estimate it in the low time lag
 Concerning the solar wind problem, \XX\ shows encouraging results on the cross-validation 
 experiments as can be seen in \cref{tab:results_syn} and visualised in \cref{fig:sw_preds}. 
 
-In \cref{tab:results_riley}, we compare the performance of the \XX \ model and the fixed time lag 
-baseline with the state of the art from \citet{Riley2011}, on the solar wind data from Carrington 
+In \cref{tab:results_reiss}, we compare the performance of the \XX \ model and the fixed time lag 
+baseline with the state of the art from \citet{Reiss_2019}, on the solar wind data from Carrington 
 rotation $2077$ (see \cref{table:dtlrsplits}). The \XX model gives improvements in predictive 
 performance.
 
 \begin{table}
   \caption{
     Performance Comparison on CR $2077$: \XX  \ , 
-    Fixed Lag Base Line vs \citet{Riley2011}
+    Fixed Lag Base Line vs \citet{Reiss_2019}
   }
-  \label{tab:results_riley}
+  \label{tab:results_reiss}
   \centering
   \begin{tabular}{ l l l }
   \hline
