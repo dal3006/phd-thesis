@@ -609,24 +609,25 @@ generated using the norm of $x_m$:
 % 
 \begin{align}
  x_{m+1} &= (1 - \eta) x_m + \mathcal{N}(0, s^2) \label{eq:data}\\
- y_{m+\tau(x_m)} &= k ||x_m||^2 + c \label{eq:outputs}
+ y_{m+\tau(x_m)} &= f(||x_m||) \label{eq:outputs}
 \end{align}
 %
 Four models of increasing complexity have been used for the time lag relationship $\tau(x_m)$; the 
 width of the time lag interval $|T|$ is set to $20$ except for Problem I where it is set to $15$.
 \\\\
 %
-{\bf Problem I}: Constant time lag $\tau(x_m) = 5$\\
+{\bf Problem I}: Constant time lag $\tau(x_m) = 5$, $y_{m+\tau(x_m)} = k ||x_m||^2 + c$\\
 %
 In all other problems, the time lag $\tau(x_m)$ depends on the velocity $v_m = k ||x_m||^2 + c$\\
 %
-{\bf Problem II}: Constant velocity $\tau(x_m) = 100/v_m,\ k = 1,\ c = 10$\\
+{\bf Problem II}: Constant velocity $y_{m+\tau(x_m)} = v_m$, $\tau(x_m) = 100/v_m,\ k = 1,\ c = 10$\\
 %
 {\bf Problem III}: Constant acceleration 
-$\tau(x_m) = (\sqrt{v_m^2 + 2ad} - v_m)/a,\ k = 5,\ a = 5,\ d = 1000, \ c = 100$
-\\
+$y_{m+\tau(x_m)} = \sqrt{v^2_{m} + 2ad}$, 
+$\tau(x_m) = (\sqrt{v_m^2 + 2ad} - v)/a,\ k = 5,\ a = 5,\ d = 1000, \ c = 100$\\
 %
 {\bf Problem IV}: Softplus 
+$y_{m+\tau(x_m)} = v_m$, 
 $\tau(x_m) = \exp\left(v_m\right)/\left(1 + \exp(v_m/20)\right), \ k = 10, c = 40$\\
 
 \paragraph{Solar Wind Speed Prediction}\label{sec:solarwind}
@@ -656,10 +657,10 @@ slots.
           GONG & 
           $\mathbb{R}^{180}$ & 
           $\mathbf{f}_S$ or FTE is computed from the outputs of the CSSS model.\\
-          $\mathbf{B}_{ss}$ & 
+          $\mathbf{B}_{cp}$ & 
           GONG & 
           $\mathbb{R}^{180}$  & 
-          The radial magnetic field strength on the solar source surface is the primary output computed by the CSSS model.\\
+          The radial magnetic field strength on the solar cusp surface is the primary output computed by the CSSS model.\\
           $\Phi$ & 
           GONG & 
           $[0, 360)$ & 
