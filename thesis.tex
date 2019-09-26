@@ -52,6 +52,10 @@
 \newcommand{\extMemberThree}{Prof. Dr. M. Girolami}
 \newcommand{\extMemberThreeAff}{The University of Warwick}
 
+\newcommand{\printingcompany}{Some Repro B.V.}
+\newcommand{\coverdesign }{Some Designer}
+\newcommand{\isbncode}{XXX-XX-XXX-XXXX-X}
+
 \author{\me}
 
 %
@@ -78,6 +82,9 @@
 
 \clearemptydoublepage
 
+\include{funding_page}
+
+\clearemptydoublepage
 %Sometimes line numbers are nice, uncomment the next line to enable:
 %\linenumbers
 
@@ -88,9 +95,9 @@
 %\chapter*{*Brainstorm results*}\todo{remove this chapter}
 %\include{chapters/brainstorm_results}
 
-%\include{chapters/abstract}
+\include{chapters/abstract}
 
-%\clearemptydoublepage
+\clearemptydoublepage
 
 %An executive summary if you want:
 %\chapter*{Executive summary}\label{chapter:executive_summary}
@@ -169,6 +176,9 @@
 %Choose a good bibliography style, plain would do often, but these might be nice too
 \bibliographystyle{plainnat}
 \bibliography{references}
+\clearpage
+
+\include{curriculum-vitae}
 
 
 \end{document}
