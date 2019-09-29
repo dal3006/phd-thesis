@@ -9,31 +9,37 @@
 
 \end{center}
 
-The study of variations in the space environment between the Sun and the Earth constitutes 
-the core of space weather research. Ionized plasma ejected by the Sun couples with the Earth’s 
-magnetic field in complex processes that determine the state of the Earth's magnetosphere. Adverse 
-effects from space weather can impact communication networks, power grids and logistics 
-infrastructure, all crucial pillars of a civilization that is reliant on technology.
+The study of variations in the space environment between the Sun and the Earth 
+constitutes the core of space weather research. Plasma ejected by the 
+Sun couples with the Earth’s magnetic field in complex ways that determine 
+the state of the Earth's magnetosphere. Adverse effects from space weather can 
+impact communication networks, power grids and logistics infrastructure, all 
+crucial pillars of a civilization that is reliant on technology.
 
-It is important to use data sources, scientific knowledge and statistical techniques to create 
-space weather forecasting and monitoring systems of the future. This thesis aims to be a step 
-towards that goal. The work is organised into the following sections/chapters.
+It is important to use data sources, scientific knowledge and statistical 
+techniques to create space weather forecasting and monitoring systems of the 
+future. This thesis aims to be a step towards that goal. The work is organised 
+into the following chapters.
 
-In \cref{chapter:dst_osa,chapter:dst_msa}, we develop probabilistic forecasting models for 
-predicting geo-magnetic time series. Combining ground based and satellite measurements, we propose 
-a gaussian process model for one hour ahead prediction of the Dst time series. We augment this 
-model with a long short-term memory network and produce probabilistic predictions six hours ahead 
-for Dst.
+In \cref{chapter:dst_osa,chapter:dst_msa}, we develop probabilistic forecasting 
+models for predicting geo-magnetic time series. Combining ground based and 
+satellite measurements, we propose a gaussian process model for forecasting of 
+the Dst time series one hour ahead. We augment this model with a 
+long short-term memory (LSTM) network and produce six-hour-ahead probabilistic 
+forecasts for Dst.
 
-Quantifying uncertainties in the Earth's radiation belt parameters is an important step for 
-producing ensembles of high fidelity simulations of the magnetosphere. In 
-\cref{chapter:bayes_diff_chapter}, we combine simplified physical models of the radiation belt with 
-Markov Chain Monte Carlo techniques to obtain uncertainties in magnetospheric parameters, using 
-data from probes orbiting in the radiation belts.
+Quantifying uncertainties in the dynamics of the Earth's radiation belt is an 
+important step for producing ensembles of high fidelity simulations of the 
+magnetosphere. In \cref{chapter:bayes_diff_chapter}, we infer uncertainties in 
+magnetospheric parameters, using data from probes orbiting in the radiation 
+belts, by combining simplified physical models of the radiation belt with 
+Markov Chain Monte Carlo techniques.
 
-In time-varying phenomena, it is often the case that effects of disturbances are not observed 
-immediately, but after a certain time interval which can be dynamic. A prominent example this 
-behavior is the Sun-Earth system. Particles ejected from the Sun, also called the solar wind, reach 
-the Earth's magnetosphere after a time delay which is uncertain. We propose a novel neural network 
-based method, called Dynamic Time Lag Regression (\XX), apply it to the problem of solar wind 
-propagation.
+In time-varying systems, it is often the case that cause and effect don't occur
+at the same time. A prominent example of this time-lagged behaviour is the 
+Sun-Earth system. Particles ejected from the Sun, also called the solar wind, 
+reach the Earth's magnetosphere after a time delay which is dynamic and 
+uncertain. In \cref{chapter:pdt}, we propose a novel neural network based 
+method, called Dynamic Time Lag Regression (\XX), for predicting time-lagged 
+effects of events and apply it to the problem of near-Earth solar wind 
+forecasting from heliospheric data.
