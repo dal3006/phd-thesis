@@ -873,7 +873,7 @@ to the auto-correlation of the series, it allows to compare different predictors
   \textbf{Pb II} & $10.15$ / $27.40$ / $0.4$ & $13.70$ / $35.11$ / $0.67$ & $0.95$ / $0.73$ / $0.70$ & $26.83$ & $0.16$\\
   \textbf{Pb III} & $3.17$ / $11.01$ / $0.17$ & $4.63$ / $14.99$ / $0.42$ & $0.98$ / $0.79$ / $0.84$ & $11.84$ & $0.09$\\
   \textbf{Pb IV} & $3.88$ / $12.28$ / $0.34$ & $5.33$ / $15.89$ / $0.64$ & $0.98$ /$0.79$/ $0.81$ & $12.18$ & $0.13$\\
-  \textbf{Solar Wind} & $56.35$ / $N.A$ / -- & $74.20$ / $N.A$ / -- & $0.6$ / $N.A$ / -- & $N.A$ & $N.A$\\
+  \textbf{Solar Wind} & $56.35$ / $66.45$ / -- & $74.20$ / $84.53$ / -- & $0.6$ / $0.41$ / -- & $76.46$ & $0.89$\\
   \hline
   \end{tabular}
 \end{table}
@@ -914,22 +914,25 @@ performance.
   }
   \label{tab:results_reiss}
   \centering
-  \begin{tabular}{ l l l }
+  \begin{tabular}{ | l | l l | }
+    \hline
+    Model &  M.A.E & R.M.S.E \\
+    \hline 
+    \hline
+    WS & $74.09$ & $85.27$ \\
+    DCHB & $83.83$ & $103.43$ \\
+    WSA & $68.54$ & $82.62$ \\
+    Ensemble Median (WS)   & $71.52$ & $83.36$ \\
+    Ensemble Median (DCHB) & $78.27$ & $100.04$ \\
+    Ensemble Median (WSA)  & $62.24$ & $74.86$ \\
+    Persistence (4 days)   & $130.48$ & $161.99$ \\
+    Persistence (27 days)  & $66.54$ & $78.86$ \\
+    \hline
+    Fixed Lag Baseline & $67.33$ & $80.39$ \\
+    \hline
+    \XX & $60.19$ & $72.64$ \\
   \hline
-  Model &  M.A.E & R.M.S.E \\
-  \hline
-  \XX & $54.41$ & $66.22$ \\
-  Fixed Lag Baseline & $67.33$ & $80.39$ \\
-  WS & $74.09$ & $85.27$ \\
-  DCHB & $83.83$ & $103.43$ \\
-  WSA & $68.54$ & $82.62$ \\
-  Ensemble Median (WS)   & $71.52$ & $83.36$ \\
-  Ensemble Median (DCHB) & $78.27$ & $100.04$ \\
-  Ensemble Median (WSA)  & $62.24$ & $74.86$ \\
-  Persistence (4 days)   & $130.48$ & $161.99$ \\
-  Persistence (27 days)  & $66.54$ & $78.86$ \\
-  \hline
-  \end{tabular}
+    \end{tabular}
 \end{table}
 
 \section{Conclusions}
