@@ -13,9 +13,11 @@ achievements of this thesis and avenues for further research.
 Using Gaussian process auto-regressive methods, it is possible to obtain 
 accurate and reliable probabilistic forecasts for the $\mathrm{Dst}$ index, 
 up to five hours ahead. By viewing the prediction problem from a probabilistic 
-lens, the GP-AR and GP-ARX models proposed in 
-\cref{chapter:dst_osa,chapter:dst_msa} represent an important transition 
-for geomagnetic index forecasting. 
+lens, the GP-AR, GP-ARX, and GPNN models proposed in 
+\cref{chapter:dst_osa,chapter:dst_msa} represent an important paradigm shift 
+for geomagnetic activity modeling. The ability to provide probabilistic 
+forecasts will become an indispensable component of future space weather 
+monitoring systems.  
 
 The GP-AR and GP-ARX models give a general framework for modeling non-linear 
 dynamical systems and provide uncertainty estimates on their time evolution. 
@@ -27,10 +29,16 @@ probabilistic forecasting capabilities.
 
 \subsection*{Radiation Belt Parameter Inference}
 
-Using machine learning models as surrogates for quantities governed by physical 
-laws, one can obtain models with some desirable properties: the ability to 
-synthesise observations and prior knowledge of physical dynamics into a 
-coherent methodology for parameter inference and uncertainty quantification. 
+In \cref{chapter:bayes_diff_chapter}, we proposed a machine learning based 
+surrogate model which is informed by models of physical dynamics and can 
+compute likelihoods over irregularly spaced observations.  
+
+Although physics informed machine learning models may not offer benefits over 
+finite difference, finite volume, and finite element based methods for solving 
+forward problems, when solving inverse problems they have some desirable 
+properties: the ability to synthesise irregular observations and physics models 
+into a unified methodology for parameter inference and uncertainty 
+quantification. 
 
 When performing inference over the parameters of the radiation belt dynamics, 
 one needs to take into account the sensitivity of the radiation belt model to 
@@ -43,12 +51,18 @@ form enables the use of potentially infinite dimensional basis function
 expansions but it introduces the same computational challenges that come with 
 Gaussian process inference. 
 
+Physics informed machine learning models have the potential to 
+play an important role in data assimilation and probabilistic inference, the 
+uncertainties obtained for unobserved physical parameters can provide 
+qualitative indications about the adequacy of a particular physical model. 
+
 \subsection*{Solar Wind Prediction}
 
 The effect of time lag relationships between interacting systems can impact the 
-performance of predictive models which give forecasts for a fixed time lag. We 
-proposed a principled approach for training predictive models on time series 
-data sets which have non-stationary time lag dependencies.
+performance of predictive models which give forecasts for a fixed time horizon. 
+In \cref{chapter:pdt}, we proposed the dynamic time-lag regression (\XX) 
+framework, a novel machine learning approach for training predictive models on 
+time series data sets which have non-stationary time lag dependencies.
 
 The task of predicting near-Earth solar wind speed from heliospheric data is 
 very challenging and requires astute application of all the tools at our 
@@ -58,9 +72,9 @@ disposal:
     \item machine learning techniques, and 
     \item solar and near-Earth data. 
 \end{enumerate*}
-Using our proposed dynamic time-lag regression (\XX) framework, we were able to 
-achieve encouraging progress in the forecasting of near-Earth solar wind speed.
-
+Using the \XX \ framework, we were able to achieve encouraging progress in the 
+forecasting of near-Earth solar wind speed.
+ 
 
 \section{Further Research}
 
