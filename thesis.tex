@@ -4,11 +4,37 @@
 % THIS IS THE MAIN FILE (i.e. compile this file, compiling the others directly won't work)
 %
 \documentclass[11pt,twoside]{book}
-
+\usepackage[
+  papersize={172mm,242mm},
+  layout=b5paper,
+  layouthoffset=2mm,
+  layoutvoffset=2mm,
+  %inner=25mm,         % Inner margin
+  %outer=20mm,         % Outer margin
+  %bindingoffset=3mm, % Binding offset
+  %top=25mm,           % Top margin
+  %bottom=20mm,        % Bottom margin
+  %includefoot,
+  pdftex, pass
+]{geometry}
+% \geometry{
+%   papersize={172mm,242mm},
+%   layout=b5paper,
+%   layouthoffset=2mm,
+%   layoutvoffset=2mm,
+%   inner=25mm,         % Inner margin
+%   outer=20mm,         % Outer margin
+%   %bindingoffset=3mm, % Binding offset
+%   top=25mm,           % Top margin
+%   bottom=20mm,        % Bottom margin
+%   %includefoot,
+%   pdftex
+%   %showframe
+% }
 %all the other includes etc. are done in the thesis.sty file.
 \usepackage{thesis}
 
-%\loadgeometry{phdthesisview}
+%\loadgeometry{thesisprint}
 \graphicspath{{figures/}}
 %\setlength{\headheight}{13.59pt}
 
