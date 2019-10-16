@@ -1,52 +1,112 @@
 \chapter{Log Likelihood Of The \XX \ Model}\label{app:LL}
-Assume that the number of learning samples tends to infinity, and so that in a small volume $dv = dxd{\bf y}$ around a given  joint configuration $(x,{\bf y})$,
-the number of data $N_{x,{\bf y}}$ becomes large. Restricting the likelihood to this subset of the data yields the following:
+
+\section{Direct computation}
+Due to the single effect constraint in \cref{eq:cs1} the mixture model in 
+\cref{eq:py} can be expressed as  
+\begin{align*}
+P({\bf y}\vert \mathbf{x}) &= \Bigl(\sum_{i\in T}\hat p_i(\mathbf{x})\prod_{j\in T}\sqrt{\frac{1+\alpha_{ji}}{2\pi\sigma^2}}e^{-\frac{1}{2\sigma^2}(1+\alpha_{ji})\bigl(y_j-\hat y_j(\mathbf{x})\bigr)^2}\Bigr)\\[0.2cm]
+&= \Bigl(\sum_{i\in T}\hat p_i(\mathbf{x})\prod_{j\in T}\sqrt{\frac{1+\alpha_{ji}}{2\pi\sigma^2}}e^{-\frac{1}{2\sigma^2}\alpha_{ji}\bigl(y_j-\hat y_j(\mathbf{x})\bigr)^2}\Bigr)
+\exp\Bigl(-\frac{1}{2\sigma^2}\sum_{j\in T}\bigl(y_j-\hat y_j(\mathbf{x})\bigr)^2\Bigr).
+\end{align*}
+Let $\theta \egaldef (\hat {\bf y},\hp,\sigma,{\bf \alpha})$ denote the 
+parameters of the model and consider the probability that $\hat y_i$ is the 
+predictor corresponding to the ground truth time-lag, conditioned on the pair 
+$(\mathbf{x},{\bf y})$: 
+\begin{align*}
+  q_i(\mathbf{x},{\bf y}) &= P(\tau_i=1 \vert x,{\bf y})\\[0.2cm]
+  &= \frac{1}{Z(\mathbf{x},{\bf y}\vert\theta)}
+  \hat p_i(\mathbf{x})\exp\Bigl(-\frac{1}{2\sigma^2}\sum_{j\in  T}\alpha_{ji}\bigl(y_j-\hat y_j(\mathbf{x})\bigr)^2+\frac{1}{2}\sum_{j\in  T}\log(1+\alpha_{ji})\Bigr),
+\end{align*}
+with
 \[
-{\cal L}_{x,{\bf y}} = \prod_{m=1}^{N_{x,{\bf y}}} \sum_{\{\tau^{(m)}\}} 
-\frac{\hat p(\tau^{(m)}\vert x)}{\prod_{i\in T}\sqrt{2\pi}\ \sigma_i(\tau^{(m)})}
-\exp\Bigl(-\frac{1}{2}\sum_{i\in T}\frac{\bigl(y_i-\hat y_i(x)\bigr)^2}{\sigma_i(\tau^{(m)})^2}\Bigr).
+Z(\mathbf{x},{\bf y}\vert\theta) = \sum_{i\in T}  \hat p_i(\mathbf{x})\exp\Bigl(-\frac{1}{2\sigma^2}\sum_{j\in  T}\alpha_{ji}\bigl(y_j-\hat y_j(\mathbf{x})\bigr)^2+\frac{1}{2}\sum_{j\in  T}\log(1+\alpha_{ji})\Bigr).
+\]
+This results in 
+\[
+  {\cal L}[\{(\mathbf{x},{\bf y})\}_{\rm data}\vert\theta] = -\vert  T\vert\log(\sigma)-{\mathbb E}_{\rm data}
+  \Bigl[\sum_{i\in T}\frac{1}{2\sigma^2}\bigl(y_i-\hat y_i(\mathbf{x})\bigr)^2-\log\bigl(Z(\mathbf{x},{\bf y}\vert\theta)\bigr)\Bigr].
+\]
+
+\section{Large deviation argument}
+Even though the log likelihood can be obtained by direct summation, for sake of 
+generality we show how this can result from a large deviation principle.
+Assume that the number of learning samples tends to infinity, and so that in a 
+small volume $dv = d\mathbf{x} d{\bf y}$ around a given joint configuration 
+$(\mathbf{x},{\bf y})$, the number of data $N_{\mathbf{x},{\bf y}}$ becomes large. 
+Restricting the likelihood to this subset of the data yields the following:
+\[
+{\cal L}_{\mathbf{x},{\bf y}} = \prod_{m=1}^{N_{\mathbf{x},{\bf y}}} \sum_{\{\tau^{(m)}\}} 
+\frac{\hat p(\tau^{(m)}\vert \mathbf{x})}{\prod_{i\in  T}\sqrt{2\pi}\ \sigma_i(\tau^{(m)})}
+\exp\Bigl(-\frac{1}{2}\sum_{i\in  T}\frac{\bigl(y_i-\hat y_i(\mathbf{x})\bigr)^2}{\sigma_i(\tau^{(m)})^2}\Bigr).
 \]
 Upon introducing the relative frequencies:
 \[
-q_i(x,{\bf y}) = \frac{1}{N_{x,{\bf y}}}\sum_{m=1}^{N_{x,{\bf y}}} \tau_i^{(m)} 
+q_i(\mathbf{x},{\bf y}) = \frac{1}{N_{\mathbf{x},{\bf y}}}\sum_{m=1}^{N_{\mathbf{x},{\bf y}}} \tau_i^{(m)} 
 \qquad\text{satisfying}\qquad 
-\sum_{i\in T} q_i(x,{\bf y}) = 1,
+\sum_{i\in  T} q_i(\mathbf{x},{\bf y}) = 1,
 \]
-the sum over the $\tau_i^{(m)}$ is replaced by a sum over these new variables, with the summand 
-obeying a large deviation principle\footnote{For sake of generality we appeal to the large 
-deviation principle, but the same analysis can be made by direct summation over the 
-latent variable here.} 
+the sum over the $\tau_i^{(m)}$ is replaced by a sum over these new variables, 
+with the summand obeying a large deviation principle 
 %(see e.g.~\cite{Touchette})
 \[
-{\cal L}_{x,{\bf y}} \asymp \sum_{\p} 
-\exp\Bigl(-N_{x,{\bf y}} {\cal F}_{x,{\bf y}}\bigl[\p\bigr]\Bigr)
+{\cal L}_{\mathbf{x},{\bf y}} \asymp \sum_{\p} 
+\exp\Bigl(-N_{\mathbf{x},{\bf y}} {\cal F}_{x,{\bf y}}\bigl[\p\bigr]\Bigr)
 \]
-where the rate function simply reads from Sanov's theorem
+where the rate function reads
 \[
-{\cal F}_{x,{\bf y}}\bigl[\p\bigr] = \vert T\vert\log(\sigma)+
-\sum_{i\in T}\Bigl[\bigl(y_i-\hat y_i(x)\bigr)^2\frac{1+\sum_{j\in T}\alpha_{ij}q_j}{2\sigma^2}
--\frac{1}{2}q_i\sum_{j\in T}\log(1+\alpha_{ji})+q_i\log\frac{q_i}{\hat p_i}\Bigr].
+{\cal F}_{\mathbf{x},{\bf y}}\bigl[\p\bigr] = \vert T\vert\log(\sigma)+
+\sum_{i\in  T}\Bigl[\bigl(y_i-\hat y_i(\mathbf{x})\bigr)^2\frac{1+\sum_{j\in  T}\alpha_{ij}q_j}{2\sigma^2}
+-\frac{1}{2}q_i\sum_{j\in  T}\log(1+\alpha_{ji})+q_i\log\frac{q_i}{\hat p_i}\Bigr].
 \]
-Taking the saddle point for $q_i$ yield as a function of $(x,{\bf y})$~(\cref{eq:hatpi}). 
-Inserting this into ${\cal F}$ and taking the average over the data set yields the log 
-likelihood~(\cref{eq:LL}) with the opposite sign:
+Taking the saddle point for $q_i$ yields %as a function of $(\mathbf{x},{\bf y})$ %expression~(\ref{eq:hatpi}). Inserting this into ${\cal F}$ and taking
+\cref{eq:var}. Inserting this into ${\cal F}$ and taking
+%the average over the data set yields the log likelihood~(\ref{eq:LL}) with
+the average over the data set yields the log likelihood (\cref{eq:hatpi}) with 
+opposite sign:
 \[
-{\cal L}({\bf x},{\bf y};\hat {\bf y},\hp,\sigma,\alpha) = -{\mathbb E}_{data}\Bigl[{\cal F}_{x,{\bf y}}\bigl[\p(x,{\bf y})\bigr]\Bigr].
+{\cal L}[\{(\mathbf{x},{\bf y})\}_{\rm data}\vert\theta]
+ = -{\mathbb E}_{\rm data}\Bigl[{\cal F}_{x,{\bf y}}\bigl[\p(\mathbf{x},{\bf y})\bigr]\Bigr].
 \]
-% The optimization of the predictors $\hat {\bf y}$ yields:
-% \[
-% \frac{\partial{\cal L}}{\partial \hat y_i(x)} = \frac{1}{\sigma^2}{\mathbb E}_{data}\Bigl[ \bigl(y_i-\hat y_i(x)\bigr)\bigl(1+\sum_{j\in T}\alpha_{ij}q_j(x,{\bf y})\bigr)\Big\vert x\Bigr].
-% \]
-% The optimization of $\hp$ gives:
-% \[
-% \frac{\partial{\cal L}}{\partial \hat p_i(x)} = {\mathbb E}_{data}\Bigl[\frac{q_i(x,{\bf y})}{\hat p_i(x)}-\lambda(x)\Big\vert x \Bigr],
-% \]
-% with $\lambda(x)$ a Lagrange multiplier to insure that $\sum_i\hat p_i(x)=1$ 
-% %for any $x$ yielding expression~(\ref{eq:tildep}).
-% for any $x$ yielding \cref{eq:tildep}.
-%
-The optimization with respect to $\alpha$ reads:
+
+\subsection{Saddle point equations}
+Now we turn to the self-consistent equations relating the parameters $\theta$ 
+of the model at a saddle point of the log likelihood function. First, the 
+optimization of the predictors $\hat {\bf y}$ yields:
 \[
-\frac{\partial{\cal L}}{\partial \alpha_{ij}} = \frac{1}{2(1+\alpha_{ij})}{\mathbb E}_{data}\bigl[q_j(x,{\bf y})\bigr]-\frac{1}{2\sigma^2}
-{\mathbb E}_{data}\bigl[\bigl(y_i-\hat y_i(x)\bigr)^2q_j(x,{\bf y})\bigr].
+\frac{\partial{\cal L}}{\partial \hat y_i(\mathbf{x})} = \frac{1}{\sigma^2}{\mathbb E}_{\rm data}\Bigl[ \bigl(y_i-\hat y_i(\mathbf{x})\bigr)\bigl(1+\sum_{j\in  T}\alpha_{ij}q_j(\mathbf{x},{\bf y})\bigr)\Big\vert \mathbf{x}\Bigr].
+\]
+Then the optimization of $\hp$ gives:
+\begin{align*}
+\frac{\partial{\cal L}}{\partial \hat p_i(\mathbf{x})} &= {\mathbb E}_{\rm data}\Bigl[\frac{q_i(\mathbf{x},{\bf y})}{\hat p_i(\mathbf{x})}-\lambda(\mathbf{x})\Big\vert \mathbf{x} \Bigr],\\[0.2cm]
+&= \frac{1}{\hat p_i(\mathbf{x})}{\mathbb E}_{\rm data}\Bigl[q_i(\mathbf{x},{\bf y})\Big\vert \mathbf{x} \Bigr]-\lambda(\mathbf{x})
+\end{align*}
+with $\lambda(\mathbf{x})$ a Lagrange multiplier to insure that $\sum_i\hat p_i(\mathbf{x})=1$ 
+%for any $x$ yielding expression~(\ref{eq:tildep}).
+This gives
+\[
+\hat p_i(\mathbf{x}) = \frac{1}{\lambda(\mathbf{x})}{\mathbb E}_{\rm data}
+\Bigl[q_i(\mathbf{x},{\bf y})\Big\vert \mathbf{x} \Bigr]
+\]
+Hence
+\[
+\sum_{i\in T} \hat p_i(\mathbf{x}) = \frac{1}{\lambda(\mathbf{x})} = 1\qquad \forall x
+\]
+in order to fulfill the normalization constraint, yielding 
+
+\begin{align}
+  \hat y_i(x) &= 
+    \frac{
+      {\mathbb E}_{\rm data} \Bigl[
+          y_i\bigl(1+\sum_{j\in T}\alpha_{ij}q_j(\mathbf{x},{\bf y})\bigr)\Big\vert \mathbf{x}
+        \Bigr]
+    }{
+      {\mathbb E}_{\rm data}\Bigl[1+\sum_{j\in T}\alpha_{ij}q_j(\mathbf{x},{\bf y})\Big\vert \mathbf{x}\Bigr]
+    }\label{eq:hyopt}\\[0.2cm]
+  \hat p_i(\mathbf{x}) &= {\mathbb E}_{\rm data}\Bigl[q_i(\mathbf{x},{\bf y})\Big\vert \mathbf{x} \Bigr],\label{eq:tildep}
+\end{align}
+
+Finally the optimization of $\alpha$ reads:
+\[
+\frac{\partial{\cal L}}{\partial \alpha_{ij}} = \frac{1}{2(1+\alpha_{ij})}{\mathbb E}_{\rm data}\bigl[q_j(\mathbf{x},{\bf y})\bigr]-\frac{1}{2\sigma^2}
+{\mathbb E}_{\rm data}\bigl[\bigl(y_i-\hat y_i(\mathbf{x})\bigr)^2q_j(\mathbf{x},{\bf y})\bigr].
 \]

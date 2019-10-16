@@ -73,9 +73,9 @@ path taken by the system from time step $p$ to time step $t$.
 %
 \begin{equation}\label{eq:systemDesignMat}
     \mathbf{X}_t = \begin{bmatrix}
-        \mathbf{x}^{\intercal}_{t}\\ 
+        \mathbf{x}^{T}_{t}\\ 
         \vdots\\ 
-        \mathbf{x}^{\intercal}_{p}\\ 
+        \mathbf{x}^{T}_{p}\\ 
         \end{bmatrix}_{(t-p+1) \times p}
 \end{equation}
 %
@@ -145,9 +145,9 @@ $\mathbf{x}_t$ and design matrix $\mathbf{X}_{t-1}$.
 \begin{equation}\label{eq:postGPAR}
     \begin{aligned}
         \bar{m}_t &= m(\mathbf{x}_t) + 
-        \mathbf{k}_{t}^{\intercal}\mathbf{K}_{t}^{-1}\left( \mathbf{y}_t - m(\mathbf{X}_{t-1}) \right) \\
+        \mathbf{k}_{t}^{T}\mathbf{K}_{t}^{-1}\left( \mathbf{y}_t - m(\mathbf{X}_{t-1}) \right) \\
         \bar{\sigma}^{2}_{t} &= K(\mathbf{x}_t, \mathbf{x}_t) - 
-        \mathbf{k}_{t}^{\intercal} \mathbf{K}_{t}^{-1} \mathbf{k}_{t}
+        \mathbf{k}_{t}^{T} \mathbf{K}_{t}^{-1} \mathbf{k}_{t}
     \end{aligned}
 \end{equation}
 %

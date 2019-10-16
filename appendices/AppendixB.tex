@@ -1,79 +1,80 @@
 \chapter{Stability Analysis Of The \XX \ Model}\label{app:Hessian}
-The log likelihood as a function of $r$ and $\beta=\alpha/r$ after inserting the optimal
-$\p = \p(x,{\bf y})$ reads in that case
+The analysis is restricted for simplicity to the case $\alpha_{ij}=\alpha\delta_{ij}$.
+The log likelihood as a function of $r=\sigma^2/\sigma_0^2$ and $\beta=\alpha/r$ after inserting the optimal
+$\p = \p(\mathbf{x},{\bf y})$ reads in that case
 \[
-{\cal L}(r,\beta) = -\frac{\vert T\vert}{2}\log(r)-\frac{\vert T\vert}{2r}+\frac{1}{2}\log(1+r\beta)+{\mathbb E}_{data}\Bigl[\log(Z)-\lambda(x)\sum_{i\in T} \hat p_i(x)\Bigr]
+{\cal L}(r,\beta) = -\frac{\vert  T\vert}{2}\log(r)-\frac{\vert  T\vert}{2r}+\frac{1}{2}\log(1+r\beta)+{\mathbb E}_{\rm data}\Bigl[\log(Z)-\lambda(\mathbf{x})\sum_{i\in  T} \hat p_i(\mathbf{x})\Bigr]
 \]
 with
 \[
-Z = \sum_i \hat p_i(x)\exp\Bigl(-\frac{\beta}{2\sigma_0^2}\Delta y_i^2(x)\Bigr),
+Z = \sum_i \hat p_i(\mathbf{x})\exp\Bigl(-\frac{\beta}{2\sigma_0^2}\Delta y_i^2(\mathbf{x})\Bigr),
 \]
-and where $\lambda(x)$ is a Lagrange multiplier which has been added to impose the normalization of $\hat {\bf p}$.
+and where $\lambda(\mathbf{x})$ is a Lagrange multiplier which has been added to impose the normalization of $\hat {\bf p}$.
 The gradient reads
 \begin{align*}
-  \frac{\partial {\cal L}}{\partial r} &= \frac{1}{2r^2}\Bigl(\vert T\vert(1-r)+\frac{\beta r^2}{1+\beta r}\Bigr),\\[0.2cm]
+  \frac{\partial {\cal L}}{\partial r} &= \frac{1}{2r^2}\Bigl(\vert  T\vert(1-r)+\frac{\beta r^2}{1+\beta r}\Bigr),\\[0.2cm]
   \frac{\partial {\cal L}}{\partial \beta} &= \frac{r}{2(1+r\beta)}-\frac{1}{2}C_1[\p],\\[0.2cm]
-  \frac{\partial{\cal L}}{\partial \hat y_i(x)} &= \frac{1}{\sigma^2}{\mathbb E}_{data}\Bigl[ \bigl(y_i-\hat y_i(x)\bigr)\bigl(1+\alpha q_i(x,{\bf y})\bigr)\Big\vert x\Bigr].\\[0.2cm]
-  \frac{\partial {\cal L}}{\partial \hat p_i(x)} &= \frac{{\mathbb E}_{data}\bigl[ q_i(x,{\bf y})\vert x \bigr]}{\hat p_i(x)}-\lambda(x),
+  \frac{\partial{\cal L}}{\partial \hat y_i(\mathbf{x})} &= \frac{1}{\sigma^2}{\mathbb E}_{\rm data}\Bigl[ \bigl(y_i-\hat y_i(\mathbf{x})\bigr)\bigl(1+\alpha q_i(\mathbf{x},{\bf y})\bigr)\Big\vert \mathbf{x}\Bigr].\\[0.2cm]
+  \frac{\partial {\cal L}}{\partial \hat p_i(\mathbf{x})} &= \frac{{\mathbb E}_{\rm data}\bigl[ q_i(\mathbf{x},{\bf y})\vert \mathbf{x} \bigr]}{\hat p_i(\mathbf{x})}-\lambda(\mathbf{x}),
 \end{align*}
 with
 \[
-C_1[\p] = \frac{1}{\sigma_0^2}{\mathbb E}_{data}\Bigl(\sum_{i\in T} q_i(x,{\bf y})\Delta y_i^2(x)\Bigr),
+C_1[\p] = \frac{1}{\sigma_0^2}{\mathbb E}_{\rm data}\Bigl(\sum_{i\in  T} q_i(\mathbf{x},{\bf y})\Delta y_i^2(\mathbf{x})\Bigr),
 \]
 This leads to the following relation at the saddle point:
 \begin{align*}
-  r &= \frac{\vert T\vert-C_1[\p]}{\vert T\vert-1},\\[0.2cm]
-  \alpha &= \frac{\vert T\vert}{\vert T\vert-1}\frac{1-C_1[\p]}{C_1[\p]},\\[0.2cm]
-\hat y_i(x) &= \frac{{\mathbb E}_{data}\Bigl[y_i\bigl(1+\alpha q_i(x,{\bf y})\bigr)\Big\vert x\Bigr]}
-{{\mathbb E}_{data}\Bigl[1+\alpha q_i(x,{\bf y})\Big\vert x\Bigr]}\\[0.2cm]
-  \hat p_i(x) &= \mathbb{E}_{data}\bigl[ q_i(x,{\bf y})\vert x \bigr].
+  r &= \frac{\vert  T\vert-C_1[\p]}{\vert  T\vert-1},\\[0.2cm]
+  \alpha &= \frac{\vert  T\vert}{\vert  T\vert-1}\frac{1-C_1[\p]}{C_1[\p]},\\[0.2cm]
+\hat y_i(\mathbf{x}) &= \frac{{\mathbb E}_{\rm data}\Bigl[y_i\bigl(1+\alpha q_i(\mathbf{x},{\bf y})\bigr)\Big\vert \mathbf{x}\Bigr]}
+{{\mathbb E}_{\rm data}\Bigl[1+\alpha q_i(\mathbf{x},{\bf y})\Big\vert \mathbf{x}\Bigr]}\\[0.2cm]
+  \hat p_i(\mathbf{x}) &= \mathbb{E}_{\rm data}\bigl[ q_i(\mathbf{x},{\bf y})\vert \mathbf{x} \bigr].
 \end{align*}
 Let us now compute the Hessian. It is easy to see that the block corresponding to the predictors $\hat{\bf y}$ decouples from the rest as soon as these predictors are centered. 
 
 Denoting
 \[
-C_2[\p] = \frac{1}{\sigma_0^4}{\mathbb E}_{data}\Bigl[\sum_{i\in T} q_i(x,{\bf y})\Bigl(\Delta y_i^2(x)-\sum_{j=1}^n q_j(x,{\bf y})\Delta y_j^2(x)\Bigr)^2\Bigr],
+C_2[\p] = \frac{1}{\sigma_0^4}{\mathbb E}_{\rm data}\Bigl[\sum_{i\in  T} q_i(\mathbf{x},{\bf y})\Bigl(\Delta y_i^2(\mathbf{x})-\sum_{j=1}^n q_j(\mathbf{x},{\bf y})\Delta y_j^2(\mathbf{x})\Bigr)^2\Bigr],
 \]
 we have
 \begin{align*}
-\frac{\partial^2 {\cal L}}{\partial r^2} &= \frac{1}{2r^2}\Bigl(-{\vert T\vert} +2\frac{\vert T\vert}{\vert T\vert-1}\bigl(C_1[\p]-1\bigr)-\beta^2 C_1^2[\p]\Bigr)\\[0.2cm]
+\frac{\partial^2 {\cal L}}{\partial r^2} &= \frac{1}{2r^2}\Bigl(-{\vert  T\vert} +2\frac{\vert  T\vert}{\vert  T\vert-1}\bigl(C_1[\p]-1\bigr)-\beta^2 C_1^2[\p]\Bigr)\\[0.2cm]
 \frac{\partial^2 {\cal L}}{\partial r\partial \beta} &=\frac{1}{2r^2}C_1^2[\p]\\[0.2cm]
 \frac{\partial^2 {\cal L}}{\partial \beta^2} &= \frac{1}{4}\Bigl(C_2[\p]-2C_1^2[\p]\Bigr)\\[0.2cm]
-\frac{\partial^2 {\cal L}}{\partial \hat p_i(x)\partial\hat p_j(x)}  &= -\frac{{\mathbb E}_{data}\bigl[ q_i(x,{\bf y})q_j(x,{\bf y})\vert x \bigr]}{\hat p_i(x)\hat p_j(x)}\\[0.2cm]
-\frac{\partial^2 {\cal L}}{\partial r\partial\hat p_i(x)} &= 0\\[0.2cm]
-\frac{\partial^2 {\cal L}}{\partial \beta\partial\hat p_i(x)} &= -\frac{C_{2+i}[\p]}{2\hat p_i(x)},
+\frac{\partial^2 {\cal L}}{\partial \hat p_i(\mathbf{x})\partial\hat p_j(\mathbf{x})}  &= -\frac{{\mathbb E}_{\rm data}\bigl[ q_i(\mathbf{x},{\bf y})q_j(\mathbf{x},{\bf y})\vert \mathbf{x} \bigr]}{\hat p_i(\mathbf{x})\hat p_j(\mathbf{x})}\\[0.2cm]
+\frac{\partial^2 {\cal L}}{\partial r\partial\hat p_i(\mathbf{x})} &= 0\\[0.2cm]
+\frac{\partial^2 {\cal L}}{\partial \beta\partial\hat p_i(\mathbf{x})} &= -\frac{u_i[x,\p]}{2\hat p_i(\mathbf{x})},
 \end{align*}
 where
 \[
-C_{2+i}[\p] = \frac{1}{\sigma_0^2}{\mathbb E}_{data}
-\Bigl[ q_i(x,{\bf y})\bigl(\Delta y_i^2(x)-\sum_{j\in T} q_j(x,{\bf y})\Delta y_j^2(x)\bigr)\vert x \Bigr].
+u_i[x,\p] \egaldef \frac{1}{\sigma_0^2}{\mathbb E}_{\rm data}
+\Bigl[ q_i(\mathbf{x},{\bf y})\bigl(\Delta y_i^2(\mathbf{x})-\sum_{j\in  T} q_j(\mathbf{x},{\bf y})\Delta y_j^2(\mathbf{x})\bigr)\vert \mathbf{x} \Bigr].
 \]
 There are two blocks in this Hessian, the one corresponding to $r$ and $\beta$ and the one corresponding to derivatives with respect to $\hat p_i$.
-The stability of the first one depends on the sign of $C_2[\p]-2C_1^2[\p]$ for $\vert T\vert$ large while the second block
-is always stable as being an average of the exterior product of the vector $(q_1(x,{\bf y})/\hat p_1(x),\ldots,q_{\vert T\vert}(x,{\bf y})/\hat p_{\vert T\vert}(x))$
-by itself. At the degenerate point $\alpha=0$, $r=1$, $\hat  p_i=1/\vert T\vert$ the Hessian simplifies as follows. Denote
+The stability of the first one depends on the sign of $C_2[\p]-2C_1^2[\p]$ for $\vert  T\vert$ large while the second block
+is always stable as being an average of the exterior product of the vector $(q_1(\mathbf{x},{\bf y})/\hat p_1(\mathbf{x}),\ldots,q_{\vert  T\vert}(\mathbf{x},{\bf y})/\hat p_{\vert  T\vert}(\mathbf{x}))$
+by itself. At the degenerate point $\alpha=0$, $r=1$, $\hat  p_i=1/\vert  T\vert$ the Hessian simplifies as follows. Denote
 \[
-{d{\bf \eta}} = dr{\bf e}_1+d\beta{\bf e}_2+\sum_{i\in T} d\hat p_i(x){\bf e}_{i+2}
+{d{\bf \eta}} = dr{\bf e}_1+d\beta{\bf e}_2+\int d\mathbf{x}\sum_{i\in  T} d\hat p_i(\mathbf{x}){\bf e}_{i+2}(\mathbf{x})
 \]
-a given vector of perturbations decomposed onto the canonical basis $\{{\bf e}_k,k=1,\ldots \vert T\vert+2\}$.
+a given vector of perturbations, decomposed onto a set of unit tangent vectors, $\{{\bf e}_1$ and ${\bf e}_2\}$ being respectively associated to $r$ and $\beta$, while ${\bf e}_i(\mathbf{x})$ associated to $\hat p_i(\mathbf{x})$ for all $i\in T$ and $x\in{\mathcal X}$. 
 Denote
 \begin{align*}
-{\bf u} &= \sum_{i\in T} C_{2+i} {\bf e}_{2+i}\\[0.2cm]    
-{\bf v} &= \sum_{i\in T}  {\bf e}_{2+i}
+{\bf u} &= \sum_{i\in  T} \int d\mathbf{x} u_i[\mathbf{x}] {\bf e}_i(\mathbf{x})\\[0.2cm]    
+{\bf v}(\mathbf{x}) &= \sum_{i\in  T}  {\bf e}_i(\mathbf{x})
 \end{align*}
 with
 \begin{align*}
-C_2 &= \frac{1}{\vert T\vert\sigma_0^4}{\mathbb E}_{data}\Bigl[\sum_{i\in T} \Bigl(\Delta y_i^2(x)-\frac{1}{\vert T\vert}\sum_{j\in T}\Delta y_j^2(x)\Bigr)^2\Bigr].\\[0.2cm]
-C_{2+i} &= \frac{1}{\sigma_0^2}{\mathbb E}_{data}
-\bigl[\Delta y_i^2(x)-\sigma_0^2\vert x \bigr].
+C_2 &= \frac{1}{\vert  T\vert\sigma_0^4}{\mathbb E}_{\rm data}\Bigl[\sum_{i\in  T} \Bigl(\Delta y_i^2(\mathbf{x})-\frac{1}{\vert  T\vert}\sum_{j\in  T}\Delta y_j^2(\mathbf{x})\Bigr)^2\Bigr].\\[0.2cm]
+u_i[\mathbf{x}] &= \frac{1}{\sigma_0^2}{\mathbb E}_{\rm data}
+\bigl[\Delta y_i^2(\mathbf{x})-\sigma_0^2\vert \mathbf{x} \bigr].
 \end{align*}
 With these notations the Hessian reads: 
 \[
-H = \frac{1}{2}\bigl(-\vert T\vert{\bf e}_1{\bf e}_1^t+{\bf e}_1{\bf e}_2^t+{\bf e}_2{\bf e}_1^t+\bigl(\frac{C_2}{2}-1\bigr){\bf e}_2{\bf e}_2^t
--{\bf u}{\bf e}_2^t-{\bf e}_2{\bf u}^t-{\bf v}{\bf v}^t\bigr).
+H = \frac{1}{2}\Bigl(-\vert  T\vert{\bf e}_1{\bf e}_1^t+{\bf e}_1{\bf e}_2^t+{\bf e}_2{\bf e}_1^t+\bigl(\frac{C_2}{2}-1\bigr){\bf e}_2{\bf e}_2^t
+-{\bf u}{\bf e}_2^t-{\bf e}_2{\bf u}^t-\int d\mathbf{x}{\bf v}(\mathbf{x}){\bf v}^t(\mathbf{x})\Bigr).
 \]
-We see that $H$ is of rank four. In fact we can look at its eigenvalues in the subspace of deformations
-which conserve the norm of $\hat {\bf p}$, i.e. orthogonal to ${\bf v}$, given by
+In fact we are interested in the eigenvalues of $H$ in the subspace of deformations
+which conserve the norm of $\hat {\bf p}$, i.e. orthogonal to ${\bf v}(\mathbf{x})$, thereby given by
 \[
 {\bf \eta} = \eta_1{\bf e}_1+\eta_2{\bf e}_2+\eta_3{\bf u}.
 \]
@@ -82,34 +83,42 @@ In this subspace the Hessian reads
 H =\frac{1}{2}
 \left[
   \begin{matrix}
- -\vert T\vert& 1 &0 \\[0.4cm] 
- 1 & \qquad\DD \frac{C_2}{2}-1&\qquad-\vert {\bf u}\vert^2  \\[0.4cm]
- 0& -\vert {\bf u}\vert^2 &0 
+ -\vert  T\vert& 1 &0 \\[0.4cm] 
+ 1 & \qquad\DD \frac{C_2}{2}-1&\qquad-M\vert  T\vert C_2  \\[0.4cm]
+ 0& - M \vert T\vert C_2 &0 
   \end{matrix}
-  \right]
+  \right],
 \]
-If $|u|^2>0$ or  if $|u|=0$ and $1+\vert T\vert(C_2/2-1)>0$ there is at least one positive eigenvalue. Let $\lambda$ be such an eigenvalue.
-The deformation along this mode reads
+where $M$ is the number of data points,
+resulting from the fact that 
+\begin{align*}
+\sum_{i\in T}\int d\mathbf{x} u_i[\mathbf{x}]^2 &= \frac{M}{\sigma_0^4}{\mathbb E}_{\rm data}
+\Bigl[\sum_{i\in T}\bigl(\Delta y_i^2(\mathbf{x})-\sigma_0^2\bigr)^2\Bigr],\\[0.2cm]
+&= M C_2,
+\end{align*}
+because ${\mathbb E}_{\rm data}(\cdot\vert \mathbf{x})$ as a function of $x$ is actually a point-wise function on the data.
+If $|u|^2>0$ or  if $|u|=0$ and $1+\vert  T\vert(C_2/2-1)>0$ there is at least one positive eigenvalue. Let $\Lambda$ be such an eigenvalue.
+After eliminating $dr$ and $d\beta$ from the eigenvalue equations in $d\eta$, the deformation along this mode verifies
 \[
-{d\bf \eta} \propto \lambda{\bf e}_1+\lambda(n+\lambda){\bf e}_2-|u|^2(\vert T\vert+\lambda){\bf u},
+{d\bf \eta} \propto \Lambda{\bf e}_1+\Lambda(\vert T\vert+\Lambda){\bf e}_2-M\vert  T\vert(\vert  T\vert+\Lambda)C_2{\bf u},
 \]
-which corresponds to increasing $r$ and $\alpha$ while decreasing the $\hat p_i$ having the highest mean error $C_{2+i}$.
+which corresponds to increasing $r$ and $\alpha$ while decreasing for each $x$ the $\hat p_i$ having the highest mean relative error $u_i[\mathbf{x}]$.
 
 
 \noindent Concerning solutions for which
 \[
-\hat p_i(x) = \delta_{i\hat I(x)}
+\hat p_i(\mathbf{x}) = \delta_{i\hat I(\mathbf{x})}
 \]
-is concentrated on some index $\hat I(x)$,  the analysis is more complex. In that case $C_2[{\bf p}]=0$ and $C_1[{\bf p}] >0$. The $(r,\beta)$ sector has $2$ negative eigenvalues,
+is concentrated on some index $\hat I(\mathbf{x})$,  the analysis is more complex. In that case $C_2[{\bf p}]=0$ and $C_1[{\bf p}] >0$. The $(r,\beta)$ sector has $2$ negative eigenvalues,
 while the $\hat {\bf p}$ block is $(-)$ a covariance matrix, so it has as well negative eigenvalues. The coupling between these  two blocks could however in principle generate in some cases some instabilities.
 
 Still, the log likelihood of such solutions reads
 \[
-{\cal L} = -\frac{\vert T\vert}{2}\log(\sigma^2)+\frac{1}{2}\log(1+\alpha)-\frac{1}{2\sigma^2}{\mathbb E}_{data}\Bigl[\sum_{i\in T}\Delta y_i^2(x)\Bigr]-\frac{\alpha}{2\sigma^2}{\mathbb E}_{data}\Bigl[\Delta y_{I(x)}^2(x)\Bigr]
+{\cal L} = -\frac{\vert  T\vert}{2}\log(\sigma^2)+\frac{1}{2}\log(1+\alpha)-\frac{1}{2\sigma^2}{\mathbb E}_{\rm data}\Bigl[\sum_{i\in  T}\Delta y_i^2(\mathbf{x})\Bigr]-\frac{\alpha}{2\sigma^2}{\mathbb E}_{\rm data}\Bigl[\Delta y_{I(\mathbf{x})}^2(\mathbf{x})\Bigr]
 \]
 so we get the following optimal solution
 \begin{align*}
-\sigma^2 &= \frac{1}{\vert T\vert}{\mathbb E}_{data}\Bigl[\sum_{i\in T}\Delta y_i^2(x)\Bigr],\\[0.2cm]
-\frac{1}{1+\alpha} &=  \frac{{\mathbb E}_{data}\Bigl[\Delta y_{I(x)}^2(x)\Bigr]}{\sigma^2},\\[0.2cm]
-I(x) &= \argmin_{i\in T} {\mathbb E}_{data}\Bigl[\Delta y_i^2(x)\vert x \Bigr].
+\sigma^2 &= \frac{1}{\vert  T\vert}{\mathbb E}_{\rm data}\Bigl[\sum_{i\in  T}\Delta y_i^2(\mathbf{x})\Bigr],\\[0.2cm]
+\frac{1}{1+\alpha} &=  \frac{{\mathbb E}_{\rm data}\Bigl[\Delta y_{I(\mathbf{x})}^2(\mathbf{x})\Bigr]}{\sigma^2},\\[0.2cm]
+I(\mathbf{x}) &= \argmin_{i\in  T} {\mathbb E}_{\rm data}\Bigl[\Delta y_i^2(\mathbf{x})\vert \mathbf{x} \Bigr].
 \end{align*}
