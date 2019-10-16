@@ -305,7 +305,7 @@ More details on the architecture chosen for this task are given in \cref{sec:mod
 Let us denote the dataset as $\{(\mathbf{x},{\bf y})\}_{\rm data}$, 
 $\theta = (\hat {\bf y},\hp,\sigma,\alpha)$, and empirical averaging on the 
 data is noted as ${\mathbb E}_{\rm data}$.
-
+%
 A heuristic derivation shows that the log-likelihood based on the model in \cref{eq:py} is 
 approximately given by
 %
@@ -626,14 +626,14 @@ $\mathbf{x}_t \in \mathbb{R}^{10}$ and the effect signal $y_t$ are generated as 
 with time-lag mapping $g(\mathbf{x}_t)$ ranges in a time interval with width $20$ 
 (except for problem I where $|\T| = 15$). The complexity of the synthetic 
 problems is governed by the amplitude and time-lag functions $f$ and $g$:\\
-\centerline{  \begin{tabular}{| l c l l |}
+\centerline{  \begin{tabular}{ l c l l }
   \hline
-  Problem &  ${\scriptstyle f(v_t})$ & ${\scriptstyle g(\mathbf{x}_t)}$ & Other\\
+  Problem &  $f(v_t)$ & $g(\mathbf{x}_t)$ & Other\\
   \hline
-  \textbf{I} & ${\scriptstyle v_t}$ & ${\scriptstyle 5}$ & ${\scriptstyle k = 10,c=0}$\\
-  \textbf{II} & ${\scriptstyle v_t}$ & ${\scriptstyle 100/v_t}$ & ${\scriptstyle k = 1, c = 10}$\\
-  \textbf{III} & ${\scriptstyle \sqrt{v^2_{t} + 2ad}}$ & ${\scriptstyle (\sqrt{v_t^2 + 2ad} - v)/a}$ & ${\scriptstyle k = 5, a = 5, d = 1000, c = 100}$\\
-  \textbf{IV} & ${\scriptstyle v_t}$ & ${\scriptstyle g(\mathbf{x}_t) = \exp\left(v_t\right)/\left(1 + \exp(v_t/20)\right)}$ & ${\scriptstyle k = 10, c = 40}$\\
+  \textbf{I} & $v_t$ & $5$ & $k = 10,c=0$\\
+  \textbf{II} & $v_t$ & $100/v_t$ & $k = 1, c = 10$\\
+  \textbf{III} & $\sqrt{v^2_{t} + 2ad}$ & $(\sqrt{v_t^2 + 2ad} - v)/a$ & $k = 5, a = 5, d = 1000, c = 100$\\
+  \textbf{IV} & $v_t$ & $g(\mathbf{x}_t) = \exp\left(v_t\right)/\left(1 + \exp(v_t/20)\right)$ & $k = 10, c = 40$\\
   \hline
   \end{tabular}}
 

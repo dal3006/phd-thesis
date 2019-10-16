@@ -7,7 +7,7 @@
 
 %all the other includes etc. are done in the thesis.sty file.
 \usepackage{thesis}
-\loadgeometry{phdthesisview}
+%\loadgeometry{phdthesisview}
 \graphicspath{{figures/}}
 %\setlength{\headheight}{13.59pt}
 
@@ -73,9 +73,9 @@
 % Make url typeset smaller
 \renewcommand{\UrlFont}{\small\tt}
 %use this include for PDF and distribution versions
-\pagenumbering{roman}
 \include{titlepage}
 \clearemptydoublepage
+\pagenumbering{roman}
 \include{committee}
 \normalsize
 
