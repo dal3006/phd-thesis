@@ -2,9 +2,29 @@
 % September 2009
 % Further updates by Joos Buijs
 \ProvidesPackage{thesis}
-\usepackage{geometry}
-\geometry{paper=b5paper}
-
+\usepackage[pass]{geometry}
+\geometry{
+  papersize={172mm,242mm},
+  layout=b5paper,
+  layouthoffset=2mm,
+  layoutvoffset=2mm,
+  inner=25mm,         % Inner margin
+  outer=20mm,         % Outer margin
+  %bindingoffset=3mm, % Binding offset
+  top=25mm,           % Top margin
+  bottom=20mm        % Bottom margin
+  %includefoot
+  %showframe
+}
+% \geometry{
+%     paper=b5paper,
+%     inner=25mm,         % Inner margin
+%     outer=20mm,         % Outer margin
+%     bindingoffset=-3mm, % Binding offset
+%     top=25mm,           % Top margin
+%     bottom=20mm,        % Bottom margin
+%     %showframe,         % show how the type block is set on the page
+% }
 % \newgeometry{
 %   papersize = {173mm,246mm},
 %   layoutsize = {167mm,240mm},
