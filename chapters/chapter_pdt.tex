@@ -279,7 +279,8 @@ $\hat y_i(\mathbf{x})$,
 where the mixture weights are defined as $p\bigl(\boldsymbol{\tau}\vert \mathbf{x})$. Using the constraint 
 defined in \cref{eq:cs1}, $p\bigl(\boldsymbol{\tau}\vert \mathbf{x})$ can be simplified to a vector 
 $\hat{\mathbf{p}}(\mathbf{x})$ consisting of components $[\hat p_i(\mathbf{x}): i \in T]$, such that 
-$\sum_{i \in T}{\hat p_i(\mathbf{x})} = 1,\ \forall \mathbf{x}$, where $\hat p_i(\mathbf{x})$ stands for the probability that the effect of $\mathbf{x}_t=\mathbf{x}$ will occur with delay $i$.
+$\sum_{i \in T}{\hat p_i(\mathbf{x})} = 1,\ \forall \mathbf{x}$, where $\hat p_i(\mathbf{x})$ stands for the 
+probability that the effect of $\mathbf{x}_t=\mathbf{x}$ will occur with delay $i$.
 
 For further simplifying the analysis, we assume that the variance $\sigma_i^2({\bf \tau})$ of 
 predictor $\hat y_i$ does not depend on $\mathbf{x}$, by setting:
@@ -624,7 +625,7 @@ $\mathbf{x}_t \in \mathbb{R}^{10}$ and the effect signal $y_t$ are generated as 
  y_{t+g(\mathbf{x}_t)} &= f(v_t), \label{eq:outputs}
 \end{align} 
 with time-lag mapping $g(\mathbf{x}_t)$ ranges in a time interval with width $20$ 
-(except for problem I where $|\T| = 15$). The complexity of the synthetic 
+(except for problem I where $|T| = 15$). The complexity of the synthetic 
 problems is governed by the amplitude and time-lag functions $f$ and $g$:\\
 \centerline{  \begin{tabular}{ l c l l }
   \hline
@@ -651,7 +652,10 @@ $\mathbf{x}_t$ is a vector consisting of the components outlined in \cref{table:
 For each input pattern, time lagged solar wind data is extracted corresponding to minimum and 
 maximum time delays of two and five days respectively. For computational convenience, each three 
 day time window is pre-processed by computing sliding six hour medians yielding $|T| = 12$ time 
-slots.
+slots\footnote{Before computing the cross-validation performance, the predictions are mapped back to 
+hourly resolution using interpolation}. Before training, the solar wind data was 
+mapped into standardized Gaussian space by applying a quantile-quantile followed 
+by the inverse probit mapping.
 %
 \begin{table}[ht]
     \centering
@@ -668,10 +672,6 @@ slots.
           GONG & 
           $\mathbb{R}^{180}$  & 
           The radial magnetic field strength on the solar cusp surface is the primary output computed by the CSSS model.\\
-          $\Phi$ & 
-          GONG & 
-          $[0, 360)$ & 
-          $\Phi$ is the Carrington longitude of the computed $\mathbf{f}_S$.\\
           $\mathbf{v}_{27}$ & 
           OMNI & 
           $\mathbb{R}^{\rvert T \rvert}$ & 
@@ -683,14 +683,16 @@ slots.
     \caption{Inputs used in the DTLR solar wind forecast model.}
     \label{table:dtlrInputs}
 \end{table}
-%
+
 \XX\ is validated using a $9$ fold cross-validation, where the test data consists of one 
 (continuous) Carrington rotation (see \cref{table:dtlrsplits}). The performance on Carrington 
 rotation $2077$ (first fold in \cref{table:dtlrsplits}) is compared with the state of the art 
 \citep{Riley2011} in \cref{tab:results_reiss}, while the overall cross-validation performance 
 is compared with a fixed time lag baseline which uses the same inputs as the DTLR model 
 (\cref{table:dtlrInputs}) and has the same architecture until the penultimate layer 
-(\cref{fig:archi}). 
+(\cref{fig:archi}). For Carrington rotations $2077$ and $2184$, the hourly solar wind 
+time series reconstructions are shown in \cref{fig:problemsw_ts1,fig:problemsw_ts2} respectively. 
+
 %
 \begin{table}[ht]
   \centering
@@ -886,17 +888,21 @@ to the auto-correlation of the series, it allows to compare different predictors
 \end{table}
 %\todo{Update $\sigma_0$ and $C_1$ numbers for \XX in \cref{tab:results_syn}}
 
-On the easy Problem I, the model predicts the correct time lag for $97.93\%$ of the samples. The 
-higher value of $\sigma_0$ in problems I and II compared to the other problems is explained from 
-the higher variance in the generated  time series $y(t)$. \\
-On Problem II, the model accurately learns the inverse relationship between 
-$\mathbf{x}_t$, $g(\mathbf{x}_t)$ and $y_t$ on average. The time lag is 
-overestimated in the regions with low time lag (with high velocity), which is 
-blamed on the low sample density in this region, due to the data generation 
-process. \\
-Interestingly, Problems III and IV are better handled by \XX, despite a more complex dynamic time 
-lag relationship. In both latter cases however, the model tends to under-estimate the time lag in 
-the high time lag regions and conversely to over-estimate it in the low time lag region. 
+On the easy Problem I, the model predicts the correct time lag for $97.93\%$ of 
+the samples. The higher value of $\sigma_0$ in problems I and II compared to 
+the other problems is explained from the higher variance in the generated 
+time series $y(t)$. 
+
+On Problem II, the model accurately learns the inverse 
+relationship between $\mathbf{x}_t$, $g(\mathbf{x}_t)$ and $y_t$ on average. 
+The time lag is overestimated in the regions with low time lag 
+(with high velocity), which is blamed on the low sample density in this region, 
+due to the data generation process.
+
+Interestingly, Problems III and IV are better handled by \XX, despite a more 
+complex dynamic time lag relationship. In both latter cases however, the model 
+tends to under-estimate the time lag in the high time lag regions and 
+conversely to over-estimate it in the low time lag region. 
 
 \begin{figure}
   \centering
@@ -907,12 +913,15 @@ the high time lag regions and conversely to over-estimate it in the low time lag
   \label{fig:sw_preds}
 \end{figure}
 
-Concerning the solar wind problem, \XX\ shows encouraging results on the cross-validation 
-experiments as can be seen in \cref{tab:results_syn} and visualised in \cref{fig:sw_preds}. 
-
+Concerning the solar wind problem, \XX\ shows encouraging results on the 
+cross-validation experiments as can be seen in \cref{tab:results_syn} and 
+visualised in \cref{fig:sw_preds}. The significantly higher difficulty of the 
+solar wind forecasting problem is witnessed by the $C_1$ value close to the 
+degenerate value of $1$. 
+%
 In \cref{tab:results_reiss}, we compare the performance of the \XX \ model and the fixed time lag 
 baseline with the state of the art from \citet{Reiss_2019}, on the solar wind data from Carrington 
-rotation $2077$ (see \cref{table:dtlrsplits}). The \XX model gives improvements in predictive 
+rotation $2077$ (see \cref{table:dtlrsplits}). The \XX \ model gives improvements in predictive 
 performance.
 
 \begin{table}
@@ -949,14 +958,14 @@ performance.
   \begin{subfigure}[b]{0.4\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/test_2008-11-20_2008-12-20_ts}
-    \caption{Hourly forecasts for period 2008-11-20 07:00 to 2008-12-17 14:00}
+    \caption{Hourly forecasts for the period \\ 2008-11-20 07:00 to 2008-12-17 14:00}
     \label{fig:problemsw_ts1}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.4\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/test_2016-11-16_2016-12-17_ts}
-    \caption{ Hourly forecasts for period 2016-11-16 17:00 to 2016-12-14 01:00}
+    \caption{ Hourly forecasts for the period \\ 2016-11-16 17:00 to 2016-12-14 01:00}
     \label{fig:problemsw_ts2}
   \end{subfigure}
   
