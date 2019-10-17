@@ -321,23 +321,25 @@ classification, and density estimation \citep{Girolami:2002:OSD:638929.638938}.
 
 \begin{table}[ht]
     \caption{Popular Kernel functions used in GPR models}
-    \centering
-    \begin{tabular}{l l l}
-    \hline
-     \textbf{Name}  & \textbf{Expression} & \textbf{Hyperparameters}  \\
-    \hline
-      {\small Radial Basis Function (RBF)}  & ${\scriptstyle \frac{1}{2} \exp(-||\mathbf{x} - \mathbf{y}||^2/l^2)}$  & ${\scriptstyle l \in \mathbb{R}}$   \\
-      
-      {\small Polynomial}  & ${\scriptstyle (\mathbf{x}\boldsymbol{\cdot} \mathbf{y} + b)^d}$ & ${\scriptstyle b \in \mathbb{R}, d \in \mathbb{N}}$   \\
-      
-      {\small Laplacian}  & ${\scriptstyle \exp(-||\mathbf{x} - \mathbf{y}||_{1}/\theta)}$  & ${\scriptstyle \theta \in \mathbb{R}^+}$  \\
-      
-      {\small Student's T}  & ${\scriptstyle 1/(1 + ||\mathbf{x} - \mathbf{y}||_{2}^d)}$ & ${\scriptstyle d \in \mathbb{R}^{+}}$\\
-      
-      {\small Maximum Likelihood Perceptron (MLP)}  & ${\scriptstyle \sin^{-1}\left(\frac{w\mathbf{x}\boldsymbol{\cdot} \mathbf{y} + b}{\sqrt{w\mathbf{x}\boldsymbol{\cdot} \mathbf{x} + b + 1} \sqrt{w\mathbf{y}\boldsymbol{\cdot} \mathbf{y} + b + 1}}\right)}$ & ${\scriptstyle w, b \in \mathbb{R}^{+}}$\\
-    \hline
-    \end{tabular}
     \label{table:kernel}
+    \centering
+    \resizebox{\textwidth}{!}{
+        \begin{tabular}{l l l}
+            \hline
+             \textbf{Name}  & \textbf{Expression} & \textbf{Hyperparameters}  \\
+            \hline
+              Radial Basis Function (RBF)  & $\frac{1}{2} \exp(-||\mathbf{x} - \mathbf{y}||^2/l^2)$  & $l \in \mathbb{R}$   \\
+              
+              Polynomial  & $(\mathbf{x}\boldsymbol{\cdot} \mathbf{y} + b)^d$ & $b \in \mathbb{R}, d \in \mathbb{N}$   \\
+              
+              Laplacian  & $\exp(-||\mathbf{x} - \mathbf{y}||_{1}/\theta)$  & $\theta \in \mathbb{R}^+$  \\
+              
+              Student's T  & $1/(1 + ||\mathbf{x} - \mathbf{y}||_{2}^d)$ & $d \in \mathbb{R}^{+}$\\
+              
+              Maximum Likelihood Perceptron (MLP)  & $\sin^{-1}\left(\frac{w\mathbf{x}\boldsymbol{\cdot} \mathbf{y} + b}{\sqrt{w\mathbf{x}\boldsymbol{\cdot} \mathbf{x} + b + 1} \sqrt{w\mathbf{y}\boldsymbol{\cdot} \mathbf{y} + b + 1}}\right)$ & $w, b \in \mathbb{R}^{+}$\\
+            \hline
+            \end{tabular}
+    }
 \end{table}
     
 \subsection{Kernel Functions}
@@ -793,34 +795,36 @@ Our results can be summarised as follows.
     \centering
     \caption{Storm events used for model selection of GP-AR and GP-ARX}
     \label{table:validationstorms}
-    \begin{tabular}{llllll}
-    \hline
-    \textbf{Event Id} & \textbf{Start Date} & \textbf{Start Hour} & \textbf{End Date} & \textbf{End Hour} & \textbf{Storm Peak} \\ \hline
-    1 & 1995/03/26 & 05:00 & 1995/03/26 & 23:00 & $ \SI{-107}{\nano\tesla}$ \\
-    2 & 1995/04/07 & 13:00 & 1995/04/09 & 09:00 & $ \SI{-149}{\nano\tesla}$ \\
-    3 & 1995/09/27 & 01:00 & 1995/09/28 & 04:00 & $ \SI{-108}{\nano\tesla}$ \\
-    4 & 1995/10/18 & 13:00 & 1995/10/19 & 14:00 & $ \SI{-127}{\nano\tesla}$ \\
-    5 & 1996/10/22 & 22:00 & 1996/10/23 & 11:00 & $ \SI{-105}{\nano\tesla}$ \\
-    6 & 1997/04/21 & 10:00 & 1997/04/22 & 09:00 & $ \SI{-107}{\nano\tesla}$ \\
-    7 & 1997/05/15 & 03:00 & 1997/05/16 & 00:00 & $ \SI{-115}{\nano\tesla}$ \\
-    8 & 1997/10/10 & 18:00 & 1997/10/11 & 19:00 & $ \SI{-130}{\nano\tesla}$ \\
-    9 & 1997/11/07 & 00:00 & 1997/11/07 & 18:00 & $ \SI{-110}{\nano\tesla}$ \\
-    10 & 1997/11/22 & 21:00 & 1997/11/24 & 04:00 & $ \SI{-108}{\nano\tesla}$ \\
-    11 & 2005/06/12 & 17:00 & 2005/06/13 & 19:00 & $ \SI{-106}{\nano\tesla}$ \\
-    12 & 2005/08/31 & 12:00 & 2005/09/01 & 12:00 & $ \SI{-122}{\nano\tesla}$ \\
-    13 & 2006/12/14 & 21:00 & 2006/12/16 & 03:00 & $ \SI{-162}{\nano\tesla}$ \\
-    14 & 2011/09/26 & 14:00 & 2011/09/27 & 12:00 & $ \SI{-101}{\nano\tesla}$ \\
-    15 & 2011/10/24 & 20:00 & 2011/10/25 & 14:00 & $ \SI{-132}{\nano\tesla}$ \\
-    16 & 2012/03/08 & 12:00 & 2012/03/10 & 16:00 & $ \SI{-131}{\nano\tesla}$ \\
-    17 & 2012/04/23 & 11:00 & 2012/04/24 & 13:00 & $ \SI{-108}{\nano\tesla}$ \\
-    18 & 2012/07/15 & 01:00 & 2012/07/16 & 23:00 & $ \SI{-127}{\nano\tesla}$ \\
-    19 & 2012/09/30 & 13:00 & 2012/10/01 & 18:00 & $ \SI{-119}{\nano\tesla}$ \\
-    20 & 2012/10/08 & 02:00 & 2012/10/09 & 17:00 & $ \SI{-105}{\nano\tesla}$ \\
-    21 & 2012/11/13 & 18:00 & 2012/11/14 & 18:00 & $ \SI{-108}{\nano\tesla}$ \\
-    22 & 2013/03/17 & 07:00 & 2013/03/18 & 10:00 & $ \SI{-132}{\nano\tesla}$ \\
-    23 & 2013/05/31 & 18:00 & 2013/06/01 & 20:00 & $ \SI{-119}{\nano\tesla}$ \\
-    24 & 2014/02/18 & 15:00 & 2014/02/19 & 16:00 & $ \SI{-112}{\nano\tesla}$ \\ \hline
-    \end{tabular}
+    \resizebox{\textwidth}{!}{
+        \begin{tabular}{llllll}
+            \hline
+            \textbf{Event Id} & \textbf{Start Date} & \textbf{Start Hour} & \textbf{End Date} & \textbf{End Hour} & \textbf{Storm Peak} \\ \hline
+            1 & 1995/03/26 & 05:00 & 1995/03/26 & 23:00 & $ \SI{-107}{\nano\tesla}$ \\
+            2 & 1995/04/07 & 13:00 & 1995/04/09 & 09:00 & $ \SI{-149}{\nano\tesla}$ \\
+            3 & 1995/09/27 & 01:00 & 1995/09/28 & 04:00 & $ \SI{-108}{\nano\tesla}$ \\
+            4 & 1995/10/18 & 13:00 & 1995/10/19 & 14:00 & $ \SI{-127}{\nano\tesla}$ \\
+            5 & 1996/10/22 & 22:00 & 1996/10/23 & 11:00 & $ \SI{-105}{\nano\tesla}$ \\
+            6 & 1997/04/21 & 10:00 & 1997/04/22 & 09:00 & $ \SI{-107}{\nano\tesla}$ \\
+            7 & 1997/05/15 & 03:00 & 1997/05/16 & 00:00 & $ \SI{-115}{\nano\tesla}$ \\
+            8 & 1997/10/10 & 18:00 & 1997/10/11 & 19:00 & $ \SI{-130}{\nano\tesla}$ \\
+            9 & 1997/11/07 & 00:00 & 1997/11/07 & 18:00 & $ \SI{-110}{\nano\tesla}$ \\
+            10 & 1997/11/22 & 21:00 & 1997/11/24 & 04:00 & $ \SI{-108}{\nano\tesla}$ \\
+            11 & 2005/06/12 & 17:00 & 2005/06/13 & 19:00 & $ \SI{-106}{\nano\tesla}$ \\
+            12 & 2005/08/31 & 12:00 & 2005/09/01 & 12:00 & $ \SI{-122}{\nano\tesla}$ \\
+            13 & 2006/12/14 & 21:00 & 2006/12/16 & 03:00 & $ \SI{-162}{\nano\tesla}$ \\
+            14 & 2011/09/26 & 14:00 & 2011/09/27 & 12:00 & $ \SI{-101}{\nano\tesla}$ \\
+            15 & 2011/10/24 & 20:00 & 2011/10/25 & 14:00 & $ \SI{-132}{\nano\tesla}$ \\
+            16 & 2012/03/08 & 12:00 & 2012/03/10 & 16:00 & $ \SI{-131}{\nano\tesla}$ \\
+            17 & 2012/04/23 & 11:00 & 2012/04/24 & 13:00 & $ \SI{-108}{\nano\tesla}$ \\
+            18 & 2012/07/15 & 01:00 & 2012/07/16 & 23:00 & $ \SI{-127}{\nano\tesla}$ \\
+            19 & 2012/09/30 & 13:00 & 2012/10/01 & 18:00 & $ \SI{-119}{\nano\tesla}$ \\
+            20 & 2012/10/08 & 02:00 & 2012/10/09 & 17:00 & $ \SI{-105}{\nano\tesla}$ \\
+            21 & 2012/11/13 & 18:00 & 2012/11/14 & 18:00 & $ \SI{-108}{\nano\tesla}$ \\
+            22 & 2013/03/17 & 07:00 & 2013/03/18 & 10:00 & $ \SI{-132}{\nano\tesla}$ \\
+            23 & 2013/05/31 & 18:00 & 2013/06/01 & 20:00 & $ \SI{-119}{\nano\tesla}$ \\
+            24 & 2014/02/18 & 15:00 & 2014/02/19 & 16:00 & $ \SI{-112}{\nano\tesla}$ \\ \hline
+            \end{tabular}
+    }
     \end{table}
     
     

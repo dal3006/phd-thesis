@@ -119,20 +119,21 @@ to the GP-AR process.
 
 \subsubsection*{GP-AR: Dynamics \& Sampling}
 
-\begin{figure}[ht]
-    \centering
-    \noindent\includegraphics[width=0.75\textwidth]{gpar.png}
-    \caption{Successive simulation of the GP-AR model}
-    \label{fig:gparDiag}
-\end{figure}
+% \begin{figure}[ht]
+%     \centering
+%     \noindent\includegraphics[width=0.75\textwidth]{gpar.png}
+%     \caption{Successive simulation of the GP-AR model}
+%     \label{fig:gparDiag}
+% \end{figure}
 
 
-GP-AR and GP-ARX models can be understood as probabilistic simulation models. In \cref{fig:gparDiag} we can 
-see a schematic illustration of such an iterative probabilistic system. To better understand \cref{fig:gparDiag}, 
-we formalise the time stepping of the GP-AR model.
-
+GP-AR and GP-ARX models can be understood as probabilistic simulation models. %In \cref{fig:gparDiag} we can 
+% see a schematic illustration of such an iterative probabilistic system. To better understand \cref{fig:gparDiag}, 
+%we formalise the time stepping of the GP-AR model.
+%
 The iterative dynamics of GP-AR is captured in \cref{eq:gpARInit,eq:gpARProp}. The initial seed of the process is the 
-system trajectory from time step $0$ to time step $p-1$ which is sampled from a standard multivariate Gaussian distribution. At each time step $t$, $y_t$ conditional to the system trajectory $\mathbf{y}_{t-1}$ is sampled 
+system trajectory from time step $0$ to time step $p-1$ which is sampled from a standard multivariate Gaussian distribution. 
+At each time step $t$, $y_t$ conditional to the system trajectory $\mathbf{y}_{t-1}$ is sampled 
 from a Gaussian distribution (\cref{eq:gpARProp}) whose mean and covariance are calculated by appropriately 
 conditioning the joint distribution in \cref{eq:systemTrajProb} and constructing the system state 
 $\mathbf{x}_t$ and design matrix $\mathbf{X}_{t-1}$.     

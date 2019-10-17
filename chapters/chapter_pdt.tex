@@ -626,17 +626,23 @@ $\mathbf{x}_t \in \mathbb{R}^{10}$ and the effect signal $y_t$ are generated as 
 \end{align} 
 with time-lag mapping $g(\mathbf{x}_t)$ ranges in a time interval with width $20$ 
 (except for problem I where $|T| = 15$). The complexity of the synthetic 
-problems is governed by the amplitude and time-lag functions $f$ and $g$:\\
-\centerline{  \begin{tabular}{ l c l l }
-  \hline
-  Problem &  $f(v_t)$ & $g(\mathbf{x}_t)$ & Other\\
-  \hline
-  \textbf{I} & $v_t$ & $5$ & $k = 10,c=0$\\
-  \textbf{II} & $v_t$ & $100/v_t$ & $k = 1, c = 10$\\
-  \textbf{III} & $\sqrt{v^2_{t} + 2ad}$ & $(\sqrt{v_t^2 + 2ad} - v)/a$ & $k = 5, a = 5, d = 1000, c = 100$\\
-  \textbf{IV} & $v_t$ & $g(\mathbf{x}_t) = \exp\left(v_t\right)/\left(1 + \exp(v_t/20)\right)$ & $k = 10, c = 40$\\
-  \hline
-  \end{tabular}}
+problems is governed by the amplitude and time-lag functions $f$ and $g$, as 
+shown in the table below.\\
+
+\centerline{  
+  \resizebox{\textwidth}{!}{
+    \begin{tabular}{ l c l l }
+      \hline
+      Problem &  $f(v_t)$ & $g(\mathbf{x}_t)$ & Other\\
+      \hline
+      \textbf{I} & $v_t$ & $5$ & $k = 10,c=0$\\
+      \textbf{II} & $v_t$ & $100/v_t$ & $k = 1, c = 10$\\
+      \textbf{III} & $\sqrt{v^2_{t} + 2ad}$ & $(\sqrt{v_t^2 + 2ad} - v)/a$ & $k = 5, a = 5, d = 1000, c = 100$\\
+      \textbf{IV} & $v_t$ & $g(\mathbf{x}_t) = \exp\left(v_t\right)/\left(1 + \exp(v_t/20)\right)$ & $k = 10, c = 40$\\
+      \hline
+      \end{tabular}
+  }
+}
 
 \paragraph{Solar Wind Speed Prediction}\label{sec:solarwind}
 As said in \cref{sec:motivationsolarwind}, the task of predicting solar wind speed from 
@@ -698,20 +704,22 @@ time series reconstructions are shown in \cref{fig:problemsw_ts1,fig:problemsw_t
   \centering
   \caption{Cross validation splits used to evaluate \ \XX \ on the solar wind forecasting task}
   \label{table:dtlrsplits}
-  \begin{tabular}{llll}
-  \hline
-  \textbf{Split Id} & \textbf{Carrington Rotation} & \textbf{Start} & \textbf{End}\\ \hline
-  $1$ & $2077$ & 2008/11/20 07:00:04 & 2008/12/17 14:38:34  \\
-  $2$ & $2090$ & 2009/11/09 20:33:43 & 2009/12/07 04:03:59  \\
-  $3$ & $2104$ & 2010/11/26 17:32:44 & 2010/12/24 01:15:56  \\
-  $4$ & $2117$ & 2011/11/16 07:04:41 & 2011/12/13 14:39:28  \\
-  $5$ & $2130$ & 2012/11/04 20:39:43 & 2012/12/02 04:06:23  \\
-  $6$ & $2143$ & 2013/10/25 10:17:52 & 2013/11/21 17:36:35  \\
-  $7$ & $2157$ & 2014/11/11 07:09:56 & 2014/12/08 14:41:02  \\
-  $8$ & $2171$ & 2015/11/28 04:09:27 & 2015/12/25 11:53:33  \\
-  $9$ & $2184$ & 2016/11/16 17:41:04 & 2016/12/14 01:16:43  \\
-  \hline
-  \end{tabular}
+  \resizebox{\textwidth}{!}{
+    \begin{tabular}{llll}
+      \hline
+      \textbf{Split Id} & \textbf{Carrington Rotation} & \textbf{Start} & \textbf{End}\\ \hline
+      $1$ & $2077$ & 2008/11/20 07:00:04 & 2008/12/17 14:38:34  \\
+      $2$ & $2090$ & 2009/11/09 20:33:43 & 2009/12/07 04:03:59  \\
+      $3$ & $2104$ & 2010/11/26 17:32:44 & 2010/12/24 01:15:56  \\
+      $4$ & $2117$ & 2011/11/16 07:04:41 & 2011/12/13 14:39:28  \\
+      $5$ & $2130$ & 2012/11/04 20:39:43 & 2012/12/02 04:06:23  \\
+      $6$ & $2143$ & 2013/10/25 10:17:52 & 2013/11/21 17:36:35  \\
+      $7$ & $2157$ & 2014/11/11 07:09:56 & 2014/12/08 14:41:02  \\
+      $8$ & $2171$ & 2015/11/28 04:09:27 & 2015/12/25 11:53:33  \\
+      $9$ & $2184$ & 2016/11/16 17:41:04 & 2016/12/14 01:16:43  \\
+      \hline
+      \end{tabular}
+  }
   \end{table}
 %
 
@@ -874,17 +882,19 @@ to the auto-correlation of the series, it allows to compare different predictors
 \begin{table}
   \caption{Performance: \XX  \ / Base Line / \XX  \ Time Lag Prediction}\label{tab:results_syn}
   \centering
-  \begin{tabular}{ l l l l l l}
-  \hline
-  Problem &  M.A.E & R.M.S.E & Pearson Corr. & $\sigma_0$ & $C_1$\\
-  \hline
-  \textbf{Pb I} & $8.82$ / $21.79$ / $0.021$  & $12.35$ / $28.79$ / $0.26$ & $0.98$ / $0.87$ / -- & $29.8$ & $0.14$\\
-  \textbf{Pb II} & $10.15$ / $27.40$ / $0.4$ & $13.70$ / $35.11$ / $0.67$ & $0.95$ / $0.73$ / $0.70$ & $26.83$ & $0.16$\\
-  \textbf{Pb III} & $3.17$ / $11.01$ / $0.17$ & $4.63$ / $14.99$ / $0.42$ & $0.98$ / $0.79$ / $0.84$ & $11.84$ & $0.09$\\
-  \textbf{Pb IV} & $3.88$ / $12.28$ / $0.34$ & $5.33$ / $15.89$ / $0.64$ & $0.98$ /$0.79$/ $0.81$ & $12.18$ & $0.13$\\
-  \textbf{Solar Wind} & $56.35$ / $66.45$ / -- & $74.20$ / $84.53$ / -- & $0.6$ / $0.41$ / -- & $76.46$ & $0.89$\\
-  \hline
-  \end{tabular}
+  \resizebox{\textwidth}{!}{
+    \begin{tabular}{ l l l l l l}
+      \hline
+      Problem &  M.A.E & R.M.S.E & Pearson Corr. & $\sigma_0$ & $C_1$\\
+      \hline
+      \textbf{Pb I} & $8.82$ / $21.79$ / $0.021$  & $12.35$ / $28.79$ / $0.26$ & $0.98$ / $0.87$ / -- & $29.8$ & $0.14$\\
+      \textbf{Pb II} & $10.15$ / $27.40$ / $0.4$ & $13.70$ / $35.11$ / $0.67$ & $0.95$ / $0.73$ / $0.70$ & $26.83$ & $0.16$\\
+      \textbf{Pb III} & $3.17$ / $11.01$ / $0.17$ & $4.63$ / $14.99$ / $0.42$ & $0.98$ / $0.79$ / $0.84$ & $11.84$ & $0.09$\\
+      \textbf{Pb IV} & $3.88$ / $12.28$ / $0.34$ & $5.33$ / $15.89$ / $0.64$ & $0.98$ /$0.79$/ $0.81$ & $12.18$ & $0.13$\\
+      \textbf{Solar Wind} & $56.35$ / $66.45$ / -- & $74.20$ / $84.53$ / -- & $0.6$ / $0.41$ / -- & $76.46$ & $0.89$\\
+      \hline
+      \end{tabular}
+  }
 \end{table}
 %\todo{Update $\sigma_0$ and $C_1$ numbers for \XX in \cref{tab:results_syn}}
 

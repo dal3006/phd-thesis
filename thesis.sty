@@ -3,25 +3,50 @@
 % Further updates by Joos Buijs
 \ProvidesPackage{thesis}
 
+\usepackage[
+  %papersize={172mm,242mm},
+  %b5paper,
+  %dvips=false,
+  %pdftex=false,
+  %vtex=false
+  %inner=25mm,         % Inner margin
+  %outer=20mm,         % Outer margin
+  %bindingoffset=3mm, % Binding offset
+  %top=25mm,           % Top margin
+  %bottom=20mm,        % Bottom margin
+  %includefoot,
+  %pdftex
+  includeheadfoot
+]{geometry}
 % \geometry{
-%     paper=b5paper,
-%     inner=25mm,         % Inner margin
-%     outer=20mm,         % Outer margin
-%     bindingoffset=-3mm, % Binding offset
-%     top=25mm,           % Top margin
-%     bottom=20mm,        % Bottom margin
-%     %showframe,         % show how the type block is set on the page
+%   papersize={172mm,242mm},
+%   layout=b5paper,
+%   layouthoffset=2mm,
+%   layoutvoffset=2mm,
+%   inner=25mm,         % Inner margin
+%   outer=20mm,         % Outer margin
+%   %bindingoffset=3mm, % Binding offset
+%   top=25mm,           % Top margin
+%   bottom=20mm,        % Bottom margin
+%   %includefoot,
+%   pdftex
+%   %showframe
 % }
-% \newgeometry{
-%   papersize = {173mm,246mm},
-%   layoutsize = {167mm,240mm},
-%   layoutoffset = {3mm,3mm},
-%   bindingoffset = -3mm
-% }
-% \savegeometry{phdthesisprint}
+\geometry{
+    papersize = {172mm,242mm},
+  %layoutsize = {167mm,240mm},
+  %layoutoffset = {3mm,3mm},
+  %bindingoffset = -3mm
+    inner=25mm,         % Inner margin
+    outer=20mm,         % Outer margin
+    %bindingoffset=3mm, % Binding offset
+    top=25mm,           % Top margin
+    bottom=20mm         % Bottom margin
+}
+\savegeometry{phdthesisprint}
 
-% \newgeometry{papersize={170mm,240mm}}
-% \savegeometry{phdthesisview}
+%\newgeometry{papersize={170mm,240mm}}
+%\savegeometry{phdthesisview}
 %
 % Packages
 %
@@ -69,7 +94,6 @@
 \usepackage{amsthm}
 
 %\usepackage[greek, british]{babel}      % Use british hyphenation stuff and the Greek Euro symbol
-\usepackage{fancyhdr}                   % Nice and shiny headers
 \usepackage{graphicx}                   % For images
 \DeclareGraphicsExtensions{.pdf,.png,.jpg,.jpeg}
 \usepackage{grffile}                    % So that we can use spaces in image names...
@@ -257,6 +281,8 @@ stringstyle=\color[rgb]{0.627,0.126,0.941},  %
     \cleardoublepage}
 }
 
+\loadgeometry{phdthesisprint}
+\usepackage{fancyhdr}                   % Nice and shiny headers
 % header!
 
 %Common header attributes - see also http://en.wikibooks.org/wiki/LaTeX/Page_Layout

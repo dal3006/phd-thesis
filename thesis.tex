@@ -4,37 +4,9 @@
 % THIS IS THE MAIN FILE (i.e. compile this file, compiling the others directly won't work)
 %
 \documentclass[11pt,twoside]{book}
-\usepackage[
-  %papersize={172mm,242mm},
-  layout=b5paper,
-  layouthoffset=2mm,
-  layoutvoffset=2mm,
-  %inner=25mm,         % Inner margin
-  %outer=20mm,         % Outer margin
-  %bindingoffset=3mm, % Binding offset
-  %top=25mm,           % Top margin
-  %bottom=20mm,        % Bottom margin
-  %includefoot,
-  pdftex
-]{geometry}
-% \geometry{
-%   papersize={172mm,242mm},
-%   layout=b5paper,
-%   layouthoffset=2mm,
-%   layoutvoffset=2mm,
-%   inner=25mm,         % Inner margin
-%   outer=20mm,         % Outer margin
-%   %bindingoffset=3mm, % Binding offset
-%   top=25mm,           % Top margin
-%   bottom=20mm,        % Bottom margin
-%   %includefoot,
-%   pdftex
-%   %showframe
-% }
 %all the other includes etc. are done in the thesis.sty file.
 \usepackage{thesis}
 
-%\loadgeometry{thesisprint}
 \graphicspath{{figures/}}
 %\setlength{\headheight}{13.59pt}
 
@@ -48,8 +20,8 @@
 
 \newcommand{\me}{Mandar Hemant Chandorkar}
 \newcommand{\keywords}{Machine Learning, Space Physics, Uncertainty Quantification}
-\newcommand{\version}{Alpha 0.1}
-\newcommand{\monthYear}{June 2019}
+\newcommand{\version}{1.0}
+\newcommand{\monthYear}{November 2019}
 
 %Be sure to use all the titles for your committee members!!! (their names show up on the very first page!)
 \newcommand{\dean}{prof.dr.ir. G.M.W. Kroesen}
@@ -203,7 +175,7 @@
 %Choose a good bibliography style, plain would do often, but these might be nice too
 \bibliographystyle{plainnat}
 \bibliography{references}
-\clearpage
+\clearemptydoublepage
 
 \include{curriculum-vitae}
 

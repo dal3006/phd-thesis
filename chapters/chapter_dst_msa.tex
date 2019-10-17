@@ -474,22 +474,24 @@ for the time horizon $t+1 \cdots t+6$, summarised in \cref{table:competingmodels
 	\centering
 	\caption{Summary of Dst forecasting models compared in this study}
 	\label{table:competingmodels}
-	\begin{tabular}{ l  p{0.65\textwidth} }
-		\hline
-		\textbf{Model} & \textbf{Description}\\
-		\hline
-		\citet{wu1997geomagnetic} & An Elman RNN model having explicitly computed solar wind magnetospheric 
-		coupling functions as inputs.\\
-		\citet{Bala2012} & A feedforward neural network model using the \emph{Boyle} function as input.\\
-		\citet{Lazzus} & A feedforward neural network model using only the time history of Dst. Trained using 
-		particle swarm optimization.\\
-		Persistence model & $\mathrm{\hat{D}st}(t + p) = \mathrm{Dst}(t)$, also used for benchmarking in 
-		\cref{sec:gpOSAEval}.\\
-		LSTM-Dst & Our proposed LSTM model. Inputs are solar wind parameters (\cref{sec:datagpnn}) 
-		and time history of Dst.\\
-		LSTM-Dst-GPS & The LSTM model but with GPS magnetic field data $B_{\text{gps}}$ also included in the inputs. \\
-		\hline
-	\end{tabular}
+	\resizebox{\textwidth}{!}{
+		\begin{tabular}{ l  p{0.65\textwidth} }
+			\hline
+			\textbf{Model} & \textbf{Description}\\
+			\hline
+			\citet{wu1997geomagnetic} & An Elman RNN model having explicitly computed solar wind magnetospheric 
+			coupling functions as inputs.\\
+			\citet{Bala2012} & A feedforward neural network model using the \emph{Boyle} function as input.\\
+			\citet{Lazzus} & A feedforward neural network model using only the time history of Dst. Trained using 
+			particle swarm optimization.\\
+			Persistence model & $\mathrm{\hat{D}st}(t + p) = \mathrm{Dst}(t)$, also used for benchmarking in 
+			\cref{sec:gpOSAEval}.\\
+			LSTM-Dst & Our proposed LSTM model. Inputs are solar wind parameters (\cref{sec:datagpnn}) 
+			and time history of Dst.\\
+			LSTM-Dst-GPS & The LSTM model but with GPS magnetic field data $B_{\text{gps}}$ also included in the inputs. \\
+			\hline
+		\end{tabular}
+	}
 \end{table}
 
 \Cref{fig:lstmCC,fig:lstmCC} present a comparison of $\mathrm{CC}$ and $\mathrm{RMSE}$ performance 
