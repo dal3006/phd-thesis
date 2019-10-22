@@ -133,11 +133,13 @@ wind parameters (density, velocity, $\text{IMF}\vert B \vert$  and $Bz$ ), six h
 of Dst, and the magnetic field measured onboard GPS satellites. To the best of our knowledge, the 
 LSTM architecture has never been used in space weather applications before.
 
-The remainder of this chapter is organised as follows: \cref{sec:datagpnn} presents the 
-data used in this study, \cref{sec:methodgpnn} describes the computational method and 
-how the LSTM and its combination with the GP are developed and optimised. \Cref{sec:resultsgpnn} 
-presents the performance of the LSTM model when producing point predictions for the Dst one to 
-six hours ahead and the evaluation of the probabilistic forecasts provided by the GPNN model. 
+The remainder of this chapter is organised into sections as follows. 
+\cref{sec:datagpnn} presents the data used in this study, \cref{sec:methodgpnn} 
+describes the computational method and how the LSTM and its combination with 
+the GP are developed and optimised. \Cref{sec:resultsgpnn} presents the 
+performance of the LSTM model when producing point predictions for the Dst one to 
+six hours ahead and the evaluation of the probabilistic forecasts provided by 
+the GPNN model. 
 
 \section{Data}\label{sec:datagpnn}
 
@@ -154,11 +156,12 @@ The solar wind parameters and the geomagnetic Dst index are taken from the OMNI 
 set\footnote{\url{https://omniweb.gsfc.nasa.gov/ow.html}} maintained by the National Space Science 
 Data Center (NSSDC) of National Aeronautics and Space Administration (NASA).
 
-We also consider GPS data provided by the National Oceanic and Atmospheric Administration 
-(NOAA). This dataset was provided by the team working on the Combined X-ray dosimeter or CXD at the 
-Los Alamos National Laboratory\footnote{\url{https://www.ngdc.noaa.gov/stp/space-weather/satellite-data/satellite-system/gps/}}. 
-In this study, we used data recorded by the GPS satellite ns41, which has the widest 
-temporal coverage \citep{morley2017energetic}. 
+We also consider GPS data made available by the National Oceanic and Atmospheric 
+Administration (NOAA). The Combined X-ray dosimeter (CXD) team at the Los 
+Alamos National Laboratory\footnote{\url{https://www.ngdc.noaa.gov/stp/space-weather/satellite-data/satellite-systems/gps/}}
+provided this data set. In this study, we used measurements recorded by the GPS 
+satellite ns41, which has the widest temporal coverage 
+\citep{morley2017energetic}. 
 
 \Cref{fig:datacoverage} shows the temporal coverage of the database used in this study compared 
 with previous studies. The temporal coverage of our study is represented by the green line. As GPS 
@@ -277,7 +280,7 @@ final prediction computed LSTM cell for input $\mathbf{x}_t$.
 
 \subsection{The LSTM Dst Model}\label{sec:lstmDstArch}
 
-To produce predictions of Dst up to six hours ahead, we trained six LSTM models. 
+We trained six LSTM models, one for each hour in the forward time window. 
 Thus for every input, we obtained a vector of outputs 
 $[\mathrm{\hat{D}st}\left(t + p\right)], p\in \{ 1, \cdots, 6 \}$.
 %
