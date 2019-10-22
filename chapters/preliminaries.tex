@@ -574,7 +574,8 @@ Rewriting $\Phi \propto \frac{1}{\ell}$, the third invariant can be expressed in
 \emph{drift shell} $l$ (larger value of $l$ implies greater distance from the Earth). The radial 
 diffusion system can be obtained from \cref{eq:fokker} by keeping $\mathcal{M}\ \text{and} \ J$ 
 fixed, considering diffusion in $\ell$ (violation of $\Phi$ invariance), and by approximating pitch 
-angle diffusion as a loss process \citep{Walt1970,roederer2012dynamics}.  
+angle diffusion as a loss process \citep{Walt1970,roederer2012dynamics}. The 
+resulting system is shown in \cref{eq:radialDiff}. 
 %
 \begin{equation}\label{eq:radialDiff}
     \frac{\partial{f}}{\partial{t}} = \ell^2 \frac{\partial}{\partial{\ell}} \left( 
@@ -582,11 +583,11 @@ angle diffusion as a loss process \citep{Walt1970,roederer2012dynamics}.
     \right)_{\mathcal{M}, J} - \lambda(\ell,t) f
 \end{equation}
 %
-The resulting system is shown in \cref{eq:radialDiff}. The term 
-$\ell^2 \frac{\partial}{\partial{\ell}} \left( \frac{\kappa(\ell,t)}{\ell^{2}} 
-\frac{\partial{f}}{\partial{\ell}}\right)_{\mathcal{M}, J}$ models diffusive phenomena in $\Phi$ 
-but is expressed in the drift shell coordinate $\ell$. Pitch angle diffusion is approximated 
-using a loss process $\lambda(\ell,t) f$, where $\lambda(\ell,t)$ is the \emph{loss rate}. As an 
+The first term on the right hand side, 
+$\ell^2 \frac{\partial}{\partial{\ell}} \left( \frac{\kappa(\ell,t)}{\ell^{2}} \frac{\partial{f}}{\partial{\ell}}\right)_{\mathcal{M}, J}$, 
+models diffusive phenomena in $\Phi$ but is expressed in the drift shell 
+coordinate $\ell$. Pitch angle diffusion is approximated using a loss process 
+$\lambda(\ell,t) f$, where $\lambda(\ell,t)$ is the \emph{loss rate}. As an 
 alternative it is also possible to express the loss rate as a \emph{loss time scale} 
 $\tau(\ell,t) = \frac{1}{\lambda(\ell,t)}$, but in this thesis we will use the former convention.
 
