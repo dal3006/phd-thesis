@@ -5,8 +5,8 @@ Due to the single effect constraint in \cref{eq:cs1} the mixture model in
 \cref{eq:py} can be expressed as  
 \begin{align*}
 P({\bf y}\vert \mathbf{x}) &= \Bigl(\sum_{i\in T}\hat p_i(\mathbf{x})\prod_{j\in T}\sqrt{\frac{1+\alpha_{ji}}{2\pi\sigma^2}}e^{-\frac{1}{2\sigma^2}(1+\alpha_{ji})\bigl(y_j-\hat y_j(\mathbf{x})\bigr)^2}\Bigr)\\[0.2cm]
-&= \Bigl(\sum_{i\in T}\hat p_i(\mathbf{x})\prod_{j\in T}\sqrt{\frac{1+\alpha_{ji}}{2\pi\sigma^2}}e^{-\frac{1}{2\sigma^2}\alpha_{ji}\bigl(y_j-\hat y_j(\mathbf{x})\bigr)^2}\Bigr)
-\exp\Bigl(-\frac{1}{2\sigma^2}\sum_{j\in T}\bigl(y_j-\hat y_j(\mathbf{x})\bigr)^2\Bigr).
+&= \Bigl(\sum_{i\in T}\hat p_i(\mathbf{x})\prod_{j\in T}\sqrt{\frac{1+\alpha_{ji}}{2\pi\sigma^2}}e^{-\frac{1}{2\sigma^2}\alpha_{ji}\bigl(y_j-\hat y_j(\mathbf{x})\bigr)^2}\Bigr) \\
+&\times \ \exp\Bigl(-\frac{1}{2\sigma^2}\sum_{j\in T}\bigl(y_j-\hat y_j(\mathbf{x})\bigr)^2\Bigr).
 \end{align*}
 Let $\theta \egaldef (\hat {\bf y},\hp,\sigma,{\bf \alpha})$ denote the 
 parameters of the model and consider the probability that $\hat y_i$ is the 
@@ -14,18 +14,17 @@ predictor corresponding to the ground truth time-lag, conditioned on the pair
 $(\mathbf{x},{\bf y})$: 
 \begin{align*}
   q_i(\mathbf{x},{\bf y}) &= P(\tau_i=1 \vert x,{\bf y})\\[0.2cm]
-  &= \frac{1}{Z(\mathbf{x},{\bf y}\vert\theta)}
-  \hat p_i(\mathbf{x})\exp\Bigl(-\frac{1}{2\sigma^2}\sum_{j\in  T}\alpha_{ji}\bigl(y_j-\hat y_j(\mathbf{x})\bigr)^2+\frac{1}{2}\sum_{j\in  T}\log(1+\alpha_{ji})\Bigr),
+  &= \frac{\hat p_i(\mathbf{x})\exp\Bigl(-\frac{1}{2\sigma^2}\sum_{j\in  T}\alpha_{ji}\bigl(y_j-\hat y_j(\mathbf{x})\bigr)^2+\frac{1}{2}\sum_{j\in  T}\log(1+\alpha_{ji})\Bigr)}{Z(\mathbf{x},{\bf y}\vert\theta)},
 \end{align*}
 with
 \[
 Z(\mathbf{x},{\bf y}\vert\theta) = \sum_{i\in T}  \hat p_i(\mathbf{x})\exp\Bigl(-\frac{1}{2\sigma^2}\sum_{j\in  T}\alpha_{ji}\bigl(y_j-\hat y_j(\mathbf{x})\bigr)^2+\frac{1}{2}\sum_{j\in  T}\log(1+\alpha_{ji})\Bigr).
 \]
 This results in 
-\[
-  {\cal L}[\{(\mathbf{x},{\bf y})\}_{\rm data}\vert\theta] = -\vert  T\vert\log(\sigma)-{\mathbb E}_{\rm data}
-  \Bigl[\sum_{i\in T}\frac{1}{2\sigma^2}\bigl(y_i-\hat y_i(\mathbf{x})\bigr)^2-\log\bigl(Z(\mathbf{x},{\bf y}\vert\theta)\bigr)\Bigr].
-\]
+\begin{align*}
+  {\cal L}[\{(\mathbf{x},{\bf y})\}_{\rm data}\vert\theta] = - & \vert  T\vert\log(\sigma) \\ 
+  - & {\mathbb E}_{\rm data}\Bigl[\sum_{i\in T}\frac{1}{2\sigma^2}\bigl(y_i-\hat y_i(\mathbf{x})\bigr)^2-\log\bigl(Z(\mathbf{x},{\bf y}\vert\theta)\bigr)\Bigr].
+\end{align*}
 
 \section*{Large deviation argument}
 Even though the log likelihood can be obtained by direct summation, for sake of 
@@ -53,11 +52,11 @@ with the summand obeying a large deviation principle
 \exp\Bigl(-N_{\mathbf{x},{\bf y}} {\cal F}_{x,{\bf y}}\bigl[\p\bigr]\Bigr)
 \]
 where the rate function reads
-\[
-{\cal F}_{\mathbf{x},{\bf y}}\bigl[\p\bigr] = \vert T\vert\log(\sigma)+
-\sum_{i\in  T}\Bigl[\bigl(y_i-\hat y_i(\mathbf{x})\bigr)^2\frac{1+\sum_{j\in  T}\alpha_{ij}q_j}{2\sigma^2}
--\frac{1}{2}q_i\sum_{j\in  T}\log(1+\alpha_{ji})+q_i\log\frac{q_i}{\hat p_i}\Bigr].
-\]
+\begin{align*}
+  {\cal F}_{\mathbf{x},{\bf y}}\bigl[\p\bigr] =& \vert T\vert\log(\sigma) \\
+  +& \sum_{i\in  T}\Bigl[\bigl(y_i-\hat y_i(\mathbf{x})\bigr)^2\frac{1+\sum_{j\in  T}\alpha_{ij}q_j}{2\sigma^2} \\
+  & \ \ \ - \frac{1}{2}q_i\sum_{j\in  T}\log(1+\alpha_{ji})+q_i\log\frac{q_i}{\hat p_i}\Bigr].
+\end{align*}
 Taking the saddle point for $q_i$ yields %as a function of $(\mathbf{x},{\bf y})$ %expression~(\ref{eq:hatpi}). Inserting this into ${\cal F}$ and taking
 \cref{eq:var}. Inserting this into ${\cal F}$ and taking
 %the average over the data set yields the log likelihood~(\ref{eq:LL}) with
